@@ -61,6 +61,7 @@ from src.tools.verify_report import verify_report
 
 ASK_STUDENT_TOOL = "ask_student"
 VERIFY_REPORT_TOOL = "verify_report"
+BUILD_REPORT_TOOL = "build_report"
 NOT_EXECUTED_ERROR = "not executed: answer the pending question first"
 INVALID_ARGUMENTS_ERROR = "invalid arguments"
 STOPPED_STEP_LIMIT = "Stopped: step limit reached."
@@ -76,7 +77,7 @@ TOOLS = {
     "lookup_filieres": lookup_filieres,
     ASK_STUDENT_TOOL: ask_student,
     VERIFY_REPORT_TOOL: verify_report,
-    "build_report": build_report,
+    BUILD_REPORT_TOOL: build_report,
 }
 MAX_STEPS = 12  # docs/prd.md FR-1
 MAX_VERIFY_REFUSALS = 3  # docs/decisions.md 2026-10-28: stop at the 3rd consecutive refusal
@@ -197,6 +198,8 @@ def _execute_calls(tool_calls: list, messages: list, steps_used: int, journal: l
             _record(journal, steps_used, call.function.name, journal_args, None,
                     parse_error, DECISION_CONTINUE)
             continue
+        if call.function.name == BUILD_REPORT_TOOL:
+            args = _pin_verified_draft(args, journal)
         result, error, filtered = _execute_tool(call.function.name, args, tool_schemas)
         messages.append(_tool_observation(call, result, error))
         if call.function.name == VERIFY_REPORT_TOOL and error is None:
@@ -208,6 +211,23 @@ def _execute_calls(tool_calls: list, messages: list, steps_used: int, journal: l
         _record(journal, steps_used, call.function.name, filtered, result, error,
                 DECISION_CONTINUE)
     return None, verify_refusals
+
+
+def _pin_verified_draft(args: dict, journal: list) -> dict:
+    """Make build_report receive the draft verify_report just accepted.
+
+    The model retypes the whole JSON for build_report and can drift from
+    the verified draft (a proof copied into the wrong field). When the most
+    recent verify_report call returned no problem, its `report` and `context`
+    replace the model's: routing only, build_report still re-verifies.
+    """
+    last = next((event for event in reversed(journal)
+                 if event["tool"] == VERIFY_REPORT_TOOL), None)
+    if last is None or last["result"] != []:
+        return args
+    pinned = {key: last["args"][key] for key in ("report", "context")
+              if key in last["args"]}
+    return {**args, **pinned}
 
 
 def _verify_outcome(args: dict, result: object, steps_used: int, journal: list,

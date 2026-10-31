@@ -410,3 +410,36 @@ def test_multiple_calls_in_one_message_keep_counting_verify_in_the_middle(monkey
     assert seen == [{"serie": "D"}, {"serie": "D"}]
     assert [entry["tool"] for entry in journal] == ["lookup_filieres", "verify_report",
                                                    "lookup_filieres"]
+
+
+def test_build_report_receives_the_draft_verify_report_accepted(monkeypatch):
+    verified = {"schema_version": 1, "claims": [{"claim_id": "c1", "text": "ok", "proofs": []}]}
+    drifted = {"schema_version": 1, "claims": [{"claim_id": "c1", "text": "ok", "proofs": [
+        {"type": "filiere", "champ": "Mode_entrée", "valeur": "C, D"}]}]}
+    context = {"grades": [], "serie": "D"}
+    stub_verify_report(monkeypatch, [[]])
+    received = {}
+    monkeypatch.setitem(loop.TOOLS, "build_report",
+                        lambda **kwargs: received.update(kwargs) or "Rapport.")
+    client = ScriptedFakeClient([
+        assistant_message(tool_calls=[tool_call("v", "verify_report", {"report": verified, "context": context})]),
+        assistant_message(tool_calls=[tool_call("b", "build_report", {"report": drifted, "context": context})]),
+        assistant_message(content="Rapport.")])
+    journal = []
+    loop.run(client, "fake-model", None, "Brouillon.", journal=journal)
+    assert received["report"] == verified
+    assert journal[-1]["args"]["report"] == verified
+
+
+def test_build_report_keeps_the_model_draft_when_the_last_verify_was_refused(monkeypatch):
+    draft = {"schema_version": 1, "claims": []}
+    stub_verify_report(monkeypatch, [VERIFY_PROBLEMS])
+    received = {}
+    monkeypatch.setitem(loop.TOOLS, "build_report",
+                        lambda **kwargs: received.update(kwargs) or "Refus.")
+    client = ScriptedFakeClient([
+        assistant_message(tool_calls=[tool_call("v", "verify_report", {"report": FALSE_REPORT, "context": {}})]),
+        assistant_message(tool_calls=[tool_call("b", "build_report", {"report": draft, "context": {}})]),
+        assistant_message(content="Fin.")])
+    loop.run(client, "fake-model", None, "Brouillon.", journal=[])
+    assert received["report"] == draft
