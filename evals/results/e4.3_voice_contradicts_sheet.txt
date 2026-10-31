@@ -1,0 +1,12 @@
+Manual replay E4.3 (issue #28) - case voice_contradicts_sheet - 2026-10-31
+Input: data/samples/releve_serie_d.jpg + data/samples/note_vocale_contradictoire.mp3 (fictional)
+Invocation: loop.run(get_client(), MUSE_SPARK_MODEL, None, <inputs below>, journal=[]) then loop.resume(..., 'Oui, je confirme : série D.') after the FR-4 serie confirmation
+---
+FIRST: needs_input | Votre relevé indique la série D, mais la confiance de la transcription de votre note vocale est absente. Pouvez-vous confirmer que vous êtes bien en série D ?
+SECOND: needs_input | Vous avez déclaré 14 de moyenne, mais votre relevé affiche 11,2. Le relevé prévaut. Confirmez-vous que nous devons poursuivre avec la moyenne du relevé (11,2) ? | steps: 4
+JOURNAL:
+ step=1 tool=transcribe_voice decision=continue result={"text": "Euh oui bonjour bonjour je suis en série D j'ai eu quatorze de moyenne voilà j'aime beaucoup la biologie et j'aimerais travailler dans la santé peut-être peut-être médecin au lycée ce que je préférais c'était c'était les travaux pratiques e
+ step=1 tool=read_grade_sheet decision=continue result={"serie": "D", "matieres": [{"matiere": "Anglais", "note": 8, "lisible": true, "flags": []}, {"matiere": "Français", "note": 9.5, "lisible": true, "flags": []}, {"matiere": "Histoire-Géographie", "note": 7, "lisible": true, "flags": []}, {"matiere": 
+ step=2 tool=extract_profile decision=continue result={"serie_declaree": {"value": "D", "quote": "je suis en série D"}, "moyenne_declaree": {"value": 14, "quote": "j'ai eu 14 de moyenne"}, "interets": [{"value": "la biologie", "quote": "j'aime beaucoup la biologie"}, {"value": "les travaux pratiques en 
+ step=3 tool=ask_student decision=suspend result={"status": "needs_input", "question": "Votre relevé indique la série D, mais la confiance de la transcription de votre note vocale est absente. Pouvez-vous confirmer que vous êtes bien en série D ?"}
+ step=4 tool=ask_student decision=suspend result={"status": "needs_input", "question": "Vous avez déclaré 14 de moyenne, mais votre relevé affiche 11,2. Le relevé prévaut. Confirmez-vous que nous devons poursuivre avec la moyenne du relevé (11,2) ?"}

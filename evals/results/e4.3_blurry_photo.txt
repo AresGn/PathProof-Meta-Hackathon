@@ -1,0 +1,11 @@
+Manual replay E4.3 (issue #28) - case blurry_photo - 2026-10-31
+Input: data/samples/releve_serie_d_flou.jpg (fictional)
+Invocation: loop.run(get_client(), MUSE_SPARK_MODEL, None, <input below>, journal=[]) from src/agent/loop.py with src/agent/prompts.py SYSTEM_PROMPT
+---
+CASE blurry_photo
+STATUS: needs_input
+QUESTION: Sur la photo de votre relevé, la note de Mathématiques est illisible. Pouvez-vous fournir une nouvelle photo plus nette du relevé pour que je puisse lire cette note ?
+STEPS: 2
+JOURNAL:
+ step=1 tool=read_grade_sheet decision=continue result={"serie": "D", "matieres": [{"matiere": "Anglais", "note": 8, "lisible": true, "flags": []}, {"matiere": "Français", "note": 9.5, "lisible": true, "flags": []}, {"matiere": "Histoire-Géographie", "note": 7, "lisible": true, "flags": []}, {"matiere": "Mathématiques", "note": null, "lisible": false, "
+ step=2 tool=ask_student decision=suspend result={"status": "needs_input", "question": "Sur la photo de votre relevé, la note de Mathématiques est illisible. Pouvez-vous fournir une nouvelle photo plus nette du relevé pour que je puisse lire cette note ?"}
