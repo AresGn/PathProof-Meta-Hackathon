@@ -9,12 +9,10 @@ from src.cli_run import (
     CliRunResult,
     answers_from_file,
     default_journal_path,
+    persist_run_artifacts,
     print_outcome,
     resolve_path,
     run_cli_session,
-    summary_path_for_journal,
-    write_journal,
-    write_run_summary,
 )
 from src.clients.meta_client import get_client
 
@@ -69,25 +67,23 @@ def main(argv: list[str] | None = None) -> int:
                     default_journal_path(image_path, audio_path, args.run_label))
     if not journal_path.is_absolute():
         journal_path = Path.cwd() / journal_path
+    try:
+        client = get_client()
+    except RuntimeError as error:
+        print(error, file=sys.stderr)
+        return 2
     journal: list = []
     result: CliRunResult | None = None
     exit_code = 1
     try:
-        client = get_client()
         result = run_cli_session(client, MUSE_SPARK_MODEL, image_path, audio_path, ask_fn,
                                  journal=journal)
         exit_code = print_outcome(result)
-    except RuntimeError as error:
-        print(error, file=sys.stderr)
-        exit_code = 2
+    except Exception as error:
+        print(f"Run failed ({type(error).__name__}): {error}", file=sys.stderr)
+        exit_code = 1
     finally:
-        if journal:
-            write_journal(journal_path, journal)
-            summary_path = summary_path_for_journal(journal_path)
-            if result is not None:
-                write_run_summary(journal_path, result)
-            print(f"Journal written to {journal_path}", file=sys.stderr)
-            print(f"Summary written to {summary_path}", file=sys.stderr)
+        persist_run_artifacts(journal_path, journal, result)
     return exit_code
 
 

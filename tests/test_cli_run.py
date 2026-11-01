@@ -8,11 +8,13 @@ import pytest
 from src.agent import loop
 from src.cli_run import (
     CliInputError,
+    CliRunResult,
     TokenUsage,
     answers_from_lines,
     build_user_message,
     default_journal_path,
     path_for_agent,
+    persist_run_artifacts,
     print_outcome,
     report_from_journal,
     resolve_path,
@@ -67,9 +69,11 @@ def test_default_journal_path_uses_run_label():
     assert path == Path("evals/results/e4.4_clear_sheet_d_medecin.json")
 
 
-def test_summary_path_never_overwrites_journal():
-    journal = Path("evals/results/run.txt")
-    assert summary_path_for_journal(journal) == Path("evals/results/run.summary.txt")
+def test_summary_path_uses_full_journal_name():
+    assert summary_path_for_journal(Path("evals/results/run.json")) == (
+        Path("evals/results/run.json.summary.txt"))
+    assert summary_path_for_journal(Path("evals/results/run.txt")) == (
+        Path("evals/results/run.txt.summary.txt"))
 
 
 def test_verified_report_requires_empty_verify_before_build():
@@ -87,6 +91,16 @@ def test_verified_report_accepts_proven_draft():
         {"step": 6, "tool": "build_report", "result": "OK report.", "decision": "continue"},
     ]
     assert verified_report_from_journal(journal) == "OK report."
+
+
+def test_verified_report_rejects_tool_calls_after_build():
+    journal = [
+        {"step": 4, "tool": "verify_report", "result": [], "decision": "continue"},
+        {"step": 5, "tool": "build_report", "result": "OK report.", "decision": "continue"},
+        {"step": 6, "tool": "verify_report", "result": [{"claim_id": "x"}], "decision": "continue"},
+    ]
+    assert report_from_journal(journal) == "OK report."
+    assert verified_report_from_journal(journal) is None
 
 
 def test_print_outcome_rejects_stale_report_after_unverified():
@@ -128,24 +142,43 @@ def test_answers_from_lines_skips_blanks():
     assert ask("?") == ""
 
 
+def test_print_outcome_prints_model_text_on_stderr_when_unverified(capsys):
+    result = SimpleNamespace(
+        journal=[],
+        report_text=None,
+        outcome="Le modèle s'arrête ici.",
+    )
+    assert print_outcome(result, stream=StringIO()) == 1
+    captured = capsys.readouterr()
+    assert "without a verified report" in captured.err
+    assert "Le modèle s'arrête ici." in captured.err
+
+
 def test_write_run_summary_uses_summary_suffix(tmp_path):
     journal_path = tmp_path / "run.json"
-    result = SimpleNamespace(
+    result = CliRunResult(
         image_path=Path("data/samples/a.jpg"),
         audio_path=None,
-        duration_seconds=1.0,
         journal=[{"step": 1, "tool": "read_grade_sheet", "result": {}}],
-        distinct_tool_count=1,
-        max_model_step=1,
-        usage=TokenUsage(),
-        questions=[],
-        outcome="ok",
+        outcome={"status": "unverified"},
         report_text=None,
+        duration_seconds=1.0,
     )
     write_run_summary(journal_path, result)
-    summary = tmp_path / "run.summary.txt"
+    summary = tmp_path / "run.json.summary.txt"
     assert summary.is_file()
-    assert "Tool call events in journal" in summary.read_text(encoding="utf-8")
+    text = summary.read_text(encoding="utf-8")
+    assert "Report: not verified (unverified stop)" in text
+
+
+def test_persist_run_artifacts_writes_journal_only_when_result_missing(tmp_path, capsys):
+    journal_path = tmp_path / "run.json"
+    journal = [{"step": 1, "tool": "read_grade_sheet", "result": {}}]
+    persist_run_artifacts(journal_path, journal, None)
+    assert journal_path.is_file()
+    captured = capsys.readouterr()
+    assert "Journal written" in captured.err
+    assert "Summary written" not in captured.err
 
 
 def test_run_cli_session_resumes_ask_student(monkeypatch):
