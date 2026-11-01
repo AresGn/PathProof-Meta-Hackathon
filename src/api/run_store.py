@@ -29,7 +29,7 @@ def cleanup_tmpdir(tmpdir: Path | None) -> None:
 
 
 class ActiveRunSlot:
-    """One in-progress run allowance; release is idempotent (stream end or response background)."""
+    """One in-progress run allowance; release is idempotent (single settle point)."""
 
     def __init__(self, store: "PendingRunStore"):
         self._store = store

@@ -340,6 +340,8 @@ def test_late_tool_error_streams_partial_steps_then_error(monkeypatch):
     assert [event["step"] for event in step_events(events)] == [1]
     errors = [event for event in events if event.get("type") == "error"]
     assert errors and "late boom" in errors[0]["error"]
+    # Nothing is rolled back on /run: the trace of the failed run stays shown.
+    assert not any(event.get("type") == "rollback" for event in events)
 
 
 def test_secret_with_json_special_chars_is_redacted(monkeypatch):
@@ -508,3 +510,60 @@ def test_failed_upload_write_leaves_no_tmpdir(monkeypatch):
     assert response.status_code == 500
     after = set(tmp_root.glob("pathproof-*")) if tmp_root.is_dir() else set()
     assert after == before
+
+
+def test_disconnect_holds_slot_until_worker_finishes(tmp_path):
+    import threading
+    import time as time_module
+
+    from src.api.run_store import PendingRunStore
+
+    store = PendingRunStore()
+    slot = store.try_acquire_active_run(limit=1)
+    release = threading.Event()
+    journal = []
+    tmpdir = tmp_path / "pathproof-hold"
+    tmpdir.mkdir()
+    (tmpdir / "image.jpg").write_bytes(b"x")
+
+    def call():
+        journal.append({"step": 1, "tool": "lookup_filieres", "args": {},
+                        "result": {}, "decision": "continue"})
+        release.wait(timeout=5)
+        return "done"
+
+    frames = server.stream_agent_run(run_id="hold", journal=journal, start=0,
+                                     tmpdir=tmpdir, restore_entry=None, call=call,
+                                     run_slot=slot)
+    assert "lookup_filieres" in next(frames)
+    frames.close()
+    # The paid call is still running: capacity must not be freed early.
+    assert store.active_count() == 1
+    release.set()
+    deadline = time_module.monotonic() + 5
+    while store.active_count() and time_module.monotonic() < deadline:
+        time_module.sleep(0.01)
+    assert store.active_count() == 0
+    assert not tmpdir.exists()
+
+
+def test_never_iterated_stream_still_settles(tmp_path):
+    import time as time_module
+
+    from src.api.run_store import PendingRunStore
+
+    store = PendingRunStore()
+    slot = store.try_acquire_active_run(limit=1)
+    tmpdir = tmp_path / "pathproof-never"
+    tmpdir.mkdir()
+    (tmpdir / "image.jpg").write_bytes(b"x")
+    frames = server.stream_agent_run(run_id="never", journal=[], start=0,
+                                     tmpdir=tmpdir, restore_entry=None,
+                                     call=lambda: "done", run_slot=slot)
+    # The client never reads a single frame (disconnect before iteration).
+    deadline = time_module.monotonic() + 8
+    while tmpdir.exists() and time_module.monotonic() < deadline:
+        time_module.sleep(0.05)
+    assert not tmpdir.exists()
+    assert store.active_count() == 0
+    del frames

@@ -19,7 +19,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from starlette.background import BackgroundTask
 
 from src.agent import loop
 from src.agent.tool_schemas import TOOL_SCHEMAS
@@ -230,67 +229,107 @@ def settle_agent_run_safely(*, run_id: str, journal: list, tmpdir: Path | None,
         return {"type": "error", "run_id": run_id, "error": describe_run_error(error)}
 
 
-def finish_interrupted_run(worker: threading.Thread, *, run_id: str, journal: list,
-                           tmpdir: Path | None, restore_entry: dict | None, box: dict,
-                           pending_limit: int, rollback_state: dict | None = None) -> None:
-    """Settle in the background after a disconnect or stream failure (never blocks the client)."""
-    worker.join()
-    settle_agent_run_safely(run_id=run_id, journal=journal, tmpdir=tmpdir,
-                            restore_entry=restore_entry, box=box,
-                            pending_limit=pending_limit, rollback_state=rollback_state)
+SETTLE_DRAIN_TIMEOUT_SECONDS = 2.0  # E5.1 review (3rd pass): grace for a live consumer to drain before the background settle
+
+
+class AgentRunHandle:
+    """One agent run: eager worker, background finisher, single idempotent settle.
+
+    The worker and finisher start at creation, not at first iteration, so a
+    client that disconnects before the stream starts still gets settled
+    (tmpdir cleaned or session stored, slot released) once the loop ends.
+    The slot is released only inside settle, i.e. after the worker finished:
+    a disconnect never frees capacity while the paid API is still running.
+    settle_once is the unique settlement point (concurrent calls share it).
+    """
+
+    def __init__(self, *, run_id: str, journal: list, start: int, tmpdir: Path | None,
+                 restore_entry: dict | None, call: Callable[[], str | dict],
+                 pending_limit: int = MAX_PENDING_RUNS, run_slot=None,
+                 rollback_state: dict | None = None):
+        self.run_id = run_id
+        self.journal = journal
+        self.start = start
+        self.tmpdir = tmpdir
+        self.restore_entry = restore_entry
+        self.pending_limit = pending_limit
+        self.run_slot = run_slot
+        self.rollback_state = rollback_state
+        self.box: dict = {}
+        self._settle_lock = threading.Lock()
+        self._settled = False
+        self._terminal: dict | None = None
+        self._consumer_finished = threading.Event()
+        self.worker = threading.Thread(target=run_worker_call, args=(call, self.box),
+                                       daemon=True)
+        self.worker.start()
+        self._finisher = threading.Thread(target=self._finish_in_background, daemon=True)
+        self._finisher.start()
+
+    def _finish_in_background(self) -> None:
+        self.worker.join()
+        # A live consumer drains and settles first; a gone one signals via
+        # frames() finally, an absent one falls back to this timeout.
+        self._consumer_finished.wait(timeout=SETTLE_DRAIN_TIMEOUT_SECONDS)
+        self.settle_once()
+
+    def settle_once(self) -> dict:
+        """Settle exactly once and release the slot (worker already finished)."""
+        with self._settle_lock:
+            if self._settled:
+                return self._terminal
+            self._settled = True
+            try:
+                self._terminal = settle_agent_run_safely(
+                    run_id=self.run_id, journal=self.journal, tmpdir=self.tmpdir,
+                    restore_entry=self.restore_entry, box=self.box,
+                    pending_limit=self.pending_limit,
+                    rollback_state=self.rollback_state)
+            finally:
+                if self.run_slot is not None:
+                    self.run_slot.release()
+            return self._terminal
+
+    def frames(self):
+        """Yield step frames live, then rollback (answer only), then terminal."""
+        position = self.start
+        try:
+            while True:
+                while position < len(self.journal):
+                    try:
+                        event = self.journal[position]
+                    except IndexError:  # background settle truncated a failed attempt
+                        break
+                    yield format_sse_frame(build_step_frame(event))
+                    position += 1
+                if self.box.get("done"):
+                    break
+                time.sleep(POLL_INTERVAL_SECONDS)
+            self.worker.join()
+            while position < len(self.journal):
+                yield format_sse_frame(build_step_frame(self.journal[position]))
+                position += 1
+            terminal = self.settle_once()
+            if (self.box.get("error") is not None and self.rollback_state is not None
+                    and position > self.start):
+                yield format_sse_frame({"type": "rollback", "run_id": self.run_id,
+                                        "steps": position - self.start})
+            yield format_sse_frame(terminal)
+        finally:
+            # Consumer gone or done: the finisher may settle (idempotent).
+            self._consumer_finished.set()
 
 
 def stream_agent_run(*, run_id: str, journal: list, start: int, tmpdir: Path | None,
                      restore_entry: dict | None, call: Callable[[], str | dict],
                      pending_limit: int = MAX_PENDING_RUNS, run_slot=None,
                      rollback_state: dict | None = None):
-    """Stream a worker thread's journal steps live, then its terminal frame.
-
-    restore_entry is None for /run; for /answer it is the claimed entry put
-    back when the worker fails, so a retry resumes from the pre-answer state
-    instead of duplicating tool answers. Steps streamed by a failed attempt
-    are announced by a rollback frame (the front removes them) before the
-    error frame, because the journal itself is truncated on failure.
-    Bookkeeping runs in a finally: on disconnect the response thread never
-    joins the worker, a background finisher settles once the loop ends.
-    """
-    box: dict = {}
-    worker = threading.Thread(target=run_worker_call, args=(call, box), daemon=True)
-    worker.start()
-    settled = False
-    try:
-        position = start
-        while True:
-            while position < len(journal):
-                yield format_sse_frame(build_step_frame(journal[position]))
-                position += 1
-            if box.get("done"):
-                break
-            time.sleep(POLL_INTERVAL_SECONDS)
-        worker.join()
-        while position < len(journal):
-            yield format_sse_frame(build_step_frame(journal[position]))
-            position += 1
-        terminal = settle_agent_run_safely(
-            run_id=run_id, journal=journal, tmpdir=tmpdir,
-            restore_entry=restore_entry, box=box, pending_limit=pending_limit,
-            rollback_state=rollback_state)
-        if box.get("error") is not None and position > start:
-            yield format_sse_frame({"type": "rollback", "run_id": run_id,
-                                    "steps": position - start})
-        yield format_sse_frame(terminal)
-        settled = True
-    finally:
-        if not settled:
-            threading.Thread(
-                target=finish_interrupted_run, args=(worker,),
-                kwargs={"run_id": run_id, "journal": journal, "tmpdir": tmpdir,
-                        "restore_entry": restore_entry, "box": box,
-                        "pending_limit": pending_limit,
-                        "rollback_state": rollback_state},
-                daemon=True).start()
-        if run_slot is not None:
-            run_slot.release()
+    """Start a run eagerly and return its SSE frames iterator."""
+    handle = AgentRunHandle(run_id=run_id, journal=journal, start=start, tmpdir=tmpdir,
+                            restore_entry=restore_entry, call=call,
+                            pending_limit=pending_limit, run_slot=run_slot,
+                            rollback_state=rollback_state)
+    return handle.frames()
 
 
 app = FastAPI(title="PathProof Demo API", version="0.2.0")
@@ -361,7 +400,6 @@ async def run_agent(
                              pending_limit=MAX_PENDING_RUNS, run_slot=run_slot),
             media_type="text/event-stream",
             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-            background=BackgroundTask(run_slot.release),
         )
     except BaseException:
         cleanup_tmpdir(tmpdir)
@@ -406,7 +444,6 @@ async def answer_agent(payload: AnswerRequest) -> StreamingResponse:
                              rollback_state=rollback_state),
             media_type="text/event-stream",
             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-            background=BackgroundTask(run_slot.release),
         )
     except BaseException:
         pending_run_store.restore_pending_run(payload.run_id, entry)
