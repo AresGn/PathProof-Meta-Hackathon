@@ -45,6 +45,7 @@ const DECISION_LABELS = {
 let currentRunId = null;
 let seenSteps = [];
 let submittedText = "";
+let runBusy = false;
 
 function setStatus(message, isError = false) {
   statusEl.textContent = message;
@@ -74,14 +75,19 @@ function toolIcon(tool) {
 }
 
 function setRunBusy(busy) {
+  runBusy = busy;
   submitBtn.disabled = busy;
   busyBar.hidden = !busy;
   for (const btn of exampleBtns) btn.disabled = busy;
+  if (!seenSteps.length) renderSteps();
 }
 
 function renderSteps() {
   if (!seenSteps.length) {
-    stepsEl.innerHTML = '<p class="muted">En attente des étapes…</p>';
+    stepsEl.innerHTML = runBusy
+      ? '<p class="muted">Analyse en cours… La lecture du relevé et la transcription ' +
+        "peuvent prendre une minute ; chaque outil s’affichera ici dès qu’il répond.</p>"
+      : '<p class="muted">Aucune exécution pour l’instant.</p>';
     return;
   }
   const items = seenSteps
@@ -373,9 +379,12 @@ function handleEvent(event) {
     questionEl.textContent = event.question || "";
     answerInput.value = "";
     answerBlock.hidden = false;
-    setStatus("L’agent pose une question.");
+    setStatus("L’agent pose une question : répondez dans l’encadré orange ci-contre.");
+    answerBlock.scrollIntoView({ behavior: "smooth", block: "center" });
+    answerInput.focus({ preventScroll: true });
   } else if (event.type === "done") {
     closeSession();
+    reportEl.scrollIntoView({ behavior: "smooth", block: "start" });
     if (event.status === "ok") {
       setStatus("Exécution terminée.");
       renderReport(event.report);
