@@ -111,7 +111,7 @@ E1.4 format des preuves ─► E2.4 verify_report ──────────
 
 ## E5 — Démo web (J6, dim 1er nov)
 
-- [ ] **E5.1 (M)** [#30](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/30) `POST /run` en flux d'événements (outil, entrée, sortie, décision) à la place du 501 de `src/api/server.py`. *Dép. :* E4.1.
+- [x] **E5.1 (M)** [#30](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/30) `POST /run` en flux d'événements (outil, entrée, sortie, décision) à la place du 501 de `src/api/server.py`. *Dép. :* E4.1. *Fait le 1er nov : SSE `{step, tool, args, result, decision}` dans l'ordre, `needs_input` + `POST /answer` avec sessions `PendingRunStore`, 413/415 côté serveur, erreur en événement `error` (jamais 500 brut), clé expurgée, stub 501 supprimé ; tests `tests/test_api_run.py` (`TestClient`, sans réseau).*
   *Acceptation :* test : les événements arrivent dans l'ordre ; une question produit l'état `needs_input`.
 - [ ] **E5.2 (L)** [#31](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/31) Interface : envoi photo + audio, trace en direct, questions de l'agent, preuves cliquables, exemples fictifs proposés aux juges. *Dép. :* E5.1.
   *Acceptation :* un juge lance un cas sans rien préparer ; chaque preuve ouvre sa source.

@@ -1,6 +1,6 @@
 # Architecture
 
-Document de conception de PathProof. Le comportement attendu est dans `docs/prd.md` ; ici, la structure technique. **La boucle CLI de bout en bout (E4.4) est câblée** ; la démo web (E5) reste à faire (voir la colonne « État »).
+Document de conception de PathProof. Le comportement attendu est dans `docs/prd.md` ; ici, la structure technique. **La boucle CLI de bout en bout (E4.4) est câblée** ; le flux web `POST /run` + `POST /answer` (E5.1) l'est aussi, l'interface complète (E5.2) reste à faire.
 
 ## Boucle de l'agent
 
@@ -122,6 +122,10 @@ Le PDF du guide n'est pas versionné (`data/source/`, ignoré par git). Contrôl
 - Le modèle ne calcule jamais une moyenne ni un filtre : ce sont des outils déterministes.
 - Aucune donnée réelle d'élève ; relevés et notes vocales fictifs uniquement.
 - `MUSE_API_KEY` côté serveur uniquement, dans `.env`.
+
+## Serveur web (E5.1)
+
+`src/api/server.py` ne contient aucune logique métier : il valide les dépôts (image `.jpg`/`.jpeg`/`.png` 10 Mo au plus, audio des formats de `transcribe_voice` 32 Mo au plus, lus par blocs de 1 Mo avec 413/415, `image` ou `text` requis, 429 au-delà de 100 runs suspendus ou de 5 runs en cours), les enregistre sous `tmp/pathproof-<run_id>/` (chemins relatifs via `path_for_agent`, jamais de chemin personnel dans le journal, tmpdir supprimé si l'écriture ou le démarrage échoue), puis appelle `loop.run` / `loop.resume` avec `TOOL_SCHEMAS` et `MUSE_SPARK_MODEL` dans un thread tandis que la réponse suit le journal et diffuse chaque pas en SSE `text/event-stream` (`{step, tool, args, result, decision}` dans l'ordre, y compris avant une erreur tardive ; les pas d'une tentative échouée sont annoncés par un cadre `rollback` que le front retire avant le retry). Les sessions suspendues vivent dans `PendingRunStore` (`src/api/run_store.py`, verrou unique — aucune globale mutable — TTL 30 min avec purge à chaque requête, cap vérifié sous le même verrou, claim atomique du `run_id` sur `/answer` contre les doubles reprises, restauration de l'état pré-réponse au settle en cas d'erreur pour rejouer sans dupliquer les réponses `tool`, `tmp/` ignoré par git). Le règlement passe par `AgentRunHandle.settle_once` (unique et idempotent) : le worker démarre à la création du handle, donc même un client parti avant la première frame est réglé par le finisseur d'arrière-plan une fois la boucle terminée, et le slot n'est libéré qu'après la fin du worker (jamais à la simple déconnexion). Le cadre `rollback` n'est émis que sur `/answer` (`rollback_state`), jamais sur `/run` dont la trace reste affichée en cas d'erreur. `POST /answer` (`run_id`, `answer`) reprend la suspension et diffuse les nouveaux pas. Les erreurs deviennent un événement `error` (jamais de 500 brut, clé expurgée des valeurs avant `json.dumps`, nom `MUSE_API_KEY` jamais renvoyé). Limite assumée : processus unique, un redémarrage ou un second worker perd les sessions (stockage partagé = chantier E5.4). Couverture sans réseau : `tests/test_api_run.py` (`TestClient`, ordre, `needs_input`/`/answer`, reprise après erreur avec `rollback`, déconnexion et cadre illisible nettoyés, 404/413/415/429, `error`, absence de clé et de 501) et `tests/test_run_store.py` (verrou, claim unique sous threads, slots idempotents).
 
 ## Points à confirmer
 
