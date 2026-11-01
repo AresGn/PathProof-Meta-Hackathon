@@ -3,7 +3,7 @@
     "step": 1,
     "tool": "transcribe_voice",
     "args": {
-      "audio_path": "C:\\Users\\AresDev\\Documents\\PathProof-Meta-Hackathon\\data\\samples\\note_vocale_coherente.mp3"
+      "audio_path": "data/samples/note_vocale_coherente.mp3"
     },
     "result": {
       "text": "Bonjour, alors euh je suis en terminale série D D comme Daniel, au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh Je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse bourse parce que les études euh ça coûte cher chez nous. Voilà. Merci de m'écouter hein.",
@@ -16,7 +16,7 @@
     "step": 1,
     "tool": "read_grade_sheet",
     "args": {
-      "image_path": "C:\\Users\\AresDev\\Documents\\PathProof-Meta-Hackathon\\data\\samples\\releve_serie_d.jpg"
+      "image_path": "data/samples/releve_serie_d.jpg"
     },
     "result": {
       "serie": "D",

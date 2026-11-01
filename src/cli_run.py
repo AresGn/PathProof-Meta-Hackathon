@@ -53,32 +53,50 @@ class CliRunResult:
     def distinct_tool_count(self) -> int:
         return len({event["tool"] for event in self.journal if event.get("tool")})
 
+    @property
+    def max_model_step(self) -> int:
+        steps = [event["step"] for event in self.journal if isinstance(event.get("step"), int)]
+        return max(steps) if steps else 0
+
 
 class UsageTrackingClient:
-    """Wrap an OpenAI-compatible client and sum completion usage across calls."""
+    """Delegate to the real client; count tokens only on non-streaming completions."""
 
     def __init__(self, inner, usage: TokenUsage):
         self._inner = inner
         self._usage = usage
-        self.chat = _UsageChat(inner.chat, usage)
+
+    def __getattr__(self, name: str):
+        if name == "chat":
+            return _UsageTrackingChat(self._inner.chat, self._usage)
+        return getattr(self._inner, name)
 
 
-class _UsageChat:
+class _UsageTrackingChat:
     def __init__(self, chat, usage: TokenUsage):
         self._chat = chat
         self._usage = usage
-        self.completions = _UsageCompletions(chat.completions, usage)
+
+    def __getattr__(self, name: str):
+        if name == "completions":
+            return _UsageTrackingCompletions(self._chat.completions, self._usage)
+        return getattr(self._chat, name)
 
 
-class _UsageCompletions:
+class _UsageTrackingCompletions:
     def __init__(self, completions, usage: TokenUsage):
         self._completions = completions
         self._usage = usage
 
     def create(self, **kwargs):
+        if kwargs.get("stream"):
+            return self._completions.create(**kwargs)
         response = self._completions.create(**kwargs)
         self._usage.add(getattr(response, "usage", None))
         return response
+
+    def __getattr__(self, name: str):
+        return getattr(self._completions, name)
 
 
 def resolve_path(path: str | Path, label: str) -> Path:
@@ -88,14 +106,25 @@ def resolve_path(path: str | Path, label: str) -> Path:
     return resolved
 
 
+def path_for_agent(path: Path) -> str:
+    """Prefer a repo-relative path so journals stay portable and replayable."""
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(Path.cwd().resolve()))
+    except ValueError:
+        return str(resolved)
+
+
 def build_user_message(image_path: Path, audio_path: Path | None) -> str:
+    image_arg = path_for_agent(image_path)
     lines = [
         "The student submitted a grade-sheet photo and a voice note (fictional sample).",
-        f"Grade sheet image path (pass verbatim to read_grade_sheet): {image_path}",
+        f"Grade sheet image path (pass verbatim to read_grade_sheet): {image_arg}",
     ]
     if audio_path is not None:
         lines.append(
-            f"Voice note audio path (pass verbatim to transcribe_voice): {audio_path}")
+            "Voice note audio path (pass verbatim to transcribe_voice): "
+            f"{path_for_agent(audio_path)}")
     lines.append(
         "Run the full tool loop and produce a verified orientation report via "
         "verify_report then build_report.")
@@ -111,6 +140,34 @@ def report_from_journal(journal: list) -> str | None:
         result = event.get("result")
         if isinstance(result, str) and result.strip():
             return result
+    return None
+
+
+def verified_report_from_journal(journal: list) -> str | None:
+    """Return build_report text only if the last verify_report before it accepted the draft."""
+    build_index = None
+    build_text = None
+    for index in range(len(journal) - 1, -1, -1):
+        event = journal[index]
+        if event.get("tool") != BUILD_REPORT_TOOL:
+            continue
+        if event.get("decision") != loop.DECISION_CONTINUE:
+            continue
+        result = event.get("result")
+        if isinstance(result, str) and result.strip():
+            build_index = index
+            build_text = result
+            break
+    if build_index is None or build_text is None:
+        return None
+    for event in reversed(journal[:build_index]):
+        if event.get("tool") != VERIFY_REPORT_TOOL:
+            continue
+        if event.get("decision") != loop.DECISION_CONTINUE:
+            return None
+        if event.get("result") != []:
+            return None
+        return build_text
     return None
 
 
@@ -134,6 +191,11 @@ def default_journal_path(image_path: Path, audio_path: Path | None, label: str |
     return Path("evals") / "results" / f"{stem}.json"
 
 
+def summary_path_for_journal(journal_path: Path) -> Path:
+    """Summary file sits beside the journal; never overwrites the journal path."""
+    return journal_path.parent / f"{journal_path.stem}.summary.txt"
+
+
 def write_journal(path: Path, journal: list) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(journal, ensure_ascii=False, indent=2) + "\n",
@@ -143,21 +205,19 @@ def write_journal(path: Path, journal: list) -> None:
 def _path_for_log(path: Path | None) -> str:
     if path is None:
         return "(none)"
-    try:
-        return str(path.resolve().relative_to(Path.cwd().resolve()))
-    except ValueError:
-        return str(path)
+    return path_for_agent(path)
 
 
-def write_run_summary(path: Path, result: CliRunResult) -> None:
-    summary_path = path.with_suffix(".txt")
+def write_run_summary(journal_path: Path, result: CliRunResult) -> None:
+    summary_path = summary_path_for_journal(journal_path)
     lines = [
-        f"CLI run E4.4 — {path.name}",
+        f"CLI run E4.4 — {journal_path.name}",
         f"Image: {_path_for_log(result.image_path)}",
         f"Audio: {_path_for_log(result.audio_path)}",
         f"Duration: {result.duration_seconds:.1f}s",
-        f"Model steps (journal entries): {len(result.journal)}",
+        f"Tool call events in journal: {len(result.journal)}",
         f"Distinct tools: {result.distinct_tool_count}",
+        f"Max model step reached: {result.max_model_step} (limit {loop.MAX_STEPS})",
         (f"Token usage (Muse Spark completions only): prompt="
          f"{result.usage.prompt_tokens}, completion={result.usage.completion_tokens}, "
          f"total={result.usage.total_tokens}"),
@@ -174,8 +234,8 @@ def write_run_summary(path: Path, result: CliRunResult) -> None:
     verify = verify_problems_from_journal(result.journal)
     if verify is not None:
         lines.append(f"Last verify_report problems: {len(verify)}")
-    if result.report_text:
-        lines.append("Report: produced")
+    if verified_report_from_journal(result.journal):
+        lines.append("Report: verified (build_report after empty verify_report)")
     summary_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -207,11 +267,12 @@ def run_cli_session(
     ask_student: Callable[[str], str],
     *,
     tool_schemas: list[dict] | None = None,
+    journal: list | None = None,
 ) -> CliRunResult:
     """Run the agent loop until it finishes or ask_student gets no answer."""
     usage = TokenUsage()
     tracked = UsageTrackingClient(client, usage)
-    journal: list = []
+    journal = journal if journal is not None else []
     user_input = build_user_message(image_path, audio_path)
     schemas = TOOL_SCHEMAS if tool_schemas is None else tool_schemas
     started = time.monotonic()
@@ -224,11 +285,7 @@ def run_cli_session(
         if not isinstance(answer, str) or not answer.strip():
             break
         outcome = loop.resume(tracked, model, schemas, outcome, answer)
-    report_text = report_from_journal(journal)
-    if report_text is None and isinstance(outcome, dict):
-        report = outcome.get("report")
-        if isinstance(report, dict):
-            report_text = None
+    report_text = verified_report_from_journal(journal)
     duration = time.monotonic() - started
     return CliRunResult(image_path=image_path, audio_path=audio_path, journal=journal,
                         outcome=outcome, report_text=report_text, usage=usage,
@@ -238,11 +295,6 @@ def run_cli_session(
 def print_outcome(result: CliRunResult, *, stream=None) -> int:
     """Print the report or an error; return a process exit code."""
     stream = stream or sys.stdout
-    if result.report_text:
-        stream.write(result.report_text)
-        if not result.report_text.endswith("\n"):
-            stream.write("\n")
-        return 0
     if isinstance(result.outcome, dict) and result.outcome.get("status") == "unverified":
         print("Run stopped: report could not be fully verified (unverified).",
               file=sys.stderr)
@@ -253,10 +305,14 @@ def print_outcome(result: CliRunResult, *, stream=None) -> int:
     if isinstance(result.outcome, dict) and result.outcome.get("status") == "needs_input":
         print("Run stopped: student did not answer.", file=sys.stderr)
         return 1
-    if isinstance(result.outcome, str) and result.outcome.strip():
-        stream.write(result.outcome)
-        if not result.outcome.endswith("\n"):
+    verified = result.report_text or verified_report_from_journal(result.journal)
+    if verified:
+        stream.write(verified)
+        if not verified.endswith("\n"):
             stream.write("\n")
         return 0
+    if isinstance(result.outcome, str) and result.outcome.strip():
+        print("Run finished without a verified report.", file=sys.stderr)
+        return 1
     print("Run finished without a build_report output.", file=sys.stderr)
     return 1

@@ -3,7 +3,7 @@
     "step": 1,
     "tool": "transcribe_voice",
     "args": {
-      "audio_path": "C:\\Users\\AresDev\\Documents\\PathProof-Meta-Hackathon\\data\\samples\\note_vocale_contradictoire.mp3"
+      "audio_path": "data/samples/note_vocale_contradictoire.mp3"
     },
     "result": {
       "text": "you oui bonjour bonjour je suis en série D j'ai eu quatorze de moyenne voilà j'aime beaucoup la biologie et j'aimerais travailler dans la santé peut-être médecin au lycée ce que je préférais c'était les les travaux pratiques en SVT avec le microscope je préfère rester à Cotonou et j'aurai besoin d'une bourse mes parents m'ont dit de bien chercher les filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup",
@@ -16,7 +16,7 @@
     "step": 1,
     "tool": "read_grade_sheet",
     "args": {
-      "image_path": "C:\\Users\\AresDev\\Documents\\PathProof-Meta-Hackathon\\data\\samples\\releve_serie_d.jpg"
+      "image_path": "data/samples/releve_serie_d.jpg"
     },
     "result": {
       "serie": "D",

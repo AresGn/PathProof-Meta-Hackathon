@@ -1,15 +1,27 @@
 import json
+from io import StringIO
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 from src.agent import loop
 from src.cli_run import (
+    CliInputError,
+    TokenUsage,
+    answers_from_lines,
     build_user_message,
     default_journal_path,
+    path_for_agent,
+    print_outcome,
     report_from_journal,
     resolve_path,
     run_cli_session,
+    summary_path_for_journal,
+    verified_report_from_journal,
+    write_run_summary,
 )
+from src import main as main_module
 from tests.fake_client import ScriptedFakeClient
 
 
@@ -24,25 +36,30 @@ def assistant_message(content=None, tool_calls=None):
     return SimpleNamespace(content=content, tool_calls=tool_calls)
 
 
-def test_build_user_message_includes_resolved_paths(tmp_path):
-    image = tmp_path / "releve_serie_d.jpg"
-    audio = tmp_path / "note.mp3"
+def test_build_user_message_uses_repo_relative_paths(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    image = tmp_path / "data" / "samples" / "releve.jpg"
+    audio = tmp_path / "data" / "samples" / "note.mp3"
+    image.parent.mkdir(parents=True)
     image.write_bytes(b"x")
     audio.write_bytes(b"y")
-    message = build_user_message(image.resolve(), audio.resolve())
-    assert str(image.resolve()) in message
-    assert str(audio.resolve()) in message
-    assert "read_grade_sheet" in message
-    assert "transcribe_voice" in message
+    message = build_user_message(image, audio)
+    assert "data/samples/releve.jpg" in message.replace("\\", "/")
+    assert "data/samples/note.mp3" in message.replace("\\", "/")
+    assert "AresDev" not in message
 
 
-def test_resolve_path_raises_for_missing_file(tmp_path):
-    try:
+def test_path_for_agent_prefers_relative(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    path = tmp_path / "data" / "x.jpg"
+    path.parent.mkdir(parents=True)
+    path.write_bytes(b"")
+    assert path_for_agent(path).replace("\\", "/") == "data/x.jpg"
+
+
+def test_resolve_path_raises_cli_input_error(tmp_path):
+    with pytest.raises(CliInputError, match="not found"):
         resolve_path(tmp_path / "missing.jpg", "Grade sheet")
-    except Exception as error:
-        assert "not found" in str(error)
-    else:
-        raise AssertionError("expected CliInputError")
 
 
 def test_default_journal_path_uses_run_label():
@@ -50,12 +67,85 @@ def test_default_journal_path_uses_run_label():
     assert path == Path("evals/results/e4.4_clear_sheet_d_medecin.json")
 
 
-def test_report_from_journal_reads_last_build_report():
+def test_summary_path_never_overwrites_journal():
+    journal = Path("evals/results/run.txt")
+    assert summary_path_for_journal(journal) == Path("evals/results/run.summary.txt")
+
+
+def test_verified_report_requires_empty_verify_before_build():
     journal = [
-        {"tool": "verify_report", "result": [], "decision": "continue"},
-        {"tool": "build_report", "result": "Rapport vérifié.", "decision": "continue"},
+        {"step": 1, "tool": "verify_report", "result": [{"claim_id": "x"}], "decision": "continue"},
+        {"step": 2, "tool": "build_report", "result": "Stale report.", "decision": "continue"},
     ]
-    assert report_from_journal(journal) == "Rapport vérifié."
+    assert report_from_journal(journal) == "Stale report."
+    assert verified_report_from_journal(journal) is None
+
+
+def test_verified_report_accepts_proven_draft():
+    journal = [
+        {"step": 5, "tool": "verify_report", "result": [], "decision": "continue"},
+        {"step": 6, "tool": "build_report", "result": "OK report.", "decision": "continue"},
+    ]
+    assert verified_report_from_journal(journal) == "OK report."
+
+
+def test_print_outcome_rejects_stale_report_after_unverified():
+    journal = [
+        {"step": 1, "tool": "verify_report", "result": [], "decision": "continue"},
+        {"step": 2, "tool": "build_report", "result": "Old report.", "decision": "continue"},
+    ]
+    result = SimpleNamespace(
+        journal=journal,
+        report_text=None,
+        outcome={"status": "unverified"},
+    )
+    buffer = StringIO()
+    assert print_outcome(result, stream=buffer) == 1
+    assert buffer.getvalue() == ""
+
+
+def test_print_outcome_prints_verified_report():
+    journal = [
+        {"step": 1, "tool": "verify_report", "result": [], "decision": "continue"},
+        {"step": 2, "tool": "build_report", "result": "Verified.", "decision": "continue"},
+    ]
+    result = SimpleNamespace(journal=journal, report_text="Verified.", outcome="done")
+    buffer = StringIO()
+    assert print_outcome(result, stream=buffer) == 0
+    assert buffer.getvalue() == "Verified.\n"
+
+
+def test_token_usage_adds_fields():
+    usage = TokenUsage()
+    usage.add(SimpleNamespace(prompt_tokens=10, completion_tokens=5, total_tokens=15))
+    assert usage.total_tokens == 15
+
+
+def test_answers_from_lines_skips_blanks():
+    ask = answers_from_lines(["", "  first  ", "second"])
+    assert ask("?") == "  first  "
+    assert ask("?") == "second"
+    assert ask("?") == ""
+
+
+def test_write_run_summary_uses_summary_suffix(tmp_path):
+    journal_path = tmp_path / "run.json"
+    result = SimpleNamespace(
+        image_path=Path("data/samples/a.jpg"),
+        audio_path=None,
+        duration_seconds=1.0,
+        journal=[{"step": 1, "tool": "read_grade_sheet", "result": {}}],
+        distinct_tool_count=1,
+        max_model_step=1,
+        usage=TokenUsage(),
+        questions=[],
+        outcome="ok",
+        report_text=None,
+    )
+    write_run_summary(journal_path, result)
+    summary = tmp_path / "run.summary.txt"
+    assert summary.is_file()
+    assert "Tool call events in journal" in summary.read_text(encoding="utf-8")
 
 
 def test_run_cli_session_resumes_ask_student(monkeypatch):
@@ -103,18 +193,20 @@ def test_run_cli_session_resumes_ask_student(monkeypatch):
     assert any(event["tool"] == "ask_student" for event in result.journal)
 
 
-def test_blank_answer_stops_resume_loop(monkeypatch):
+def test_blank_answer_stops_resume_loop():
     ask_question = "Quelle série ?"
     ask = assistant_message(tool_calls=[
         tool_call("call-ask", "ask_student", {"question": ask_question}),
     ])
     client = ScriptedFakeClient([ask])
 
-    def scripted_ask(_question):
-        return "   "
-
     result = run_cli_session(
-        client, "fake-model", Path("img.jpg"), None, scripted_ask, tool_schemas=[],
+        client, "fake-model", Path("img.jpg"), None, lambda _q: "   ", tool_schemas=[],
     )
     assert result.outcome["status"] == "needs_input"
     assert len(client.calls) == 1
+
+
+def test_main_returns_2_when_image_missing(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    assert main_module.main(["--image", "missing.jpg"]) == 2
