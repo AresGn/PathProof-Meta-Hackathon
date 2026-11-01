@@ -91,3 +91,10 @@ def test_server_errors_are_never_shown_empty():
     # A non-OK response without a readable detail still names its HTTP status.
     assert "response.status" in APP_JS
     assert "/health" in APP_JS
+
+
+def test_page_finds_the_local_api_when_served_statically():
+    # Opened via Live Server (127.0.0.1:5500) or a file, the page must still
+    # reach the uvicorn API instead of calling the static server.
+    assert "127.0.0.1:8000" in APP_JS
+    assert "API_BASE" in APP_JS

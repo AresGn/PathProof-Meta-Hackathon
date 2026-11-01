@@ -44,7 +44,7 @@ Private-institution offers (753) are not used: the guide gives no series, subjec
 
 Video: TODO. Public demo URL: TODO.
 
-Local web demo: `uvicorn src.api.server:app --port 8000`, then open http://127.0.0.1:8000/ — upload a grade-sheet photo and a voice note (or use the fallback text), or launch a fictional example in one click (clear serie D sheet with a matching voice note, blurry sheet, contradictory voice note). Each tool step appears live, agent questions take an answer inline, and in the final report every claim carries clickable proofs (grade read, voice quote, guide row with its PDF page, ranking-average detail).
+Local web demo: `uvicorn src.api.server:app --port 8000`, then open http://127.0.0.1:8000/ (open the page served by uvicorn itself, not a static preview such as Live Server; opened locally by mistake, the page still finds the API on port 8000 and says so) — upload a grade-sheet photo and a voice note (or use the fallback text), or launch a fictional example in one click (clear serie D sheet with a matching voice note, blurry sheet, contradictory voice note). Each tool step appears live, agent questions take an answer inline, and in the final report every claim carries clickable proofs (grade read, voice quote, guide row with its PDF page, ranking-average detail).
 
 ## How the agent decides
 

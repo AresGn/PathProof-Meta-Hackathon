@@ -456,8 +456,53 @@ function describeClientError(err) {
   return "erreur inconnue";
 }
 
+// The API normally shares the page origin (uvicorn serves both). Opened via
+// a static preview (Live Server, file), the page falls back to the local
+// uvicorn port instead of calling a server that has no API at all.
+const LOCAL_API_BASE = "http://127.0.0.1:8000";
+let API_BASE = "";
+let apiBasePromise = null;
+
+async function probeApiBase(base) {
+  const response = await fetch(`${base}/health`);
+  const data = await response.json();
+  if (!response.ok || data.service !== "pathproof-demo") throw new Error("unexpected");
+  return base;
+}
+
+function ensureApiBase() {
+  if (!apiBasePromise) {
+    apiBasePromise = (async () => {
+      try {
+        API_BASE = await probeApiBase("");
+        serverStatusEl.textContent = "Serveur de démo prêt.";
+        return API_BASE;
+      } catch {
+        const host = window.location.hostname;
+        const isLocalPage = ["127.0.0.1", "localhost", ""].includes(host);
+        if (isLocalPage && window.location.origin !== LOCAL_API_BASE) {
+          try {
+            API_BASE = await probeApiBase(LOCAL_API_BASE);
+            serverStatusEl.textContent = "Serveur de démo prêt (API locale, port 8000).";
+            return API_BASE;
+          } catch {
+            // Fall through to the unreachable message below.
+          }
+        }
+        serverStatusEl.textContent =
+          "Serveur de démo injoignable : lancez « python -m uvicorn src.api.server:app --port 8000 » " +
+          "depuis la racine du dépôt, puis ouvrez http://127.0.0.1:8000/ (pas un aperçu statique).";
+        serverStatusEl.className = "bad";
+        return "";
+      }
+    })();
+  }
+  return apiBasePromise;
+}
+
 async function postRun(body) {
-  const response = await fetch("/run", { method: "POST", body });
+  await ensureApiBase();
+  const response = await fetch(`${API_BASE}/run`, { method: "POST", body });
   if (!response.ok) throw new Error(await readErrorDetail(response));
   const result = await streamEvents(response, handleEvent);
   if (!result.terminalSeen) {
@@ -486,7 +531,8 @@ async function startRun(body) {
 }
 
 async function fetchSampleFile(name) {
-  const response = await fetch(`/samples/${name}`);
+  await ensureApiBase();
+  const response = await fetch(`${API_BASE}/samples/${name}`);
   if (!response.ok) throw new Error(`exemple illisible (${name}) : ${await readErrorDetail(response)}`);
   const blob = await response.blob();
   return new File([blob], name, { type: blob.type || "application/octet-stream" });
@@ -513,16 +559,7 @@ async function runExample(key) {
 }
 
 async function checkServer() {
-  try {
-    const response = await fetch("/health");
-    const data = await response.json();
-    if (!response.ok || data.service !== "pathproof-demo") throw new Error("unexpected");
-    serverStatusEl.textContent = "Serveur de démo prêt.";
-  } catch {
-    serverStatusEl.textContent =
-      "Serveur de démo injoignable : lancez « python -m uvicorn src.api.server:app --port 8000 » depuis la racine du dépôt, puis rechargez la page.";
-    serverStatusEl.className = "bad";
-  }
+  await ensureApiBase();
 }
 
 for (const btn of exampleBtns) {
@@ -559,7 +596,8 @@ answerBtn.addEventListener("click", async () => {
   answerBtn.disabled = true;
   const stepsBeforeAnswer = seenSteps.length;
   try {
-    const response = await fetch("/answer", {
+    await ensureApiBase();
+    const response = await fetch(`${API_BASE}/answer`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ run_id: currentRunId, answer: answer.trim() }),
