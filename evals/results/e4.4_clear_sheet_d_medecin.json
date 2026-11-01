@@ -1,0 +1,1788 @@
+[
+  {
+    "step": 1,
+    "tool": "transcribe_voice",
+    "args": {
+      "audio_path": "C:\\Users\\AresDev\\Documents\\PathProof-Meta-Hackathon\\data\\samples\\note_vocale_coherente.mp3"
+    },
+    "result": {
+      "text": "Bonjour, alors euh je suis en terminale série D D comme Daniel, au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh Je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse bourse parce que les études euh ça coûte cher chez nous. Voilà. Merci de m'écouter hein.",
+      "text_normalized": "Bonjour, alors euh je suis en terminale série D D comme Daniel, au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh Je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse bourse parce que les études euh ça coûte cher chez nous. Voilà. Merci de m'écouter hein.",
+      "confidence": null
+    },
+    "decision": "continue"
+  },
+  {
+    "step": 1,
+    "tool": "read_grade_sheet",
+    "args": {
+      "image_path": "C:\\Users\\AresDev\\Documents\\PathProof-Meta-Hackathon\\data\\samples\\releve_serie_d.jpg"
+    },
+    "result": {
+      "serie": "D",
+      "matieres": [
+        {
+          "matiere": "Anglais",
+          "note": 8,
+          "lisible": true,
+          "flags": []
+        },
+        {
+          "matiere": "Français",
+          "note": 9.5,
+          "lisible": true,
+          "flags": []
+        },
+        {
+          "matiere": "Histoire-Géographie",
+          "note": 7,
+          "lisible": true,
+          "flags": []
+        },
+        {
+          "matiere": "Mathématiques",
+          "note": 12,
+          "lisible": true,
+          "flags": []
+        },
+        {
+          "matiere": "Philosophie",
+          "note": 8,
+          "lisible": true,
+          "flags": []
+        },
+        {
+          "matiere": "Sciences Physiques (PCT/SPCT)",
+          "note": 12,
+          "lisible": true,
+          "flags": []
+        },
+        {
+          "matiere": "SVT",
+          "note": 15,
+          "lisible": true,
+          "flags": []
+        },
+        {
+          "matiere": "EPS",
+          "note": 10.5,
+          "lisible": true,
+          "flags": []
+        }
+      ],
+      "moyenne_affichee": 11.2,
+      "flags": []
+    },
+    "decision": "continue"
+  },
+  {
+    "step": 2,
+    "tool": "extract_profile",
+    "args": {
+      "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel, au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh Je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse bourse parce que les études euh ça coûte cher chez nous. Voilà. Merci de m'écouter hein."
+    },
+    "result": {
+      "serie_declaree": {
+        "value": "D",
+        "quote": "série D"
+      },
+      "moyenne_declaree": {
+        "value": 11.2,
+        "quote": "j'ai eu onze virgule deux de moyenne"
+      },
+      "interets": [
+        {
+          "value": "la biologie",
+          "quote": "la biologie"
+        },
+        {
+          "value": "les SVT",
+          "quote": "les SVT"
+        }
+      ],
+      "metier_vise": {
+        "value": "médecin",
+        "quote": "peut-être médecin"
+      },
+      "contraintes": [
+        {
+          "value": "rester à Cotonou",
+          "quote": "Je préfère rester à Cotonou, près de mes parents"
+        },
+        {
+          "value": "besoin d'une bourse",
+          "quote": "j'aurais besoin d'une bourse"
+        }
+      ],
+      "flags": []
+    },
+    "decision": "continue"
+  },
+  {
+    "step": 3,
+    "tool": "lookup_filieres",
+    "args": {
+      "grades": [
+        {
+          "matiere": "Anglais",
+          "note": 8.0
+        },
+        {
+          "matiere": "Français",
+          "note": 9.5
+        },
+        {
+          "matiere": "Histoire-Géographie",
+          "note": 7.0
+        },
+        {
+          "matiere": "Mathématiques",
+          "note": 12.0
+        },
+        {
+          "matiere": "Philosophie",
+          "note": 8.0
+        },
+        {
+          "matiere": "Sciences Physiques (PCT/SPCT)",
+          "note": 12.0
+        },
+        {
+          "matiere": "SVT",
+          "note": 15.0
+        },
+        {
+          "matiere": "EPS",
+          "note": 10.5
+        }
+      ],
+      "interets": [
+        "la biologie",
+        "les SVT"
+      ],
+      "metier_vise": "médecin",
+      "serie": "D"
+    },
+    "result": {
+      "accessible": [
+        {
+          "Offre_ID": "PUB-062",
+          "Filière": "Médecine Générale",
+          "Établissement": "Faculté des Sciences de la Santé (FSS)",
+          "page_pdf": 36,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D",
+          "Statut_qualité": "OK",
+          "Bourse": "95",
+          "Aide_FPP": "20",
+          "Débouchés_Métiers": "Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé",
+          "raisons": [
+            "série D dans Bac_recommandé (C, D)",
+            "Statut_qualité = OK",
+            "page 36 du guide officiel",
+            "Mode d'entrée : Classement",
+            "métier visé « médecin » retrouvé comme mots entiers dans Débouchés_Métiers",
+            "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
+          ],
+          "score": 100,
+          "moyenne_classement": 13.15,
+          "calcul": {
+            "status": "calculé",
+            "moyenne": 13.153846153846153,
+            "moyenne_arrondie": 13.15,
+            "formule": "M = Σ(mi·ci) / Σci",
+            "somme_coefficients": 13,
+            "details": [
+              {
+                "matiere": "Mathématiques",
+                "note": 12.0,
+                "coefficient": 4,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Mathématiques"
+                }
+              },
+              {
+                "matiere": "Sciences Physiques (PCT/SPCT)",
+                "note": 12.0,
+                "coefficient": 4,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Sciences Physiques (PCT/SPCT)"
+                }
+              },
+              {
+                "matiere": "SVT",
+                "note": 15.0,
+                "coefficient": 5,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "SVT"
+                }
+              }
+            ]
+          },
+          "epreuves": []
+        },
+        {
+          "Offre_ID": "PUB-133",
+          "Filière": "Médecine Humaine",
+          "Établissement": "Faculté de Médecine (FM)",
+          "page_pdf": 47,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D",
+          "Statut_qualité": "OK",
+          "Bourse": "100",
+          "Aide_FPP": "30",
+          "Débouchés_Métiers": "Médecin généraliste dans les hôpitaux et centre de santé",
+          "raisons": [
+            "série D dans Bac_recommandé (C, D)",
+            "Statut_qualité = OK",
+            "page 47 du guide officiel",
+            "Mode d'entrée : Classement",
+            "métier visé « médecin » retrouvé comme mots entiers dans Débouchés_Métiers",
+            "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
+          ],
+          "score": 100,
+          "moyenne_classement": 13.15,
+          "calcul": {
+            "status": "calculé",
+            "moyenne": 13.153846153846153,
+            "moyenne_arrondie": 13.15,
+            "formule": "M = Σ(mi·ci) / Σci",
+            "somme_coefficients": 13,
+            "details": [
+              {
+                "matiere": "Mathématiques",
+                "note": 12.0,
+                "coefficient": 4,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Mathématiques"
+                }
+              },
+              {
+                "matiere": "Sciences Physiques (PCT/SPCT)",
+                "note": 12.0,
+                "coefficient": 4,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Sciences Physiques (PCT/SPCT)"
+                }
+              },
+              {
+                "matiere": "SVT",
+                "note": 15.0,
+                "coefficient": 5,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "SVT"
+                }
+              }
+            ]
+          },
+          "epreuves": []
+        },
+        {
+          "Offre_ID": "PUB-162",
+          "Filière": "Génie Biologique et Bioprocédés (GBB)",
+          "Établissement": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)",
+          "page_pdf": 62,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D",
+          "Statut_qualité": "OK",
+          "Bourse": "35",
+          "Aide_FPP": "7",
+          "Débouchés_Métiers": "Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi",
+          "raisons": [
+            "série D dans Bac_recommandé (C, D)",
+            "Statut_qualité = OK",
+            "page 62 du guide officiel",
+            "Mode d'entrée : Classement",
+            "intérêt « la biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+            "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
+          ],
+          "score": 20,
+          "moyenne_classement": 13.15,
+          "calcul": {
+            "status": "calculé",
+            "moyenne": 13.153846153846153,
+            "moyenne_arrondie": 13.15,
+            "formule": "M = Σ(mi·ci) / Σci",
+            "somme_coefficients": 13,
+            "details": [
+              {
+                "matiere": "Mathématiques",
+                "note": 12.0,
+                "coefficient": 4,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Mathématiques"
+                }
+              },
+              {
+                "matiere": "Sciences Physiques (PCT/SPCT)",
+                "note": 12.0,
+                "coefficient": 4,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Sciences Physiques (PCT/SPCT)"
+                }
+              },
+              {
+                "matiere": "SVT",
+                "note": 15.0,
+                "coefficient": 5,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "SVT"
+                }
+              }
+            ]
+          },
+          "epreuves": []
+        },
+        {
+          "Offre_ID": "PUB-077",
+          "Filière": "Hydrobiologie Appliquée",
+          "Établissement": "Faculté des Sciences Techniques (FAST)",
+          "page_pdf": 45,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, DEAT",
+          "Statut_qualité": "OK",
+          "Bourse": "51",
+          "Aide_FPP": "10",
+          "Débouchés_Métiers": "Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques",
+          "raisons": [
+            "série D dans Bac_recommandé (C, D, DEAT)",
+            "Statut_qualité = OK",
+            "page 45 du guide officiel",
+            "Mode d'entrée : Classement",
+            "intérêt « la biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+            "moyenne de classement 12.91 calculée sur Français, Sciences Physiques (PCT/SPCT), SVT"
+          ],
+          "score": 20,
+          "moyenne_classement": 12.91,
+          "calcul": {
+            "status": "calculé",
+            "moyenne": 12.909090909090908,
+            "moyenne_arrondie": 12.91,
+            "formule": "M = Σ(mi·ci) / Σci",
+            "somme_coefficients": 11,
+            "details": [
+              {
+                "matiere": "Français",
+                "note": 9.5,
+                "coefficient": 2,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Français"
+                }
+              },
+              {
+                "matiere": "Sciences Physiques (PCT/SPCT)",
+                "note": 12.0,
+                "coefficient": 4,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Sciences Physiques (PCT/SPCT)"
+                }
+              },
+              {
+                "matiere": "SVT",
+                "note": 15.0,
+                "coefficient": 5,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "SVT"
+                }
+              }
+            ]
+          },
+          "epreuves": []
+        },
+        {
+          "Offre_ID": "PUB-081",
+          "Filière": "Sciences de la Vie et de la Terre",
+          "Établissement": "Faculté des Sciences Techniques (FAST)",
+          "page_pdf": 44,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D",
+          "Statut_qualité": "OK",
+          "Bourse": "50",
+          "Aide_FPP": "120",
+          "Débouchés_Métiers": "Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs",
+          "raisons": [
+            "série D dans Bac_recommandé (C, D)",
+            "Statut_qualité = OK",
+            "page 44 du guide officiel",
+            "Mode d'entrée : Classement",
+            "intérêt « les SVT » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+            "moyenne de classement 12.91 calculée sur Français, Sciences Physiques (PCT/SPCT), SVT"
+          ],
+          "score": 20,
+          "moyenne_classement": 12.91,
+          "calcul": {
+            "status": "calculé",
+            "moyenne": 12.909090909090908,
+            "moyenne_arrondie": 12.91,
+            "formule": "M = Σ(mi·ci) / Σci",
+            "somme_coefficients": 11,
+            "details": [
+              {
+                "matiere": "Français",
+                "note": 9.5,
+                "coefficient": 2,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Français"
+                }
+              },
+              {
+                "matiere": "Sciences Physiques (PCT/SPCT)",
+                "note": 12.0,
+                "coefficient": 4,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "Sciences Physiques (PCT/SPCT)"
+                }
+              },
+              {
+                "matiere": "SVT",
+                "note": 15.0,
+                "coefficient": 5,
+                "provenance": {
+                  "fichier": "coefficients_bac_benin.json",
+                  "serie": "D",
+                  "matiere": "SVT"
+                }
+              }
+            ]
+          },
+          "epreuves": []
+        }
+      ],
+      "excluded": [
+        {
+          "Offre_ID": "PUB-018",
+          "Filière": "Marketing",
+          "Établissement": "Ecole Nationale d'Economie Appliquée et de Management (ENEAM)",
+          "page_pdf": 29,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "B, C, D, G2, G3, DT",
+          "Statut_qualité": "Texte continué",
+          "Bourse": "0",
+          "Aide_FPP": "10",
+          "Débouchés_Métiers": "Marketing et Communication Commerciale, Responsable commercial, Chef de produit, Responsable du développement commercial, Chargé de clientèle, Chargé d'affaires, Chargé d'étude marketing, Responsable des ventes, Chef de publicité, Chargé des relations publiques, Média planner, Chargé de communication, Marketing Digital et Community Management, Responsable MarketingDigital/Digital Marketing Manager, Responsable de la stratégie mobile, Chargé de communication Web digital/Digital brand manager, Responsable marketing relationnel/CRM, Marketing business analyst, Data miner/Data analyst, Chef de projet Web, Responsable e-Commerce, Digital planner,Consultant search marketing (SEM/SEO), Community manager, Chef de produit Web/Mobile, Responsable de la marque en ligne, Social media manager, Content manager/Responsable contenu numérique, Marketing et Management Commercial, Chef de ventes, Chef de rayon, Manager commercial/responsable commercial, Chargé d'affaires, Conseiller clientèle, Chargé d'études commerciales, Responsable d'agence commerciale, Marchandiseur",
+          "raisons": [
+            "Statut_qualité = Texte continué (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-064",
+          "Filière": "Pharmacie",
+          "Établissement": "Faculté des Sciences de la Santé (FSS)",
+          "page_pdf": 36,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "18",
+          "Aide_FPP": "10",
+          "Débouchés_Métiers": "Pharmacie, spécialisations en sciences de la santé, option pharmacie",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-065",
+          "Filière": "Econométrie et Statistiques Appliquées",
+          "Établissement": "Faculté des Sciences Economiques et de Gestion (FASEG)",
+          "page_pdf": 43,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "10",
+          "Aide_FPP": "5",
+          "Débouchés_Métiers": "Statisticien économique, analyste économiste, conseiller en stratégies et prise de décisions",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-074",
+          "Filière": "Socio-Anthropologie",
+          "Établissement": "Faculté des Sciences Humaines et Sociales (FASHS Calavi)",
+          "page_pdf": 32,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "A1, A2, B, C, D, G1, G2, G3",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "0",
+          "Aide_FPP": "320",
+          "Débouchés_Métiers": "Centres sociaux, ministères, recherche",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-075",
+          "Filière": "Energies Renouvelables et Systèmes Energétiques",
+          "Établissement": "Faculté des Sciences Techniques (FAST)",
+          "page_pdf": 44,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, F2, F3",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "100",
+          "Aide_FPP": "20",
+          "Débouchés_Métiers": "Production et fourniture d'énergie électrique, fourniture de services",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-090",
+          "Filière": "Planification et Gestion des espaces urbains et ruraux",
+          "Établissement": "Institut de Cadre de Vie (Ex. Institut de Géographie de l'Aménagement du Territoire et de l'Environnement-IGATE)",
+          "page_pdf": 26,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "A1, A2, B, C, D",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "30",
+          "Aide_FPP": "8",
+          "Débouchés_Métiers": "Spécialiste en planification et gestion des espaces urbains",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-091",
+          "Filière": "Génie Logiciel",
+          "Établissement": "Institut de Formation et de Recherche en Informatique (IFRI)",
+          "page_pdf": 33,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, E, DT",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "23",
+          "Aide_FPP": "5",
+          "Débouchés_Métiers": "Analystes et concepteurs, architectes logiciels, administrateurs de bases de données, développeurs d'applications métiers, auto-entrepreneuriat",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-140",
+          "Filière": "Marketing et Management des Organisations (MMO)",
+          "Établissement": "Faculté de Sciences Economiques et de Gestion (FASEG)",
+          "page_pdf": 52,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "B, C, D, G2, G3, DT",
+          "Statut_qualité": "Texte continué",
+          "Bourse": "2",
+          "Aide_FPP": "15",
+          "Débouchés_Métiers": "Auto emploi, Cabinets Conseils en Management, Cabinets Conseils en Marketing, Cabinets Conseils en Communication, Cabinets d'Audit en Gestion, Administrations de tous Genres (Ministères, Administrations, Projets de Développement, Entreprises de tous Genres)",
+          "raisons": [
+            "Statut_qualité = Texte continué (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-149",
+          "Filière": "Soins obstétricaux",
+          "Établissement": "Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)",
+          "page_pdf": 48,
+          "Mode_entrée": "Concours",
+          "Bac_recommandé": "C, D",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "50",
+          "Aide_FPP": "0",
+          "Débouchés_Métiers": "Sage-femme diplômée d'Etat",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-150",
+          "Filière": "Gestion Commerciale",
+          "Établissement": "Institut Universitaire de Technologie (IUT)",
+          "page_pdf": 48,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "B, C, D, G3, DT",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "5",
+          "Aide_FPP": "3",
+          "Débouchés_Métiers": "Entreprises commerciales ou services commerciaux, logistique internationale, export, transit, banque, communication, représentation commerciale, chef de rayon, chef de produit, relations publiques",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-189",
+          "Filière": "Génie Énergétique (Énergies Renouvelables et Systèmes Énergétiques)",
+          "Établissement": "Institut National Supérieur de Technologie Industrielle (INSTI)",
+          "page_pdf": 58,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, E, F2, F3, DT",
+          "Statut_qualité": "À vérifier",
+          "Bourse": "24",
+          "Aide_FPP": "5",
+          "Débouchés_Métiers": "Techniciens en Industrie électrique, électrotechniques et électroniques, Métiers du bâtiment, Appareillage, instrumentation, Installations, équipements et systèmes pour énergies renouvelables, Audit et Efficacité énergétique",
+          "raisons": [
+            "Statut_qualité = À vérifier (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-195",
+          "Filière": "Finance Agricole (FA)",
+          "Établissement": "",
+          "page_pdf": 78,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, DEAT",
+          "Statut_qualité": "À vérifier",
+          "Bourse": "20",
+          "Aide_FPP": "2",
+          "Débouchés_Métiers": "Entrepreneur agricole, Gestionnaire d'entreprises agricoles et agro-industrielles, Gestionnaire de coopératives et associations de producteurs, Analyste du marché des produits et intrants agricoles, Mercaticien d'entreprises agricoles et agro-industrielles, Agent commercial d'entreprise agricole et agro-industrielles, Banquier agricole, Assureur agricole, Gestionnaire d'institutions de financement agricole, Assistant de recherche et d'études socioéconomiques, Conseiller en gestion d'entreprises agricoles et agroindustrielles, Assistant planificateur du développement agricole, Analyste des politiques de développement agricole, Enseignant de collèges et lycées agricoles, Consultant",
+          "raisons": [
+            "Statut_qualité = À vérifier (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-198",
+          "Filière": "Aquaculture",
+          "Établissement": "Ecole d'Aquaculture (EAq)",
+          "page_pdf": 70,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, DEAT",
+          "Statut_qualité": "Texte continué",
+          "Bourse": "22",
+          "Aide_FPP": "4",
+          "Débouchés_Métiers": "Chargé des entreprises aquacoles, Technicien en production de poissons, Technicien en production de crevettes, crabes, huitres et de moules, Technicien en conception et fabrication des aliments pour les espèces aquacoles d'élevage, Technicien en conception, fabrication et entretien d'aquarium, Technicien en conception et fabrication des aliments, Technicien en aquariologie, Technicien en production, gestion et certification de semences aquacoles, Conseiller/Assistant en aquaculture",
+          "raisons": [
+            "Statut_qualité = Texte continué (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-200",
+          "Filière": "Foresterie Tropicale",
+          "Établissement": "Ecole de Foresterie Tropicale (EFoT)",
+          "page_pdf": 80,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, DEAT",
+          "Statut_qualité": "Texte continué",
+          "Bourse": "19",
+          "Aide_FPP": "3",
+          "Débouchés_Métiers": "Forestier Gestionnaire des ressources naturelles (Forêts, Eaux et Chasse), Forestier Gestionnaire des réserves de faune et des aires protégées, Cartographe forestier, Sylviculteur (Planteur de bois d'œuvre, de service et énergie d'essences autochtones et exotiques), Gestionnaire des Unités de productions sylvicoles, Opérateur pilote de drones (Véhicule aérien sans humain à bord) pour les collectes de données en forêt et traitement d'images, Ebéniste d'art et designer, Producteur de biocharbon et dendroénergie, Spécialiste de la domestication et élevage des gibiers, Spécialiste des façonnages et transformations du bois, Producteur des produits forestiers non ligneux (PFNL y compris miel, viande d'élevage non conventionnel et champignons), Environnementaliste, Chercheur des cabinets d'étude d'impact environnemental et de laboratoire de recherche, Enseignant des lycées techniques agricoles, Fonctionnaire dans les Ministères (MCVDD, MAEP), et des Organisations Non Gouvernementales (ONG)",
+          "raisons": [
+            "Statut_qualité = Texte continué (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-204",
+          "Filière": "Productions et santé animales",
+          "Établissement": "Ecole de Gestion et d'Exploitation des Systèmes d'Elevage (EGESE)",
+          "page_pdf": 77,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, DEAT",
+          "Statut_qualité": "Texte continué",
+          "Bourse": "50",
+          "Aide_FPP": "3",
+          "Débouchés_Métiers": "Technicien des fermes d'embouche de bovins, ovins et caprins porcs, lapins et aulacodes, Technicien des fermes de production de laits de vaches et chèvres, Technicien en production des œufs de consommation, Technicien des centres d'accouvage pour la fourniture des poussins d'un jour, Agent technique des Cliniques et pharmacies vétérinaires, Entrepreneur en fabrication des aliments bétail, Gestionnaire des Fermes Agro-vétérinaire, Assistant des structures d'audites des systèmes de production animale, Technicien des entreprises agro-alimentaires de transformation des produits animaux, Assistant des structures de contrôle de qualité des Denrées Alimentaires d'Origine Animale, Enseignant des lycées techniques agricoles",
+          "raisons": [
+            "Statut_qualité = Texte continué (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-206",
+          "Filière": "Sociologie rurale et Vulgarisation Agricole",
+          "Établissement": "Ecole de Sociologie rurale et de Vulgarisation Agricole (ESRVA)",
+          "page_pdf": 79,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, DEAT",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "47",
+          "Aide_FPP": "5",
+          "Débouchés_Métiers": "Technicien supérieur des entreprises agricoles, vulgarisateur/conseiller agricole, technicien de recherche, conseiller technique, gestion des organisations paysannes, nutrition humaine, enseignement agricole et développement international",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-207",
+          "Filière": "Génie de Conditionnement, Emballage et Stockage des Produits Alimentaires (GCES)",
+          "Établissement": "Ecole des Sciences et Techniques de Conservation et de Transformation des Produits Agricoles (ESTCTPA)",
+          "page_pdf": 73,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "C, D, DEAT",
+          "Statut_qualité": "Réparé - fusion OCR",
+          "Bourse": "30",
+          "Aide_FPP": "3",
+          "Débouchés_Métiers": "Technicien en conditionnement, emballage et stockage des produits agroalimentaires, contrôle qualité et normes, conception d'étiquettes et d'emballages, structures de stockage et conservation, enseignement agricole",
+          "raisons": [
+            "Statut_qualité = Réparé - fusion OCR (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-210",
+          "Filière": "Economie et Gestion des Organisations Coopératives et Associatives",
+          "Établissement": "",
+          "page_pdf": 86,
+          "Mode_entrée": "Classement",
+          "Bac_recommandé": "B, C, D, G2, G3",
+          "Statut_qualité": "À vérifier",
+          "Bourse": "0",
+          "Aide_FPP": "0",
+          "Débouchés_Métiers": "Inspecteurs d'Action Coopérative, Gestionnaire d'entreprises coopératives, Gestionnaire des autres entreprises, Chargé de projet/programme, Dirigeant des Unions et Fédérations des Coopératives, Chargé de clientèle, Agent des Organisations internationales, Animateur/Facilitateur Communautaire, Entrepreneur",
+          "raisons": [
+            "Statut_qualité = À vérifier (seules les lignes OK sont recommandées)"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-217",
+          "Filière": "Licence en Design",
+          "Établissement": "Africa Design School",
+          "page_pdf": 89,
+          "Mode_entrée": "non publié",
+          "Bac_recommandé": "non publié",
+          "Statut_qualité": "OK",
+          "Bourse": "non publié",
+          "Aide_FPP": "non publié",
+          "Débouchés_Métiers": "—",
+          "raisons": [
+            "Bac_recommandé non publié par le guide : série non vérifiable"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-218",
+          "Filière": "Licence en Métier de l’Informatique",
+          "Établissement": "Ecole de l’Innovation et de l’Expertise Informatique (EPITECH)",
+          "page_pdf": 89,
+          "Mode_entrée": "non publié",
+          "Bac_recommandé": "non publié",
+          "Statut_qualité": "OK",
+          "Bourse": "non publié",
+          "Aide_FPP": "non publié",
+          "Débouchés_Métiers": "—",
+          "raisons": [
+            "Bac_recommandé non publié par le guide : série non vérifiable"
+          ]
+        },
+        {
+          "Offre_ID": "PUB-219",
+          "Filière": "Toutes les filières",
+          "Établissement": "Centre d'Appui aux Ecoles de Statistique Africaines (CAPESA)",
+          "page_pdf": 84,
+          "Mode_entrée": "Concours",
+          "Bac_recommandé": "non publié",
+          "Statut_qualité": "OK",
+          "Bourse": "40",
+          "Aide_FPP": "0",
+          "Débouchés_Métiers": "—",
+          "raisons": [
+            "Bac_recommandé non publié par le guide : série non vérifiable"
+          ]
+        }
+      ]
+    },
+    "decision": "continue"
+  },
+  {
+    "step": 4,
+    "tool": "verify_report",
+    "args": {
+      "context": {
+        "grades": [
+          {
+            "lisible": true,
+            "matiere": "Anglais",
+            "note": 8.0
+          },
+          {
+            "lisible": true,
+            "matiere": "Français",
+            "note": 9.5
+          },
+          {
+            "lisible": true,
+            "matiere": "Histoire-Géographie",
+            "note": 7.0
+          },
+          {
+            "lisible": true,
+            "matiere": "Mathématiques",
+            "note": 12.0
+          },
+          {
+            "lisible": true,
+            "matiere": "Philosophie",
+            "note": 8.0
+          },
+          {
+            "lisible": true,
+            "matiere": "Sciences Physiques (PCT/SPCT)",
+            "note": 12.0
+          },
+          {
+            "lisible": true,
+            "matiere": "SVT",
+            "note": 15.0
+          },
+          {
+            "lisible": true,
+            "matiere": "EPS",
+            "note": 10.5
+          }
+        ],
+        "serie": "D",
+        "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel, au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh Je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse bourse parce que les études euh ça coûte cher chez nous. Voilà. Merci de m'écouter hein."
+      },
+      "report": {
+        "claims": [
+          {
+            "claim_id": "c-grade-svt",
+            "proofs": [
+              {
+                "matiere": "SVT",
+                "note": 15.0,
+                "type": "grade"
+              }
+            ],
+            "text": "Votre relevé indique 15 en SVT."
+          },
+          {
+            "claim_id": "c-transcript-serie",
+            "proofs": [
+              {
+                "quote": "série D",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez dit « série D »."
+          },
+          {
+            "claim_id": "c-transcript-metier",
+            "proofs": [
+              {
+                "quote": "peut-être médecin",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez dit « peut-être médecin »."
+          },
+          {
+            "claim_id": "c-transcript-interet",
+            "proofs": [
+              {
+                "quote": "la biologie",
+                "type": "transcript"
+              },
+              {
+                "quote": "les SVT",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez dit « la biologie » et « les SVT »."
+          },
+          {
+            "claim_id": "c-transcript-ville",
+            "proofs": [
+              {
+                "quote": "Je préfère rester à Cotonou, près de mes parents",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez dit « Je préfère rester à Cotonou, près de mes parents » et le guide ne publie pas de ville."
+          },
+          {
+            "claim_id": "c-offre-062",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Médecine Générale"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Faculté des Sciences de la Santé (FSS)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "C, D"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "95"
+              }
+            ],
+            "text": "Médecine Générale – Faculté des Sciences de la Santé (FSS) : Bac recommandé C, D, entrée Classement, le guide publie 95 bourses."
+          },
+          {
+            "claim_id": "c-calc-062",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 4,
+                    "matiere": "Mathématiques",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Médecine Générale"
+              }
+            ],
+            "text": "Moyenne de classement pour Médecine Générale : 13.15 selon M = Σ(mi·ci) / Σci à partir de Mathématiques 12 (coef 4), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          },
+          {
+            "claim_id": "c-offre-133",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Médecine Humaine"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Faculté de Médecine (FM)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "C, D"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "100"
+              }
+            ],
+            "text": "Médecine Humaine – Faculté de Médecine (FM) : Bac recommandé C, D, entrée Classement, le guide publie 100 bourses."
+          },
+          {
+            "claim_id": "c-calc-133",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 4,
+                    "matiere": "Mathématiques",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Médecine Humaine"
+              }
+            ],
+            "text": "Moyenne de classement pour Médecine Humaine : 13.15 selon M = Σ(mi·ci) / Σci à partir de Mathématiques 12 (coef 4), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          },
+          {
+            "claim_id": "c-offre-162",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Génie Biologique et Bioprocédés (GBB)"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "C, D"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "35"
+              }
+            ],
+            "text": "Génie Biologique et Bioprocédés (GBB) – Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé C, D, entrée Classement, le guide publie 35 bourses."
+          },
+          {
+            "claim_id": "c-calc-162",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 4,
+                    "matiere": "Mathématiques",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Génie Biologique et Bioprocédés (GBB)"
+              }
+            ],
+            "text": "Moyenne de classement pour Génie Biologique et Bioprocédés (GBB) : 13.15 selon M = Σ(mi·ci) / Σci à partir de Mathématiques 12 (coef 4), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          },
+          {
+            "claim_id": "c-offre-077",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Hydrobiologie Appliquée"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Faculté des Sciences Techniques (FAST)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "C, D, DEAT"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "51"
+              }
+            ],
+            "text": "Hydrobiologie Appliquée – Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, DEAT, entrée Classement, le guide publie 51 bourses."
+          },
+          {
+            "claim_id": "c-calc-077",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 2,
+                    "matiere": "Français",
+                    "note": 9.5
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 12.91,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Hydrobiologie Appliquée"
+              }
+            ],
+            "text": "Moyenne de classement pour Hydrobiologie Appliquée : 12.91 selon M = Σ(mi·ci) / Σci à partir de Français 9.5 (coef 2), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          },
+          {
+            "claim_id": "c-offre-081",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "Sciences de la Vie et de la Terre"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "Faculté des Sciences Techniques (FAST)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "C, D"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "50"
+              }
+            ],
+            "text": "Sciences de la Vie et de la Terre – Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, entrée Classement, le guide publie 50 bourses."
+          },
+          {
+            "claim_id": "c-calc-081",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 2,
+                    "matiere": "Français",
+                    "note": 9.5
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 12.91,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "Sciences de la Vie et de la Terre"
+              }
+            ],
+            "text": "Moyenne de classement pour Sciences de la Vie et de la Terre : 12.91 selon M = Σ(mi·ci) / Σci à partir de Français 9.5 (coef 2), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          }
+        ],
+        "schema_version": 1
+      }
+    },
+    "result": [],
+    "decision": "continue"
+  },
+  {
+    "step": 5,
+    "tool": "build_report",
+    "args": {
+      "context": {
+        "grades": [
+          {
+            "lisible": true,
+            "matiere": "Anglais",
+            "note": 8.0
+          },
+          {
+            "lisible": true,
+            "matiere": "Français",
+            "note": 9.5
+          },
+          {
+            "lisible": true,
+            "matiere": "Histoire-Géographie",
+            "note": 7.0
+          },
+          {
+            "lisible": true,
+            "matiere": "Mathématiques",
+            "note": 12.0
+          },
+          {
+            "lisible": true,
+            "matiere": "Philosophie",
+            "note": 8.0
+          },
+          {
+            "lisible": true,
+            "matiere": "Sciences Physiques (PCT/SPCT)",
+            "note": 12.0
+          },
+          {
+            "lisible": true,
+            "matiere": "SVT",
+            "note": 15.0
+          },
+          {
+            "lisible": true,
+            "matiere": "EPS",
+            "note": 10.5
+          }
+        ],
+        "serie": "D",
+        "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel, au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh Je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse bourse parce que les études euh ça coûte cher chez nous. Voilà. Merci de m'écouter hein."
+      },
+      "refused_claims": [],
+      "report": {
+        "claims": [
+          {
+            "claim_id": "c-grade-svt",
+            "proofs": [
+              {
+                "matiere": "SVT",
+                "note": 15.0,
+                "type": "grade"
+              }
+            ],
+            "text": "Votre relevé indique 15 en SVT."
+          },
+          {
+            "claim_id": "c-transcript-serie",
+            "proofs": [
+              {
+                "quote": "série D",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez dit « série D »."
+          },
+          {
+            "claim_id": "c-transcript-metier",
+            "proofs": [
+              {
+                "quote": "peut-être médecin",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez dit « peut-être médecin »."
+          },
+          {
+            "claim_id": "c-transcript-interet",
+            "proofs": [
+              {
+                "quote": "la biologie",
+                "type": "transcript"
+              },
+              {
+                "quote": "les SVT",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez dit « la biologie » et « les SVT »."
+          },
+          {
+            "claim_id": "c-transcript-ville",
+            "proofs": [
+              {
+                "quote": "Je préfère rester à Cotonou, près de mes parents",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez dit « Je préfère rester à Cotonou, près de mes parents » et le guide ne publie pas de ville."
+          },
+          {
+            "claim_id": "c-offre-062",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Médecine Générale"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Faculté des Sciences de la Santé (FSS)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "C, D"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "95"
+              }
+            ],
+            "text": "Médecine Générale – Faculté des Sciences de la Santé (FSS) : Bac recommandé C, D, entrée Classement, le guide publie 95 bourses."
+          },
+          {
+            "claim_id": "c-calc-062",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 4,
+                    "matiere": "Mathématiques",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Médecine Générale"
+              }
+            ],
+            "text": "Moyenne de classement pour Médecine Générale : 13.15 selon M = Σ(mi·ci) / Σci à partir de Mathématiques 12 (coef 4), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          },
+          {
+            "claim_id": "c-offre-133",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Médecine Humaine"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Faculté de Médecine (FM)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "C, D"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "100"
+              }
+            ],
+            "text": "Médecine Humaine – Faculté de Médecine (FM) : Bac recommandé C, D, entrée Classement, le guide publie 100 bourses."
+          },
+          {
+            "claim_id": "c-calc-133",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 4,
+                    "matiere": "Mathématiques",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Médecine Humaine"
+              }
+            ],
+            "text": "Moyenne de classement pour Médecine Humaine : 13.15 selon M = Σ(mi·ci) / Σci à partir de Mathématiques 12 (coef 4), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          },
+          {
+            "claim_id": "c-offre-162",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Génie Biologique et Bioprocédés (GBB)"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "C, D"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "35"
+              }
+            ],
+            "text": "Génie Biologique et Bioprocédés (GBB) – Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé C, D, entrée Classement, le guide publie 35 bourses."
+          },
+          {
+            "claim_id": "c-calc-162",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 4,
+                    "matiere": "Mathématiques",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Génie Biologique et Bioprocédés (GBB)"
+              }
+            ],
+            "text": "Moyenne de classement pour Génie Biologique et Bioprocédés (GBB) : 13.15 selon M = Σ(mi·ci) / Σci à partir de Mathématiques 12 (coef 4), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          },
+          {
+            "claim_id": "c-offre-077",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Hydrobiologie Appliquée"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Faculté des Sciences Techniques (FAST)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "C, D, DEAT"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "51"
+              }
+            ],
+            "text": "Hydrobiologie Appliquée – Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, DEAT, entrée Classement, le guide publie 51 bourses."
+          },
+          {
+            "claim_id": "c-calc-077",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 2,
+                    "matiere": "Français",
+                    "note": 9.5
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 12.91,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Hydrobiologie Appliquée"
+              }
+            ],
+            "text": "Moyenne de classement pour Hydrobiologie Appliquée : 12.91 selon M = Σ(mi·ci) / Σci à partir de Français 9.5 (coef 2), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          },
+          {
+            "claim_id": "c-offre-081",
+            "proofs": [
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "Sciences de la Vie et de la Terre"
+              },
+              {
+                "champ": "Établissement",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "Faculté des Sciences Techniques (FAST)"
+              },
+              {
+                "champ": "Bac_recommandé",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "C, D"
+              },
+              {
+                "champ": "Mode_entrée",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "Classement"
+              },
+              {
+                "champ": "Bourse",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "50"
+              }
+            ],
+            "text": "Sciences de la Vie et de la Terre – Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, entrée Classement, le guide publie 50 bourses."
+          },
+          {
+            "claim_id": "c-calc-081",
+            "proofs": [
+              {
+                "formula": "M = Σ(mi·ci) / Σci",
+                "inputs": [
+                  {
+                    "coefficient": 2,
+                    "matiere": "Français",
+                    "note": 9.5
+                  },
+                  {
+                    "coefficient": 4,
+                    "matiere": "Sciences Physiques (PCT/SPCT)",
+                    "note": 12.0
+                  },
+                  {
+                    "coefficient": 5,
+                    "matiere": "SVT",
+                    "note": 15.0
+                  }
+                ],
+                "result": 12.91,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-081",
+                "page_pdf": 44,
+                "type": "filiere",
+                "valeur": "Sciences de la Vie et de la Terre"
+              }
+            ],
+            "text": "Moyenne de classement pour Sciences de la Vie et de la Terre : 12.91 selon M = Σ(mi·ci) / Σci à partir de Français 9.5 (coef 2), Sciences Physiques (PCT/SPCT) 12 (coef 4), SVT 15 (coef 5)."
+          }
+        ],
+        "schema_version": 1
+      }
+    },
+    "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Sciences de la Vie et de la Terre (Faculté des Sciences Techniques (FAST)) — PUB-081, page 44 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « série D ».\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « les SVT ».\n- Tu as dit : « Je préfère rester à Cotonou, près de mes parents ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n- Sciences de la Vie et de la Terre (PUB-081) : Débouchés « Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n- Sciences de la Vie et de la Terre (PUB-081) : 50 bourses et 120 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n- Sciences de la Vie et de la Terre (PUB-081) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+    "decision": "continue"
+  }
+]

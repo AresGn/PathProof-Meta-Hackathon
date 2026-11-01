@@ -6,7 +6,7 @@
 
 An agent that takes a post-BAC student's grade-sheet photo and a short voice note, chooses its own tools step by step, and produces an orientation report in which every sentence points to its proof: a grade read on the photo, a quote from the transcript, a row of the official guide, or a calculation. It recommends only what it can prove, and it stops to ask the student instead of guessing.
 
-> **Status: build period 27 Oct - 3 Nov 2026.** The agent loop is implemented and unit-tested with a fake model (12-step limit, tool journal, stop after 3 consecutive `verify_report` refusals); it has not been run end to end yet (CLI wiring is E4.4). `build_report` is still a skeleton (E4.2). Nothing in this README describes behavior that does not run.
+> **Status: build period 27 Oct - 3 Nov 2026.** The agent loop runs end to end from the CLI (`python -m src.main --image … --audio …`, story E4.4): real tools, journal in `evals/results/`, `ask_student` on stdin. Unit tests still use a fake model only; CI never calls the Meta API. Nothing in this README describes behavior that does not run.
 
 **Track:** Indie Developer. **Theme:** Build for Your World. Full plan: [`docs/prd.md`](docs/prd.md).
 
@@ -71,7 +71,7 @@ flowchart TD
     B --> OUT([Report with proofs])
 ```
 
-Design intent: the loop is implemented (tool schemas in `src/agent/tool_schemas.py`, journal of `{step, tool, args, result, decision}` events) and has not been run end to end yet.
+Design intent: the loop is implemented (tool schemas in `src/agent/tool_schemas.py`, journal of `{step, tool, args, result, decision}` events) and wired to the CLI (E4.4).
 
 | Tool | Purpose | State |
 |---|---|---|
@@ -83,7 +83,7 @@ Design intent: the loop is implemented (tool schemas in `src/agent/tool_schemas.
 | `lookup_filieres` | Filter accessible offers, then rank them | implemented (strict access, whole-word ranking, excluded rows returned) |
 | `ask_student` | Ask a question and pause the loop | implemented (`src/tools/ask_student.py`, loop suspension/resume in `src/agent/loop.py`) |
 | `verify_report` | Check every proof of the draft | implemented (`src/tools/verify_report.py`) |
-| `build_report` | Format the verified report | skeleton |
+| `build_report` | Format the verified report | implemented (`src/tools/build_report.py`) |
 
 ## Meta models used
 
@@ -101,7 +101,7 @@ Tool calling in Muse Spark 1.3 was observed working in a small test (1 tool, 5/5
 ```bash
 pip install -r requirements.txt
 cp .env.example .env   # then set MUSE_API_KEY (the file must be named .env)
-python -m src.main     # currently exits: not implemented
+python -m src.main --image data/samples/releve_serie_d.jpg --audio data/samples/note_vocale_coherente.mp3
 uvicorn src.api.server:app --reload --port 8000   # demo UI at http://127.0.0.1:8000/
 python -m pytest       # deterministic tests only, no API key needed
 ```
@@ -110,13 +110,15 @@ Tool-calling check (Muse Spark 1.3): `python scripts/test_muse_tool_call.py`.
 
 Vertical slice without vision or voice (E2.5, no API key): `python scripts/run_vertical_slice.py data/samples/vertical_slice_serie_d.json` prints the verified report for the fictional serie D fixture (see `scripts/README.md`).
 
+Full agent run (E4.4, needs `MUSE_API_KEY` and ffmpeg for voice): `python -m src.main --image data/samples/releve_serie_d.jpg --audio data/samples/note_vocale_coherente.mp3` writes the tool journal to `evals/results/` and prints the report on stdout; answer `ask_student` prompts on stdin.
+
 ## Evaluation
 
 Ten cases are planned in `evals/cases.jsonl`, four of them adversarial (unverified row, false-friend job, contest-entry program, voice contradicting the sheet). Target: 9 of 10 compliant and zero claims without proof. Sample files are not created yet. Results (to be committed in `evals/results/`): TODO (nothing measured).
 
 ## Limitations
 
-- The agent is not functional end to end yet.
+- End-to-end runs consume Meta API credits and are manual only; CI runs deterministic tests with a fake model.
 - Tool calling was checked on one tool (5/5 runs) and on 2 tools with the result returned (5/5 runs, one question per tool); chained calls were not observed and the test is small. SAM 3.1 cannot locate a single table cell from a text prompt (day-1 test), so there is no cell zoom.
 - Target scope: public offers for series C and D of the 2026-2027 guide whose row passed the quality check (206 of 224 rows are `OK`; the others are listed under "what I could not verify"). The guide gives no city, no admission threshold and no cost, so the agent never states them and never speaks of admission chances.
 - OCR extraction errors may remain in `OK` rows; a hand audit of 20 rows against the PDF is published (`docs/data-audit.md`): 5 gaps in 20 rows (missing spaces, omitted series, values inferred from dash cells), above the 3-line threshold, so the extraction was fixed by a traced script and restricted in E3.5 (see `docs/decisions.md`). Verified, except the guide's dash cells, which are reported as "not published in the guide", never asserted.

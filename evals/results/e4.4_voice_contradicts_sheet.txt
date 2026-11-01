@@ -1,0 +1,13 @@
+CLI run E4.4 — e4.4_voice_contradicts_sheet.json
+Image: data/samples/releve_serie_d.jpg
+Audio: data/samples/note_vocale_contradictoire.mp3
+Duration: 84.8s
+Model steps (journal entries): 8
+Distinct tools: 7
+Token usage (Muse Spark completions only): prompt=63832, completion=14492, total=78324
+Student questions asked: 2
+  Q1: La transcription de ton message vocal n'a pas de score de confiance. Peux-tu confirmer que tu es bien en série D, comme lu sur ton relevé de notes ?
+  Q2: Tu as déclaré « j'ai eu quatorze de moyenne », mais ton relevé de notes affiche une moyenne de 11.2. Peux-tu confirmer que la valeur du relevé (11.2) est la bonne et que je dois continuer avec les notes du relevé ?
+Outcome: finished
+Last verify_report problems: 0
+Report: produced
