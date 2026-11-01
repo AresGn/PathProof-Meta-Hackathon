@@ -1,14 +1,14 @@
 CLI run E4.4 — e4.4_voice_contradicts_sheet.json
 Image: data/samples/releve_serie_d.jpg
 Audio: data/samples/note_vocale_contradictoire.mp3
-Duration: 84.8s
+Duration: 87.9s
 Tool call events in journal: 8
 Distinct tools: 7
-Max model step reached: 8 (limit 12)
-Token usage (Muse Spark completions only): prompt=63832, completion=14492, total=78324
+Max model step reached: 7 (limit 12)
+Token usage (non-streaming Muse Spark completions): prompt=63163, completion=14371, total=77534
 Student questions asked: 2
-  Q1: La transcription de ton message vocal n'a pas de score de confiance. Peux-tu confirmer que tu es bien en série D, comme lu sur ton relevé de notes ?
-  Q2: Tu as déclaré « j'ai eu quatorze de moyenne », mais ton relevé de notes affiche une moyenne de 11.2. Peux-tu confirmer que la valeur du relevé (11.2) est la bonne et que je dois continuer avec les notes du relevé ?
+  Q1: Pouvez-vous confirmer votre série au Bac ? La transcription de votre note vocale n'est pas certaine, et votre relevé indique la série D.
+  Q2: Vous avez déclaré 14 de moyenne dans votre message (« j'ai eu 14 de moyenne »), mais votre relevé affiche une moyenne de 11.2. Le relevé prévaut. Pouvez-vous confirmer que nous devons garder la valeur du relevé (11.2) pour la suite ?
 Outcome: finished
 Last verify_report problems: 0
-Report: verified (build_report after empty verify_report)
+Report: verified (printed on stdout)

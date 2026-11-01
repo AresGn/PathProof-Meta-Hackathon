@@ -164,7 +164,7 @@ def report_from_journal(journal: list) -> str | None:
 
 
 def verified_report_from_journal(journal: list) -> str | None:
-    """Return build_report text only if it is the last tool call and follows empty verify_report."""
+    """Return build_report text only if it is the last tool call and builds the draft an empty verify_report accepted."""
     events = _tool_events(journal)
     if not events or events[-1].get("tool") != BUILD_REPORT_TOOL:
         return None
@@ -180,6 +180,9 @@ def verified_report_from_journal(journal: list) -> str | None:
         if event.get("decision") != loop.DECISION_CONTINUE:
             return None
         if event.get("result") != []:
+            return None
+        # The loop pins the accepted draft on build_report; a different one was never verified.
+        if (event.get("args") or {}).get("report") != (build.get("args") or {}).get("report"):
             return None
         return build_text
     return None
@@ -197,6 +200,8 @@ def verify_problems_from_journal(journal: list) -> list | None:
 
 def default_journal_path(image_path: Path, audio_path: Path | None, label: str | None) -> Path:
     if label:
+        if label in (".", "..") or Path(label).name != label:
+            raise CliInputError(f"--run-label must be a plain file name, got: {label}")
         stem = label
     elif audio_path is not None:
         stem = f"{image_path.stem}_{audio_path.stem}"
@@ -284,8 +289,8 @@ def persist_run_artifacts(journal_path: Path, journal: list,
 
 
 def answers_from_lines(lines: list[str]) -> Callable[[str], str]:
-    """Return answers in order; blank lines are skipped when reading a file."""
-    queue = [line for line in lines if line.strip()]
+    """Return answers in order; a blank line is a blank answer (the run stops there)."""
+    queue = list(lines)
     index = 0
 
     def ask(_question: str) -> str:
@@ -320,17 +325,20 @@ def run_cli_session(
     user_input = build_user_message(image_path, audio_path)
     schemas = TOOL_SCHEMAS if tool_schemas is None else tool_schemas
     started = time.monotonic()
+    waiting_seconds = 0.0
     questions: list[str] = []
     outcome = loop.run(tracked, model, schemas, user_input, journal=journal)
     while isinstance(outcome, dict) and outcome.get("status") == "needs_input":
         question = outcome["question"]
         questions.append(question)
+        asked = time.monotonic()
         answer = ask_student(question)
+        waiting_seconds += time.monotonic() - asked
         if not isinstance(answer, str) or not answer.strip():
             break
         outcome = loop.resume(tracked, model, schemas, outcome, answer)
     report_text = verified_report_from_journal(journal)
-    duration = time.monotonic() - started
+    duration = time.monotonic() - started - waiting_seconds  # agent time, not the student's
     return CliRunResult(image_path=image_path, audio_path=audio_path, journal=journal,
                         outcome=outcome, report_text=report_text, usage=usage,
                         duration_seconds=duration, questions=questions)
@@ -339,6 +347,12 @@ def run_cli_session(
 def print_outcome(result: CliRunResult, *, stream=None) -> int:
     """Print the report or an error; return a process exit code."""
     stream = stream or sys.stdout
+    verified = result.report_text
+    if verified:
+        stream.write(verified)
+        if not verified.endswith("\n"):
+            stream.write("\n")
+        return 0
     if isinstance(result.outcome, dict) and result.outcome.get("status") == "unverified":
         print("Run stopped: report could not be fully verified (unverified).",
               file=sys.stderr)
@@ -349,12 +363,6 @@ def print_outcome(result: CliRunResult, *, stream=None) -> int:
     if isinstance(result.outcome, dict) and result.outcome.get("status") == "needs_input":
         print("Run stopped: student did not answer.", file=sys.stderr)
         return 1
-    verified = result.report_text
-    if verified:
-        stream.write(verified)
-        if not verified.endswith("\n"):
-            stream.write("\n")
-        return 0
     if isinstance(result.outcome, str) and result.outcome.strip():
         print("Run finished without a verified report.", file=sys.stderr)
         print(result.outcome.strip(), file=sys.stderr)

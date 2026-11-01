@@ -135,10 +135,11 @@ def test_token_usage_adds_fields():
     assert usage.total_tokens == 15
 
 
-def test_answers_from_lines_skips_blanks():
-    ask = answers_from_lines(["", "  first  ", "second"])
-    assert ask("?") == "  first  "
-    assert ask("?") == "second"
+def test_answers_from_lines_keeps_blank_lines_so_answers_stay_aligned():
+    ask = answers_from_lines(["oui", "", "médecin"])
+    assert ask("?") == "oui"
+    assert ask("?") == ""
+    assert ask("?") == "médecin"
     assert ask("?") == ""
 
 
@@ -243,3 +244,56 @@ def test_blank_answer_stops_resume_loop():
 def test_main_returns_2_when_image_missing(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     assert main_module.main(["--image", "missing.jpg"]) == 2
+
+
+def test_print_outcome_prints_a_verified_report_when_the_step_limit_ended_the_loop():
+    result = SimpleNamespace(journal=[], report_text="Verified.", outcome=loop.STOPPED_STEP_LIMIT)
+    buffer = StringIO()
+    assert print_outcome(result, stream=buffer) == 0
+    assert buffer.getvalue() == "Verified.\n"
+
+
+def test_verified_report_rejects_a_build_of_another_draft_than_the_verified_one():
+    journal = [
+        {"step": 1, "tool": "verify_report", "args": {"report": {"claims": ["A"]}},
+         "result": [], "decision": "continue"},
+        {"step": 2, "tool": "build_report", "args": {"report": {"claims": ["B"]}},
+         "result": "Report B.", "decision": "continue"},
+    ]
+    assert verified_report_from_journal(journal) is None
+    journal[1]["args"]["report"] = {"claims": ["A"]}
+    assert verified_report_from_journal(journal) == "Report B."
+
+
+@pytest.mark.parametrize("label", ["../../x", "a/b", "..", "."])
+def test_default_journal_path_rejects_a_label_that_is_not_a_plain_file_name(label):
+    with pytest.raises(CliInputError, match="run-label"):
+        default_journal_path(Path("a.jpg"), None, label)
+
+
+def test_duration_excludes_the_time_spent_waiting_for_the_student(monkeypatch):
+    clock = iter([0.0, 10.0, 70.0, 100.0])  # start, ask start, ask end, end
+    monkeypatch.setattr("src.cli_run.time.monotonic", lambda: next(clock))
+    ask = assistant_message(tool_calls=[tool_call("call-ask", "ask_student", {"question": "Série ?"})])
+    client = ScriptedFakeClient([ask, assistant_message(content="Fin.")])
+    result = run_cli_session(client, "fake-model", Path("img.jpg"), None,
+                             lambda _q: "D", tool_schemas=[])
+    assert result.duration_seconds == 40.0
+
+
+def test_main_returns_2_when_the_client_cannot_be_created(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "sheet.jpg").write_bytes(b"x")
+
+    def broken_client():
+        raise ValueError("malformed base URL")
+
+    monkeypatch.setattr(main_module, "get_client", broken_client)
+    assert main_module.main(["--image", "sheet.jpg"]) == 2
+    assert "ValueError" in capsys.readouterr().err
+
+
+def test_main_returns_2_for_an_unsafe_run_label(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "sheet.jpg").write_bytes(b"x")
+    assert main_module.main(["--image", "sheet.jpg", "--run-label", "../../x"]) == 2

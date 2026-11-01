@@ -1,12 +1,13 @@
 CLI run E4.4 — e4.4_clear_sheet_d_medecin.json
 Image: data/samples/releve_serie_d.jpg
 Audio: data/samples/note_vocale_coherente.mp3
-Duration: 79.9s
-Tool call events in journal: 6
-Distinct tools: 6
-Max model step reached: 6 (limit 12)
-Token usage (Muse Spark completions only): prompt=57196, completion=14303, total=71499
-Student questions asked: 0
+Duration: 113.4s
+Tool call events in journal: 9
+Distinct tools: 7
+Max model step reached: 8 (limit 12)
+Token usage (non-streaming Muse Spark completions): prompt=110896, completion=27433, total=138329
+Student questions asked: 1
+  Q1: Pouvez-vous confirmer que vous êtes bien en série D, comme indiqué sur votre relevé ?
 Outcome: finished
 Last verify_report problems: 0
-Report: verified (build_report after empty verify_report)
+Report: verified (printed on stdout)
