@@ -11,6 +11,9 @@
         color: #1a1a1a;
         background: #f6f7f9;
       }
+      * {
+        box-sizing: border-box;
+      }
       body {
         max-width: 42rem;
         margin: 0 auto;
@@ -19,6 +22,14 @@
       h1 {
         font-size: 1.35rem;
         margin-bottom: 0.25rem;
+      }
+      h2 {
+        font-size: 1.1rem;
+        margin-top: 1.5rem;
+      }
+      h3 {
+        font-size: 1rem;
+        margin: 0.5rem 0;
       }
       .muted {
         color: #555;
@@ -39,6 +50,17 @@
         display: block;
         margin-top: 0.75rem;
       }
+      input[type="file"],
+      input[type="text"],
+      textarea {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font: inherit;
+      }
+      textarea {
+        padding: 0.5rem;
+      }
       button {
         margin-top: 1rem;
         padding: 0.6rem 1.2rem;
@@ -53,6 +75,21 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+      .example-btn {
+        background: #fff;
+        color: #1a1a1a;
+        border: 1px solid #1877f2;
+        text-align: left;
+        width: 100%;
+        margin-top: 0.5rem;
+      }
+      .example-btn strong {
+        display: block;
+      }
+      .example-btn span {
+        font-size: 0.9rem;
+        color: #555;
+      }
       #steps,
       #report {
         margin-top: 1rem;
@@ -61,10 +98,18 @@
         border-radius: 8px;
         border: 1px solid #ddd;
         min-height: 3rem;
+        overflow-wrap: break-word;
       }
       #steps ol {
         margin: 0;
         padding-left: 1.25rem;
+      }
+      #steps pre,
+      #report pre {
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        font-size: 0.82rem;
+        margin: 0.5rem 0;
       }
       #status {
         margin-top: 0.75rem;
@@ -73,14 +118,85 @@
       .error {
         color: #b00020;
       }
+      .claim {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        padding: 0.75rem;
+        margin-top: 0.75rem;
+      }
+      .claim p {
+        margin: 0 0 0.5rem;
+      }
+      .proof-chip {
+        margin: 0.25rem 0.25rem 0 0;
+        padding: 0.35rem 0.7rem;
+        font-size: 0.88rem;
+        background: #eef4ff;
+        color: #0b4ea2;
+        border: 1px solid #0b4ea2;
+      }
+      dialog {
+        max-width: min(36rem, 92vw);
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 1rem;
+      }
+      dialog table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+      }
+      dialog th,
+      dialog td {
+        border: 1px solid #ddd;
+        padding: 0.3rem 0.5rem;
+        text-align: left;
+        vertical-align: top;
+        overflow-wrap: break-word;
+      }
+      mark {
+        background: #ffe58a;
+      }
+      @media (max-width: 480px) {
+        body {
+          padding: 0.75rem;
+        }
+        button {
+          width: 100%;
+        }
+        .proof-chip {
+          width: auto;
+        }
+        #steps,
+        #report {
+          padding: 0.75rem;
+        }
+      }
     </style>
   </head>
   <body>
     <h1>PathProof</h1>
     <p class="muted">
       Démo : envoyez une photo de relevé et un message vocal. L’agent affichera
-      ses étapes d’outils puis un rapport avec sources.
+      ses étapes d’outils puis un rapport dont chaque affirmation ouvre sa preuve.
     </p>
+
+    <fieldset>
+      <legend>Exemples fictifs — un clic, rien à préparer</legend>
+      <button type="button" class="example-btn" data-example="coherent">
+        <strong>Relevé D net + voix cohérente</strong>
+        <span>Série D, « peut-être médecin » : rapport complet attendu.</span>
+      </button>
+      <button type="button" class="example-btn" data-example="blurry">
+        <strong>Relevé flou</strong>
+        <span>Une note illisible : l’agent demande au lieu de deviner.</span>
+      </button>
+      <button type="button" class="example-btn" data-example="contradictory">
+        <strong>Voix contradictoire</strong>
+        <span>« 14 de moyenne » dite, 11,2 au relevé : l’agent signale l’écart.</span>
+      </button>
+    </fieldset>
 
     <form id="demo-form">
       <fieldset>
@@ -118,6 +234,19 @@
 
     <h2>Rapport</h2>
     <div id="report"><p class="muted">Le rapport apparaîtra ici.</p></div>
+
+    <div id="proofs" hidden>
+      <h3>Affirmations et preuves</h3>
+      <p class="muted">Chaque preuve est cliquable et ouvre sa source : note lue,
+        citation de la voix, ligne du guide ou détail du calcul.</p>
+      <div id="claims"></div>
+    </div>
+
+    <dialog id="proof-dialog">
+      <h3 id="proof-title"></h3>
+      <div id="proof-body"></div>
+      <button type="button" id="proof-close">Fermer</button>
+    </dialog>
 
     <script src="app.js"></script>
   </body>
