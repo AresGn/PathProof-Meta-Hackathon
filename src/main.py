@@ -6,11 +6,13 @@ from pathlib import Path
 from src.cli_run import (
     CliInputError,
     MUSE_SPARK_MODEL,
+    CliRunResult,
     answers_from_file,
     default_journal_path,
     print_outcome,
     resolve_path,
     run_cli_session,
+    summary_path_for_journal,
     write_journal,
     write_run_summary,
 )
@@ -38,6 +40,13 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def configure_stdio_utf8() -> None:
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            reconfigure(encoding="utf-8")
+
+
 def _stdin_ask(question: str) -> str:
     print(question, file=sys.stderr)
     sys.stderr.write("> ")
@@ -46,12 +55,13 @@ def _stdin_ask(question: str) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    sys.stdout.reconfigure(encoding="utf-8")
-    sys.stderr.reconfigure(encoding="utf-8")
+    configure_stdio_utf8()
     args = build_parser().parse_args(argv)
     try:
         image_path = resolve_path(args.image, "Grade sheet")
         audio_path = resolve_path(args.audio, "Voice note") if args.audio else None
+        ask_fn = (_stdin_ask if not args.answers_file else
+                  answers_from_file(resolve_path(args.answers_file, "Answers file")))
     except CliInputError as error:
         print(error, file=sys.stderr)
         return 2
@@ -59,16 +69,26 @@ def main(argv: list[str] | None = None) -> int:
                     default_journal_path(image_path, audio_path, args.run_label))
     if not journal_path.is_absolute():
         journal_path = Path.cwd() / journal_path
-    client = get_client()
-    if args.answers_file:
-        ask_fn = answers_from_file(resolve_path(args.answers_file, "Answers file"))
-    else:
-        ask_fn = _stdin_ask
-    result = run_cli_session(client, MUSE_SPARK_MODEL, image_path, audio_path, ask_fn)
-    write_journal(journal_path, result.journal)
-    write_run_summary(journal_path, result)
-    print(f"Journal written to {journal_path}", file=sys.stderr)
-    return print_outcome(result)
+    journal: list = []
+    result: CliRunResult | None = None
+    exit_code = 1
+    try:
+        client = get_client()
+        result = run_cli_session(client, MUSE_SPARK_MODEL, image_path, audio_path, ask_fn,
+                                 journal=journal)
+        exit_code = print_outcome(result)
+    except RuntimeError as error:
+        print(error, file=sys.stderr)
+        exit_code = 2
+    finally:
+        if journal:
+            write_journal(journal_path, journal)
+            summary_path = summary_path_for_journal(journal_path)
+            if result is not None:
+                write_run_summary(journal_path, result)
+            print(f"Journal written to {journal_path}", file=sys.stderr)
+            print(f"Summary written to {summary_path}", file=sys.stderr)
+    return exit_code
 
 
 if __name__ == "__main__":
