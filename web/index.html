@@ -93,6 +93,10 @@
           Message vocal
           <input type="file" id="voice" accept="audio/*" />
         </label>
+        <label>
+          Texte de secours (si pas de note vocale)
+          <textarea id="fallback-text" rows="3" placeholder="Série, intérêts, métier visé…"></textarea>
+        </label>
         <button type="submit" id="submit-btn">Lancer l’orientation</button>
       </fieldset>
     </form>
@@ -101,6 +105,16 @@
 
     <h2>Étapes de l’agent</h2>
     <div id="steps"><p class="muted">Aucune exécution pour l’instant.</p></div>
+
+    <div id="answer-block" hidden>
+      <h2>Question de l’agent</h2>
+      <p id="question"></p>
+      <label>
+        Votre réponse
+        <input type="text" id="answer-input" />
+      </label>
+      <button type="button" id="answer-btn">Répondre</button>
+    </div>
 
     <h2>Rapport</h2>
     <div id="report"><p class="muted">Le rapport apparaîtra ici.</p></div>

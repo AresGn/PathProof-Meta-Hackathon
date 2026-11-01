@@ -14,3 +14,5 @@ data/private/
 env
 # Official guide PDF ("Vente interdite"): kept locally for page checks, not republished (see docs/prd.md section 6)
 data/source/
+# Demo uploads (E5.1): grade-sheet photos and voice notes saved per run, never committed
+tmp/

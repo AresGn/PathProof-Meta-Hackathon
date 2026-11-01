@@ -1,6 +1,6 @@
 # Architecture
 
-Document de conception de PathProof. Le comportement attendu est dans `docs/prd.md` ; ici, la structure technique. **La boucle CLI de bout en bout (E4.4) est câblée** ; la démo web (E5) reste à faire (voir la colonne « État »).
+Document de conception de PathProof. Le comportement attendu est dans `docs/prd.md` ; ici, la structure technique. **La boucle CLI de bout en bout (E4.4) est câblée** ; le flux web `POST /run` + `POST /answer` (E5.1) l'est aussi, l'interface complète (E5.2) reste à faire.
 
 ## Boucle de l'agent
 
@@ -122,6 +122,10 @@ Le PDF du guide n'est pas versionné (`data/source/`, ignoré par git). Contrôl
 - Le modèle ne calcule jamais une moyenne ni un filtre : ce sont des outils déterministes.
 - Aucune donnée réelle d'élève ; relevés et notes vocales fictifs uniquement.
 - `MUSE_API_KEY` côté serveur uniquement, dans `.env`.
+
+## Serveur web (E5.1)
+
+`src/api/server.py` ne contient aucune logique métier : il valide les dépôts (image `.jpg`/`.jpeg`/`.png` 10 Mo au plus, audio des formats de `transcribe_voice` 32 Mo au plus, 413/415 sinon, `image` ou `text` requis), les enregistre sous `tmp/pathproof-<run_id>/` (chemins relatifs via `path_for_agent`, jamais de chemin personnel dans le journal), puis appelle `loop.run` / `loop.resume` avec `TOOL_SCHEMAS` et `MUSE_SPARK_MODEL`. La réponse est un flux SSE `text/event-stream` : un événement `step` par entrée du journal `{step, tool, args, result, decision}` dans l'ordre, puis `needs_input` (`run_id`, `question`, sessions en mémoire `RUNS`) ou `done` (`ok`, `unverified`, `step_limit`, `no_verified_report`), ou `error` (jamais de 500 brut, clé expurgée par `_sanitize_text`). `POST /answer` (`run_id`, `answer`) reprend la suspension et diffuse les nouveaux pas. Le flux rejoue le journal après exécution (pas de rappel temps réel dans la boucle), l'ordre restant garanti. `tmp/` est ignoré par git. Couverture sans réseau : `tests/test_api_run.py` (`TestClient`, ordre, `needs_input`/`/answer`, 413/415, `error`, absence de clé et de 501).
 
 ## Points à confirmer
 

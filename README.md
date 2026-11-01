@@ -6,7 +6,7 @@
 
 An agent that takes a post-BAC student's grade-sheet photo and a short voice note, chooses its own tools step by step, and produces an orientation report in which every sentence points to its proof: a grade read on the photo, a quote from the transcript, a row of the official guide, or a calculation. It recommends only what it can prove, and it stops to ask the student instead of guessing.
 
-> **Status: build period 27 Oct - 3 Nov 2026.** The agent loop runs end to end from the CLI (`python -m src.main --image … --audio …`, story E4.4): real tools, journal in `evals/results/`, `ask_student` on stdin. Unit tests still use a fake model only; CI never calls the Meta API. Nothing in this README describes behavior that does not run.
+> **Status: build period 27 Oct - 3 Nov 2026.** The agent loop runs end to end from the CLI (`python -m src.main --image … --audio …`, story E4.4): real tools, journal in `evals/results/`, `ask_student` on stdin. The web API streams the same loop as SSE (`POST /run` + `POST /answer`, story E5.1). Unit tests still use a fake model only; CI never calls the Meta API. Nothing in this README describes behavior that does not run.
 
 **Track:** Indie Developer. **Theme:** Build for Your World. Full plan: [`docs/prd.md`](docs/prd.md).
 
@@ -24,7 +24,7 @@ A student in Benin often picks a program on vague grounds (the BAC series, famil
 
 ## What is new in this repository
 
-All the code in this repository is written during the hackathon: the agent loop, the tools in `src/tools/`, the Meta API client, the evaluation cases in `evals/`, the demo web page and API stub (`web/`, `src/api/`). The one exception is the data in `data/`, extracted from the official guide before the event (see **Data** below).
+All the code in this repository is written during the hackathon: the agent loop, the tools in `src/tools/`, the Meta API client, the evaluation cases in `evals/`, the demo web page and streaming API (`web/`, `src/api/` with `POST /run` SSE + `POST /answer`). The one exception is the data in `data/`, extracted from the official guide before the event (see **Data** below).
 
 **An earlier prototype** by the same author (OrientBot V1, a fixed WhatsApp workflow, 7 users, now paused) explored this problem. No code from it is reused here. PathProof is built from scratch during the hackathon. Only public official rules (the MESRS weighted-average formula, subject-name normalization) are re-implemented. See [`docs/v1-reuse.md`](docs/v1-reuse.md).
 
