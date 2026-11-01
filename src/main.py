@@ -60,17 +60,18 @@ def main(argv: list[str] | None = None) -> int:
         audio_path = resolve_path(args.audio, "Voice note") if args.audio else None
         ask_fn = (_stdin_ask if not args.answers_file else
                   answers_from_file(resolve_path(args.answers_file, "Answers file")))
+        journal_path = (Path(args.journal_out) if args.journal_out else
+                        default_journal_path(image_path, audio_path, args.run_label))
     except CliInputError as error:
         print(error, file=sys.stderr)
         return 2
-    journal_path = (Path(args.journal_out) if args.journal_out else
-                    default_journal_path(image_path, audio_path, args.run_label))
     if not journal_path.is_absolute():
         journal_path = Path.cwd() / journal_path
     try:
         client = get_client()
-    except RuntimeError as error:
-        print(error, file=sys.stderr)
+    except Exception as error:  # missing key, malformed base URL, SDK error: one clean exit
+        print(f"Could not create the Muse client ({type(error).__name__}): {error}",
+              file=sys.stderr)
         return 2
     journal: list = []
     result: CliRunResult | None = None
