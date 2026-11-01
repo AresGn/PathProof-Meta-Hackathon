@@ -5,6 +5,8 @@ const reportEl = document.getElementById("report");
 const proofsEl = document.getElementById("proofs");
 const claimsEl = document.getElementById("claims");
 const submitBtn = document.getElementById("submit-btn");
+const busyBar = document.getElementById("busy-bar");
+const serverStatusEl = document.getElementById("server-status");
 const answerBlock = document.getElementById("answer-block");
 const questionEl = document.getElementById("question");
 const answerInput = document.getElementById("answer-input");
@@ -20,6 +22,24 @@ const EXAMPLES = {
   coherent: { image: "releve_serie_d.jpg", audio: "note_vocale_coherente.mp3" },
   blurry: { image: "releve_serie_d_flou.jpg", audio: null },
   contradictory: { image: "releve_serie_d.jpg", audio: "note_vocale_contradictoire.mp3" },
+};
+
+const TOOL_META = {
+  transcribe_voice: { label: "Transcription de la voix", icon: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 19v3"/>' },
+  extract_profile: { label: "Profil de l’élève", icon: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-5.5 8-5.5s6.5 1.5 8 5.5"/>' },
+  read_grade_sheet: { label: "Lecture du relevé", icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>' },
+  compute_ranking_average: { label: "Moyenne de classement (code)", icon: '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><path d="M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"/>' },
+  lookup_filieres: { label: "Recherche des filières (code)", icon: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>' },
+  ask_student: { label: "Question à l’élève", icon: '<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>' },
+  verify_report: { label: "Vérification des preuves (code)", icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>' },
+  build_report: { label: "Rapport final", icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/>' },
+};
+
+const DECISION_LABELS = {
+  continue: "continue",
+  suspend: "question posée",
+  stop_unverified: "arrêt : non vérifié",
+  stop_step_limit: "limite de pas atteinte",
 };
 
 let currentRunId = null;
@@ -47,8 +67,15 @@ function formatNumber(value) {
   return String(value ?? "").replace(".", ",");
 }
 
+function toolIcon(tool) {
+  const meta = TOOL_META[tool];
+  const paths = meta ? meta.icon : '<circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/>';
+  return `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">${paths}</svg>`;
+}
+
 function setRunBusy(busy) {
   submitBtn.disabled = busy;
+  busyBar.hidden = !busy;
   for (const btn of exampleBtns) btn.disabled = busy;
 }
 
@@ -58,15 +85,22 @@ function renderSteps() {
     return;
   }
   const items = seenSteps
-    .map(
-      (s) =>
-        `<li><strong>${escapeHtml(s.tool || "étape")} (pas ${escapeHtml(s.step)})</strong> — ${escapeHtml(s.decision || "")}` +
+    .map((s) => {
+      const meta = TOOL_META[s.tool];
+      const label = meta ? meta.label : s.tool || "Étape";
+      const decision = DECISION_LABELS[s.decision] || s.decision || "";
+      return (
+        `<article class="step-card"><span class="step-ico">${toolIcon(s.tool)}</span>` +
+        `<div class="step-head"><strong>${escapeHtml(label)}</strong>` +
+        `<span class="step-num">pas ${escapeHtml(s.step)} · ${escapeHtml(s.tool || "")}</span>` +
+        `<span class="pill decision-${escapeHtml(s.decision || "continue")}">${escapeHtml(decision)}</span></div>` +
         `<details><summary>Entrée / sortie</summary>` +
         `<pre>Entrée : ${escapeHtml(formatDetail(s.args))}</pre>` +
-        `<pre>Sortie : ${escapeHtml(formatDetail(s.result))}</pre></details></li>`
-    )
+        `<pre>Sortie : ${escapeHtml(formatDetail(s.result))}</pre></details></article>`
+      );
+    })
     .join("");
-  stepsEl.innerHTML = `<ol>${items}</ol>`;
+  stepsEl.innerHTML = `<div class="timeline">${items}</div>`;
 }
 
 function lastStep(tool) {
@@ -277,7 +311,7 @@ function renderClaims() {
     for (const proof of claim.proofs || []) {
       const chip = document.createElement("button");
       chip.type = "button";
-      chip.className = "proof-chip";
+      chip.className = `proof-chip chip-${proof.type}`;
       chip.textContent = proofLabel(proof);
       chip.addEventListener("click", () => openProof(proof));
       card.appendChild(chip);
@@ -398,11 +432,28 @@ async function streamEvents(response, onEvent) {
 
 async function readErrorDetail(response) {
   const text = await response.text();
+  let parsed = null;
   try {
-    return JSON.parse(text).detail || text;
+    parsed = JSON.parse(text);
   } catch {
-    return text;
+    parsed = null;
   }
+  const detail = parsed && typeof parsed === "object" ? parsed.detail : null;
+  if (typeof detail === "string" && detail.trim()) return detail;
+  if (Array.isArray(detail) && detail.length) {
+    return detail.map((item) => (item && item.msg) || JSON.stringify(item)).join(" ; ");
+  }
+  if (text && text.trim()) return text.trim().slice(0, 500);
+  return `le serveur a répondu ${response.status}${response.statusText ? ` ${response.statusText}` : ""} sans détail`;
+}
+
+// Never surface an empty error: name the cause or say the server is down.
+function describeClientError(err) {
+  if (err && err.name === "TypeError") {
+    return "serveur injoignable : vérifiez que uvicorn tourne depuis la racine du dépôt, puis réessayez";
+  }
+  if (err && typeof err.message === "string" && err.message.trim()) return err.message;
+  return "erreur inconnue";
 }
 
 async function postRun(body) {
@@ -428,7 +479,7 @@ async function startRun(body) {
   try {
     await postRun(body);
   } catch (err) {
-    setStatus(`Erreur : ${err.message}`, true);
+    setStatus(`Erreur : ${describeClientError(err)}`, true);
   } finally {
     setRunBusy(false);
   }
@@ -436,7 +487,7 @@ async function startRun(body) {
 
 async function fetchSampleFile(name) {
   const response = await fetch(`/samples/${name}`);
-  if (!response.ok) throw new Error(`exemple illisible (${name})`);
+  if (!response.ok) throw new Error(`exemple illisible (${name}) : ${await readErrorDetail(response)}`);
   const blob = await response.blob();
   return new File([blob], name, { type: blob.type || "application/octet-stream" });
 }
@@ -455,9 +506,22 @@ async function runExample(key) {
     setStatus("Envoi au serveur…");
     await postRun(body);
   } catch (err) {
-    setStatus(`Erreur : ${err.message}`, true);
+    setStatus(`Erreur : ${describeClientError(err)}`, true);
   } finally {
     setRunBusy(false);
+  }
+}
+
+async function checkServer() {
+  try {
+    const response = await fetch("/health");
+    const data = await response.json();
+    if (!response.ok || data.service !== "pathproof-demo") throw new Error("unexpected");
+    serverStatusEl.textContent = "Serveur de démo prêt.";
+  } catch {
+    serverStatusEl.textContent =
+      "Serveur de démo injoignable : lancez « python -m uvicorn src.api.server:app --port 8000 » depuis la racine du dépôt, puis rechargez la page.";
+    serverStatusEl.className = "bad";
   }
 }
 
@@ -465,7 +529,16 @@ for (const btn of exampleBtns) {
   btn.addEventListener("click", () => runExample(btn.dataset.example));
 }
 
+for (const inputId of ["photo", "voice"]) {
+  const input = document.getElementById(inputId);
+  const nameEl = document.getElementById(`${inputId}-name`);
+  input.addEventListener("change", () => {
+    nameEl.textContent = input.files[0] ? input.files[0].name : "Aucun fichier choisi";
+  });
+}
+
 proofClose.addEventListener("click", () => proofDialog.close());
+checkServer();
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -508,7 +581,7 @@ answerBtn.addEventListener("click", async () => {
   } catch (err) {
     seenSteps = seenSteps.slice(0, stepsBeforeAnswer);
     renderSteps();
-    setStatus(`Erreur : ${err.message}`, true);
+    setStatus(`Erreur : ${describeClientError(err)}`, true);
   } finally {
     answerBtn.disabled = false;
   }

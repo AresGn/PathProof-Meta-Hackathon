@@ -78,3 +78,16 @@ def test_displayed_content_is_escaped():
     assert "escapeHtml" in APP_JS
     # Report and proof sources are written as text, never as raw markup.
     assert "textContent" in APP_JS
+
+
+def test_health_endpoint_reports_the_demo_server():
+    app = TestClient(server.app)
+    response = app.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok", "service": "pathproof-demo"}
+
+
+def test_server_errors_are_never_shown_empty():
+    # A non-OK response without a readable detail still names its HTTP status.
+    assert "response.status" in APP_JS
+    assert "/health" in APP_JS

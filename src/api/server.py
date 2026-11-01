@@ -351,6 +351,12 @@ app.add_middleware(
 )
 
 
+@app.get("/health")
+async def health() -> dict:
+    """Liveness probe so the page can tell a stale server from a real run."""
+    return {"status": "ok", "service": "pathproof-demo"}
+
+
 @app.get("/samples/{name}")
 async def get_sample(name: str) -> FileResponse:
     """Serve one fictional demo file by its allowlisted name (E5.2)."""
