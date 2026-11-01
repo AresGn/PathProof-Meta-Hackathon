@@ -332,6 +332,7 @@ def test_late_tool_error_streams_partial_steps_then_error(monkeypatch):
         raise RuntimeError("late boom")
 
     monkeypatch.setattr(loop, "run", boom_run)
+    monkeypatch.setattr(server, "get_client", lambda: SimpleNamespace())
     response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
     assert response.status_code == 200
     events = parse_sse(response.text)
@@ -378,6 +379,7 @@ def test_text_only_builds_message_without_photo_or_voice(monkeypatch):
         return "ok-text"
 
     monkeypatch.setattr(loop, "run", spy_run)
+    monkeypatch.setattr(server, "get_client", lambda: SimpleNamespace())
     response = app.post("/run", data={"text": "je suis en D, je veux être médecin"})
     assert response.status_code == 200
     assert "written fallback text" in seen["input"]
@@ -394,6 +396,7 @@ def test_image_only_builds_message_without_voice_line(monkeypatch):
         return "ok-image"
 
     monkeypatch.setattr(loop, "run", spy_run)
+    monkeypatch.setattr(server, "get_client", lambda: SimpleNamespace())
     response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
     assert response.status_code == 200
     assert "grade-sheet photo (fictional sample)" in seen["input"]
