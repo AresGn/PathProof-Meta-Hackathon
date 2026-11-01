@@ -1,0 +1,11 @@
+CLI run E4.4 — e4.4_clear_sheet_d_medecin.json
+Image: data/samples/releve_serie_d.jpg
+Audio: data/samples/note_vocale_coherente.mp3
+Duration: 79.9s
+Model steps (journal entries): 6
+Distinct tools: 6
+Token usage (Muse Spark completions only): prompt=57196, completion=14303, total=71499
+Student questions asked: 0
+Outcome: finished
+Last verify_report problems: 0
+Report: produced
