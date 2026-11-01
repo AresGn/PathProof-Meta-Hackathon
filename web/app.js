@@ -23,6 +23,11 @@ function escapeHtml(value) {
   );
 }
 
+function formatDetail(value) {
+  const text = typeof value === "string" ? value : JSON.stringify(value ?? null, null, 2);
+  return text.length > 2000 ? `${text.slice(0, 2000)}…` : text;
+}
+
 function renderSteps() {
   if (!seenSteps.length) {
     stepsEl.innerHTML = '<p class="muted">En attente des étapes…</p>';
@@ -31,7 +36,10 @@ function renderSteps() {
   const items = seenSteps
     .map(
       (s) =>
-        `<li><strong>${escapeHtml(s.tool || "étape")} (pas ${escapeHtml(s.step)})</strong> — ${escapeHtml(s.decision || "")}</li>`
+        `<li><strong>${escapeHtml(s.tool || "étape")} (pas ${escapeHtml(s.step)})</strong> — ${escapeHtml(s.decision || "")}` +
+        `<details><summary>Entrée / sortie</summary>` +
+        `<pre>Entrée : ${escapeHtml(formatDetail(s.args))}</pre>` +
+        `<pre>Sortie : ${escapeHtml(formatDetail(s.result))}</pre></details></li>`
     )
     .join("");
   stepsEl.innerHTML = `<ol>${items}</ol>`;
@@ -55,9 +63,15 @@ function handleEvent(event) {
   if (event.type === "step") {
     seenSteps.push(event);
     renderSteps();
+  } else if (event.type === "rollback") {
+    // Steps of a failed attempt are re-emitted on retry: drop them here.
+    const count = Math.min(event.steps || 0, seenSteps.length);
+    if (count) seenSteps.splice(seenSteps.length - count, count);
+    renderSteps();
   } else if (event.type === "needs_input") {
     currentRunId = event.run_id;
     questionEl.textContent = event.question || "";
+    answerInput.value = "";
     answerBlock.hidden = false;
     setStatus("L’agent pose une question.");
   } else if (event.type === "done") {
@@ -73,8 +87,12 @@ function handleEvent(event) {
       renderReport(event.report || null);
     }
   } else if (event.type === "error") {
-    // The server kept the session, so the student can retry the same answer.
-    setStatus(`Erreur : ${event.error || "exécution impossible"} — vous pouvez réessayer.`, true);
+    if (currentRunId && event.run_id === currentRunId) {
+      // The server kept the session and the typed answer: offer a retry.
+      setStatus(`Erreur : ${event.error || "exécution impossible"} — vous pouvez réessayer.`, true);
+    } else {
+      setStatus(`Erreur : ${event.error || "exécution impossible"}`, true);
+    }
   }
 }
 
@@ -82,6 +100,20 @@ async function streamEvents(response, onEvent) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let terminalSeen = false;
+  let parseErrors = 0;
+  const dispatch = (line) => {
+    if (!line.startsWith("data:")) return;
+    try {
+      const event = JSON.parse(line.slice(5).trim());
+      if (event.type === "done" || event.type === "needs_input" || event.type === "error") {
+        terminalSeen = true;
+      }
+      onEvent(event);
+    } catch {
+      parseErrors += 1;
+    }
+  };
   for (;;) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -90,24 +122,12 @@ async function streamEvents(response, onEvent) {
     while ((cut = buffer.indexOf("\n\n")) >= 0) {
       const block = buffer.slice(0, cut);
       buffer = buffer.slice(cut + 2);
-      for (const line of block.split("\n")) {
-        if (!line.startsWith("data:")) continue;
-        try {
-          onEvent(JSON.parse(line.slice(5).trim()));
-        } catch {
-          // Ignore a malformed frame; the error event carries real failures.
-        }
-      }
+      for (const line of block.split("\n")) dispatch(line);
     }
   }
   const tail = buffer.trim();
-  if (tail.startsWith("data:")) {
-    try {
-      onEvent(JSON.parse(tail.slice(5).trim()));
-    } catch {
-      // Ignore a truncated tail frame on disconnect.
-    }
-  }
+  if (tail) dispatch(tail);
+  return { terminalSeen, parseErrors };
 }
 
 async function readErrorDetail(response) {
@@ -122,7 +142,10 @@ async function readErrorDetail(response) {
 async function postRun(body) {
   const response = await fetch("/run", { method: "POST", body });
   if (!response.ok) throw new Error(await readErrorDetail(response));
-  await streamEvents(response, handleEvent);
+  const result = await streamEvents(response, handleEvent);
+  if (!result.terminalSeen) {
+    throw new Error("Connexion interrompue : aucun événement final reçu. Relancez l’exécution.");
+  }
 }
 
 form.addEventListener("submit", async (event) => {
@@ -155,6 +178,7 @@ answerBtn.addEventListener("click", async () => {
   const answer = answerInput.value;
   if (!currentRunId || !answer.trim()) return;
   answerBtn.disabled = true;
+  const stepsBeforeAnswer = seenSteps.length;
   try {
     const response = await fetch("/answer", {
       method: "POST",
@@ -166,9 +190,18 @@ answerBtn.addEventListener("click", async () => {
       if (response.status === 404) closeSession();
       throw new Error(detail);
     }
-    answerInput.value = "";
-    await streamEvents(response, handleEvent);
+    // The typed answer is cleared only on a terminal event (needs_input
+    // clears it for the next question, done via closeSession): on error it
+    // stays in place so the student can retry as the message promises.
+    const result = await streamEvents(response, handleEvent);
+    if (!result.terminalSeen) {
+      seenSteps = seenSteps.slice(0, stepsBeforeAnswer);
+      renderSteps();
+      setStatus("Connexion interrompue : la réponse n’a pas abouti. Vous pouvez réessayer.", true);
+    }
   } catch (err) {
+    seenSteps = seenSteps.slice(0, stepsBeforeAnswer);
+    renderSteps();
     setStatus(`Erreur : ${err.message}`, true);
   } finally {
     answerBtn.disabled = false;

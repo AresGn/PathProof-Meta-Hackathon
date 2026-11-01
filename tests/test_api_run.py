@@ -46,7 +46,7 @@ def step_events(events):
 def make_client(monkeypatch):
     app = TestClient(server.app)
     # Isolate runs between tests (in-memory sessions + temp dirs).
-    server.RUNS.clear()
+    server.pending_run_store.clear_pending_runs()
     return app
 
 
@@ -161,7 +161,7 @@ def test_audio_too_large_returns_413(monkeypatch):
 
 def test_unsupported_image_type_returns_415():
     app = TestClient(server.app)
-    server.RUNS.clear()
+    server.pending_run_store.clear_pending_runs()
     response = app.post(
         "/run",
         files={"image": ("sheet.txt", b"not an image", "text/plain")},
@@ -171,7 +171,7 @@ def test_unsupported_image_type_returns_415():
 
 def test_unsupported_audio_type_returns_415():
     app = TestClient(server.app)
-    server.RUNS.clear()
+    server.pending_run_store.clear_pending_runs()
     response = app.post(
         "/run",
         files={
@@ -225,17 +225,18 @@ def test_no_501_stub_left():
 
 
 class FailOnceClient:
-    """Fake client whose second model call raises, then behaves like the scripted client."""
+    """Fake client whose Nth model call raises, then behaves like the scripted client."""
 
-    def __init__(self, scripted):
+    def __init__(self, scripted, fail_on=2):
         self._scripted = scripted
         self.calls = scripted.calls
         self._creates = 0
+        self._fail_on = fail_on
         self.chat = SimpleNamespace(completions=SimpleNamespace(create=self._create))
 
     def _create(self, **kwargs):
         self._creates += 1
-        if self._creates == 2:
+        if self._creates == self._fail_on:
             raise RuntimeError("boom, retry me")
         return self._scripted._create(**kwargs)
 
@@ -259,7 +260,7 @@ def test_answer_error_keeps_session_for_retry(monkeypatch):
     assert retryable.status_code == 200
     retry_events = parse_sse(retryable.text)
     assert any(event.get("type") == "error" for event in retry_events)
-    assert run_id in server.RUNS  # failed resume keeps the pre-answer state
+    assert server.pending_run_store.has_pending_run(run_id)  # failed resume keeps the pre-answer state
 
     resumed = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
     assert resumed.status_code == 200
@@ -299,13 +300,13 @@ def test_expired_pending_run_returns_404_and_cleans_tmpdir(monkeypatch):
     first = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
     run_id = next(event["run_id"] for event in parse_sse(first.text)
                   if event.get("type") == "needs_input")
-    tmpdir = Path(server.RUNS[run_id]["tmpdir"])
+    tmpdir = Path(server.pending_run_store.get_pending_entry(run_id)["tmpdir"])
     assert tmpdir.is_dir()
-    server.RUNS[run_id]["created_at"] -= run_store.RUN_TTL_SECONDS + 1
+    monkeypatch.setattr(run_store, "RUN_TTL_SECONDS", -1)
 
     expired = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
     assert expired.status_code == 404
-    assert run_id not in server.RUNS
+    assert not server.pending_run_store.has_pending_run(run_id)
     assert not tmpdir.exists()
 
 
@@ -318,7 +319,7 @@ def test_too_many_pending_runs_returns_429(monkeypatch):
 
 def test_empty_image_returns_400():
     app = TestClient(server.app)
-    server.RUNS.clear()
+    server.pending_run_store.clear_pending_runs()
     response = app.post("/run", files={"image": ("sheet.jpg", b"", "image/jpeg")})
     assert response.status_code == 400
 
@@ -401,3 +402,109 @@ def test_image_only_builds_message_without_voice_line(monkeypatch):
     assert response.status_code == 200
     assert "grade-sheet photo (fictional sample)" in seen["input"]
     assert "Voice note audio path" not in seen["input"]
+
+
+def test_failed_answer_steps_are_rolled_back_before_retry(monkeypatch):
+    app = make_client(monkeypatch)
+    question = "Quelle est ta série ?"
+    monkeypatch.setitem(loop.TOOLS, "lookup_filieres", lambda **kwargs: {"accessible": [], "excluded": []})
+    client = FailOnceClient(ScriptedFakeClient([
+        assistant_message(tool_calls=[tool_call("ask-1", "ask_student", {"question": question})]),
+        assistant_message(tool_calls=[tool_call("c2", "lookup_filieres", {"serie": "D"})]),
+        assistant_message(tool_calls=[tool_call("c3", "lookup_filieres", {"serie": "D"})]),
+        assistant_message(content="Merci, je continue."),
+    ]), fail_on=3)
+    monkeypatch.setattr(server, "get_client", lambda: client)
+
+    first = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    run_id = next(event["run_id"] for event in parse_sse(first.text)
+                  if event.get("type") == "needs_input")
+
+    failed = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
+    failed_events = parse_sse(failed.text)
+    assert [event["step"] for event in step_events(failed_events)] == [2]
+    rollbacks = [event for event in failed_events if event.get("type") == "rollback"]
+    assert rollbacks and rollbacks[0]["steps"] == 1
+    assert any(event.get("type") == "error" for event in failed_events)
+    assert server.pending_run_store.has_pending_run(run_id)
+
+    resumed = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
+    resumed_events = parse_sse(resumed.text)
+    assert [event["step"] for event in step_events(resumed_events)] == [2]
+    assert not any(event.get("type") == "rollback" for event in resumed_events)
+    assert any(event.get("type") == "done" for event in resumed_events)
+
+
+def test_too_many_concurrent_runs_returns_429(monkeypatch):
+    app = make_client(monkeypatch)
+    monkeypatch.setattr(server, "MAX_CONCURRENT_RUNS", 0)
+    response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    assert response.status_code == 429
+
+
+def test_stream_disconnect_settles_in_background(tmp_path):
+    import threading
+    import time as time_module
+
+    release = threading.Event()
+    journal = []
+    tmpdir = tmp_path / "pathproof-disconnect"
+    tmpdir.mkdir()
+    (tmpdir / "image.jpg").write_bytes(b"x")
+
+    def call():
+        journal.append({"step": 1, "tool": "lookup_filieres", "args": {},
+                        "result": {}, "decision": "continue"})
+        release.wait(timeout=5)
+        return "done"
+
+    frames = server.stream_agent_run(run_id="disconnect", journal=journal, start=0,
+                                     tmpdir=tmpdir, restore_entry=None, call=call)
+    assert "lookup_filieres" in next(frames)
+    frames.close()  # client gone: the response path must not join the worker
+    release.set()
+    deadline = time_module.monotonic() + 5
+    while tmpdir.exists() and time_module.monotonic() < deadline:
+        time_module.sleep(0.01)
+    assert not tmpdir.exists()
+
+
+def test_stream_frame_failure_still_cleans_tmpdir(tmp_path):
+    import time as time_module
+
+    tmpdir = tmp_path / "pathproof-badframe"
+    tmpdir.mkdir()
+    journal = [{"step": 1, "tool": "lookup_filieres", "args": {"bad": object()},
+                "result": {}, "decision": "continue"}]
+    frames = server.stream_agent_run(run_id="badframe", journal=journal, start=0,
+                                     tmpdir=tmpdir, restore_entry=None,
+                                     call=lambda: "done")
+    try:
+        next(frames)
+        raised = False
+    except TypeError:
+        raised = True
+    assert raised
+    deadline = time_module.monotonic() + 5
+    while tmpdir.exists() and time_module.monotonic() < deadline:
+        time_module.sleep(0.01)
+    assert not tmpdir.exists()
+
+
+def test_failed_upload_write_leaves_no_tmpdir(monkeypatch):
+    app = TestClient(server.app, raise_server_exceptions=False)
+    server.pending_run_store.clear_pending_runs()
+    tmp_root = Path.cwd() / "tmp"
+    before = set(tmp_root.glob("pathproof-*")) if tmp_root.is_dir() else set()
+    original_write = Path.write_bytes
+
+    def flaky_write(self, data):
+        if self.name.startswith("image"):
+            raise OSError("disk full")
+        return original_write(self, data)
+
+    monkeypatch.setattr(Path, "write_bytes", flaky_write)
+    response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    assert response.status_code == 500
+    after = set(tmp_root.glob("pathproof-*")) if tmp_root.is_dir() else set()
+    assert after == before
