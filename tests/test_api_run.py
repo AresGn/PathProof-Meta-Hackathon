@@ -222,3 +222,179 @@ def test_no_501_stub_left():
     source = Path(server.__file__).read_text(encoding="utf-8")
     assert "501" not in source
     assert "not implemented" not in source
+
+
+class FailOnceClient:
+    """Fake client whose second model call raises, then behaves like the scripted client."""
+
+    def __init__(self, scripted):
+        self._scripted = scripted
+        self.calls = scripted.calls
+        self._creates = 0
+        self.chat = SimpleNamespace(completions=SimpleNamespace(create=self._create))
+
+    def _create(self, **kwargs):
+        self._creates += 1
+        if self._creates == 2:
+            raise RuntimeError("boom, retry me")
+        return self._scripted._create(**kwargs)
+
+
+def test_answer_error_keeps_session_for_retry(monkeypatch):
+    app = make_client(monkeypatch)
+    question = "Quelle est ta série ?"
+    monkeypatch.setitem(loop.TOOLS, "lookup_filieres", lambda **kwargs: {"accessible": [], "excluded": []})
+    client = FailOnceClient(ScriptedFakeClient([
+        assistant_message(tool_calls=[tool_call("ask-1", "ask_student", {"question": question})]),
+        assistant_message(tool_calls=[tool_call("c2", "lookup_filieres", {"serie": "D"})]),
+        assistant_message(content="Merci, je continue."),
+    ]))
+    monkeypatch.setattr(server, "get_client", lambda: client)
+
+    first = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    run_id = next(event["run_id"] for event in parse_sse(first.text)
+                  if event.get("type") == "needs_input")
+
+    retryable = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
+    assert retryable.status_code == 200
+    retry_events = parse_sse(retryable.text)
+    assert any(event.get("type") == "error" for event in retry_events)
+    assert run_id in server.RUNS  # failed resume keeps the pre-answer state
+
+    resumed = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
+    assert resumed.status_code == 200
+    resumed_events = parse_sse(resumed.text)
+    assert [event["step"] for event in step_events(resumed_events)] == [2]
+    assert any(event.get("type") == "done" for event in resumed_events)
+
+
+def test_second_answer_after_done_returns_404(monkeypatch):
+    app = make_client(monkeypatch)
+    question = "Quelle est ta série ?"
+    client = ScriptedFakeClient([
+        assistant_message(tool_calls=[tool_call("ask-1", "ask_student", {"question": question})]),
+        assistant_message(content="Merci, je continue."),
+    ])
+    monkeypatch.setattr(server, "get_client", lambda: client)
+
+    first = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    run_id = next(event["run_id"] for event in parse_sse(first.text)
+                  if event.get("type") == "needs_input")
+    done = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
+    assert any(event.get("type") == "done" for event in parse_sse(done.text))
+    again = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
+    assert again.status_code == 404
+
+
+def test_expired_pending_run_returns_404_and_cleans_tmpdir(monkeypatch):
+    from src.api import run_store
+
+    app = make_client(monkeypatch)
+    question = "Quelle est ta série ?"
+    client = ScriptedFakeClient([
+        assistant_message(tool_calls=[tool_call("ask-1", "ask_student", {"question": question})]),
+    ])
+    monkeypatch.setattr(server, "get_client", lambda: client)
+
+    first = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    run_id = next(event["run_id"] for event in parse_sse(first.text)
+                  if event.get("type") == "needs_input")
+    tmpdir = Path(server.RUNS[run_id]["tmpdir"])
+    assert tmpdir.is_dir()
+    server.RUNS[run_id]["created_at"] -= run_store.RUN_TTL_SECONDS + 1
+
+    expired = app.post("/answer", json={"run_id": run_id, "answer": "Série D."})
+    assert expired.status_code == 404
+    assert run_id not in server.RUNS
+    assert not tmpdir.exists()
+
+
+def test_too_many_pending_runs_returns_429(monkeypatch):
+    app = make_client(monkeypatch)
+    monkeypatch.setattr(server, "MAX_PENDING_RUNS", 0)
+    response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    assert response.status_code == 429
+
+
+def test_empty_image_returns_400():
+    app = TestClient(server.app)
+    server.RUNS.clear()
+    response = app.post("/run", files={"image": ("sheet.jpg", b"", "image/jpeg")})
+    assert response.status_code == 400
+
+
+def test_late_tool_error_streams_partial_steps_then_error(monkeypatch):
+    app = make_client(monkeypatch)
+
+    def boom_run(client, model, schemas, user_input, journal=None):
+        journal.append({"step": 1, "tool": "lookup_filieres", "args": {"serie": "D"},
+                        "result": {"accessible": [], "excluded": []}, "decision": "continue"})
+        raise RuntimeError("late boom")
+
+    monkeypatch.setattr(loop, "run", boom_run)
+    response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    assert response.status_code == 200
+    events = parse_sse(response.text)
+    assert [event["step"] for event in step_events(events)] == [1]
+    errors = [event for event in events if event.get("type") == "error"]
+    assert errors and "late boom" in errors[0]["error"]
+
+
+def test_secret_with_json_special_chars_is_redacted(monkeypatch):
+    app = make_client(monkeypatch)
+    secret = 'sk-"quote\\slash'
+    monkeypatch.setenv("MUSE_API_KEY", secret)
+
+    def leaking_client():
+        raise RuntimeError(f"auth failed {secret} end")
+
+    monkeypatch.setattr(server, "get_client", leaking_client)
+    response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    assert response.status_code == 200
+    assert secret not in response.text
+    assert "[redacted]" in response.text
+
+
+def test_missing_api_key_returns_error_without_env_name(monkeypatch):
+    app = make_client(monkeypatch)
+
+    def missing_key_client():
+        raise RuntimeError("MUSE_API_KEY is not set (see .env.example)")
+
+    monkeypatch.setattr(server, "get_client", missing_key_client)
+    response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    assert response.status_code == 200
+    assert "MUSE_API_KEY" not in response.text
+    errors = [event for event in parse_sse(response.text) if event.get("type") == "error"]
+    assert errors and "API key" in errors[0]["error"]
+
+
+def test_text_only_builds_message_without_photo_or_voice(monkeypatch):
+    app = make_client(monkeypatch)
+    seen = {}
+
+    def spy_run(client, model, schemas, user_input, journal=None):
+        seen["input"] = user_input
+        return "ok-text"
+
+    monkeypatch.setattr(loop, "run", spy_run)
+    response = app.post("/run", data={"text": "je suis en D, je veux être médecin"})
+    assert response.status_code == 200
+    assert "written fallback text" in seen["input"]
+    assert "Grade sheet" not in seen["input"]
+    assert "Voice note audio path" not in seen["input"]
+
+
+def test_image_only_builds_message_without_voice_line(monkeypatch):
+    app = make_client(monkeypatch)
+    seen = {}
+
+    def spy_run(client, model, schemas, user_input, journal=None):
+        seen["input"] = user_input
+        return "ok-image"
+
+    monkeypatch.setattr(loop, "run", spy_run)
+    response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
+    assert response.status_code == 200
+    assert "grade-sheet photo (fictional sample)" in seen["input"]
+    assert "Voice note audio path" not in seen["input"]

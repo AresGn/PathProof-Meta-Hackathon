@@ -23,24 +23,6 @@ function escapeHtml(value) {
   );
 }
 
-function parseSse(text) {
-  const events = [];
-  for (const block of String(text).split("\n\n")) {
-    const trimmed = block.trim();
-    if (!trimmed) continue;
-    for (const line of trimmed.split("\n")) {
-      if (line.startsWith("data:")) {
-        try {
-          events.push(JSON.parse(line.slice(5).trim()));
-        } catch {
-          // Ignore a malformed frame; the error event carries real failures.
-        }
-      }
-    }
-  }
-  return events;
-}
-
 function renderSteps() {
   if (!seenSteps.length) {
     stepsEl.innerHTML = '<p class="muted">En attente des étapes…</p>';
@@ -63,55 +45,90 @@ function renderReport(report) {
   reportEl.innerHTML = `<pre>${escapeHtml(report)}</pre>`;
 }
 
-function handleEvents(events) {
-  for (const event of events) {
-    if (event.type === "step") {
-      seenSteps.push(event);
-      renderSteps();
-    } else if (event.type === "needs_input") {
-      currentRunId = event.run_id;
-      questionEl.textContent = event.question || "";
-      answerBlock.hidden = false;
-      setStatus("L’agent pose une question.");
-    } else if (event.type === "done") {
-      currentRunId = null;
-      answerBlock.hidden = true;
-      if (event.status === "ok") {
-        setStatus("Exécution terminée.");
-        renderReport(event.report);
-      } else if (event.status === "unverified") {
-        setStatus("Rapport non vérifié : voir les problèmes.", true);
-        renderReport(null);
-      } else {
-        setStatus(`Exécution terminée (${event.status}).`);
-        renderReport(event.report || null);
-      }
-    } else if (event.type === "error") {
-      setStatus(`Erreur : ${event.error || "exécution impossible"}`, true);
+function closeSession() {
+  currentRunId = null;
+  answerBlock.hidden = true;
+  answerInput.value = "";
+}
+
+function handleEvent(event) {
+  if (event.type === "step") {
+    seenSteps.push(event);
+    renderSteps();
+  } else if (event.type === "needs_input") {
+    currentRunId = event.run_id;
+    questionEl.textContent = event.question || "";
+    answerBlock.hidden = false;
+    setStatus("L’agent pose une question.");
+  } else if (event.type === "done") {
+    closeSession();
+    if (event.status === "ok") {
+      setStatus("Exécution terminée.");
+      renderReport(event.report);
+    } else if (event.status === "unverified") {
+      setStatus("Rapport non vérifié : voir « Ce que je n’ai pas pu vérifier ».", true);
+      renderReport(null);
+    } else {
+      setStatus(`Exécution terminée (${event.status}).`);
+      renderReport(event.report || null);
     }
+  } else if (event.type === "error") {
+    // The server kept the session, so the student can retry the same answer.
+    setStatus(`Erreur : ${event.error || "exécution impossible"} — vous pouvez réessayer.`, true);
+  }
+}
+
+async function streamEvents(response, onEvent) {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let cut;
+    while ((cut = buffer.indexOf("\n\n")) >= 0) {
+      const block = buffer.slice(0, cut);
+      buffer = buffer.slice(cut + 2);
+      for (const line of block.split("\n")) {
+        if (!line.startsWith("data:")) continue;
+        try {
+          onEvent(JSON.parse(line.slice(5).trim()));
+        } catch {
+          // Ignore a malformed frame; the error event carries real failures.
+        }
+      }
+    }
+  }
+  const tail = buffer.trim();
+  if (tail.startsWith("data:")) {
+    try {
+      onEvent(JSON.parse(tail.slice(5).trim()));
+    } catch {
+      // Ignore a truncated tail frame on disconnect.
+    }
+  }
+}
+
+async function readErrorDetail(response) {
+  const text = await response.text();
+  try {
+    return JSON.parse(text).detail || text;
+  } catch {
+    return text;
   }
 }
 
 async function postRun(body) {
   const response = await fetch("/run", { method: "POST", body });
-  const text = await response.text();
-  if (!response.ok) {
-    let detail = text;
-    try {
-      detail = JSON.parse(text).detail || text;
-    } catch {
-      // Keep the raw body when it is not JSON (413/415 pages).
-    }
-    throw new Error(detail);
-  }
-  handleEvents(parseSse(text));
+  if (!response.ok) throw new Error(await readErrorDetail(response));
+  await streamEvents(response, handleEvent);
 }
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   submitBtn.disabled = true;
-  answerBlock.hidden = true;
-  currentRunId = null;
+  closeSession();
   seenSteps = [];
   renderSteps();
   renderReport(null);
@@ -144,10 +161,13 @@ answerBtn.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ run_id: currentRunId, answer: answer.trim() }),
     });
-    const text = await response.text();
-    if (!response.ok) throw new Error(text);
+    if (!response.ok) {
+      const detail = await readErrorDetail(response);
+      if (response.status === 404) closeSession();
+      throw new Error(detail);
+    }
     answerInput.value = "";
-    handleEvents(parseSse(text));
+    await streamEvents(response, handleEvent);
   } catch (err) {
     setStatus(`Erreur : ${err.message}`, true);
   } finally {
