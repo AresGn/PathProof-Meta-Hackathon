@@ -21,6 +21,9 @@ export function formatNumber(value) {
 }
 
 function decimalParts(value) {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    throw new TypeError("grade must be a finite number");
+  }
   const match = /^([+-]?)(\d+)(?:\.(\d*))?(?:e([+-]?\d+))?$/i.exec(String(value));
   if (!match) throw new TypeError(`not a finite decimal: ${value}`);
   const fraction = match[3] || "";
@@ -40,10 +43,23 @@ function rescaleDecimal(decimal, scale) {
 }
 
 export function sumWeightedGrades(inputs) {
-  const grades = inputs.map((entry) => decimalParts(entry.note));
+  if (!Array.isArray(inputs) || inputs.length === 0) {
+    throw new TypeError("calculation inputs must be a non-empty list");
+  }
+  const grades = inputs.map((entry) => {
+    if (!entry || typeof entry !== "object") {
+      throw new TypeError("calculation input must be an object");
+    }
+    const note = decimalParts(entry.note);
+    const coefficient = entry.coefficient;
+    if (!Number.isSafeInteger(coefficient) || coefficient < 1) {
+      throw new TypeError("coefficient must be a positive safe integer");
+    }
+    return { ...note, coefficient };
+  });
   const scale = Math.max(0, ...grades.map((grade) => grade.scale));
   const products = grades.map(
-    (grade, index) => rescaleDecimal(grade, scale) * BigInt(inputs[index].coefficient)
+    (grade) => rescaleDecimal(grade, scale) * BigInt(grade.coefficient)
   );
   return { products, total: products.reduce((sum, product) => sum + product, 0n), scale };
 }

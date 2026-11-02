@@ -160,6 +160,14 @@ export function createProofViewer({ dialog, title, body, getSteps, getVerifiedCo
     title.textContent = t("calcTitle", { result: formatNumber(proof.result) });
     addNote(body, t("calcNote", { formula: proof.formula }));
     const inputs = Array.isArray(proof.inputs) ? proof.inputs : [];
+    let weighted;
+    try {
+      weighted = sumWeightedGrades(inputs);
+    } catch (error) {
+      if (!(error instanceof TypeError)) throw error;
+      addNote(body, t("calcUnavailable"));
+      return;
+    }
     const table = document.createElement("table");
     const head = document.createElement("tr");
     for (const label of [t("calcSubject"), t("calcGrade"), t("calcCoefficient"), t("calcProduct")]) {
@@ -168,7 +176,6 @@ export function createProofViewer({ dialog, title, body, getSteps, getVerifiedCo
       head.appendChild(cell);
     }
     table.appendChild(head);
-    const weighted = sumWeightedGrades(inputs);
     let coefficients = 0;
     for (let index = 0; index < inputs.length; index += 1) {
       const entry = inputs[index];

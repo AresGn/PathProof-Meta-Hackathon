@@ -72,6 +72,7 @@ export const I18N = {
     calcNote: "Guide formula (page 8): {formula}. Series coefficients, never computed by the model.",
     calcSubject: "Subject", calcGrade: "Grade", calcCoefficient: "Coefficient", calcProduct: "Grade × coefficient",
     calcDetail: "Detail: {total} / {coeffs} = {result}/20 (guide rounding).",
+    calcUnavailable: "Calculation details are unavailable because the verified inputs are invalid.",
   },
   fr: {
     tagline: "Every study path comes with its proof. L’agent choisit ses outils, calcule par du code, et ne recommande que ce qu’il peut prouver.",
@@ -145,6 +146,7 @@ export const I18N = {
     calcNote: "Formule du guide (page 8) : {formula}. Coefficients de la série, jamais calculés par le modèle.",
     calcSubject: "Matière", calcGrade: "Note", calcCoefficient: "Coefficient", calcProduct: "Note × coefficient",
     calcDetail: "Détail : {total} / {coeffs} = {result}/20 (arrondi du guide).",
+    calcUnavailable: "Le détail du calcul est indisponible : les entrées vérifiées sont invalides.",
   },
 };
 const STORAGE_KEY = "pathproof-lang";
@@ -153,7 +155,7 @@ function readStoredLanguage() {
   try {
     return window.localStorage.getItem(STORAGE_KEY);
   } catch (error) {
-    if (error.name !== "SecurityError") throw error;
+    if (!isStorageUnavailable(error)) throw error;
     return null;
   }
 }
@@ -162,8 +164,12 @@ function storeLanguage(language) {
   try {
     window.localStorage.setItem(STORAGE_KEY, language);
   } catch (error) {
-    if (error.name !== "SecurityError") throw error;
+    if (!isStorageUnavailable(error)) throw error;
   }
+}
+
+function isStorageUnavailable(error) {
+  return error && ["SecurityError", "QuotaExceededError"].includes(error.name);
 }
 
 let currentLanguage = readStoredLanguage() === "fr" ? "fr" : "en";

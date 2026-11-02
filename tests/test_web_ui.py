@@ -150,11 +150,17 @@ def test_blocked_local_storage_does_not_prevent_language_module_loading():
     i18n = MODULES["i18n.js"]
     assert "function readStoredLanguage()" in i18n
     assert "function storeLanguage(language)" in i18n
-    assert "error.name !== \"SecurityError\"" in i18n
+    assert "!isStorageUnavailable(error)" in i18n
     assert "let currentLanguage = readStoredLanguage() === \"fr\" ? \"fr\" : \"en\"" in i18n
     assert "storeLanguage(currentLanguage)" in i18n
     assert i18n.count("window.localStorage.getItem(STORAGE_KEY)") == 1
     assert i18n.count("window.localStorage.setItem(STORAGE_KEY") == 1
+
+
+def test_full_local_storage_does_not_break_language_switch():
+    i18n = MODULES["i18n.js"]
+    assert '"QuotaExceededError"' in i18n
+    assert "function isStorageUnavailable(error)" in i18n
 
 
 def test_answer_stream_locks_new_runs_until_the_answer_finishes():
@@ -193,6 +199,10 @@ def test_calculation_proof_uses_exact_decimal_sums_and_rounded_display():
     assert "formatCalculationNumber(weighted.products[index], weighted.scale)" in proofs
     assert "formatCalculationNumber(weighted.total, weighted.scale)" in proofs
     assert "Number(entry.note) * Number(entry.coefficient)" not in proofs
+    assert "t(\"calcUnavailable\")" in proofs
+    assert "Number.isFinite(value)" in format_module
+    assert "Number.isSafeInteger(coefficient)" in format_module
+    assert 'calcUnavailable: "Calculation details are unavailable' in MODULES["i18n.js"]
 
 
 def test_api_health_probe_can_retry_after_the_server_becomes_available():
