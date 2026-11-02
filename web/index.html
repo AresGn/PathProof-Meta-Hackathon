@@ -1,124 +1,136 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PathProof — démo</title>
-    <style>
-      :root {
-        font-family: system-ui, sans-serif;
-        line-height: 1.5;
-        color: #1a1a1a;
-        background: #f6f7f9;
-      }
-      body {
-        max-width: 42rem;
-        margin: 0 auto;
-        padding: 1.5rem;
-      }
-      h1 {
-        font-size: 1.35rem;
-        margin-bottom: 0.25rem;
-      }
-      .muted {
-        color: #555;
-        font-size: 0.95rem;
-      }
-      fieldset {
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        margin: 1rem 0;
-        padding: 1rem;
-        background: #fff;
-      }
-      legend {
-        font-weight: 600;
-        padding: 0 0.25rem;
-      }
-      label {
-        display: block;
-        margin-top: 0.75rem;
-      }
-      button {
-        margin-top: 1rem;
-        padding: 0.6rem 1.2rem;
-        font-size: 1rem;
-        border: none;
-        border-radius: 6px;
-        background: #1877f2;
-        color: #fff;
-        cursor: pointer;
-      }
-      button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-      #steps,
-      #report {
-        margin-top: 1rem;
-        padding: 1rem;
-        background: #fff;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        min-height: 3rem;
-      }
-      #steps ol {
-        margin: 0;
-        padding-left: 1.25rem;
-      }
-      #status {
-        margin-top: 0.75rem;
-        font-size: 0.9rem;
-      }
-      .error {
-        color: #b00020;
-      }
-    </style>
+    <title>PathProof — demo</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%230b3527'/%3E%3Cpath d='M7 12.5 10.5 16 17 8' stroke='%237be3b8' stroke-width='2.5' fill='none'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>PathProof</h1>
-    <p class="muted">
-      Démo : envoyez une photo de relevé et un message vocal. L’agent affichera
-      ses étapes d’outils puis un rapport avec sources.
-    </p>
+    <header class="hero">
+      <div class="hero-in">
+        <div>
+          <p class="wordmark">Path<em>Proof</em></p>
+          <p class="tagline" data-i18n="tagline">Every study path comes with its proof. The agent picks its own tools, deterministic code does the math, and only proven claims reach the report.</p>
+          <div class="badges">
+            <span class="badge" data-i18n="badgeGuide">Official 2026-2027 guide</span>
+            <span class="badge" data-i18n="badgeProofs">Code-verified proofs</span>
+            <span class="badge" data-i18n="badgeSeries">Series C and D</span>
+            <span class="badge" data-i18n="badgeFictional">Fictional data only</span>
+          </div>
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-btn active" data-set-lang="en">EN</button>
+            <button type="button" class="lang-btn" data-set-lang="fr">FR</button>
+          </div>
+          <p id="server-status" data-i18n="serverChecking">Checking the demo server…</p>
+        </div>
+        <aside class="hero-proof" aria-hidden="true">
+          <p data-i18n="heroProof">Every claim opens its source. Try it in the report:</p>
+          <span class="proof-chip chip-grade">Grade · SVT 15/20</span>
+          <span class="proof-chip chip-transcript">Quote · “maybe a doctor”</span>
+          <span class="proof-chip chip-filiere">Guide · PUB-062 (page 36)</span>
+          <span class="proof-chip chip-calc">Result · 13.15</span>
+        </aside>
+      </div>
+    </header>
 
-    <form id="demo-form">
-      <fieldset>
-        <legend>Entrées élève</legend>
-        <label>
-          Photo du relevé (JPEG/PNG)
-          <input type="file" id="photo" accept="image/*" />
-        </label>
-        <label>
-          Message vocal
-          <input type="file" id="voice" accept="audio/*" />
-        </label>
-        <label>
-          Texte de secours (si pas de note vocale)
-          <textarea id="fallback-text" rows="3" placeholder="Série, intérêts, métier visé…"></textarea>
-        </label>
-        <button type="submit" id="submit-btn">Lancer l’orientation</button>
-      </fieldset>
-    </form>
-
-    <p id="status" class="muted" aria-live="polite"></p>
-
-    <h2>Étapes de l’agent</h2>
-    <div id="steps"><p class="muted">Aucune exécution pour l’instant.</p></div>
-
-    <div id="answer-block" hidden>
-      <h2>Question de l’agent</h2>
-      <p id="question"></p>
-      <label>
-        Votre réponse
-        <input type="text" id="answer-input" />
-      </label>
-      <button type="button" id="answer-btn">Répondre</button>
+    <div class="how">
+      <div class="how-step"><span class="how-num">1</span><p data-i18n="how1">Send a grade-sheet photo and a voice note — or launch a fictional example.</p></div>
+      <div class="how-step"><span class="how-num">2</span><p data-i18n="how2">The agent reads, transcribes, computes by code, and asks when something is unsure.</p></div>
+      <div class="how-step"><span class="how-num">3</span><p data-i18n="how3">You get a verified report where every claim opens its proof.</p></div>
     </div>
 
-    <h2>Rapport</h2>
-    <div id="report"><p class="muted">Le rapport apparaîtra ici.</p></div>
+    <div class="layout">
+      <div>
+        <section class="panel">
+          <fieldset>
+            <legend data-i18n="examplesLegend">Fictional examples — one click, nothing to prepare</legend>
+            <button type="button" class="example-btn" data-example="coherent">
+              <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14l-3-3"/></svg></span>
+              <span><strong data-i18n="ex1Title">Clear serie D sheet + matching voice note</strong>
+              <span class="ex-desc" data-i18n="ex1Desc">Serie D, “maybe a doctor”: expect a full report.</span></span>
+            </button>
+            <button type="button" class="example-btn" data-example="blurry">
+              <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              <span><strong data-i18n="ex2Title">Blurry sheet</strong>
+              <span class="ex-desc" data-i18n="ex2Desc">One unreadable grade: the agent asks instead of guessing.</span></span>
+            </button>
+            <button type="button" class="example-btn" data-example="contradictory">
+              <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
+              <span><strong data-i18n="ex3Title">Contradictory voice note</strong>
+              <span class="ex-desc" data-i18n="ex3Desc">“14 average” said, 11.2 on the sheet: the agent flags the gap.</span></span>
+            </button>
+          </fieldset>
+        </section>
 
-    <script src="app.js"></script>
+        <form id="demo-form">
+          <section class="panel">
+            <fieldset>
+              <legend data-i18n="formLegend">Student inputs</legend>
+              <label class="drop">
+                <span class="drop-title" data-i18n="photoTitle">Grade-sheet photo (JPEG/PNG)</span>
+                <input type="file" id="photo" accept="image/*" />
+                <span class="file-name" id="photo-name" data-i18n="noFile">No file chosen</span>
+              </label>
+              <label class="drop">
+                <span class="drop-title" data-i18n="voiceTitle">Voice note</span>
+                <input type="file" id="voice" accept="audio/*" />
+                <span class="file-name" id="voice-name" data-i18n="noFile">No file chosen</span>
+              </label>
+              <label>
+                <span data-i18n="fallbackLabel">Fallback text (if no voice note)</span>
+                <textarea id="fallback-text" rows="3" data-i18n-ph="fallbackPh" placeholder="Series, interests, target job…"></textarea>
+              </label>
+              <button type="submit" class="cta" id="submit-btn" data-i18n="submit">Start orientation</button>
+              <div id="busy-bar" hidden><i></i></div>
+              <p id="status" class="muted" aria-live="polite"></p>
+            </fieldset>
+          </section>
+        </form>
+      </div>
+
+      <main>
+        <section class="panel">
+          <h2 data-i18n="stepsHeading">Agent steps</h2>
+          <div id="steps"><p class="muted" data-i18n="stepsEmpty">No run yet.</p></div>
+        </section>
+
+        <div id="answer-block" hidden>
+          <h2 data-i18n="questionHeading">A question from the agent</h2>
+          <p id="question"></p>
+          <label>
+            <span data-i18n="answerLabel">Your answer</span>
+            <input type="text" id="answer-input" />
+          </label>
+          <button type="button" id="answer-btn" data-i18n="answerButton">Reply</button>
+        </div>
+
+        <section class="panel">
+          <h2 data-i18n="reportHeading">Report</h2>
+          <div id="verified-banner" hidden>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span data-i18n="verifiedBanner">Verified report — every claim checked by code</span>
+          </div>
+          <p class="muted" data-i18n="reportNote">The verified report is written in French for the student; each claim below opens its proof.</p>
+          <div id="report"><p class="muted" data-i18n="reportEmpty">The report will appear here.</p></div>
+          <div id="proofs" hidden>
+            <h3 data-i18n="proofsHeading">Claims and proofs</h3>
+            <p class="muted" data-i18n="proofsIntro">Every proof is clickable and opens its source: a read grade, a voice quote, a guide row, or the calculation detail.</p>
+            <div id="claims"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer data-i18n="footer">Demo on fictional data only. Recommendations are limited to public offers for series C and D of the 2026-2027 guide whose row passed quality control.</footer>
+
+    <dialog id="proof-dialog">
+      <h3 id="proof-title"></h3>
+      <div id="proof-body"></div>
+      <button type="button" id="proof-close" data-i18n="close">Close</button>
+    </dialog>
+
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>

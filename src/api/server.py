@@ -16,7 +16,7 @@ from typing import Callable
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -28,6 +28,15 @@ from src.clients.meta_client import get_client
 from src.clients.muse_spark import MUSE_SPARK_MODEL
 
 WEB_DIR = Path(__file__).resolve().parents[2] / "web"
+SAMPLES_DIR = Path(__file__).resolve().parents[2] / "data" / "samples"
+# Fictional demo files the judges can launch in one click (E5.2, data/samples/README.md).
+SAMPLE_MEDIA_TYPES = {
+    "releve_serie_d.jpg": "image/jpeg",
+    "releve_serie_c.jpg": "image/jpeg",
+    "releve_serie_d_flou.jpg": "image/jpeg",
+    "note_vocale_coherente.mp3": "audio/mpeg",
+    "note_vocale_contradictoire.mp3": "audio/mpeg",
+}
 
 MAX_IMAGE_BYTES = 10 * 1024 * 1024  # demo upload cap for grade-sheet photos (E5.1)
 MAX_AUDIO_BYTES = 32 * 1024 * 1024  # docs/decisions.md E0.5: transcribe endpoint body limit
@@ -340,6 +349,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/health")
+async def health() -> dict:
+    """Liveness probe so the page can tell a stale server from a real run."""
+    return {"status": "ok", "service": "pathproof-demo"}
+
+
+@app.get("/samples/{name}")
+async def get_sample(name: str) -> FileResponse:
+    """Serve one fictional demo file by its allowlisted name (E5.2)."""
+    media_type = SAMPLE_MEDIA_TYPES.get(name)
+    path = SAMPLES_DIR / name
+    if media_type is None or not path.is_file():
+        raise HTTPException(status_code=404, detail="unknown sample")
+    return FileResponse(path, media_type=media_type, filename=name)
 
 
 @app.post("/run")
