@@ -10,6 +10,8 @@ const LOCAL_API_BASE = "http://127.0.0.1:8000";
 let apiBase = "";
 let apiBasePromise = null;
 let serverStateListener = null;
+let recordedRun = null;
+let recordedRunPromise = null;
 
 export function setServerStateListener(listener) {
   serverStateListener = listener;
@@ -17,6 +19,54 @@ export function setServerStateListener(listener) {
 
 function notifyServerState(state) {
   if (serverStateListener) serverStateListener(state);
+}
+
+async function requestRecordedRun() {
+  const response = await fetch(new URL("../recorded-run.json", import.meta.url));
+  if (!response.ok) throw new Error(t("recordedRunUnavailable", {
+    detail: `${response.status}${response.statusText ? ` ${response.statusText}` : ""}`,
+  }));
+  const data = await response.json();
+  const events = data && data.events;
+  const done = Array.isArray(events) ? events[events.length - 1] : null;
+  const steps = Array.isArray(events)
+    ? events.filter((event) => event && event.type === "step")
+    : [];
+  const hasAcceptedVerification = steps.some(
+    (event) => event.tool === "verify_report"
+      && Array.isArray(event.result) && event.result.length === 0
+  );
+  if (!done || done.type !== "done" || done.status !== "ok"
+      || typeof done.report !== "string" || !done.report.trim()
+      || !steps.length || !hasAcceptedVerification) {
+    throw new Error(t("recordedRunInvalid"));
+  }
+  return data;
+}
+
+export function preloadRecordedRun() {
+  if (!recordedRunPromise) {
+    recordedRunPromise = requestRecordedRun().then((data) => {
+      recordedRun = data;
+      return data;
+    }).catch(() => {
+      recordedRunPromise = null;
+      return null;
+    });
+  }
+  return recordedRunPromise;
+}
+
+export async function fetchRecordedRun() {
+  if (recordedRun) return recordedRun;
+  if (recordedRunPromise) {
+    const preloaded = await recordedRunPromise;
+    if (preloaded) return preloaded;
+  }
+  const data = await requestRecordedRun();
+  recordedRun = data;
+  recordedRunPromise = Promise.resolve(data);
+  return data;
 }
 
 async function probeApiBase(base) {
@@ -121,7 +171,12 @@ export async function streamRun(body, onEvent) {
   await ensureApiBase();
   const response = await fetch(`${apiBase}/run`, { method: "POST", body });
   if (!response.ok) throw new Error(await readErrorDetail(response));
-  const result = await streamEvents(response, onEvent);
+  let runError = null;
+  const result = await streamEvents(response, (event) => {
+    if (event.type === "error") runError = event.error || "run failed";
+    onEvent(event);
+  });
+  if (runError) throw new Error(runError);
   if (!result.terminalSeen) throw new Error(t("interrupted"));
 }
 
@@ -137,7 +192,13 @@ export async function streamAnswer(runId, answer, onEvent) {
     error.status = response.status;
     throw error;
   }
-  return streamEvents(response, onEvent);
+  let runError = null;
+  const result = await streamEvents(response, (event) => {
+    if (event.type === "error") runError = event.error || "run failed";
+    onEvent(event);
+  });
+  if (runError) throw new Error(runError);
+  return result;
 }
 
 export async function fetchSampleFile(name) {

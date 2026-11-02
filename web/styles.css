@@ -166,6 +166,12 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
   background: var(--amber); color: #fff; font-weight: 700; cursor: pointer; font-size: 1rem;
 }
 #report { font-size: 0.94rem; }
+#recorded-banner {
+  border: 1px solid var(--amber); border-left-width: 5px; border-radius: 10px;
+  background: var(--amber-soft); color: var(--ink); padding: 0.6rem 0.8rem; margin: 0 0 0.8rem;
+  font-size: 0.9rem; font-weight: 700;
+}
+#recorded-banner[hidden] { display: none !important; }
 #verified-banner {
   display: flex; gap: 0.6rem; align-items: center; background: var(--green-soft); color: var(--deep);
   border: 1px solid var(--green); border-radius: 12px; padding: 0.6rem 0.8rem; margin-bottom: 0.8rem;

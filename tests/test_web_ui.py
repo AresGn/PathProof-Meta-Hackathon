@@ -225,3 +225,34 @@ def test_backlog_names_the_split_frontend_files():
     assert "`web/js/`" in backlog
     assert "`web/styles.css`" in backlog
     assert "`web/app.js`" not in backlog
+
+
+def test_recorded_run_is_served_as_a_fictional_successful_execution():
+    response = TestClient(server.app).get("/recorded-run.json")
+    assert response.status_code == 200
+    recording = response.json()
+    events = recording["events"]
+    steps = [event for event in events if event["type"] == "step"]
+    done = events[-1]
+    assert steps
+    assert done["type"] == "done"
+    assert done["status"] == "ok"
+    assert done["report"]
+    assert any(step["tool"] == "verify_report" and step["result"] == []
+               for step in steps)
+    assert any(step["tool"] == "transcribe_voice" for step in steps)
+    assert any(step["tool"] == "read_grade_sheet" for step in steps)
+    assert "C:\\Users\\" not in response.text
+    assert "/Users/" not in response.text
+
+
+def test_recorded_run_fallback_is_explicit_in_both_languages():
+    app = MODULES["app.js"]
+    i18n = MODULES["i18n.js"]
+    assert 'id="recorded-banner"' in INDEX_HTML
+    assert 'data-i18n="recordedRun"' in INDEX_HTML
+    assert "exécution enregistrée" in i18n.casefold()
+    assert "Recorded execution" in i18n
+    assert "fetchRecordedRun" in app
+    assert "showRecordedRun" in app
+    assert "recordedBanner.hidden = false" in app

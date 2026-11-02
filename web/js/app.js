@@ -3,7 +3,8 @@
 // see steps.js, proofs.js, report.js, api.js, i18n.js and format.js.
 import { applyTranslations, setLanguage, t } from "./i18n.js";
 import {
-  describeClientError, ensureApiBase, fetchSampleFile,
+  describeClientError, ensureApiBase, fetchRecordedRun, fetchSampleFile,
+  preloadRecordedRun,
   setServerStateListener, streamAnswer, streamRun,
 } from "./api.js";
 import { renderSteps } from "./steps.js";
@@ -16,6 +17,7 @@ const stepsEl = document.getElementById("steps");
 const submitBtn = document.getElementById("submit-btn");
 const busyBar = document.getElementById("busy-bar");
 const serverStatusEl = document.getElementById("server-status");
+const recordedBanner = document.getElementById("recorded-banner");
 const answerBlock = document.getElementById("answer-block");
 const questionEl = document.getElementById("question");
 const answerInput = document.getElementById("answer-input");
@@ -46,6 +48,8 @@ let serverState = "checking";
 let lastReport = null;
 let lastReportVerified = false;
 let lastProblems = null;
+let lastRunRecorded = false;
+let lastRecordedError = null;
 
 const proofViewer = createProofViewer({
   dialog: proofDialog,
@@ -146,12 +150,35 @@ function handleEvent(event) {
 
 function resetRunView() {
   closeSession();
+  recordedBanner.hidden = true;
   seenSteps = [];
   lastReport = null;
   lastReportVerified = false;
   lastProblems = null;
+  lastRunRecorded = false;
+  lastRecordedError = null;
   drawSteps();
   showReport(null);
+}
+
+async function showRecordedRun(error) {
+  let recording;
+  try {
+    recording = await fetchRecordedRun();
+  } catch (recordedError) {
+    setStatus(
+      `${t("errorPrefix")}${describeClientError(error)} — ` +
+        t("recordedRunUnavailable", { detail: describeClientError(recordedError) }),
+      true
+    );
+    return;
+  }
+  resetRunView();
+  lastRunRecorded = true;
+  lastRecordedError = error;
+  recordedBanner.hidden = false;
+  for (const event of recording.events) handleEvent(event);
+  setStatus(t("recordedRunStatus", { reason: describeClientError(error) }), true);
 }
 
 async function startRun(body) {
@@ -161,7 +188,7 @@ async function startRun(body) {
   try {
     await streamRun(body, handleEvent);
   } catch (err) {
-    setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
+    await showRecordedRun(err);
   } finally {
     setRunBusy(false);
   }
@@ -181,7 +208,7 @@ async function runExample(key) {
     setStatus(t("statusSending"));
     await streamRun(body, handleEvent);
   } catch (err) {
-    setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
+    await showRecordedRun(err);
   } finally {
     setRunBusy(false);
   }
@@ -198,6 +225,12 @@ function applyLanguage() {
   drawSteps(true);
   if (lastProblems) showProblems(lastProblems);
   else if (lastReport) showReport(lastReport, lastReportVerified);
+  if (lastRunRecorded) {
+    recordedBanner.hidden = false;
+    setStatus(t("recordedRunStatus", {
+      reason: describeClientError(lastRecordedError),
+    }), true);
+  }
 }
 
 for (const btn of langBtns) {
@@ -229,6 +262,7 @@ applyTranslations();
 renderServerStatus();
 drawSteps();
 showReport(null);
+preloadRecordedRun();
 ensureApiBase();
 
 form.addEventListener("submit", async (event) => {
@@ -249,19 +283,13 @@ answerBtn.addEventListener("click", async () => {
   if (!currentRunId || !answer.trim()) return;
   setRunBusy(true);
   answerBtn.disabled = true;
-  const stepsBeforeAnswer = seenSteps.length;
   try {
     const result = await streamAnswer(currentRunId, answer.trim(), handleEvent);
     if (!result.terminalSeen) {
-      seenSteps = seenSteps.slice(0, stepsBeforeAnswer);
-      drawSteps();
-      setStatus(t("answerInterrupted"), true);
+      await showRecordedRun(new Error(t("answerInterrupted")));
     }
   } catch (err) {
-    seenSteps = seenSteps.slice(0, stepsBeforeAnswer);
-    drawSteps();
-    if (err && err.status === 404) closeSession();
-    setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
+    await showRecordedRun(err);
   } finally {
     setRunBusy(false);
     answerBtn.disabled = false;

@@ -6,7 +6,7 @@
 
 An agent that takes a post-BAC student's grade-sheet photo and a short voice note, chooses its own tools step by step, and produces an orientation report in which every sentence points to its proof: a grade read on the photo, a quote from the transcript, a row of the official guide, or a calculation. It recommends only what it can prove, and it stops to ask the student instead of guessing.
 
-> **Status: build period 27 Oct - 3 Nov 2026.** The agent loop runs end to end from the CLI (`python -m src.main --image … --audio …`, story E4.4): real tools, journal in `evals/results/`, `ask_student` on stdin. The web demo streams the same loop as SSE (`POST /run` + `POST /answer`, story E5.1) behind an interface with a live tool trace, agent questions, one-click fictional examples and a verified report whose every proof opens its source (story E5.2; browser capture at 375 px: `docs/e5.2-demo-report-375px.png`, `docs/e5.2-demo-375px.png`). Unit tests still use a fake model only; CI never calls the Meta API. Nothing in this README describes behavior that does not run.
+> **Status: build period 27 Oct - 3 Nov 2026.** The agent loop runs end to end from the CLI (`python -m src.main --image … --audio …`, story E4.4): real tools, journal in `evals/results/`, `ask_student` on stdin. The web demo streams the same loop as SSE (`POST /run` + `POST /answer`, story E5.1) behind an interface with a live tool trace, agent questions, one-click fictional examples and a verified report whose every proof opens its source (story E5.2; browser capture at 375 px: `docs/e5.2-demo-report-375px.png`, `docs/e5.2-demo-375px.png`). If a live run fails, story E5.3 replays a committed fictional execution and labels it as recorded. Unit tests still use a fake model only; CI never calls the Meta API. Nothing in this README describes behavior that does not run.
 
 **Track:** Indie Developer. **Theme:** Build for Your World. Full plan: [`docs/prd.md`](docs/prd.md).
 
@@ -45,6 +45,8 @@ Private-institution offers (753) are not used: the guide gives no series, subjec
 Video: TODO. Public demo URL: TODO.
 
 Local web demo: `uvicorn src.api.server:app --port 8000`, then open http://127.0.0.1:8000/ (open the page served by uvicorn itself, not a static preview such as Live Server; opened locally by mistake, the page still finds the API on port 8000 and says so). The interface is in English by default with a French toggle (the verified report itself stays in French, as generated for the student). Upload a grade-sheet photo and a voice note (or use the fallback text), or launch a fictional example in one click (clear serie D sheet with a matching voice note, blurry sheet, contradictory voice note). Each tool step appears live, agent questions take an answer inline, and in the final report every claim carries clickable proofs (grade read, voice quote, guide row with its PDF page, ranking-average detail).
+
+If the live API or network request fails after the page loads, the interface displays the saved fictional run from `web/recorded-run.json` and keeps an “exécution enregistrée” notice visible; this report belongs to the saved sample, not the current input. Regenerate it from a real run on the fixed fictional samples with `python scripts/record_demo.py` (requires `MUSE_API_KEY` and uses API credits), or rebuild it from an existing successful journal with `python scripts/record_demo.py --journal evals/results/e4.4_clear_sheet_d_medecin.json`.
 
 ## How the agent decides
 
