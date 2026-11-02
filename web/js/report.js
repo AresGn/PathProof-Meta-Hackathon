@@ -24,7 +24,7 @@ export function renderClaims(view, claims, openProof) {
   }
 }
 
-export function renderReport(view, report, claims, openProof) {
+export function renderReport(view, report, claims, openProof, isVerified) {
   view.report.innerHTML = "";
   if (!report) {
     const empty = document.createElement("p");
@@ -36,11 +36,15 @@ export function renderReport(view, report, claims, openProof) {
     view.claims.innerHTML = "";
     return;
   }
-  view.banner.hidden = false;
+  view.banner.hidden = !isVerified;
   const pre = document.createElement("pre");
   pre.textContent = report;
   view.report.appendChild(pre);
-  renderClaims(view, claims, openProof);
+  if (isVerified) renderClaims(view, claims, openProof);
+  else {
+    view.proofs.hidden = true;
+    view.claims.innerHTML = "";
+  }
 }
 
 export function renderProblems(view, problems) {

@@ -7,7 +7,7 @@ import {
   setServerStateListener, streamAnswer, streamRun,
 } from "./api.js";
 import { renderSteps } from "./steps.js";
-import { createProofViewer, verifiedClaims } from "./proofs.js";
+import { createProofViewer, verifiedClaims, verifiedContext } from "./proofs.js";
 import { renderProblems, renderReport } from "./report.js";
 
 const form = document.getElementById("demo-form");
@@ -44,6 +44,7 @@ let submittedText = "";
 let runBusy = false;
 let serverState = "checking";
 let lastReport = null;
+let lastReportVerified = false;
 let lastProblems = null;
 
 const proofViewer = createProofViewer({
@@ -51,7 +52,7 @@ const proofViewer = createProofViewer({
   title: document.getElementById("proof-title"),
   body: document.getElementById("proof-body"),
   getSteps: () => seenSteps,
-  getSubmittedText: () => submittedText,
+  getVerifiedContext: () => verifiedContext(seenSteps),
 });
 
 function setStatus(message, isError = false) {
@@ -68,13 +69,20 @@ function renderServerStatus() {
   serverStatusEl.className = serverState === "down" ? "bad" : "";
 }
 
-function drawSteps() {
-  renderSteps(stepsEl, seenSteps, runBusy);
+function drawSteps(force = false) {
+  renderSteps(stepsEl, seenSteps, runBusy, force);
 }
 
-function showReport(report) {
+function showReport(report, isVerified = false) {
   lastReport = report;
-  renderReport(reportView, report, verifiedClaims(seenSteps), proofViewer.openProof);
+  lastReportVerified = isVerified;
+  renderReport(
+    reportView,
+    report,
+    isVerified ? verifiedClaims(seenSteps) : [],
+    proofViewer.openProof,
+    isVerified
+  );
 }
 
 function showProblems(problems) {
@@ -118,13 +126,13 @@ function handleEvent(event) {
     reportView.report.scrollIntoView({ behavior: "smooth", block: "start" });
     if (event.status === "ok") {
       setStatus(t("statusDone"));
-      showReport(event.report);
+      showReport(event.report, true);
     } else if (event.status === "unverified") {
       setStatus(t("statusUnverified"), true);
       showProblems(event.problems);
     } else {
       setStatus(t("statusDoneOther", { status: event.status }));
-      showReport(event.report || null);
+      showReport(event.report || null, false);
     }
   } else if (event.type === "error") {
     if (currentRunId && event.run_id === currentRunId) {
@@ -140,6 +148,7 @@ function resetRunView() {
   closeSession();
   seenSteps = [];
   lastReport = null;
+  lastReportVerified = false;
   lastProblems = null;
   drawSteps();
   showReport(null);
@@ -186,9 +195,9 @@ function applyLanguage() {
     if (!input.files[0]) nameEl.textContent = t("noFile");
   }
   renderServerStatus();
-  drawSteps();
+  drawSteps(true);
   if (lastProblems) showProblems(lastProblems);
-  else if (lastReport) showReport(lastReport);
+  else if (lastReport) showReport(lastReport, lastReportVerified);
 }
 
 for (const btn of langBtns) {
@@ -238,6 +247,7 @@ form.addEventListener("submit", async (event) => {
 answerBtn.addEventListener("click", async () => {
   const answer = answerInput.value;
   if (!currentRunId || !answer.trim()) return;
+  setRunBusy(true);
   answerBtn.disabled = true;
   const stepsBeforeAnswer = seenSteps.length;
   try {
@@ -253,6 +263,7 @@ answerBtn.addEventListener("click", async () => {
     if (err && err.status === 404) closeSession();
     setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
   } finally {
+    setRunBusy(false);
     answerBtn.disabled = false;
   }
 });

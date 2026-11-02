@@ -2,8 +2,20 @@
 // A proof button opens its source (sheet grade, transcript quote, guide row,
 // calculation detail) in the dialog. All values are written as text nodes.
 import { t } from "./i18n.js";
-import { formatNumber } from "./format.js";
+import { formatCalculationNumber, formatNumber, sumWeightedGrades } from "./format.js";
 import { lastStep } from "./steps.js";
+
+export function verifiedContext(steps) {
+  for (let i = steps.length - 1; i >= 0; i -= 1) {
+    const step = steps[i];
+    if (step.tool !== "verify_report") continue;
+    if (!Array.isArray(step.result) || step.result.length !== 0) continue;
+    return step.args && step.args.context && typeof step.args.context === "object"
+      ? step.args.context
+      : null;
+  }
+  return null;
+}
 
 // The verified claims are the draft the streamed verify_report accepted
 // (empty problem list); build_report only formats that same draft.
@@ -20,25 +32,21 @@ export function verifiedClaims(steps) {
   return Array.isArray(claims) ? claims : [];
 }
 
-function gradeSheetResult(steps) {
-  const step = lastStep(steps, "read_grade_sheet");
-  return step && step.result && Array.isArray(step.result.matieres) ? step.result : null;
-}
-
-function transcriptSourceText(steps, submittedText) {
-  const step = lastStep(steps, "transcribe_voice");
-  if (step && step.result && typeof step.result.text === "string") return step.result.text;
-  return submittedText;
+function contextGrades(context) {
+  return context && Array.isArray(context.grades) ? context.grades : null;
 }
 
 function offerSource(steps, offreId) {
-  const step = lastStep(steps, "lookup_filieres");
-  if (!step || !step.result) return null;
-  for (const key of ["accessible", "excluded"]) {
-    const rows = step.result[key];
-    if (!Array.isArray(rows)) continue;
-    const found = rows.find((row) => row && row.Offre_ID === offreId);
-    if (found) return found;
+  const lookups = steps.filter((step) => step.tool === "lookup_filieres");
+  for (let index = lookups.length - 1; index >= 0; index -= 1) {
+    const result = lookups[index].result;
+    if (!result) continue;
+    for (const key of ["accessible", "excluded"]) {
+      const rows = result[key];
+      if (!Array.isArray(rows)) continue;
+      const found = rows.find((row) => row && row.Offre_ID === offreId);
+      if (found) return found;
+    }
   }
   return null;
 }
@@ -77,20 +85,21 @@ function addNote(parent, text) {
 
 // The viewer reads the live trace through getters, so a source always
 // reflects the steps currently on screen (retries and rollbacks included).
-export function createProofViewer({ dialog, title, body, getSteps, getSubmittedText }) {
+export function createProofViewer({ dialog, title, body, getSteps, getVerifiedContext }) {
   function showGradeProof(proof) {
     title.textContent = t("gradeTitle", { matiere: proof.matiere, note: formatNumber(proof.note) });
     addNote(body, t("gradeNote"));
-    const sheet = gradeSheetResult(getSteps());
-    if (!sheet) {
+    const context = getVerifiedContext();
+    const grades = contextGrades(context);
+    if (!grades) {
       addNote(body, t("sheetUnavailable"));
       return;
     }
     const wanted = String(proof.matiere || "").toLocaleLowerCase("fr");
-    const lines = sheet.matieres.filter(
+    const lines = grades.filter(
       (line) => String(line.matiere || "").toLocaleLowerCase("fr") === wanted
     );
-    const shown = lines.length ? lines : sheet.matieres;
+    const shown = lines.length ? lines : grades;
     addTable(
       body,
       shown.map((line) => [
@@ -98,16 +107,14 @@ export function createProofViewer({ dialog, title, body, getSteps, getSubmittedT
         `${formatNumber(line.note)}/20${line.lisible === false ? ` (${t("unreadable")})` : ""}`,
       ])
     );
-    if (sheet.serie) addNote(body, t("serieRead", { serie: sheet.serie }));
-    if (sheet.moyenne_affichee !== null && sheet.moyenne_affichee !== undefined) {
-      addNote(body, t("displayedAverage", { avg: formatNumber(sheet.moyenne_affichee) }));
-    }
+    if (context.serie) addNote(body, t("serieRead", { serie: context.serie }));
   }
 
   function showTranscriptProof(proof) {
     title.textContent = t("transcriptTitle");
     addNote(body, t("transcriptNote"));
-    const text = transcriptSourceText(getSteps(), getSubmittedText());
+    const context = getVerifiedContext();
+    const text = context && typeof context.transcript === "string" ? context.transcript : "";
     const paragraph = document.createElement("p");
     const index = text ? text.indexOf(proof.quote) : -1;
     if (index >= 0) {
@@ -143,6 +150,8 @@ export function createProofViewer({ dialog, title, body, getSteps, getSubmittedT
         ["Débouchés_Métiers", offer["Débouchés_Métiers"]],
         ["Statut_qualité", offer["Statut_qualité"]]
       );
+    } else {
+      addNote(body, t("guideRowUnavailable"));
     }
     addTable(body, rows);
   }
@@ -159,14 +168,18 @@ export function createProofViewer({ dialog, title, body, getSteps, getSubmittedT
       head.appendChild(cell);
     }
     table.appendChild(head);
-    let total = 0;
+    const weighted = sumWeightedGrades(inputs);
     let coefficients = 0;
-    for (const entry of inputs) {
-      const product = Number(entry.note) * Number(entry.coefficient);
-      total += product;
+    for (let index = 0; index < inputs.length; index += 1) {
+      const entry = inputs[index];
       coefficients += Number(entry.coefficient);
       const row = document.createElement("tr");
-      for (const value of [entry.matiere, formatNumber(entry.note), entry.coefficient, formatNumber(product)]) {
+      for (const value of [
+        entry.matiere,
+        formatNumber(entry.note),
+        entry.coefficient,
+        formatCalculationNumber(weighted.products[index], weighted.scale),
+      ]) {
         const cell = document.createElement("td");
         cell.textContent = String(value ?? "");
         row.appendChild(cell);
@@ -175,7 +188,9 @@ export function createProofViewer({ dialog, title, body, getSteps, getSubmittedT
     }
     body.appendChild(table);
     addNote(body, t("calcDetail", {
-      total: formatNumber(total), coeffs: coefficients, result: formatNumber(proof.result),
+      total: formatCalculationNumber(weighted.total, weighted.scale),
+      coeffs: coefficients,
+      result: formatNumber(proof.result),
     }));
   }
 

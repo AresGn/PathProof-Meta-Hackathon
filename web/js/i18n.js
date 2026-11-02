@@ -57,8 +57,9 @@ export const I18N = {
     proofFiliere: "Guide · {id} (page {page})", proofCalc: "Result · {result}",
     proofOther: "Proof · {type}",
     gradeTitle: "Grade proof — {matiere}: {note}/20",
-    gradeNote: "Grade read from the sheet photo (read_grade_sheet tool).",
+    gradeNote: "Grade input included in the context accepted by the verifier.",
     sheetUnavailable: "The sheet detail is no longer in the displayed trace.",
+    guideRowUnavailable: "The complete guide row is not present in the displayed trace.",
     serieRead: "Series read: {serie}.", displayedAverage: "Average printed on the sheet: {avg}/20.",
     unreadable: "unreadable",
     transcriptTitle: "Quote proof — voice note",
@@ -129,8 +130,9 @@ export const I18N = {
     proofFiliere: "Guide · {id} (page {page})", proofCalc: "Calcul · {result}",
     proofOther: "Preuve · {type}",
     gradeTitle: "Preuve note — {matiere} : {note}/20",
-    gradeNote: "Note lue sur la photo du relevé (outil read_grade_sheet).",
+    gradeNote: "Note figurant dans le contexte accepté par le vérificateur.",
     sheetUnavailable: "Le détail du relevé n’est plus dans la trace affichée.",
+    guideRowUnavailable: "La ligne complète du guide n'est pas présente dans la trace affichée.",
     serieRead: "Série lue : {serie}.", displayedAverage: "Moyenne affichée sur le relevé : {avg}/20.",
     unreadable: "illisible",
     transcriptTitle: "Preuve citation — note vocale",
@@ -147,7 +149,24 @@ export const I18N = {
 };
 const STORAGE_KEY = "pathproof-lang";
 
-let currentLanguage = window.localStorage.getItem(STORAGE_KEY) === "fr" ? "fr" : "en";
+function readStoredLanguage() {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY);
+  } catch (error) {
+    if (error.name !== "SecurityError") throw error;
+    return null;
+  }
+}
+
+function storeLanguage(language) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, language);
+  } catch (error) {
+    if (error.name !== "SecurityError") throw error;
+  }
+}
+
+let currentLanguage = readStoredLanguage() === "fr" ? "fr" : "en";
 
 export function getLanguage() {
   return currentLanguage;
@@ -155,7 +174,7 @@ export function getLanguage() {
 
 export function setLanguage(next) {
   currentLanguage = next === "fr" ? "fr" : "en";
-  window.localStorage.setItem(STORAGE_KEY, currentLanguage);
+  storeLanguage(currentLanguage);
   return currentLanguage;
 }
 

@@ -5,6 +5,7 @@ the interface files are checked as text, like test_no_501_stub_left does for
 the server. A full browser run is manual (it consumes API credits).
 """
 from pathlib import Path
+import re
 
 from fastapi.testclient import TestClient
 
@@ -16,6 +17,10 @@ INDEX_HTML = (WEB_DIR / "index.html").read_text(encoding="utf-8")
 STYLES_CSS = (WEB_DIR / "styles.css").read_text(encoding="utf-8")
 JS_MODULES = ("i18n.js", "format.js", "api.js", "steps.js", "proofs.js", "report.js", "app.js")
 APP_JS = "\n".join((WEB_DIR / "js" / name).read_text(encoding="utf-8") for name in JS_MODULES)
+MODULES = {
+    name: (WEB_DIR / "js" / name).read_text(encoding="utf-8")
+    for name in JS_MODULES
+}
 SAMPLE_NAMES = (
     "releve_serie_d.jpg",
     "releve_serie_c.jpg",
@@ -70,17 +75,19 @@ def test_interface_keeps_photo_voice_text_question_and_live_steps():
 def test_report_proofs_are_clickable_and_open_their_source():
     assert 'id="proof-dialog"' in INDEX_HTML
     for proof_type in ("grade", "transcript", "filiere", "calc"):
-        assert f'"{proof_type}"' in APP_JS, proof_type
-    # The source of a filiere proof is its guide row: Offre_ID and guide page.
-    assert "Offre_ID" in APP_JS and "page" in APP_JS
+        assert f'proof.type === "{proof_type}"' in MODULES["proofs.js"], proof_type
+    assert 'row.Offre_ID === offreId' in MODULES["proofs.js"]
+    assert '[t("fieldPage"), proof.page_pdf]' in MODULES["proofs.js"]
     # The verified claims come from the streamed verify_report step.
-    assert "verify_report" in APP_JS
+    assert "step.tool !== \"verify_report\"" in MODULES["proofs.js"]
 
 
 def test_displayed_content_is_escaped():
-    assert "escapeHtml" in APP_JS
-    # Report and proof sources are written as text, never as raw markup.
-    assert "textContent" in APP_JS
+    assert re.search(r"replace\(\s*/\[&<>\"'\]/", MODULES["format.js"])
+    assert "head.textContent = label" in MODULES["proofs.js"]
+    assert "cell.textContent = value" in MODULES["proofs.js"]
+    assert "text.textContent = claim.text || \"\"" in MODULES["report.js"]
+    assert "escapeHtml(formatDetail(step.args))" in MODULES["steps.js"]
 
 
 def test_health_endpoint_reports_the_demo_server():
@@ -92,15 +99,15 @@ def test_health_endpoint_reports_the_demo_server():
 
 def test_server_errors_are_never_shown_empty():
     # A non-OK response without a readable detail still names its HTTP status.
-    assert "response.status" in APP_JS
-    assert "/health" in APP_JS
+    assert "status: `${response.status}" in MODULES["api.js"]
+    assert 'fetch(`${base}/health`)' in MODULES["api.js"]
 
 
 def test_page_finds_the_local_api_when_served_statically():
     # Opened via Live Server (127.0.0.1:5500) or a file, the page must still
     # reach the uvicorn API instead of calling the static server.
-    assert "127.0.0.1:8000" in APP_JS
-    assert "API_BASE" in APP_JS
+    assert 'const LOCAL_API_BASE = "http://127.0.0.1:8000"' in MODULES["api.js"]
+    assert "apiBase = await probeApiBase(LOCAL_API_BASE)" in MODULES["api.js"]
 
 
 def test_frontend_files_are_split_by_responsibility():
@@ -121,6 +128,90 @@ def test_interface_is_english_by_default_with_french_toggle():
     assert '<html lang="en">' in INDEX_HTML
     assert 'data-set-lang="en"' in INDEX_HTML
     assert 'data-set-lang="fr"' in INDEX_HTML
-    assert "Run complete." in APP_JS
-    assert "Exécution terminée." in APP_JS
-    assert "pathproof-lang" in APP_JS
+    assert 'statusDone: "Run complete."' in MODULES["i18n.js"]
+    assert 'statusDone: "Exécution terminée."' in MODULES["i18n.js"]
+    assert 'const STORAGE_KEY = "pathproof-lang"' in MODULES["i18n.js"]
+
+
+def test_hidden_verified_banner_stays_hidden_despite_display_rule():
+    assert re.search(
+        r"#verified-banner\[hidden\]\s*\{\s*display:\s*none\s*!important;\s*\}",
+        STYLES_CSS,
+    )
+    report = MODULES["report.js"]
+    assert "view.banner.hidden = !isVerified" in report
+    assert "if (isVerified) renderClaims(view, claims, openProof)" in report
+    app = MODULES["app.js"]
+    assert "showReport(event.report, true)" in app
+    assert "showReport(event.report || null, false)" in app
+
+
+def test_blocked_local_storage_does_not_prevent_language_module_loading():
+    i18n = MODULES["i18n.js"]
+    assert "function readStoredLanguage()" in i18n
+    assert "function storeLanguage(language)" in i18n
+    assert "error.name !== \"SecurityError\"" in i18n
+    assert "let currentLanguage = readStoredLanguage() === \"fr\" ? \"fr\" : \"en\"" in i18n
+    assert "storeLanguage(currentLanguage)" in i18n
+    assert i18n.count("window.localStorage.getItem(STORAGE_KEY)") == 1
+    assert i18n.count("window.localStorage.setItem(STORAGE_KEY") == 1
+
+
+def test_answer_stream_locks_new_runs_until_the_answer_finishes():
+    answer_handler = MODULES["app.js"].split(
+        'answerBtn.addEventListener("click"', 1
+    )[1]
+    assert "setRunBusy(true)" in answer_handler
+    assert re.search(r"finally\s*\{\s*setRunBusy\(false\)", answer_handler)
+    assert "await streamAnswer(currentRunId, answer.trim(), handleEvent)" in answer_handler
+
+
+def test_proof_sources_come_from_the_accepted_verifier_context():
+    proofs = MODULES["proofs.js"]
+    assert "export function verifiedContext(steps)" in proofs
+    assert "step.tool !== \"verify_report\"" in proofs
+    assert "step.result.length !== 0" in proofs
+    assert "step.args.context" in proofs
+    assert "getVerifiedContext" in proofs
+    assert "context.transcript" in proofs
+    assert "context.grades" in proofs
+    assert "lastStep(steps, \"read_grade_sheet\")" not in proofs
+    assert "lastStep(steps, \"transcribe_voice\")" not in proofs
+
+
+def test_filiere_proof_finds_any_lookup_result_or_states_that_source_is_missing():
+    proofs = MODULES["proofs.js"]
+    assert "steps.filter((step) => step.tool === \"lookup_filieres\")" in proofs
+    assert "t(\"guideRowUnavailable\")" in proofs
+    assert "guideRowUnavailable:" in MODULES["i18n.js"]
+
+
+def test_calculation_proof_uses_exact_decimal_sums_and_rounded_display():
+    proofs = MODULES["proofs.js"]
+    format_module = MODULES["format.js"]
+    assert "BigInt" in format_module
+    assert "formatCalculationNumber(weighted.products[index], weighted.scale)" in proofs
+    assert "formatCalculationNumber(weighted.total, weighted.scale)" in proofs
+    assert "Number(entry.note) * Number(entry.coefficient)" not in proofs
+
+
+def test_api_health_probe_can_retry_after_the_server_becomes_available():
+    api = MODULES["api.js"]
+    assert "const currentPromise = apiBasePromise" in api
+    assert "if (!result && apiBasePromise === currentPromise)" in api
+    assert "apiBasePromise = null" in api
+
+
+def test_live_trace_appends_new_cards_and_preserves_open_details():
+    steps = MODULES["steps.js"]
+    assert "timeline.children[sharedCount].sourceStep === steps[sharedCount]" in steps
+    assert "timeline.appendChild(renderStep(steps[index]))" in steps
+    assert "timeline.removeChild(timeline.lastElementChild)" in steps
+    assert "export function renderSteps(container, steps, busy, force = false)" in steps
+
+
+def test_backlog_names_the_split_frontend_files():
+    backlog = (ROOT / "docs" / "backlog.md").read_text(encoding="utf-8")
+    assert "`web/js/`" in backlog
+    assert "`web/styles.css`" in backlog
+    assert "`web/app.js`" not in backlog

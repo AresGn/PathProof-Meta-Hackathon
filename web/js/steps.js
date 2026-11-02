@@ -25,30 +25,53 @@ export function lastStep(steps, tool) {
   return null;
 }
 
-export function renderSteps(container, steps, busy) {
+function renderStep(step) {
+  const label = t(`tool_${step.tool}`) !== `tool_${step.tool}` ? t(`tool_${step.tool}`) : t("tool_other");
+  const decisionKey = `decision_${step.decision}`;
+  const decision = t(decisionKey) !== decisionKey ? t(decisionKey) : step.decision || "";
+  const template = document.createElement("template");
+  template.innerHTML =
+    `<article class="step-card"><span class="step-ico">${toolIcon(step.tool)}</span>` +
+    `<div class="step-head"><strong>${escapeHtml(label)}</strong>` +
+    `<span class="step-num">${escapeHtml(t("stepWord"))} ${escapeHtml(step.step)} · ${escapeHtml(step.tool || "")}</span>` +
+    `<span class="pill decision-${escapeHtml(step.decision || "continue")}">${escapeHtml(decision)}</span></div>` +
+    `<details><summary>${escapeHtml(t("inputOutput"))}</summary>` +
+    `<pre>${escapeHtml(t("input"))} : ${escapeHtml(formatDetail(step.args))}</pre>` +
+    `<pre>${escapeHtml(t("output"))} : ${escapeHtml(formatDetail(step.result))}</pre></details></article>`;
+  const card = template.content.firstElementChild;
+  card.sourceStep = step;
+  return card;
+}
+
+export function renderSteps(container, steps, busy, force = false) {
   if (!steps.length) {
     const empty = document.createElement("p");
     empty.className = "muted";
     empty.textContent = busy ? t("stepsWaiting") : t("stepsEmpty");
-    container.innerHTML = "";
+    container.textContent = "";
     container.appendChild(empty);
     return;
   }
-  const items = steps
-    .map((s) => {
-      const label = t(`tool_${s.tool}`) !== `tool_${s.tool}` ? t(`tool_${s.tool}`) : t("tool_other");
-      const decisionKey = `decision_${s.decision}`;
-      const decision = t(decisionKey) !== decisionKey ? t(decisionKey) : s.decision || "";
-      return (
-        `<article class="step-card"><span class="step-ico">${toolIcon(s.tool)}</span>` +
-        `<div class="step-head"><strong>${escapeHtml(label)}</strong>` +
-        `<span class="step-num">${escapeHtml(t("stepWord"))} ${escapeHtml(s.step)} · ${escapeHtml(s.tool || "")}</span>` +
-        `<span class="pill decision-${escapeHtml(s.decision || "continue")}">${escapeHtml(decision)}</span></div>` +
-        `<details><summary>${escapeHtml(t("inputOutput"))}</summary>` +
-        `<pre>${escapeHtml(t("input"))} : ${escapeHtml(formatDetail(s.args))}</pre>` +
-        `<pre>${escapeHtml(t("output"))} : ${escapeHtml(formatDetail(s.result))}</pre></details></article>`
-      );
-    })
-    .join("");
-  container.innerHTML = `<div class="timeline">${items}</div>`;
+  let timeline = container.querySelector(".timeline");
+  if (!timeline) {
+    container.textContent = "";
+    timeline = document.createElement("div");
+    timeline.className = "timeline";
+    container.appendChild(timeline);
+  }
+  let sharedCount = 0;
+  while (
+    !force &&
+    sharedCount < steps.length &&
+    sharedCount < timeline.children.length &&
+    timeline.children[sharedCount].sourceStep === steps[sharedCount]
+  ) {
+    sharedCount += 1;
+  }
+  while (timeline.children.length > sharedCount) {
+    timeline.removeChild(timeline.lastElementChild);
+  }
+  for (let index = sharedCount; index < steps.length; index += 1) {
+    timeline.appendChild(renderStep(steps[index]));
+  }
 }

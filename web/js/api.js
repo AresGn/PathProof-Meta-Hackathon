@@ -50,7 +50,11 @@ export function ensureApiBase() {
       }
     })();
   }
-  return apiBasePromise;
+  const currentPromise = apiBasePromise;
+  return currentPromise.then((result) => {
+    if (!result && apiBasePromise === currentPromise) apiBasePromise = null;
+    return result;
+  });
 }
 
 export async function readErrorDetail(response) {

@@ -171,6 +171,7 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
   border: 1px solid var(--green); border-radius: 12px; padding: 0.6rem 0.8rem; margin-bottom: 0.8rem;
   font-weight: 700; font-size: 0.92rem;
 }
+#verified-banner[hidden] { display: none !important; }
 .claim { border: 1px solid var(--line); border-radius: 12px; padding: 0.8rem; margin-top: 0.7rem; background: #fff; }
 .claim p { margin: 0 0 0.4rem; }
 .proof-chip {
