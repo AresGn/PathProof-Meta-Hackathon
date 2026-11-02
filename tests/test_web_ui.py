@@ -11,8 +11,11 @@ from fastapi.testclient import TestClient
 from src.api import server
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX_HTML = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
-APP_JS = (ROOT / "web" / "app.js").read_text(encoding="utf-8")
+WEB_DIR = ROOT / "web"
+INDEX_HTML = (WEB_DIR / "index.html").read_text(encoding="utf-8")
+STYLES_CSS = (WEB_DIR / "styles.css").read_text(encoding="utf-8")
+JS_MODULES = ("i18n.js", "format.js", "api.js", "steps.js", "proofs.js", "report.js", "app.js")
+APP_JS = "\n".join((WEB_DIR / "js" / name).read_text(encoding="utf-8") for name in JS_MODULES)
 SAMPLE_NAMES = (
     "releve_serie_d.jpg",
     "releve_serie_c.jpg",
@@ -53,7 +56,7 @@ def test_interface_forbidden_word_is_absent():
 
 def test_interface_is_readable_at_375_px():
     assert 'name="viewport"' in INDEX_HTML
-    assert "@media" in INDEX_HTML and "480px" in INDEX_HTML
+    assert "@media" in STYLES_CSS and "480px" in STYLES_CSS
 
 
 def test_interface_keeps_photo_voice_text_question_and_live_steps():
@@ -98,3 +101,26 @@ def test_page_finds_the_local_api_when_served_statically():
     # reach the uvicorn API instead of calling the static server.
     assert "127.0.0.1:8000" in APP_JS
     assert "API_BASE" in APP_JS
+
+
+def test_frontend_files_are_split_by_responsibility():
+    # Markup, styles and one module per concern (SRP): no monolith left.
+    assert "<style>" not in INDEX_HTML
+    assert 'href="styles.css"' in INDEX_HTML
+    assert 'type="module" src="js/app.js"' in INDEX_HTML
+    assert not (WEB_DIR / "app.js").exists()
+    for name in JS_MODULES:
+        assert (WEB_DIR / "js" / name).is_file(), name
+    entry = (WEB_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    for module in ("i18n", "api", "steps", "proofs", "report"):
+        assert f'from "./{module}.js"' in entry, module
+
+
+def test_interface_is_english_by_default_with_french_toggle():
+    # Anglophone jury: English first, French one click away (docs/decisions.md).
+    assert '<html lang="en">' in INDEX_HTML
+    assert 'data-set-lang="en"' in INDEX_HTML
+    assert 'data-set-lang="fr"' in INDEX_HTML
+    assert "Run complete." in APP_JS
+    assert "Exécution terminée." in APP_JS
+    assert "pathproof-lang" in APP_JS

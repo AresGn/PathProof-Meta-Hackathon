@@ -1,221 +1,65 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PathProof — démo</title>
+    <title>PathProof — demo</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%230b3527'/%3E%3Cpath d='M7 12.5 10.5 16 17 8' stroke='%237be3b8' stroke-width='2.5' fill='none'/%3E%3C/svg%3E" />
-    <style>
-      :root {
-        --ink: #12211b;
-        --deep: #0b3527;
-        --green: #0f7a55;
-        --green-soft: #e5f4ec;
-        --amber: #c77400;
-        --amber-soft: #fdf1de;
-        --violet: #6d3bd1;
-        --violet-soft: #efe9fd;
-        --blue: #1d5fd6;
-        --blue-soft: #e7effe;
-        --paper: #f4f2ea;
-        --card: #ffffff;
-        --line: #ddd8c9;
-        --muted: #5c665f;
-        --red: #b3261e;
-        --radius: 16px;
-        font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
-        line-height: 1.5;
-        color: var(--ink);
-        background: var(--paper);
-      }
-      * { box-sizing: border-box; }
-      body { margin: 0; }
-      .hero {
-        background: linear-gradient(135deg, #082a1f 0%, var(--deep) 55%, #14604a 100%);
-        color: #fff;
-        padding: 2rem 1.25rem 1.5rem;
-      }
-      .hero-in { max-width: 72rem; margin: 0 auto; }
-      .wordmark {
-        font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin: 0;
-      }
-      .wordmark em { font-style: normal; color: #7be3b8; }
-      .tagline { margin: 0.35rem 0 0; color: #d9efe4; max-width: 38rem; }
-      .badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
-      .badge {
-        border: 1px solid rgba(255, 255, 255, 0.45); border-radius: 999px;
-        padding: 0.2rem 0.7rem; font-size: 0.82rem; color: #eaf7f0;
-      }
-      #server-status { margin: 0.9rem 0 0; font-size: 0.88rem; color: #bfe8d2; }
-      #server-status.bad { color: #ffc9c4; font-weight: 600; }
-      .layout {
-        max-width: 72rem; margin: 0 auto; padding: 1.25rem;
-        display: grid; grid-template-columns: 24rem 1fr; gap: 1.25rem; align-items: start;
-      }
-      .panel {
-        background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-        padding: 1.1rem; box-shadow: 0 8px 24px rgba(18, 33, 27, 0.06); margin-bottom: 1.25rem;
-      }
-      .panel h2 { font-size: 1.02rem; margin: 0 0 0.4rem; }
-      .panel h3 { font-size: 0.95rem; margin: 0 0 0.4rem; }
-      .muted { color: var(--muted); font-size: 0.92rem; }
-      fieldset { border: none; margin: 0; padding: 0; }
-      legend { font-weight: 700; padding: 0; margin-bottom: 0.4rem; }
-      .example-btn {
-        display: flex; gap: 0.8rem; align-items: flex-start; width: 100%; text-align: left;
-        background: #fff; border: 1px solid var(--line); border-left: 5px solid var(--green);
-        border-radius: 12px; padding: 0.8rem; margin-top: 0.6rem; cursor: pointer; font: inherit;
-      }
-      .example-btn:hover:not(:disabled) { border-color: var(--green); transform: translateY(-1px); }
-      .example-btn[data-example="blurry"] { border-left-color: var(--amber); }
-      .example-btn[data-example="contradictory"] { border-left-color: var(--violet); }
-      .example-btn strong { display: block; font-size: 0.98rem; }
-      .example-btn span { display: block; color: var(--muted); font-size: 0.86rem; margin-top: 0.15rem; }
-      .ex-icon {
-        flex: none; width: 2.3rem; height: 2.3rem; border-radius: 10px; display: grid; place-items: center;
-        background: var(--green-soft); color: var(--green);
-      }
-      .example-btn[data-example="blurry"] .ex-icon { background: var(--amber-soft); color: var(--amber); }
-      .example-btn[data-example="contradictory"] .ex-icon { background: var(--violet-soft); color: var(--violet); }
-      .drop {
-        display: block; border: 1.5px dashed #b9c4bb; border-radius: 12px; padding: 0.8rem;
-        margin-top: 0.8rem; cursor: pointer; background: #fbfaf6;
-      }
-      .drop:hover { border-color: var(--green); }
-      .drop .drop-title { font-weight: 600; font-size: 0.94rem; }
-      .drop .file-name { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; overflow-wrap: anywhere; }
-      .drop input[type="file"] { display: block; margin-top: 0.45rem; max-width: 100%; }
-      textarea, input[type="text"] {
-        display: block; width: 100%; margin-top: 0.35rem; font: inherit; padding: 0.55rem 0.7rem;
-        border: 1px solid #c9cfc9; border-radius: 10px; background: #fff;
-      }
-      .cta {
-        width: 100%; margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 1rem; font-weight: 700;
-        border: none; border-radius: 12px; background: var(--green); color: #fff; cursor: pointer;
-      }
-      .cta:hover:not(:disabled) { background: #0b6647; }
-      button:disabled { opacity: 0.55; cursor: not-allowed; }
-      #busy-bar { height: 6px; border-radius: 999px; background: var(--green-soft); overflow: hidden; margin-top: 1rem; }
-      #busy-bar i {
-        display: block; height: 100%; width: 40%; border-radius: 999px; background: var(--green);
-        animation: slide 1.2s ease-in-out infinite alternate;
-      }
-      @keyframes slide { from { margin-left: 0; } to { margin-left: 60%; } }
-      #status { font-size: 0.92rem; margin: 0.8rem 0 0; }
-      #status.error { color: var(--red); font-weight: 600; }
-      .timeline { position: relative; margin-top: 0.6rem; }
-      .timeline::before {
-        content: ""; position: absolute; left: 1.15rem; top: 0.6rem; bottom: 0.6rem;
-        width: 2px; background: var(--line);
-      }
-      .step-card {
-        position: relative; margin: 0 0 0.8rem 3rem; border: 1px solid var(--line);
-        border-radius: 12px; padding: 0.7rem 0.8rem; background: #fff;
-      }
-      .step-ico {
-        position: absolute; left: -3rem; top: 0.55rem; width: 2.3rem; height: 2.3rem; border-radius: 50%;
-        display: grid; place-items: center; background: var(--deep); color: #fff; border: 2px solid var(--paper);
-      }
-      .step-head { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
-      .step-head strong { font-size: 0.94rem; }
-      .step-num { color: var(--muted); font-size: 0.82rem; }
-      .pill { border-radius: 999px; padding: 0.08rem 0.6rem; font-size: 0.76rem; font-weight: 700; }
-      .decision-continue { background: var(--blue-soft); color: var(--blue); }
-      .decision-suspend { background: var(--amber-soft); color: var(--amber); }
-      .decision-stop_unverified, .decision-stop_step_limit { background: #fbe7e5; color: var(--red); }
-      .step-card details { margin-top: 0.45rem; }
-      .step-card summary { cursor: pointer; color: var(--muted); font-size: 0.86rem; }
-      .step-card pre, #report pre {
-        white-space: pre-wrap; overflow-wrap: break-word; font-size: 0.8rem; margin: 0.5rem 0;
-        background: #f7f6f1; border: 1px solid var(--line); border-radius: 10px; padding: 0.6rem;
-      }
-      #answer-block {
-        border: 1.5px solid var(--amber); background: var(--amber-soft); border-radius: var(--radius);
-        padding: 1.1rem; margin-bottom: 1.25rem;
-      }
-      #answer-block h2 { margin-top: 0; }
-      #question { font-weight: 600; }
-      #answer-btn {
-        margin-top: 0.7rem; padding: 0.6rem 1.2rem; border: none; border-radius: 10px;
-        background: var(--amber); color: #fff; font-weight: 700; cursor: pointer; font-size: 1rem;
-      }
-      #report { font-size: 0.94rem; }
-      .claim { border: 1px solid var(--line); border-radius: 12px; padding: 0.8rem; margin-top: 0.7rem; background: #fff; }
-      .claim p { margin: 0 0 0.4rem; }
-      .proof-chip {
-        margin: 0.3rem 0.3rem 0 0; padding: 0.35rem 0.7rem; font-size: 0.85rem; border-radius: 999px;
-        cursor: pointer; font-weight: 600; border: 1px solid; background: #fff; font-family: inherit;
-      }
-      .chip-grade { color: var(--green); border-color: var(--green); background: var(--green-soft); }
-      .chip-transcript { color: var(--violet); border-color: var(--violet); background: var(--violet-soft); }
-      .chip-filiere { color: var(--blue); border-color: var(--blue); background: var(--blue-soft); }
-      .chip-calc { color: var(--amber); border-color: var(--amber); background: var(--amber-soft); }
-      dialog {
-        max-width: min(36rem, 92vw); width: 36rem; border: none; border-radius: var(--radius);
-        padding: 1.2rem; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
-      }
-      dialog::backdrop { background: rgba(8, 32, 24, 0.55); }
-      dialog table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
-      dialog th, dialog td {
-        border: 1px solid var(--line); padding: 0.35rem 0.55rem; text-align: left;
-        vertical-align: top; overflow-wrap: break-word;
-      }
-      dialog th { background: #f7f6f1; width: 38%; }
-      mark { background: #ffe58a; padding: 0 0.15rem; border-radius: 3px; }
-      #proof-close {
-        margin-top: 1rem; width: 100%; padding: 0.7rem; border: none; border-radius: 10px;
-        background: var(--deep); color: #fff; font-weight: 700; cursor: pointer; font-size: 1rem;
-      }
-      footer { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem 1.5rem; color: var(--muted); font-size: 0.85rem; }
-      @media (max-width: 900px) {
-        .layout { grid-template-columns: 1fr; }
-      }
-      @media (max-width: 480px) {
-        .hero { padding: 1.4rem 1rem 1.1rem; }
-        .wordmark { font-size: 1.6rem; }
-        .layout { padding: 0.8rem; }
-        .panel { padding: 0.9rem; }
-        .step-card { margin-left: 2.6rem; }
-        .step-ico { left: -2.6rem; width: 2rem; height: 2rem; }
-        .timeline::before { left: 0.95rem; }
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="hero">
       <div class="hero-in">
-        <p class="wordmark">Path<em>Proof</em></p>
-        <p class="tagline">Every study path comes with its proof. L’agent choisit ses outils,
-          calcule par du code, et ne recommande que ce qu’il peut prouver.</p>
-        <div class="badges">
-          <span class="badge">Guide officiel 2026-2027</span>
-          <span class="badge">Preuves vérifiées par code</span>
-          <span class="badge">Séries C et D</span>
-          <span class="badge">Données fictives uniquement</span>
+        <div>
+          <p class="wordmark">Path<em>Proof</em></p>
+          <p class="tagline" data-i18n="tagline">Every study path comes with its proof. The agent picks its own tools, deterministic code does the math, and only proven claims reach the report.</p>
+          <div class="badges">
+            <span class="badge" data-i18n="badgeGuide">Official 2026-2027 guide</span>
+            <span class="badge" data-i18n="badgeProofs">Code-verified proofs</span>
+            <span class="badge" data-i18n="badgeSeries">Series C and D</span>
+            <span class="badge" data-i18n="badgeFictional">Fictional data only</span>
+          </div>
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-btn active" data-set-lang="en">EN</button>
+            <button type="button" class="lang-btn" data-set-lang="fr">FR</button>
+          </div>
+          <p id="server-status" data-i18n="serverChecking">Checking the demo server…</p>
         </div>
-        <p id="server-status">Vérification du serveur…</p>
+        <aside class="hero-proof" aria-hidden="true">
+          <p data-i18n="heroProof">Every claim opens its source. Try it in the report:</p>
+          <span class="proof-chip chip-grade">Grade · SVT 15/20</span>
+          <span class="proof-chip chip-transcript">Quote · “maybe a doctor”</span>
+          <span class="proof-chip chip-filiere">Guide · PUB-062 (page 36)</span>
+          <span class="proof-chip chip-calc">Result · 13.15</span>
+        </aside>
       </div>
     </header>
+
+    <div class="how">
+      <div class="how-step"><span class="how-num">1</span><p data-i18n="how1">Send a grade-sheet photo and a voice note — or launch a fictional example.</p></div>
+      <div class="how-step"><span class="how-num">2</span><p data-i18n="how2">The agent reads, transcribes, computes by code, and asks when something is unsure.</p></div>
+      <div class="how-step"><span class="how-num">3</span><p data-i18n="how3">You get a verified report where every claim opens its proof.</p></div>
+    </div>
 
     <div class="layout">
       <div>
         <section class="panel">
           <fieldset>
-            <legend>Exemples fictifs — un clic, rien à préparer</legend>
+            <legend data-i18n="examplesLegend">Fictional examples — one click, nothing to prepare</legend>
             <button type="button" class="example-btn" data-example="coherent">
               <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14l-3-3"/></svg></span>
-              <span><strong>Relevé D net + voix cohérente</strong>
-              <span>Série D, « peut-être médecin » : rapport complet attendu.</span></span>
+              <span><strong data-i18n="ex1Title">Clear serie D sheet + matching voice note</strong>
+              <span class="ex-desc" data-i18n="ex1Desc">Serie D, “maybe a doctor”: expect a full report.</span></span>
             </button>
             <button type="button" class="example-btn" data-example="blurry">
               <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
-              <span><strong>Relevé flou</strong>
-              <span>Une note illisible : l’agent demande au lieu de deviner.</span></span>
+              <span><strong data-i18n="ex2Title">Blurry sheet</strong>
+              <span class="ex-desc" data-i18n="ex2Desc">One unreadable grade: the agent asks instead of guessing.</span></span>
             </button>
             <button type="button" class="example-btn" data-example="contradictory">
               <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
-              <span><strong>Voix contradictoire</strong>
-              <span>« 14 de moyenne » dite, 11,2 au relevé : l’agent signale l’écart.</span></span>
+              <span><strong data-i18n="ex3Title">Contradictory voice note</strong>
+              <span class="ex-desc" data-i18n="ex3Desc">“14 average” said, 11.2 on the sheet: the agent flags the gap.</span></span>
             </button>
           </fieldset>
         </section>
@@ -223,22 +67,22 @@
         <form id="demo-form">
           <section class="panel">
             <fieldset>
-              <legend>Entrées élève</legend>
+              <legend data-i18n="formLegend">Student inputs</legend>
               <label class="drop">
-                <span class="drop-title">Photo du relevé (JPEG/PNG)</span>
+                <span class="drop-title" data-i18n="photoTitle">Grade-sheet photo (JPEG/PNG)</span>
                 <input type="file" id="photo" accept="image/*" />
-                <span class="file-name" id="photo-name">Aucun fichier choisi</span>
+                <span class="file-name" id="photo-name" data-i18n="noFile">No file chosen</span>
               </label>
               <label class="drop">
-                <span class="drop-title">Message vocal</span>
+                <span class="drop-title" data-i18n="voiceTitle">Voice note</span>
                 <input type="file" id="voice" accept="audio/*" />
-                <span class="file-name" id="voice-name">Aucun fichier choisi</span>
+                <span class="file-name" id="voice-name" data-i18n="noFile">No file chosen</span>
               </label>
               <label>
-                Texte de secours (si pas de note vocale)
-                <textarea id="fallback-text" rows="3" placeholder="Série, intérêts, métier visé…"></textarea>
+                <span data-i18n="fallbackLabel">Fallback text (if no voice note)</span>
+                <textarea id="fallback-text" rows="3" data-i18n-ph="fallbackPh" placeholder="Series, interests, target job…"></textarea>
               </label>
-              <button type="submit" class="cta" id="submit-btn">Lancer l’orientation</button>
+              <button type="submit" class="cta" id="submit-btn" data-i18n="submit">Start orientation</button>
               <div id="busy-bar" hidden><i></i></div>
               <p id="status" class="muted" aria-live="polite"></p>
             </fieldset>
@@ -248,42 +92,45 @@
 
       <main>
         <section class="panel">
-          <h2>Étapes de l’agent</h2>
-          <div id="steps"><p class="muted">Aucune exécution pour l’instant.</p></div>
+          <h2 data-i18n="stepsHeading">Agent steps</h2>
+          <div id="steps"><p class="muted" data-i18n="stepsEmpty">No run yet.</p></div>
         </section>
 
         <div id="answer-block" hidden>
-          <h2>Question de l’agent</h2>
+          <h2 data-i18n="questionHeading">A question from the agent</h2>
           <p id="question"></p>
           <label>
-            Votre réponse
+            <span data-i18n="answerLabel">Your answer</span>
             <input type="text" id="answer-input" />
           </label>
-          <button type="button" id="answer-btn">Répondre</button>
+          <button type="button" id="answer-btn" data-i18n="answerButton">Reply</button>
         </div>
 
         <section class="panel">
-          <h2>Rapport</h2>
-          <div id="report"><p class="muted">Le rapport apparaîtra ici.</p></div>
+          <h2 data-i18n="reportHeading">Report</h2>
+          <div id="verified-banner" hidden>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span data-i18n="verifiedBanner">Verified report — every claim checked by code</span>
+          </div>
+          <p class="muted" data-i18n="reportNote">The verified report is written in French for the student; each claim below opens its proof.</p>
+          <div id="report"><p class="muted" data-i18n="reportEmpty">The report will appear here.</p></div>
           <div id="proofs" hidden>
-            <h3>Affirmations et preuves</h3>
-            <p class="muted">Chaque preuve est cliquable et ouvre sa source : note lue,
-              citation de la voix, ligne du guide ou détail du calcul.</p>
+            <h3 data-i18n="proofsHeading">Claims and proofs</h3>
+            <p class="muted" data-i18n="proofsIntro">Every proof is clickable and opens its source: a read grade, a voice quote, a guide row, or the calculation detail.</p>
             <div id="claims"></div>
           </div>
         </section>
       </main>
     </div>
 
-    <footer>Démo sur données fictives uniquement. Recommandations limitées aux offres publiques
-      des séries C et D du guide 2026-2027 dont la ligne a passé le contrôle qualité.</footer>
+    <footer data-i18n="footer">Demo on fictional data only. Recommendations are limited to public offers for series C and D of the 2026-2027 guide whose row passed quality control.</footer>
 
     <dialog id="proof-dialog">
       <h3 id="proof-title"></h3>
       <div id="proof-body"></div>
-      <button type="button" id="proof-close">Fermer</button>
+      <button type="button" id="proof-close" data-i18n="close">Close</button>
     </dialog>
 
-    <script src="app.js"></script>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
