@@ -63,13 +63,25 @@
     </section>
     <section class="hood reveal" id="models">
       <h2 data-i18n="underHoodTitle">Under the hood</h2>
-      <p class="hood-sub" data-i18n="underHoodSub">Two Meta models inside one agent loop. Every number comes from deterministic code.</p>
+      <p class="hood-sub" data-i18n="underHoodSub">Four Meta models inside one agent loop. Every number comes from deterministic code.</p>
       <div class="hood-grid">
         <article class="hood-card tile-spark">
           <span class="hood-kind kind-tag kind-tag-model">AI model</span>
+          <h3>Muse Spark 1.3 Contributor</h3>
+          <code>muse-spark-1.3-contributor</code>
+          <p data-i18n="modelContributorRole">Orchestrates the agent: reads the inputs and picks each tool, one step at a time.</p>
+        </article>
+        <article class="hood-card tile-wonder">
+          <span class="hood-kind kind-tag kind-tag-model">AI model · effort high</span>
+          <h3>Muse Wonder 1.0</h3>
+          <code>muse-wonder-1.0</code>
+          <p data-i18n="modelWonderRole">Takes over once the guide search has answered: drafts the report with its proofs and corrects it if the verifier refuses a claim, at high reasoning effort.</p>
+        </article>
+        <article class="hood-card tile-vision">
+          <span class="hood-kind kind-tag kind-tag-model">AI model</span>
           <h3>Muse Spark 1.3</h3>
           <code>muse-spark-1.3</code>
-          <p data-i18n="modelSparkRole">Decides every step, reads the grade sheet, extracts the student profile.</p>
+          <p data-i18n="modelSparkRole">Vision: reads the grade sheet photo and extracts the student profile.</p>
         </article>
         <article class="hood-card tile-voice">
           <span class="hood-kind kind-tag kind-tag-model">AI model</span>

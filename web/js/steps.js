@@ -1,7 +1,7 @@
 // Live trace view: one timeline card per streamed tool step.
 import { t } from "./i18n.js";
 import { escapeHtml, formatDetail } from "./format.js";
-import { MODELS, ORCHESTRATOR, modelOfTool } from "./models.js";
+import { deciderOf, runnerOf } from "./models.js";
 
 export const TOOL_ICONS = {
   transcribe_voice: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 19v3"/>',
@@ -63,18 +63,25 @@ export function lastStep(steps, tool) {
 
 function modelChip(label, model, tone) {
   const id = model ? `<code class="model-id">${escapeHtml(model.id)}</code>` : "";
-  return `<span class="model-chip model-${tone}">${escapeHtml(label)}${id}</span>`;
+  const effort = model?.effort
+    ? `<span class="model-effort">${escapeHtml(t("modelEffort", { effort: model.effort }))}</span>`
+    : "";
+  return `<span class="model-chip model-${tone}">${escapeHtml(label)}${id}${effort}</span>`;
 }
 
-// Who decided and who ran this step: every step is a Muse Spark turn; the
-// tool then runs on its own model, or on plain code when it has none.
+// Who decided and who ran this step: the deciding model is the one the loop
+// really called for this turn (journal); the tool then runs on its own model,
+// or on plain code when it has none.
 function modelLine(step) {
-  const orchestrator = MODELS[ORCHESTRATOR];
-  const runner = modelOfTool(step.tool);
+  const decider = deciderOf(step);
+  const runner = runnerOf(step.tool);
+  const decides = decider
+    ? modelChip(t("modelDecides", { model: decider.name }), decider, decider.tone)
+    : "";
   const runs = runner
-    ? modelChip(t("modelRuns", { model: runner.name }), runner, runner === orchestrator ? "spark" : "voice")
+    ? modelChip(t("modelRuns", { model: runner.name }), runner, runner.tone)
     : modelChip(t("modelRunsCode"), null, "code");
-  return `<p class="model-line">${modelChip(t("modelDecides", { model: orchestrator.name }), orchestrator, "spark")}${runs}</p>`;
+  return `<p class="model-line">${decides}${runs}</p>`;
 }
 
 function renderStep(step) {

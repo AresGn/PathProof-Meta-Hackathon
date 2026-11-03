@@ -431,7 +431,7 @@ footer { max-width: 72rem; margin: 0 auto; padding: 0.5rem var(--gutter) 2rem; c
 .hood, .proof-kinds, .final-cta { max-width: 72rem; margin: 0 auto; padding: 2.6rem var(--gutter) 0; }
 .hood h2, .proof-kinds h2, .final-cta h2 { margin: 0; font-size: clamp(1.5rem, 4.5vw, 2.2rem); letter-spacing: -0.025em; }
 .hood-sub { margin: 0.5rem 0 0; color: var(--text-dim); max-width: 40rem; }
-.hood-grid { display: grid; grid-template-columns: 1fr; gap: 0.9rem; margin-top: 1.4rem; }
+.hood-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.9rem; margin-top: 1.4rem; }
 .hood-card {
   position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--stroke);
   border-radius: var(--radius); padding: 1.1rem 1.2rem; transition: transform 0.25s ease, border-color 0.25s ease;
@@ -465,8 +465,11 @@ footer { max-width: 72rem; margin: 0 auto; padding: 0.5rem var(--gutter) 2rem; c
 .model-chip .model-id { font-weight: 500; opacity: 0.8; font-size: 0.7rem; }
 .model-spark { background: rgba(157, 140, 255, 0.14); color: var(--model); border-color: rgba(157, 140, 255, 0.35); }
 .model-voice { background: rgba(94, 200, 255, 0.13); color: #7cd3ff; border-color: rgba(94, 200, 255, 0.35); }
+.model-wonder { background: rgba(255, 180, 84, 0.14); color: var(--human); border-color: rgba(255, 180, 84, 0.4); }
+.model-vision { background: rgba(201, 155, 255, 0.13); color: #d3b0ff; border-color: rgba(201, 155, 255, 0.35); }
+.model-effort { border-radius: 6px; padding: 0 0.35rem; background: rgba(255, 180, 84, 0.22); font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
 .model-code { background: rgba(94, 240, 176, 0.10); color: var(--code); border-color: rgba(94, 240, 176, 0.28); }
-.model-tiles { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; margin-top: 0.4rem; }
+.model-tiles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: 0.5rem; margin-top: 0.4rem; }
 .model-tile {
   display: grid; grid-template-columns: 1fr auto; gap: 0.05rem 0.8rem; align-items: center; padding: 0.55rem 0.8rem;
   border-radius: 12px; border: 1px solid var(--stroke); background: var(--surface); position: relative; overflow: hidden;
@@ -475,6 +478,8 @@ footer { max-width: 72rem; margin: 0 auto; padding: 0.5rem var(--gutter) 2rem; c
 .model-tile::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--tile, var(--mint)); opacity: 0.45; transition: opacity 0.3s; }
 .model-tile.tile-spark { --tile: var(--model); }
 .model-tile.tile-voice { --tile: #5ec8ff; }
+.model-tile.tile-wonder, .hood-card.tile-wonder { --tile: var(--human); }
+.model-tile.tile-vision, .hood-card.tile-vision { --tile: #c99bff; }
 .model-tile.tile-code { --tile: var(--code); }
 .model-tile.is-used { border-color: color-mix(in srgb, var(--tile) 55%, transparent); background: color-mix(in srgb, var(--tile) 9%, transparent); }
 .model-tile.is-used::before { opacity: 1; }
@@ -516,9 +521,7 @@ footer { max-width: 72rem; margin: 0 auto; padding: 0.5rem var(--gutter) 2rem; c
 @media (min-width: 640px) {
   :root { --gutter: 1.5rem; }
   .topnav { display: flex; }
-  .hood-grid { grid-template-columns: repeat(3, 1fr); }
   .proof-kinds-grid { grid-template-columns: repeat(2, 1fr); }
-  .model-tiles { grid-template-columns: repeat(3, 1fr); }
   .model-tile { grid-template-columns: 1fr; }
   .tile-calls { grid-row: auto; grid-column: auto; }
   .tile-id { grid-row: auto; }

@@ -4,7 +4,7 @@
 // claims a tool is "running": it shows who answered and what comes next.
 import { t } from "./i18n.js";
 import { TOOL_ICONS, toolKind } from "./steps.js";
-import { MODELS, countModelCalls } from "./models.js";
+import { MODELS, MODEL_ORDER, countModelCalls } from "./models.js";
 
 const TOOL_ORDER = [
   "transcribe_voice", "read_grade_sheet", "extract_profile", "ask_student",
@@ -52,7 +52,7 @@ function buildSvg() {
         `<circle class="map-core-wave" r="${CORE_RADIUS}"/><circle class="map-core-wave wave-2" r="${CORE_RADIUS}"/>` +
         `<circle class="map-core-disc" r="${CORE_RADIUS}"/>` +
         `<text class="map-core-label" text-anchor="middle" y="-2" data-core></text>` +
-        `<text class="map-core-sub" text-anchor="middle" y="13">${MODELS.spark.name.replace(" 1.3", "")}</text>` +
+        `<text class="map-core-sub" text-anchor="middle" y="13">Muse</text>` +
       `</g>` +
       nodes.join("") +
     `</svg>`
@@ -67,13 +67,14 @@ function buildLegend() {
 }
 
 function buildModelTiles() {
-  const tile = (key, id) => (
-    `<div class="model-tile tile-${key}" data-model="${key}">` +
+  const tile = (key, tone, id) => (
+    `<div class="model-tile tile-${tone}" data-model="${key}">` +
       `<span class="tile-name" data-tile-name="${key}"></span>` +
       `<code class="tile-id">${id}</code>` +
       `<span class="tile-calls" data-tile-calls="${key}"></span></div>`
   );
-  return tile("spark", MODELS.spark.id) + tile("voice", MODELS.voice.id) + tile("code", "python");
+  const models = MODEL_ORDER.map((id) => tile(id, MODELS[id].tone, id));
+  return models.join("") + tile("code", "code", "python");
 }
 
 function countCalls(steps) {
@@ -112,13 +113,13 @@ export function createAgentMap(container) {
 
   function applyModelTiles(steps) {
     const calls = countModelCalls(steps);
-    const names = { spark: MODELS.spark.name, voice: MODELS.voice.name, code: t("modelCodeName") };
-    for (const key of Object.keys(names)) {
-      container.querySelector(`[data-tile-name="${key}"]`).textContent = names[key];
+    const keys = [...MODEL_ORDER, "code"];
+    for (const key of keys) {
+      const name = key === "code" ? t("modelCodeName") : MODELS[key].name;
+      container.querySelector(`[data-tile-name="${key}"]`).textContent = name;
       const callsEl = container.querySelector(`[data-tile-calls="${key}"]`);
-      callsEl.textContent = calls[key]
-        ? t(calls[key] === 1 ? "modelCall" : "modelCalls", { n: calls[key] })
-        : t("modelNoCalls");
+      const count = calls[key];
+      callsEl.textContent = count === 1 ? t("modelCallOne") : count ? t("modelCalls", { n: count }) : t("modelNoCalls");
       container.querySelector(`.model-tile[data-model="${key}"]`).classList.toggle("is-used", calls[key] > 0);
     }
   }

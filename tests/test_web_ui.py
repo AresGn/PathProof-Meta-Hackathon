@@ -301,22 +301,28 @@ def test_demo_is_a_separate_page_from_the_landing():
     assert TestClient(server.app).get("/demo.html").status_code == 200
 
 
-def test_landing_names_the_two_meta_models_and_nothing_unused():
-    assert "muse-spark-1.3" in INDEX_HTML and "muse-voice-transcribe-1.0" in INDEX_HTML
-    # Only the models the code really calls (docs/decisions.md E0.6 dropped SAM 3.1).
-    for unused in ("Muse Wonder", "wonder"):
-        assert unused.casefold() not in (INDEX_HTML + APP_JS).casefold(), unused
+def test_landing_names_every_model_the_code_calls_and_nothing_else():
+    for model in ("muse-spark-1.3-contributor", "muse-wonder-1.0", "muse-spark-1.3",
+                  "muse-voice-transcribe-1.0"):
+        assert model in INDEX_HTML, model
+    # SAM 3.1 was tested and dropped (docs/decisions.md E0.6): never presented as used.
+    assert "sam-3.1" not in INDEX_HTML.casefold()
 
 
 def test_model_identifiers_shown_in_the_trace_match_the_clients():
     from src.clients.muse_spark import MUSE_SPARK_MODEL
+    from src.clients.muse_wonder import (
+        MUSE_CONTRIBUTOR_MODEL, MUSE_WONDER_EFFORT, MUSE_WONDER_MODEL)
     from src.clients.voice import VOICE_MODEL
     models = MODULES["models.js"]
-    assert f'id: "{MUSE_SPARK_MODEL}"' in models
-    assert f'id: "{VOICE_MODEL}"' in models
-    assert 'transcribe_voice: "voice"' in models
+    for identifier in (MUSE_CONTRIBUTOR_MODEL, MUSE_WONDER_MODEL, MUSE_SPARK_MODEL, VOICE_MODEL):
+        assert f'id: "{identifier}"' in models, identifier
+    assert f'effort: "{MUSE_WONDER_EFFORT}"' in models
+    assert 'transcribe_voice: "muse-voice-transcribe-1.0"' in models
     for tool in ("read_grade_sheet", "extract_profile"):
-        assert f'{tool}: "spark"' in models, tool
+        assert f'{tool}: "muse-spark-1.3"' in models, tool
+    # The deciding model is read from the journal, not from a fixed table.
+    assert "step.model" in models
 
 
 def test_every_step_card_names_who_decided_and_who_ran_it():
