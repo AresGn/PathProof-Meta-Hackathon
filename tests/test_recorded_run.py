@@ -14,13 +14,9 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_recorded_run_is_built_from_a_verified_fictional_journal():
     journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
-    committed_recording = json.loads(
-        (ROOT / "web" / "recorded-run.json").read_text(encoding="utf-8")
-    )
 
     recording = create_recorded_run(journal)
 
-    assert committed_recording == recording
     assert recording["events"][-1]["type"] == "done"
     assert recording["events"][-1]["status"] == "ok"
     assert recording["events"][-1]["report"]
@@ -28,6 +24,29 @@ def test_recorded_run_is_built_from_a_verified_fictional_journal():
     assert recording["events"][-1]["report"].startswith("PathProof — rapport enregistré")
     assert all(event["tool"] != "ask_student" for event in recording["events"][:-1])
     assert "vérifié" not in recording["events"][-1]["report"].casefold()
+
+
+def _recording(name):
+    return json.loads((ROOT / "web" / name).read_text(encoding="utf-8"))
+
+
+@pytest.mark.parametrize("name", ["recorded-run.json", "recorded-run.en.json"])
+def test_committed_recordings_name_the_model_that_decided_each_step(name):
+    steps = _recording(name)["events"][:-1]
+    models = [step["model"] for step in steps]
+    assert all(models), "a step without its deciding model would show a made-up one"
+    # Real run of 3 nov: the contributor reads, Wonder (effort high) drafts and verifies.
+    assert models[0] == "muse-spark-1.3-contributor"
+    assert next(step for step in steps if step["tool"] == "verify_report")["model"] == "muse-wonder-1.0"
+    assert steps[-1]["tool"] == "build_report" and steps[-1]["model"] == "muse-wonder-1.0"
+
+
+def test_french_recording_is_a_verified_french_run():
+    events = _recording("recorded-run.json")["events"]
+    assert events[-1]["report"].startswith("PathProof — rapport enregistré")
+    assert "vérifié" not in events[-1]["report"].casefold()
+    assert events[-2]["tool"] == "build_report" and events[-2]["result"] == events[-1]["report"]
+    assert any(step["tool"] == "verify_report" and step["result"] == [] for step in events[:-1])
 
 
 def test_recorded_run_rejects_journals_without_a_verified_report():

@@ -328,7 +328,7 @@ def test_empty_image_returns_400():
 def test_late_tool_error_streams_partial_steps_then_error(monkeypatch):
     app = make_client(monkeypatch)
 
-    def boom_run(client, model, schemas, user_input, journal=None, language="fr"):
+    def boom_run(client, model, schemas, user_input, journal=None, language="fr", drafting_model=None):
         journal.append({"step": 1, "tool": "lookup_filieres", "args": {"serie": "D"},
                         "result": {"accessible": [], "excluded": []}, "decision": "continue"})
         raise RuntimeError("late boom")
@@ -378,7 +378,7 @@ def test_text_only_builds_message_without_photo_or_voice(monkeypatch):
     app = make_client(monkeypatch)
     seen = {}
 
-    def spy_run(client, model, schemas, user_input, journal=None, language="fr"):
+    def spy_run(client, model, schemas, user_input, journal=None, language="fr", drafting_model=None):
         seen["input"] = user_input
         return "ok-text"
 
@@ -395,7 +395,7 @@ def test_image_only_builds_message_without_voice_line(monkeypatch):
     app = make_client(monkeypatch)
     seen = {}
 
-    def spy_run(client, model, schemas, user_input, journal=None, language="fr"):
+    def spy_run(client, model, schemas, user_input, journal=None, language="fr", drafting_model=None):
         seen["input"] = user_input
         return "ok-image"
 

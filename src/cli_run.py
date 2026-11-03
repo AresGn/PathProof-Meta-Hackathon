@@ -324,6 +324,7 @@ def run_cli_session(
     tool_schemas: list[dict] | None = None,
     journal: list | None = None,
     language: str = DEFAULT_LANGUAGE,
+    drafting_model: str | None = None,
 ) -> CliRunResult:
     """Run the agent loop until it finishes or ask_student gets no answer."""
     usage = TokenUsage()
@@ -335,7 +336,7 @@ def run_cli_session(
     waiting_seconds = 0.0
     questions: list[str] = []
     outcome = loop.run(tracked, model, schemas, user_input, journal=journal,
-                       language=language)
+                       language=language, drafting_model=drafting_model)
     while isinstance(outcome, dict) and outcome.get("status") == "needs_input":
         question = outcome["question"]
         questions.append(question)
@@ -344,7 +345,8 @@ def run_cli_session(
         waiting_seconds += time.monotonic() - asked
         if not isinstance(answer, str) or not answer.strip():
             break
-        outcome = loop.resume(tracked, model, schemas, outcome, answer)
+        outcome = loop.resume(tracked, model, schemas, outcome, answer,
+                              drafting_model=drafting_model)
     report_text = verified_report_from_journal(journal)
     duration = time.monotonic() - started - waiting_seconds  # agent time, not the student's
     return CliRunResult(image_path=image_path, audio_path=audio_path, journal=journal,

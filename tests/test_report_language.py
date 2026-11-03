@@ -120,7 +120,7 @@ def test_run_endpoint_passes_the_language_to_the_loop(monkeypatch):
     server.pending_run_store.clear_pending_runs()
     seen = {}
 
-    def fake_run(client, model, schemas, user_input, journal=None, language="fr"):
+    def fake_run(client, model, schemas, user_input, journal=None, language="fr", drafting_model=None):
         seen["language"] = language
         return "Done."
 

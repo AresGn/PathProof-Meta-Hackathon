@@ -12,7 +12,7 @@ from src.agent import loop
 from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.cli_run import run_cli_session, verified_report_from_journal
 from src.clients.meta_client import get_client
-from src.clients.muse_spark import MUSE_SPARK_MODEL
+from src.clients.muse_wonder import MUSE_CONTRIBUTOR_MODEL, MUSE_WONDER_MODEL
 from src.domain.report_text import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES
 
 # Fixed fictional inputs documented in data/samples/README.md.
@@ -91,6 +91,7 @@ def create_recorded_run(journal: list[dict], language: str = DEFAULT_LANGUAGE) -
             "args": event.get("args"),
             "result": report if event.get("tool") == "build_report" else event.get("result"),
             "decision": event.get("decision"),
+            "model": event.get("model"),
         }
         for event in journal
         if event.get("tool") and event.get("tool") != "ask_student"
@@ -163,13 +164,14 @@ def run_fictional_sample(language: str = DEFAULT_LANGUAGE) -> list[dict]:
     journal: list[dict] = []
     result = run_cli_session(
         get_client(),
-        MUSE_SPARK_MODEL,
+        MUSE_CONTRIBUTOR_MODEL,
         IMAGE_PATH,
         AUDIO_PATH,
         lambda question: answer_fictional_question(question, language),
         tool_schemas=TOOL_SCHEMAS,
         journal=journal,
         language=language,
+        drafting_model=MUSE_WONDER_MODEL,
     )
     validate_fictional_question_sequence(journal, language)
     report = verified_report_from_journal(journal)

@@ -262,7 +262,7 @@ def test_journal_is_a_json_list_of_step_tool_args_result_decision_events(monkeyp
     assert json.loads(json.dumps(journal, ensure_ascii=False)) == journal
     assert journal == [{"step": 1, "tool": "lookup_filieres", "args": {"serie": "D"},
                         "result": {"accessible": [], "excluded": []},
-                        "decision": "continue"}]
+                        "decision": "continue", "model": "fake-model"}]
 
 
 def test_journal_travels_with_the_suspended_state_and_resume():

@@ -25,7 +25,7 @@ from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.api.run_store import MAX_PENDING_RUNS, PendingRunStore, cleanup_tmpdir
 from src.cli_run import path_for_agent, verified_report_from_journal
 from src.clients.meta_client import get_client
-from src.clients.muse_spark import MUSE_SPARK_MODEL
+from src.clients.muse_wonder import MUSE_CONTRIBUTOR_MODEL, MUSE_WONDER_MODEL
 from src.clients.upstream_errors import classify_run_error
 from src.domain.report_text import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES
 
@@ -156,7 +156,7 @@ def build_user_message(image_path: Path | None, audio_path: Path | None,
 def build_step_frame(event: dict) -> dict:
     return {"type": "step", "step": event.get("step"), "tool": event.get("tool"),
             "args": event.get("args"), "result": event.get("result"),
-            "decision": event.get("decision")}
+            "decision": event.get("decision"), "model": event.get("model")}
 
 
 def build_done_payload(run_id: str, outcome: str | dict, journal: list) -> dict:
@@ -433,8 +433,9 @@ async def run_agent(
 
         def call() -> str | dict:
             client = get_client()
-            return loop.run(client, MUSE_SPARK_MODEL, TOOL_SCHEMAS, user_input,
-                            journal=journal, language=language)
+            return loop.run(client, MUSE_CONTRIBUTOR_MODEL, TOOL_SCHEMAS, user_input,
+                            journal=journal, language=language,
+                            drafting_model=MUSE_WONDER_MODEL)
 
         return StreamingResponse(
             stream_agent_run(run_id=run_id, journal=journal, start=0, tmpdir=tmpdir,
@@ -477,7 +478,8 @@ async def answer_agent(payload: AnswerRequest) -> StreamingResponse:
 
         def call() -> str | dict:
             client = get_client()
-            return loop.resume(client, MUSE_SPARK_MODEL, TOOL_SCHEMAS, suspended, answer)
+            return loop.resume(client, MUSE_CONTRIBUTOR_MODEL, TOOL_SCHEMAS, suspended, answer,
+                               drafting_model=MUSE_WONDER_MODEL)
 
         return StreamingResponse(
             stream_agent_run(run_id=payload.run_id, journal=journal, start=start,

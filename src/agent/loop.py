@@ -49,6 +49,7 @@ recomputes or rechecks a proof itself.
 import json
 
 from src.agent.prompts import system_prompt_for
+from src.clients.muse_wonder import MUSE_WONDER_MODEL, request_wonder_turn
 from src.domain.report_text import DEFAULT_LANGUAGE
 from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.tools.ask_student import ask_student
@@ -114,7 +115,8 @@ def _filter_arguments(name: str, args: dict,
 
 
 def run(client, model: str, tool_schemas: list[dict] | None, user_input: str,
-        journal: list | None = None, language: str = DEFAULT_LANGUAGE) -> str | dict:
+        journal: list | None = None, language: str = DEFAULT_LANGUAGE,
+        drafting_model: str | None = None) -> str | dict:
     """Run the loop from a student input.
 
     Returns the model's final text, the `needs_input` dict of `ask_student`
@@ -123,16 +125,19 @@ def run(client, model: str, tool_schemas: list[dict] | None, user_input: str,
     `tool_schemas` defaults to `TOOL_SCHEMAS` (single declaration place);
     an empty list is treated like `None`. `language` ("fr" or "en") is the
     interface language: it words the agent's sentences and the final report.
+    `drafting_model`, when given, answers the turns that follow `lookup_filieres`
+    (draft, verification, correction) instead of `model`; see `_turn_model`.
     """
     messages = [{"role": "system", "content": system_prompt_for(language)},
                 {"role": "user", "content": user_input}]
     return _continue_loop(client, model, tool_schemas, messages, steps_used=0,
                           journal=journal if journal is not None else [],
-                          verify_refusals=0, language=language)
+                          verify_refusals=0, language=language,
+                          drafting_model=drafting_model)
 
 
 def resume(client, model: str, tool_schemas: list[dict] | None, suspended: dict,
-           student_answer: str | None) -> str | dict:
+           student_answer: str | None, drafting_model: str | None = None) -> str | dict:
     """Resume a loop suspended by `ask_student` with the student's answer.
 
     Every pending tool call of the suspended message gets a tool response:
@@ -163,39 +168,68 @@ def resume(client, model: str, tool_schemas: list[dict] | None, suspended: dict,
                           journal=suspended.get("journal") or [],
                           verify_refusals=suspended.get(
                               "consecutive_verify_refusals", 0),
-                          language=language)
+                          language=language, drafting_model=drafting_model)
 
 
 def _continue_loop(client, model: str, tool_schemas: list[dict] | None,
                    messages: list, steps_used: int, journal: list,
                    verify_refusals: int,
-                   language: str = DEFAULT_LANGUAGE) -> str | dict:
+                   language: str = DEFAULT_LANGUAGE,
+                   drafting_model: str | None = None) -> str | dict:
     tool_schemas = _resolve_schemas(tool_schemas)
     while steps_used < MAX_STEPS:
-        msg = client.chat.completions.create(
-            model=model, messages=messages, tools=tool_schemas).choices[0].message
+        turn_model = _turn_model(model, drafting_model, journal)
+        msg, decided_by = _next_message(client, turn_model, model, messages, tool_schemas)
         steps_used += 1
         messages.append(msg)
         if not msg.tool_calls:
             return msg.content or ""
         outcome, verify_refusals = _execute_calls(
             msg.tool_calls, messages, steps_used, journal, verify_refusals,
-            tool_schemas, language)
+            tool_schemas, language, decided_by)
         if outcome is not None:
             return outcome
     return STOPPED_STEP_LIMIT
 
 
+def _turn_model(model: str, drafting_model: str | None, journal: list) -> str:
+    """Pick the model of the next turn: inputs are read by `model`, then the
+    heavier work (drafting the proven report, fixing a refused draft) goes to
+    `drafting_model` as soon as the guide search has answered."""
+    if drafting_model and any(event["tool"] == "lookup_filieres" for event in journal):
+        return drafting_model
+    return model
+
+
+def _next_message(client, turn_model: str, model: str, messages: list,
+                  tool_schemas: list[dict]):
+    """Ask one turn; return (assistant message, model that really answered).
+
+    A Wonder turn that fails (network, upstream error, empty answer) is retried
+    once on `model`, and the journal then names `model`, never Wonder: the demo
+    shows who really decided.
+    """
+    if turn_model == MUSE_WONDER_MODEL:
+        try:
+            return request_wonder_turn(client, messages, tool_schemas), MUSE_WONDER_MODEL
+        except Exception:  # fall back to the base model, named honestly in the journal
+            turn_model = model
+    reply = client.chat.completions.create(
+        model=turn_model, messages=messages, tools=tool_schemas)
+    return reply.choices[0].message, turn_model
+
+
 def _execute_calls(tool_calls: list, messages: list, steps_used: int, journal: list,
                    verify_refusals: int,
                    tool_schemas: list[dict] | None = None,
-                   language: str = DEFAULT_LANGUAGE) -> tuple[str | dict | None, int]:
+                   language: str = DEFAULT_LANGUAGE,
+                   decided_by: str | None = None) -> tuple[str | dict | None, int]:
     """Execute one assistant message's calls; return (terminal outcome, refusals)."""
     for index, call in enumerate(tool_calls):
         if call.function.name == ASK_STUDENT_TOOL:
             outcome = _ask_student_outcome(
                 call, tool_calls[index:], messages, steps_used, journal,
-                verify_refusals, tool_schemas, language)
+                verify_refusals, tool_schemas, language, decided_by)
             if outcome is not None:
                 return outcome, verify_refusals
             continue
@@ -203,7 +237,7 @@ def _execute_calls(tool_calls: list, messages: list, steps_used: int, journal: l
         if parse_error is not None:
             messages.append(_tool_observation(call, None, parse_error))
             _record(journal, steps_used, call.function.name, journal_args, None,
-                    parse_error, DECISION_CONTINUE)
+                    parse_error, DECISION_CONTINUE, decided_by=decided_by)
             continue
         if call.function.name == BUILD_REPORT_TOOL:
             # The interface language is routing, like the pinned draft: the model
@@ -213,12 +247,12 @@ def _execute_calls(tool_calls: list, messages: list, steps_used: int, journal: l
         messages.append(_tool_observation(call, result, error))
         if call.function.name == VERIFY_REPORT_TOOL and error is None:
             verify_refusals, outcome = _verify_outcome(
-                filtered, result, steps_used, journal, verify_refusals)
+                filtered, result, steps_used, journal, verify_refusals, decided_by)
             if outcome is not None:
                 return outcome, verify_refusals
             continue
         _record(journal, steps_used, call.function.name, filtered, result, error,
-                DECISION_CONTINUE)
+                DECISION_CONTINUE, decided_by=decided_by)
     return None, verify_refusals
 
 
@@ -240,7 +274,8 @@ def _pin_verified_draft(args: dict, journal: list) -> dict:
 
 
 def _verify_outcome(args: dict, result: object, steps_used: int, journal: list,
-                    verify_refusals: int) -> tuple[int, dict | None]:
+                    verify_refusals: int,
+                    decided_by: str | None = None) -> tuple[int, dict | None]:
     """Count one verify_report result; stop as unverified at the 3rd refusal.
 
     Only a returned problem list counts: an exception never reaches here
@@ -249,19 +284,19 @@ def _verify_outcome(args: dict, result: object, steps_used: int, journal: list,
     """
     if not isinstance(result, list):
         _record(journal, steps_used, VERIFY_REPORT_TOOL, args, result, None,
-                DECISION_CONTINUE)
+                DECISION_CONTINUE, decided_by=decided_by)
         return verify_refusals, None
     if not result:
         _record(journal, steps_used, VERIFY_REPORT_TOOL, args, result, None,
-                DECISION_CONTINUE)
+                DECISION_CONTINUE, decided_by=decided_by)
         return 0, None
     verify_refusals += 1
     if verify_refusals < MAX_VERIFY_REFUSALS:
         _record(journal, steps_used, VERIFY_REPORT_TOOL, args, result, None,
-                DECISION_CONTINUE)
+                DECISION_CONTINUE, decided_by=decided_by)
         return verify_refusals, None
     _record(journal, steps_used, VERIFY_REPORT_TOOL, args, result, None,
-            DECISION_STOP_UNVERIFIED)
+            DECISION_STOP_UNVERIFIED, decided_by=decided_by)
     report = args.get("report")
     return verify_refusals, {
         "status": "unverified",
@@ -287,7 +322,8 @@ def _refused_claims(report: object, problems: list) -> list:
 def _ask_student_outcome(call, remaining_calls: list, messages: list, steps_used: int,
                          journal: list, verify_refusals: int,
                          tool_schemas: list[dict] | None = None,
-                         language: str = DEFAULT_LANGUAGE) -> dict | str | None:
+                         language: str = DEFAULT_LANGUAGE,
+                         decided_by: str | None = None) -> dict | str | None:
     """Suspend on a valid question; an invalid one is an error observation.
 
     `remaining_calls` is the suspended call plus every later call of the same
@@ -299,7 +335,7 @@ def _ask_student_outcome(call, remaining_calls: list, messages: list, steps_used
     if parse_error is not None:
         messages.append(_tool_observation(call, None, parse_error))
         _record(journal, steps_used, ASK_STUDENT_TOOL, journal_args, None, parse_error,
-                DECISION_CONTINUE)
+                DECISION_CONTINUE, decided_by=decided_by)
         return None
     filtered = _filter_arguments(ASK_STUDENT_TOOL, args, tool_schemas)
     try:
@@ -307,14 +343,14 @@ def _ask_student_outcome(call, remaining_calls: list, messages: list, steps_used
     except Exception as error:  # invalid question: observation, no suspension
         messages.append(_tool_observation(call, None, str(error)))
         _record(journal, steps_used, ASK_STUDENT_TOOL, filtered, None, str(error),
-                DECISION_CONTINUE)
+                DECISION_CONTINUE, decided_by=decided_by)
         return None
     if steps_used >= MAX_STEPS:
         _record(journal, steps_used, ASK_STUDENT_TOOL, filtered, result, None,
-                DECISION_STOP_STEP_LIMIT)
+                DECISION_STOP_STEP_LIMIT, decided_by=decided_by)
         return STOPPED_STEP_LIMIT
     _record(journal, steps_used, ASK_STUDENT_TOOL, filtered, result, None,
-            DECISION_SUSPEND)
+            DECISION_SUSPEND, decided_by=decided_by)
     return {**result, "messages": messages, "tool_call_id": call.id,
             "pending_tool_call_ids": [pending.id for pending in remaining_calls],
             "steps_used": steps_used, "journal": journal, "language": language,
@@ -370,10 +406,12 @@ def _tool_observation(call, result: object, error: str | None) -> dict:
 
 
 def _record(journal: list, step: int, tool: str, args: dict, result: object,
-            error: str | None, decision: str) -> None:
+            error: str | None, decision: str, decided_by: str | None = None) -> None:
+    """Journal one tool call; `model` is the model that chose it (shown by the demo)."""
     payload = {"error": error} if error is not None else result
     journal.append({"step": step, "tool": tool, "args": _json_value(args),
-                    "result": _json_value(payload), "decision": decision})
+                    "result": _json_value(payload), "decision": decision,
+                    "model": decided_by})
 
 
 def _json_value(value: object) -> object:
