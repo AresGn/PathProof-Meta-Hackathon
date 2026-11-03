@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Callable
 
 from src.agent import loop
+from src.domain.report_text import DEFAULT_LANGUAGE
 from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.clients.muse_spark import MUSE_SPARK_MODEL
 
@@ -34,8 +35,11 @@ class TokenUsage:
     def add(self, usage: object) -> None:
         if usage is None:
             return
-        self.prompt_tokens += int(getattr(usage, "prompt_tokens", 0) or 0)
-        self.completion_tokens += int(getattr(usage, "completion_tokens", 0) or 0)
+        # Chat completions say prompt/completion; the Responses API (Wonder) says input/output.
+        self.prompt_tokens += int(getattr(usage, "prompt_tokens", None)
+                                  or getattr(usage, "input_tokens", 0) or 0)
+        self.completion_tokens += int(getattr(usage, "completion_tokens", None)
+                                      or getattr(usage, "output_tokens", 0) or 0)
         self.total_tokens += int(getattr(usage, "total_tokens", 0) or 0)
 
 
@@ -71,7 +75,8 @@ class CliRunResult:
 
 
 class UsageTrackingClient:
-    """Delegate to the real client; count tokens on non-streaming completions only."""
+    """Delegate to the real client; count tokens on non-streaming completions
+    and on Responses calls (Muse Wonder turns)."""
 
     def __init__(self, inner, usage: TokenUsage):
         self._inner = inner
@@ -81,6 +86,8 @@ class UsageTrackingClient:
     def __getattr__(self, name: str):
         if name == "chat":
             return self._chat
+        if name == "responses":
+            return _UsageTrackingResponses(self._inner.responses, self._usage)
         return getattr(self._inner, name)
 
 
@@ -113,6 +120,20 @@ class _UsageTrackingCompletions:
 
     def __getattr__(self, name: str):
         return getattr(self._completions, name)
+
+
+class _UsageTrackingResponses:
+    def __init__(self, responses, usage: TokenUsage):
+        self._responses = responses
+        self._usage = usage
+
+    def create(self, **kwargs):
+        response = self._responses.create(**kwargs)
+        self._usage.add(getattr(response, "usage", None))
+        return response
+
+    def __getattr__(self, name: str):
+        return getattr(self._responses, name)
 
 
 def resolve_path(path: str | Path, label: str) -> Path:
@@ -333,6 +354,8 @@ def run_cli_session(
     voice_text: str | None = None,
     tool_schemas: list[dict] | None = None,
     journal: list | None = None,
+    language: str = DEFAULT_LANGUAGE,
+    drafting_model: str | None = None,
 ) -> CliRunResult:
     """Run the agent loop until it finishes or ask_student gets no answer."""
     usage = TokenUsage()
@@ -343,7 +366,8 @@ def run_cli_session(
     started = time.monotonic()
     waiting_seconds = 0.0
     questions: list[str] = []
-    outcome = loop.run(tracked, model, schemas, user_input, journal=journal)
+    outcome = loop.run(tracked, model, schemas, user_input, journal=journal,
+                       language=language, drafting_model=drafting_model)
     while isinstance(outcome, dict) and outcome.get("status") == "needs_input":
         question = outcome["question"]
         questions.append(question)
@@ -352,7 +376,8 @@ def run_cli_session(
         waiting_seconds += time.monotonic() - asked
         if not isinstance(answer, str) or not answer.strip():
             break
-        outcome = loop.resume(tracked, model, schemas, outcome, answer)
+        outcome = loop.resume(tracked, model, schemas, outcome, answer,
+                              drafting_model=drafting_model)
     report_text = verified_report_from_journal(journal)
     duration = time.monotonic() - started - waiting_seconds  # agent time, not the student's
     return CliRunResult(image_path=image_path, audio_path=audio_path, journal=journal,

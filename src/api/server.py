@@ -25,8 +25,9 @@ from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.api.run_store import MAX_PENDING_RUNS, PendingRunStore, cleanup_tmpdir
 from src.cli_run import build_user_message, verified_report_from_journal
 from src.clients.meta_client import get_client
-from src.clients.muse_spark import MUSE_SPARK_MODEL
+from src.clients.muse_wonder import MUSE_CONTRIBUTOR_MODEL, MUSE_WONDER_MODEL
 from src.clients.upstream_errors import classify_run_error
+from src.domain.report_text import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES
 
 WEB_DIR = Path(__file__).resolve().parents[2] / "web"
 SAMPLES_DIR = Path(__file__).resolve().parents[2] / "data" / "samples"
@@ -129,7 +130,7 @@ def new_run_tmpdir(run_id: str) -> Path:
 def build_step_frame(event: dict) -> dict:
     return {"type": "step", "step": event.get("step"), "tool": event.get("tool"),
             "args": event.get("args"), "result": event.get("result"),
-            "decision": event.get("decision")}
+            "decision": event.get("decision"), "model": event.get("model")}
 
 
 def build_done_payload(run_id: str, outcome: str | dict, journal: list) -> dict:
@@ -356,8 +357,15 @@ async def run_agent(
     audio: UploadFile | None = File(default=None),
     voice: UploadFile | None = File(default=None),
     text: str | None = Form(default=None),
+    language: str = Form(default=DEFAULT_LANGUAGE),
 ) -> StreamingResponse:
-    """Accept image + optional audio + fallback text, stream the loop as SSE."""
+    """Accept image + optional audio + fallback text, stream the loop as SSE.
+
+    `language` is the interface language ("fr" or "en"): the verified report
+    and the agent's questions follow it (docs/decisions.md E5.6).
+    """
+    if language not in SUPPORTED_LANGUAGES:
+        raise HTTPException(status_code=400, detail="language must be fr or en")
     pending_run_store.purge_expired_runs()
     if pending_run_store.pending_count() >= MAX_PENDING_RUNS:
         raise HTTPException(status_code=429, detail="too many pending runs, retry later")
@@ -399,7 +407,9 @@ async def run_agent(
 
         def call() -> str | dict:
             client = get_client()
-            return loop.run(client, MUSE_SPARK_MODEL, TOOL_SCHEMAS, user_input, journal=journal)
+            return loop.run(client, MUSE_CONTRIBUTOR_MODEL, TOOL_SCHEMAS, user_input,
+                            journal=journal, language=language,
+                            drafting_model=MUSE_WONDER_MODEL)
 
         return StreamingResponse(
             stream_agent_run(run_id=run_id, journal=journal, start=0, tmpdir=tmpdir,
@@ -442,7 +452,8 @@ async def answer_agent(payload: AnswerRequest) -> StreamingResponse:
 
         def call() -> str | dict:
             client = get_client()
-            return loop.resume(client, MUSE_SPARK_MODEL, TOOL_SCHEMAS, suspended, answer)
+            return loop.resume(client, MUSE_CONTRIBUTOR_MODEL, TOOL_SCHEMAS, suspended, answer,
+                               drafting_model=MUSE_WONDER_MODEL)
 
         return StreamingResponse(
             stream_agent_run(run_id=payload.run_id, journal=journal, start=start,

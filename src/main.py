@@ -5,7 +5,6 @@ from pathlib import Path
 
 from src.cli_run import (
     CliInputError,
-    MUSE_SPARK_MODEL,
     CliRunResult,
     answers_from_file,
     default_journal_path,
@@ -15,6 +14,8 @@ from src.cli_run import (
     run_cli_session,
 )
 from src.clients.meta_client import get_client
+from src.clients.muse_wonder import MUSE_CONTRIBUTOR_MODEL, MUSE_WONDER_MODEL
+from src.domain.report_text import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -38,6 +39,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--answers-file",
         help="Text file with one student answer per line for ask_student (non-interactive replay)",
+    )
+    parser.add_argument(
+        "--language", choices=SUPPORTED_LANGUAGES, default=DEFAULT_LANGUAGE,
+        help="Language of the verified report",
     )
     return parser
 
@@ -87,8 +92,10 @@ def main(argv: list[str] | None = None) -> int:
     result: CliRunResult | None = None
     exit_code = 1
     try:
-        result = run_cli_session(client, MUSE_SPARK_MODEL, image_path, audio_path, ask_fn,
-                                 voice_text=voice_text, journal=journal)
+        # Same models as the demo server, so evals describe what the demo runs.
+        result = run_cli_session(client, MUSE_CONTRIBUTOR_MODEL, image_path, audio_path, ask_fn,
+                                 voice_text=voice_text, journal=journal,
+                                 language=args.language, drafting_model=MUSE_WONDER_MODEL)
         exit_code = print_outcome(result)
     except Exception as error:
         print(f"Run failed ({type(error).__name__}): {error}", file=sys.stderr)

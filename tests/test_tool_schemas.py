@@ -3,6 +3,8 @@ import json
 from src.agent import loop
 from src.agent.tool_schemas import TOOL_SCHEMAS
 
+# Set by the loop, never offered to the model (the interface language).
+LOOP_ROUTED_ARGUMENTS = {"build_report": {"language"}}
 EXPECTED_TOOLS = {"transcribe_voice", "extract_profile", "read_grade_sheet",
                   "compute_ranking_average", "lookup_filieres", "ask_student",
                   "verify_report", "build_report"}
@@ -37,7 +39,8 @@ def test_tool_schemas_match_function_signatures():
     assert set(by_name) == set(loop.TOOLS)
     for name, tool in loop.TOOLS.items():
         parameters = inspect.signature(tool).parameters
-        expected = {param for param in parameters if param != "client"}
+        expected = ({param for param in parameters if param != "client"}
+                    - LOOP_ROUTED_ARGUMENTS.get(name, set()))
         declared = set(by_name[name]["properties"])
         assert declared == expected, name
         for required in by_name[name].get("required", []):

@@ -1,7 +1,7 @@
 // Demo orchestration: wires the form, examples, answer flow and language
 // switch to the API stream and the views. No rendering or HTTP code here:
 // see steps.js, proofs.js, report.js, api.js, i18n.js and format.js.
-import { applyTranslations, setLanguage, t } from "./i18n.js";
+import { applyTranslations, getLanguage, setLanguage, t } from "./i18n.js";
 import {
   describeClientError, ensureApiBase, fetchRecordedRun, fetchSampleFile,
   recordedFailureReason, shouldUseRecordedRun,
@@ -9,6 +9,8 @@ import {
   setServerStateListener, streamAnswer, streamRun,
 } from "./api.js";
 import { renderSteps } from "./steps.js";
+import { createAgentMap } from "./agent-map.js";
+import { initReveal } from "./motion.js";
 import { createProofViewer, verifiedClaims, verifiedContext } from "./proofs.js";
 import { renderProblems, renderReport } from "./report.js";
 
@@ -24,6 +26,8 @@ const questionEl = document.getElementById("question");
 const answerInput = document.getElementById("answer-input");
 const answerBtn = document.getElementById("answer-btn");
 const proofDialog = document.getElementById("proof-dialog");
+const agentPanel = document.getElementById("agent-panel");
+const agentMap = createAgentMap(document.getElementById("agent-map"));
 const exampleBtns = [...document.querySelectorAll("[data-example]")];
 const langBtns = [...document.querySelectorAll("[data-set-lang]")];
 
@@ -73,8 +77,13 @@ function renderServerStatus() {
   serverStatusEl.className = serverState === "down" ? "bad" : "";
 }
 
+function drawAgent() {
+  agentMap.update(seenSteps, { busy: runBusy, waiting: !answerBlock.hidden });
+}
+
 function drawSteps(force = false) {
   renderSteps(stepsEl, seenSteps, runBusy, force);
+  drawAgent();
 }
 
 function showReport(report, isVerified = false) {
@@ -100,12 +109,18 @@ function setRunBusy(busy) {
   busyBar.hidden = !busy;
   for (const btn of exampleBtns) btn.disabled = busy;
   if (!seenSteps.length) drawSteps();
+  else drawAgent();
+  // On a phone the agent panel sits below the form: bring the action into view.
+  if (busy && window.matchMedia("(max-width: 959px)").matches) {
+    agentPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function closeSession() {
   currentRunId = null;
   answerBlock.hidden = true;
   answerInput.value = "";
+  drawAgent();
 }
 
 function handleEvent(event) {
@@ -122,6 +137,7 @@ function handleEvent(event) {
     questionEl.textContent = event.question || "";
     answerInput.value = "";
     answerBlock.hidden = false;
+    drawAgent();
     setStatus(t("askedStatus"));
     answerBlock.scrollIntoView({ behavior: "smooth", block: "center" });
     answerInput.focus({ preventScroll: true });
@@ -248,6 +264,7 @@ async function runExample(key) {
     const body = new FormData();
     body.append("image", await fetchSampleFile(example.image));
     if (example.audio) body.append("audio", await fetchSampleFile(example.audio));
+    body.append("language", getLanguage());
     setStatus(t("statusSending"));
     await streamRun(body, handleEvent);
   } catch (err) {
@@ -260,6 +277,7 @@ async function runExample(key) {
 
 function applyLanguage() {
   applyTranslations();
+  preloadRecordedRun();
   for (const inputId of ["photo", "voice"]) {
     const input = document.getElementById(inputId);
     const nameEl = document.getElementById(`${inputId}-name`);
@@ -306,6 +324,7 @@ applyTranslations();
 renderServerStatus();
 drawSteps();
 showReport(null);
+initReveal();
 preloadRecordedRun();
 ensureApiBase();
 
@@ -319,6 +338,7 @@ form.addEventListener("submit", async (event) => {
   if (photo) body.append("image", photo);
   if (voice) body.append("audio", voice);
   if (submittedText) body.append("text", submittedText);
+  body.append("language", getLanguage());
   await startRun(body);
 });
 
