@@ -23,7 +23,7 @@ from pydantic import BaseModel
 from src.agent import loop
 from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.api.run_store import MAX_PENDING_RUNS, PendingRunStore, cleanup_tmpdir
-from src.cli_run import path_for_agent, verified_report_from_journal
+from src.cli_run import build_user_message, verified_report_from_journal
 from src.clients.meta_client import get_client
 from src.clients.muse_wonder import MUSE_CONTRIBUTOR_MODEL, MUSE_WONDER_MODEL
 from src.clients.upstream_errors import classify_run_error
@@ -125,32 +125,6 @@ def new_run_tmpdir(run_id: str) -> Path:
     tmpdir = base / f"pathproof-{run_id}"
     tmpdir.mkdir(parents=True, exist_ok=True)
     return tmpdir
-
-
-def build_user_message(image_path: Path | None, audio_path: Path | None,
-                       text: str | None) -> str:
-    """Describe the student inputs for the model; paths stay repo-relative."""
-    if image_path is not None and audio_path is not None:
-        first = "The student submitted a grade-sheet photo and a voice note (fictional sample)."
-    elif image_path is not None:
-        first = "The student submitted a grade-sheet photo (fictional sample)."
-    elif audio_path is not None:
-        first = "The student submitted a voice note (fictional sample)."
-    else:
-        first = "The student submitted a written fallback text (fictional sample)."
-    lines = [first]
-    if image_path is not None:
-        lines.append("Grade sheet image path (pass verbatim to read_grade_sheet): "
-                     f"{path_for_agent(image_path)}")
-    if audio_path is not None:
-        lines.append("Voice note audio path (pass verbatim to transcribe_voice): "
-                     f"{path_for_agent(audio_path)}")
-    if text is not None and text.strip():
-        lines.append("Student fallback text (use as transcript, skip transcribe_voice "
-                     f"when there is no audio): {text.strip()}")
-    lines.append("Run the full tool loop and produce a verified orientation report via "
-                 "verify_report then build_report.")
-    return "\n".join(lines)
 
 
 def build_step_frame(event: dict) -> dict:
