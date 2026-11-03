@@ -4,6 +4,7 @@
 import { applyTranslations, setLanguage, t } from "./i18n.js";
 import {
   describeClientError, ensureApiBase, fetchRecordedRun, fetchSampleFile,
+  recordedFailureReason, shouldUseRecordedRun,
   preloadRecordedRun,
   setServerStateListener, streamAnswer, streamRun,
 } from "./api.js";
@@ -50,6 +51,7 @@ let lastReportVerified = false;
 let lastProblems = null;
 let lastRunRecorded = false;
 let lastRecordedError = null;
+let recordedRetryState = null;
 
 const proofViewer = createProofViewer({
   dialog: proofDialog,
@@ -150,6 +152,7 @@ function handleEvent(event) {
 
 function resetRunView() {
   closeSession();
+  recordedRetryState = null;
   recordedBanner.hidden = true;
   seenSteps = [];
   lastReport = null;
@@ -161,14 +164,46 @@ function resetRunView() {
   showReport(null);
 }
 
-async function showRecordedRun(error) {
+function restoreAnswerState(state) {
+  lastRunRecorded = false;
+  lastRecordedError = null;
+  recordedBanner.hidden = true;
+  currentRunId = state.runId;
+  seenSteps = state.steps;
+  questionEl.textContent = state.question;
+  answerInput.value = state.answer;
+  answerBlock.hidden = false;
+  lastProblems = state.problems;
+  if (state.problems) showProblems(state.problems);
+  else showReport(state.report, state.reportVerified);
+  drawSteps(true);
+}
+
+function restoreRecordedRetryState() {
+  if (!recordedRetryState) return;
+  const state = recordedRetryState;
+  recordedRetryState = null;
+  restoreAnswerState(state);
+  setStatus(t("askedStatus"));
+}
+
+async function showRecordedRun(error, { retryState = null } = {}) {
   let recording;
   try {
     recording = await fetchRecordedRun();
   } catch (recordedError) {
+    if (retryState) {
+      restoreAnswerState(retryState);
+    } else {
+      closeSession();
+      seenSteps = [];
+      lastProblems = null;
+      drawSteps();
+      showReport(null);
+    }
     setStatus(
-      `${t("errorPrefix")}${describeClientError(error)} — ` +
-        t("recordedRunUnavailable", { detail: describeClientError(recordedError) }),
+      `${t("errorPrefix")}${recordedFailureReason(error)} — ` +
+        t("recordedRunUnavailable", { detail: recordedFailureReason(recordedError) }),
       true
     );
     return;
@@ -176,9 +211,23 @@ async function showRecordedRun(error) {
   resetRunView();
   lastRunRecorded = true;
   lastRecordedError = error;
+  recordedRetryState = retryState;
   recordedBanner.hidden = false;
-  for (const event of recording.events) handleEvent(event);
-  setStatus(t("recordedRunStatus", { reason: describeClientError(error) }), true);
+  for (const event of recording.events) {
+    if (event.type === "step") {
+      seenSteps.push(event);
+      drawSteps();
+    }
+  }
+  const done = recording.events[recording.events.length - 1];
+  showReport(done.report, false);
+  if (retryState) {
+    currentRunId = retryState.runId;
+    questionEl.textContent = retryState.question;
+    answerInput.value = retryState.answer;
+    answerBlock.hidden = false;
+  }
+  setStatus(t("recordedRunStatus", { reason: recordedFailureReason(error) }), true);
 }
 
 async function startRun(body) {
@@ -188,7 +237,8 @@ async function startRun(body) {
   try {
     await streamRun(body, handleEvent);
   } catch (err) {
-    await showRecordedRun(err);
+    if (shouldUseRecordedRun(err)) await showRecordedRun(err);
+    else setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
   } finally {
     setRunBusy(false);
   }
@@ -208,7 +258,8 @@ async function runExample(key) {
     setStatus(t("statusSending"));
     await streamRun(body, handleEvent);
   } catch (err) {
-    await showRecordedRun(err);
+    if (shouldUseRecordedRun(err)) await showRecordedRun(err);
+    else setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
   } finally {
     setRunBusy(false);
   }
@@ -228,7 +279,7 @@ function applyLanguage() {
   if (lastRunRecorded) {
     recordedBanner.hidden = false;
     setStatus(t("recordedRunStatus", {
-      reason: describeClientError(lastRecordedError),
+      reason: recordedFailureReason(lastRecordedError),
     }), true);
   }
 }
@@ -281,15 +332,27 @@ form.addEventListener("submit", async (event) => {
 answerBtn.addEventListener("click", async () => {
   const answer = answerInput.value;
   if (!currentRunId || !answer.trim()) return;
+  restoreRecordedRetryState();
+  const retryState = {
+    runId: currentRunId,
+    question: questionEl.textContent,
+    answer,
+    steps: [...seenSteps],
+    report: lastReport,
+    reportVerified: lastReportVerified,
+    problems: lastProblems,
+  };
   setRunBusy(true);
   answerBtn.disabled = true;
   try {
-    const result = await streamAnswer(currentRunId, answer.trim(), handleEvent);
-    if (!result.terminalSeen) {
-      await showRecordedRun(new Error(t("answerInterrupted")));
-    }
+    await streamAnswer(currentRunId, answer.trim(), handleEvent);
   } catch (err) {
-    await showRecordedRun(err);
+    if (shouldUseRecordedRun(err)) {
+      await showRecordedRun(err, { retryState });
+    } else {
+      const retrySuffix = currentRunId ? t("retrySuffix") : "";
+      setStatus(`${t("errorPrefix")}${describeClientError(err)}${retrySuffix}`, true);
+    }
   } finally {
     setRunBusy(false);
     answerBtn.disabled = false;

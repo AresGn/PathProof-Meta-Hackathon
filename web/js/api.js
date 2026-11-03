@@ -27,21 +27,77 @@ async function requestRecordedRun() {
     detail: `${response.status}${response.statusText ? ` ${response.statusText}` : ""}`,
   }));
   const data = await response.json();
-  const events = data && data.events;
-  const done = Array.isArray(events) ? events[events.length - 1] : null;
-  const steps = Array.isArray(events)
-    ? events.filter((event) => event && event.type === "step")
-    : [];
-  const hasAcceptedVerification = steps.some(
-    (event) => event.tool === "verify_report"
-      && Array.isArray(event.result) && event.result.length === 0
-  );
-  if (!done || done.type !== "done" || done.status !== "ok"
-      || typeof done.report !== "string" || !done.report.trim()
-      || !steps.length || !hasAcceptedVerification) {
-    throw new Error(t("recordedRunInvalid"));
-  }
+  if (!validateRecordedRun(data)) throw new Error(t("recordedRunInvalid"));
   return data;
+}
+
+export function validateRecordedRun(data) {
+  const events = data && data.events;
+  if (!Array.isArray(events) || events.length < 2) return false;
+  const done = events[events.length - 1];
+  if (done.type !== "done" || done.status !== "ok"
+      || typeof done.report !== "string" || !done.report.trim()) return false;
+
+  const steps = events.slice(0, -1);
+  if (steps.some((event) => !event || event.type !== "step")) return false;
+  const build = steps[steps.length - 1];
+  if (!build || build.tool !== "build_report" || build.result !== done.report) return false;
+
+  const verification = [...steps].reverse().find((event) => event.tool === "verify_report");
+  const verificationArgs = verification?.args;
+  const buildArgs = build.args;
+  return Boolean(
+    verification
+      && Array.isArray(verification.result)
+      && verification.result.length === 0
+      && verification.decision === "continue"
+      && build.decision === "continue"
+      && verificationArgs
+      && buildArgs
+      && verificationArgs.report
+      && verificationArgs.context
+      && jsonValuesEqual(verificationArgs.report, buildArgs.report)
+      && jsonValuesEqual(verificationArgs.context, buildArgs.context)
+  );
+}
+
+function jsonValuesEqual(left, right) {
+  if (left === right) return true;
+  if (!left || !right || typeof left !== "object" || typeof right !== "object") return false;
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return Array.isArray(left) && Array.isArray(right)
+      && left.length === right.length
+      && left.every((value, index) => jsonValuesEqual(value, right[index]));
+  }
+  const leftKeys = Object.keys(left).sort();
+  const rightKeys = Object.keys(right).sort();
+  return leftKeys.length === rightKeys.length
+    && leftKeys.every((key, index) => key === rightKeys[index]
+      && jsonValuesEqual(left[key], right[key]));
+}
+
+export function shouldUseRecordedRun(error) {
+  return Boolean(
+    error && (
+      error.infrastructureFailure === true
+      || error.interrupted === true
+      || error.name === "TypeError"
+      || error.name === "AbortError"
+      || (Number.isInteger(error.status) && error.status >= 500 && error.status <= 599)
+    )
+  );
+}
+
+export function recordedFailureReason(error) {
+  if (error?.interrupted || error?.name === "AbortError") {
+    return t(error.messageKey || "interrupted");
+  }
+  if (Number.isInteger(error?.status) && error.status >= 500) {
+    return t("serverFailure", { status: error.status });
+  }
+  if (error?.name === "TypeError") return t("serverUnreachable");
+  if (error?.infrastructureFailure) return error.message || t("unknownError");
+  return describeClientError(error);
 }
 
 export function preloadRecordedRun() {
@@ -133,6 +189,12 @@ export function describeClientError(err) {
   return t("unknownError");
 }
 
+async function responseError(response) {
+  const error = new Error(await readErrorDetail(response));
+  error.status = response.status;
+  return error;
+}
+
 export async function streamEvents(response, onEvent) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
@@ -141,15 +203,21 @@ export async function streamEvents(response, onEvent) {
   let parseErrors = 0;
   const dispatch = (line) => {
     if (!line.startsWith("data:")) return;
+    let event;
     try {
-      const event = JSON.parse(line.slice(5).trim());
-      if (event.type === "done" || event.type === "needs_input" || event.type === "error") {
-        terminalSeen = true;
-      }
-      onEvent(event);
+      event = JSON.parse(line.slice(5).trim());
     } catch {
       parseErrors += 1;
+      return;
     }
+    if (!event || typeof event !== "object" || Array.isArray(event)) {
+      parseErrors += 1;
+      return;
+    }
+    if (event.type === "done" || event.type === "needs_input" || event.type === "error") {
+      terminalSeen = true;
+    }
+    onEvent(event);
   };
   for (;;) {
     const { done, value } = await reader.read();
@@ -167,17 +235,29 @@ export async function streamEvents(response, onEvent) {
   return { terminalSeen, parseErrors };
 }
 
+async function streamResponse(response, onEvent, interruptedMessageKey = "interrupted") {
+  const result = await streamEvents(response, (event) => {
+    onEvent(event);
+    if (event.type === "error") {
+      const error = new Error(event.error || "run failed");
+      error.infrastructureFailure = true;
+      throw error;
+    }
+  });
+  if (!result.terminalSeen) {
+    const error = new Error(t(interruptedMessageKey));
+    error.interrupted = true;
+    error.messageKey = interruptedMessageKey;
+    throw error;
+  }
+  return result;
+}
+
 export async function streamRun(body, onEvent) {
   await ensureApiBase();
   const response = await fetch(`${apiBase}/run`, { method: "POST", body });
-  if (!response.ok) throw new Error(await readErrorDetail(response));
-  let runError = null;
-  const result = await streamEvents(response, (event) => {
-    if (event.type === "error") runError = event.error || "run failed";
-    onEvent(event);
-  });
-  if (runError) throw new Error(runError);
-  if (!result.terminalSeen) throw new Error(t("interrupted"));
+  if (!response.ok) throw await responseError(response);
+  return streamResponse(response, onEvent);
 }
 
 export async function streamAnswer(runId, answer, onEvent) {
@@ -187,25 +267,17 @@ export async function streamAnswer(runId, answer, onEvent) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ run_id: runId, answer }),
   });
-  if (!response.ok) {
-    const error = new Error(await readErrorDetail(response));
-    error.status = response.status;
-    throw error;
-  }
-  let runError = null;
-  const result = await streamEvents(response, (event) => {
-    if (event.type === "error") runError = event.error || "run failed";
-    onEvent(event);
-  });
-  if (runError) throw new Error(runError);
-  return result;
+  if (!response.ok) throw await responseError(response);
+  return streamResponse(response, onEvent, "answerInterrupted");
 }
 
 export async function fetchSampleFile(name) {
   await ensureApiBase();
   const response = await fetch(`${apiBase}/samples/${name}`);
   if (!response.ok) {
-    throw new Error(t("sampleUnreadable", { name, detail: await readErrorDetail(response) }));
+    const error = await responseError(response);
+    error.message = t("sampleUnreadable", { name, detail: error.message });
+    throw error;
   }
   const blob = await response.blob();
   return new File([blob], name, { type: blob.type || "application/octet-stream" });

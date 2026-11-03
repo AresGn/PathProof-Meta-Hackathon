@@ -181,8 +181,13 @@ def verified_report_from_journal(journal: list) -> str | None:
             return None
         if event.get("result") != []:
             return None
-        # The loop pins the accepted draft on build_report; a different one was never verified.
-        if (event.get("args") or {}).get("report") != (build.get("args") or {}).get("report"):
+        verification_args = event.get("args")
+        build_args = build.get("args")
+        if not isinstance(verification_args, dict) or not isinstance(build_args, dict):
+            return None
+        # Both inputs must match: proofs can be redirected by changing the verifier context.
+        if (verification_args.get("report") != build_args.get("report")
+                or verification_args.get("context") != build_args.get("context")):
             return None
         return build_text
     return None

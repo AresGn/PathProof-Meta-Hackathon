@@ -86,9 +86,13 @@ def test_verified_report_requires_empty_verify_before_build():
 
 
 def test_verified_report_accepts_proven_draft():
+    report = {"claims": [{"claim_id": "x"}]}
+    context = {"grades": [{"matiere": "SVT", "note": 15}]}
     journal = [
-        {"step": 5, "tool": "verify_report", "result": [], "decision": "continue"},
-        {"step": 6, "tool": "build_report", "result": "OK report.", "decision": "continue"},
+        {"step": 5, "tool": "verify_report", "args": {"report": report, "context": context},
+         "result": [], "decision": "continue"},
+        {"step": 6, "tool": "build_report", "args": {"report": report, "context": context},
+         "result": "OK report.", "decision": "continue"},
     ]
     assert verified_report_from_journal(journal) == "OK report."
 
@@ -255,14 +259,29 @@ def test_print_outcome_prints_a_verified_report_when_the_step_limit_ended_the_lo
 
 def test_verified_report_rejects_a_build_of_another_draft_than_the_verified_one():
     journal = [
-        {"step": 1, "tool": "verify_report", "args": {"report": {"claims": ["A"]}},
+        {"step": 1, "tool": "verify_report",
+         "args": {"report": {"claims": ["A"]}, "context": {"serie": "D"}},
          "result": [], "decision": "continue"},
-        {"step": 2, "tool": "build_report", "args": {"report": {"claims": ["B"]}},
+        {"step": 2, "tool": "build_report",
+         "args": {"report": {"claims": ["B"]}, "context": {"serie": "D"}},
          "result": "Report B.", "decision": "continue"},
     ]
     assert verified_report_from_journal(journal) is None
     journal[1]["args"]["report"] = {"claims": ["A"]}
     assert verified_report_from_journal(journal) == "Report B."
+
+
+def test_verified_report_rejects_a_build_with_a_different_context():
+    journal = [
+        {"step": 1, "tool": "verify_report",
+         "args": {"report": {"claims": []}, "context": {"serie": "D"}},
+         "result": [], "decision": "continue"},
+        {"step": 2, "tool": "build_report",
+         "args": {"report": {"claims": []}, "context": {"serie": "C"}},
+         "result": "Report.", "decision": "continue"},
+    ]
+
+    assert verified_report_from_journal(journal) is None
 
 
 @pytest.mark.parametrize("label", ["../../x", "a/b", "..", "."])

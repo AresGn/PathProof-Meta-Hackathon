@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from src.agent import loop
 from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.cli_run import run_cli_session, verified_report_from_journal
 from src.clients.meta_client import get_client
@@ -18,6 +19,15 @@ AUDIO_PATH = Path("data/samples/note_vocale_coherente.mp3")
 OUTPUT_PATH = ROOT / "web" / "recorded-run.json"
 
 
+def is_fixed_sample_path(value: object, sample: Path) -> bool:
+    if not isinstance(value, str):
+        return False
+    candidate = Path(value.replace("\\", "/"))
+    if not candidate.is_absolute():
+        candidate = ROOT / candidate
+    return candidate.resolve() == (ROOT / sample).resolve()
+
+
 def create_recorded_run(journal: list[dict]) -> dict:
     """Return display events only for the fixed fictional samples and verified report."""
     if not isinstance(journal, list) or not all(isinstance(event, dict) for event in journal):
@@ -25,13 +35,13 @@ def create_recorded_run(journal: list[dict]) -> dict:
     has_sample_image = any(
         event.get("tool") == "read_grade_sheet"
         and isinstance(event.get("args"), dict)
-        and event["args"].get("image_path") == IMAGE_PATH.as_posix()
+        and is_fixed_sample_path(event["args"].get("image_path"), IMAGE_PATH)
         for event in journal
     )
     has_sample_audio = any(
         event.get("tool") == "transcribe_voice"
         and isinstance(event.get("args"), dict)
-        and event["args"].get("audio_path") == AUDIO_PATH.as_posix()
+        and is_fixed_sample_path(event["args"].get("audio_path"), AUDIO_PATH)
         for event in journal
     )
     if not has_sample_image or not has_sample_audio:
@@ -65,7 +75,7 @@ def create_recorded_run(journal: list[dict]) -> dict:
 def answer_fictional_question(question: str) -> str:
     """Answer only the known series-confirmation question for the fixed sample."""
     if "série" not in question.casefold() and "serie" not in question.casefold():
-        raise ValueError(f"unexpected question for fictional sample: {question}")
+        return ""
     return "Oui, série D."
 
 
@@ -74,7 +84,7 @@ def run_fictional_sample() -> list[dict]:
     if Path.cwd().resolve() != ROOT:
         raise ValueError("run this script from the repository root")
     journal: list[dict] = []
-    run_cli_session(
+    result = run_cli_session(
         get_client(),
         MUSE_SPARK_MODEL,
         IMAGE_PATH,
@@ -83,27 +93,24 @@ def run_fictional_sample() -> list[dict]:
         tool_schemas=TOOL_SCHEMAS,
         journal=journal,
     )
+    report = verified_report_from_journal(journal)
+    if (result.outcome == loop.STOPPED_STEP_LIMIT
+            or (isinstance(result.outcome, dict)
+                and result.outcome.get("status") == "needs_input")
+            or not report or result.report_text != report):
+        raise ValueError("the fictional run did not finish with a successful verified report")
     return journal
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
+    return argparse.ArgumentParser(
         description="Regenerate web/recorded-run.json from a real fictional run.")
-    parser.add_argument(
-        "--journal",
-        type=Path,
-        help="use a previously captured real journal instead of calling the live API",
-    )
-    return parser
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
+    build_parser().parse_args(argv)
     try:
-        if args.journal:
-            journal = json.loads(args.journal.read_text(encoding="utf-8"))
-        else:
-            journal = run_fictional_sample()
+        journal = run_fictional_sample()
         recording = create_recorded_run(journal)
         OUTPUT_PATH.write_text(
             json.dumps(recording, ensure_ascii=False, indent=2) + "\n",
