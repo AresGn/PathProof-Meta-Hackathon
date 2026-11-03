@@ -271,10 +271,23 @@ def _path_for_log(path: Path | None) -> str:
     return path_for_agent(path)
 
 
-def _models_of(journal: list) -> str:
+def steps_by_model(journal: list) -> Counter:
     """Steps per deciding model, read from the journal (who really answered)."""
-    counts = Counter(event.get("model") for event in journal if event.get("model"))
+    return Counter(event.get("model") for event in journal if event.get("model"))
+
+
+def _models_of(journal: list) -> str:
+    counts = steps_by_model(journal)
     return ", ".join(f"{model} ({count})" for model, count in counts.items()) or "(none)"
+
+
+def outcome_status(outcome: str | dict) -> str:
+    """"needs_input" / "unverified" (dict status), "step_limit" or "finished"."""
+    if isinstance(outcome, dict):
+        return str(outcome.get("status"))
+    if outcome == loop.STOPPED_STEP_LIMIT:
+        return "step_limit"
+    return "finished"
 
 
 def write_run_summary(journal_path: Path, result: CliRunResult) -> None:
@@ -298,12 +311,13 @@ def write_run_summary(journal_path: Path, result: CliRunResult) -> None:
     lines.append(f"Student questions asked: {len(result.questions)}")
     for index, question in enumerate(result.questions, start=1):
         lines.append(f"  Q{index}: {question}")
-    if isinstance(result.outcome, dict):
-        lines.append(f"Outcome status: {result.outcome.get('status')}")
-    elif result.outcome == loop.STOPPED_STEP_LIMIT:
+    status = outcome_status(result.outcome)
+    if status == "step_limit":
         lines.append("Outcome: step limit reached")
-    else:
+    elif status == "finished":
         lines.append("Outcome: finished")
+    else:
+        lines.append(f"Outcome status: {status}")
     verify = verify_problems_from_journal(result.journal)
     if verify is not None:
         lines.append(f"Last verify_report problems: {len(verify)}")
@@ -371,9 +385,13 @@ def run_cli_session(
     journal: list | None = None,
     language: str = DEFAULT_LANGUAGE,
     drafting_model: str | None = None,
+    usage: TokenUsage | None = None,
 ) -> CliRunResult:
-    """Run the agent loop until it finishes or ask_student gets no answer."""
-    usage = TokenUsage()
+    """Run the agent loop until it finishes or ask_student gets no answer.
+
+    A caller that passes its own `usage` keeps the tokens already spent when the run crashes.
+    """
+    usage = usage if usage is not None else TokenUsage()
     tracked = UsageTrackingClient(client, usage)
     journal = journal if journal is not None else []
     user_input = build_user_message(image_path, audio_path, voice_text)

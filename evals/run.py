@@ -14,15 +14,17 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from datetime import date as calendar_date
 from pathlib import Path
+from typing import Callable
 
-from evals.checks import replay_verification
+from evals.checks import normalize_text, replay_verification
 from evals.summary import load_records, render_summary
-from src.agent import loop
 from src.cli_run import (
     CliRunResult,
-    answers_from_lines,
+    TokenUsage,
+    outcome_status,
     resolve_path,
     run_cli_session,
 )
@@ -61,34 +63,67 @@ def case_inputs(case: dict) -> dict:
             "voice_text": text_path.read_text(encoding="utf-8") if text_path else None}
 
 
-def outcome_status(outcome: object) -> str:
-    if isinstance(outcome, dict):
-        return str(outcome.get("status"))
-    if outcome == loop.STOPPED_STEP_LIMIT:
-        return "step_limit"
-    return "finished"
+def answers_from_script(script: list[dict], exchanges: list[dict]) -> Callable[[str], str]:
+    """Answer each question with the first unused scripted answer whose `when` words it contains.
+
+    Matching by content, not by position: a different question order must not hand
+    the student's confirmation of the series to a question about the average. A
+    question nothing matches gets a blank answer, which stops the run (as the CLI does).
+    """
+    unused = list(script)
+
+    def ask(question: str) -> str:
+        match = next((entry for entry in unused
+                      if any(normalize_text(word) in normalize_text(question)
+                             for word in entry["when"])), None)
+        if match is not None:
+            unused.remove(match)
+        answer = match["answer"] if match else ""
+        exchanges.append({"question": question, "answer": answer})
+        return answer
+
+    return ask
+
+
+def questions_from_journal(journal: list) -> list[str]:
+    return [event["args"]["question"] for event in journal
+            if event.get("tool") == "ask_student" and isinstance(event.get("args"), dict)
+            and isinstance(event["args"].get("question"), str)]
+
+
+def status_of(result: CliRunResult | None) -> str:
+    if result is None:
+        return "error"
+    status = outcome_status(result.outcome)
+    # A finished loop without a verified report is not a success.
+    return "no_verified_report" if status == "finished" and not result.report_text else status
 
 
 def build_record(case: dict, date: str, result: CliRunResult | None, journal: list,
-                 error: str | None) -> dict:
-    """Raw result of one case: enough to recompute every assertion and replay the verifier."""
-    usage = result.usage if result else None
+                 error: str | None, usage: TokenUsage, duration: float,
+                 exchanges: list[dict]) -> dict:
+    """Raw result of one case: enough to recompute every assertion and replay the verifier.
+
+    Tokens, duration and questions survive a crash: they come from the objects the
+    runner owns, not from the (missing) result. The deciding models are read from
+    the journal by the summary, never taken from constants.
+    """
     return {
         "case_id": case["id"],
         "date": date,
         "language": DEFAULT_LANGUAGE,
-        "models": {"deciding": MUSE_CONTRIBUTOR_MODEL, "drafting": MUSE_WONDER_MODEL},
         "files": case["input"]["files"],
         "student_answers": case.get("student_answers", []),
-        "outcome_status": outcome_status(result.outcome) if result else "error",
+        "exchanges": exchanges,
+        "outcome_status": status_of(result),
         "report_text": result.report_text if result else None,
-        "questions": result.questions if result else [],
-        "duration_seconds": result.duration_seconds if result else 0.0,
-        "usage": {"prompt_tokens": usage.prompt_tokens if usage else 0,
-                  "completion_tokens": usage.completion_tokens if usage else 0,
-                  "total_tokens": usage.total_tokens if usage else 0,
-                  "streaming_calls": usage.streaming_calls if usage else 0,
-                  "by_model": usage.by_model if usage else {}},
+        "questions": result.questions if result else questions_from_journal(journal),
+        "duration_seconds": result.duration_seconds if result else duration,
+        "usage": {"prompt_tokens": usage.prompt_tokens,
+                  "completion_tokens": usage.completion_tokens,
+                  "total_tokens": usage.total_tokens,
+                  "streaming_calls": usage.streaming_calls,
+                  "by_model": usage.by_model},
         "error": error,
         "journal": journal,
     }
@@ -97,17 +132,21 @@ def build_record(case: dict, date: str, result: CliRunResult | None, journal: li
 def run_case(client, case: dict, date: str) -> dict:
     """Run one case with the real loop; a crash is recorded, never raised."""
     journal: list = []
+    exchanges: list[dict] = []
+    usage = TokenUsage()
     result: CliRunResult | None = None
     error: str | None = None
+    started = time.monotonic()
     try:
         result = run_cli_session(
-            client, MUSE_CONTRIBUTOR_MODEL, ask_student=answers_from_lines(
-                case.get("student_answers", [])),
+            client, MUSE_CONTRIBUTOR_MODEL,
+            ask_student=answers_from_script(case.get("student_answers", []), exchanges),
             journal=journal, language=DEFAULT_LANGUAGE, drafting_model=MUSE_WONDER_MODEL,
-            **case_inputs(case))
+            usage=usage, **case_inputs(case))
     except Exception as exception:
         error = f"{type(exception).__name__}: {exception}"
-    return build_record(case, date, result, journal, error)
+    return build_record(case, date, result, journal, error, usage,
+                        time.monotonic() - started, exchanges)
 
 
 def write_record(results_dir: Path, record: dict) -> Path:
@@ -117,7 +156,8 @@ def write_record(results_dir: Path, record: dict) -> Path:
     return path
 
 
-def write_summary(date: str, cases: list[dict], results_root: Path = RESULTS_DIR) -> Path:
+def write_summary(date: str, cases: list[dict], results_root: Path | None = None) -> Path:
+    results_root = results_root or RESULTS_DIR  # read at call time, so tests can redirect it
     pairs = load_records(results_root / date, cases)
     summary_path = results_root / SUMMARY_NAME
     summary_path.write_text(render_summary(date, pairs) + "\n",
@@ -125,7 +165,8 @@ def write_summary(date: str, cases: list[dict], results_root: Path = RESULTS_DIR
     return summary_path
 
 
-def run_live(client, cases: list[dict], date: str, results_root: Path = RESULTS_DIR) -> None:
+def run_live(client, cases: list[dict], date: str, results_root: Path | None = None) -> None:
+    results_root = results_root or RESULTS_DIR
     for case in cases:
         print(f"[{case['id']}] running...", file=sys.stderr)
         record = run_case(client, case, date)
@@ -133,13 +174,21 @@ def run_live(client, cases: list[dict], date: str, results_root: Path = RESULTS_
         print(f"[{case['id']}] {record['outcome_status']} -> {path}", file=sys.stderr)
 
 
+def iso_date(value: str) -> str:
+    """A calendar date used as a folder name: nothing that can climb out of evals/results/."""
+    try:
+        return calendar_date.fromisoformat(value).isoformat()
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"not a YYYY-MM-DD date: {value!r}") from None
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run the PathProof evaluation cases by hand.")
     parser.add_argument("--live", action="store_true",
                         help="call the real API (costs credits); without it nothing is sent")
     parser.add_argument("--case", action="append", help="run only this case id (repeatable)")
-    parser.add_argument("--date", default=None, help="results folder name (default: today)")
-    parser.add_argument("--summarize", metavar="DATE",
+    parser.add_argument("--date", type=iso_date, default=None, help="results folder name (default: today)")
+    parser.add_argument("--summarize", metavar="DATE", type=iso_date,
                         help="rebuild summary.md from evals/results/<DATE>/, no API call")
     parser.add_argument("--replay", metavar="RESULT_JSON",
                         help="re-run verify_report on a recorded result, no agent, no API")
@@ -177,6 +226,11 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         date = args.date or calendar_date.today().isoformat()
         run_live(get_client(), cases, date)
+        if len(cases) < len(load_cases()):
+            # A summary of a few cases would replace the full table with a partial one.
+            print(f"Partial run: summary.md left untouched. Rebuild it with --summarize {date}.",
+                  file=sys.stderr)
+            return 0
         print(write_summary(date, load_cases()))
         return 0
     except Exception as error:  # one clean exit for a missing key, file or case id

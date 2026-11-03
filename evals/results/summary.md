@@ -18,7 +18,7 @@
 
 **Total: 447,221 loop tokens, 708 s, cost $2.06.**
 
-Models: deciding: muse-spark-1.3-contributor; drafting: muse-wonder-1.0.
+Models that decided the steps (steps, read from the journals): muse-spark-1.3-contributor (38), muse-wonder-1.0 (14).
 Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 streaming call(s) not counted); the tools' own calls (vision, profile extraction, transcription) are not counted. Loop cost is those tokens at the official rates of dev.meta.ai/docs/pricing-rate-limits (3 Nov 2026), cached input priced in full, so the real bill is slightly different; Billing is the reference. Duration excludes the time spent waiting for the student's answer.
 
 ## Detail per assertion

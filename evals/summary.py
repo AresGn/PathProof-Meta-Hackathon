@@ -6,9 +6,11 @@ by `evals.checks`: the table can be rebuilt later without calling the API.
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
 
 from evals.checks import AssertionResult, evaluate_case, is_conform
+from src.cli_run import steps_by_model
 
 TOKENS_PER_MILLION = 1_000_000
 NO_COST = "n/a (no per-model usage)"
@@ -38,7 +40,8 @@ def estimate_cost(usage: dict) -> float | None:
     transcription) go through clients the loop does not see, so they are not in it.
     """
     by_model = usage.get("by_model")
-    if not by_model or any(model not in PRICE_PER_MILLION_TOKENS for model in by_model):
+    # Absent: a result recorded before the per-model count existed. Empty: no call was made.
+    if by_model is None or any(model not in PRICE_PER_MILLION_TOKENS for model in by_model):
         return None
     return sum((counts["prompt_tokens"] * PRICE_PER_MILLION_TOKENS[model][0]
                 + counts["completion_tokens"] * PRICE_PER_MILLION_TOKENS[model][1])
@@ -103,10 +106,12 @@ def _totals_line(evaluated: list, costs: list[float | None]) -> str:
 
 
 def _notes(pairs: list[tuple[dict, dict]]) -> list[str]:
-    models = sorted({f"{key}: {value}" for _, record in pairs
-                     for key, value in record["models"].items()})
+    steps: Counter = Counter()
+    for _, record in pairs:
+        steps.update(steps_by_model(record["journal"]))
+    models = ", ".join(f"{model} ({count})" for model, count in steps.items()) or "(none)"
     streaming = sum(record["usage"]["streaming_calls"] for _, record in pairs)
-    return ["Models: " + "; ".join(models) + ".",
+    return [f"Models that decided the steps (steps, read from the journals): {models}.",
             "Loop tokens are the non-streaming chat and Responses calls of the agent loop "
             f"({streaming} streaming call(s) not counted); the tools' own calls (vision, "
             "profile extraction, transcription) are not counted. Loop cost is those tokens at "

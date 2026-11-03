@@ -112,8 +112,10 @@ des accents.
   question posée par `ask_student`. `null` : aucune question n'est exigée
   (la confirmation de la série d'une note vocale reste permise).
 - `student_answers` (entrée, pas une assertion) : réponses scriptées de l'élève,
-  dans l'ordre des questions ; une fois épuisées, la réponse est vide et la
-  boucle s'arrête. Le lanceur `python -m evals.run` les rejoue.
+  `{"when": [mots], "answer": "..."}`. Une question reçoit la première réponse
+  non utilisée dont un des mots `when` (casse et accents ignorés) figure dans
+  la question, quel que soit l'ordre des questions. Si rien ne correspond, la
+  réponse est vide et la boucle s'arrête. Le lanceur `python -m evals.run` les rejoue.
 
 Les `.txt` se passent au CLI avec `--voice-text` ; `noisy_voice` se lance
 avec `--audio` seul. Transcription mesurée de `note_vocale_bruitee.mp3` par

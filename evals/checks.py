@@ -8,12 +8,11 @@ from __future__ import annotations
 import unicodedata
 from dataclasses import dataclass
 
+from src.agent.loop import DECISION_SUSPEND
 from src.tools.verify_report import verify_report
 
 ASK_STUDENT_TOOL = "ask_student"
 VERIFY_REPORT_TOOL = "verify_report"
-# Reports print "13,15 / 20" with plain or narrow no-break spaces depending on the renderer.
-_SPACE_VARIANTS = {" ": " ", " ": " "}
 
 
 @dataclass(frozen=True)
@@ -24,9 +23,7 @@ class AssertionResult:
 
 
 def normalize_text(text: str) -> str:
-    """Case, accents and no-break spaces ignored, as the assertions are written."""
-    for variant, plain in _SPACE_VARIANTS.items():
-        text = text.replace(variant, plain)
+    """Case, accents and no-break spaces ignored (NFKD maps them to a plain space)."""
     decomposed = unicodedata.normalize("NFKD", text.casefold())
     return "".join(char for char in decomposed if not unicodedata.combining(char))
 
@@ -35,8 +32,17 @@ def _contains(haystack: str, needle: str) -> bool:
     return normalize_text(needle) in normalize_text(haystack)
 
 
+def is_successful_call(event: dict) -> bool:
+    """A journaled call that really happened: no tool error, and ask_student suspended the loop."""
+    result = event.get("result")
+    if isinstance(result, dict) and set(result) == {"error"}:
+        return False
+    return event["tool"] != ASK_STUDENT_TOOL or event.get("decision") == DECISION_SUSPEND
+
+
 def called_tools(record: dict) -> set[str]:
-    return {event["tool"] for event in record["journal"] if event.get("tool")}
+    return {event["tool"] for event in record["journal"]
+            if event.get("tool") and is_successful_call(event)}
 
 
 def evaluate_case(case: dict, record: dict) -> list[AssertionResult]:

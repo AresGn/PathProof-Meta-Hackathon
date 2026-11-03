@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -20,7 +21,6 @@ def _case(**assertions) -> dict:
 def _record(report: str | None = None, questions: list[str] | None = None,
             tools: list[str] | None = None) -> dict:
     return {"case_id": "case", "date": "2026-11-03", "outcome_status": "finished",
-            "models": {"deciding": "model-a", "drafting": "model-b"},
             "report_text": report, "questions": questions or [], "duration_seconds": 12.0,
             "usage": {"prompt_tokens": 800_000, "completion_tokens": 100_000,
                       "total_tokens": 900_000, "streaming_calls": 0,
@@ -30,7 +30,8 @@ def _record(report: str | None = None, questions: list[str] | None = None,
                                    {"prompt_tokens": 300_000, "completion_tokens": 50_000}}},
             "error": None,
             "journal": [{"step": index, "tool": tool, "args": {}, "result": None,
-                         "decision": "continue"} for index, tool in enumerate(tools or [])]}
+                         "decision": "suspend" if tool == "ask_student" else "continue",
+                         "model": "model-a"} for index, tool in enumerate(tools or [])]}
 
 
 def _outcomes(case: dict, record: dict) -> dict[str, bool]:
@@ -141,62 +142,103 @@ def test_summary_marks_failures():
     assert "- FAIL `required_tool: ask_student` (never called)" in text
 
 
-def _fake_result(journal: list) -> CliRunResult:
-    usage = TokenUsage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
-    usage.by_model["model-a"] = {"prompt_tokens": 10, "completion_tokens": 5}
+NO_FILES = {"image_path": None, "audio_path": None, "voice_text": None}
+
+
+def _fake_result(journal: list, usage: TokenUsage) -> CliRunResult:
+    usage.add(SimpleNamespace(prompt_tokens=10, completion_tokens=5, total_tokens=15), "model-a")
     return CliRunResult(image_path=None, audio_path=None, journal=journal, outcome="done",
                         report_text="13,15 / 20", usage=usage, duration_seconds=3.5,
                         questions=["Quelle série ?"])
 
 
 def test_run_case_records_the_raw_output_with_the_scripted_answers(monkeypatch):
-    seen = {}
-
-    def fake_session(client, model, *, ask_student, journal, **kwargs):
-        seen["answer"] = ask_student("question")
+    def fake_session(client, model, *, ask_student, journal, usage, **kwargs):
+        ask_student("Quelle est votre série ?")
         journal.append({"step": 1, "tool": "ask_student", "args": {}, "result": None,
-                        "decision": "suspend"})
-        return _fake_result(journal)
+                        "decision": "suspend", "model": "model-a"})
+        return _fake_result(journal, usage)
 
     monkeypatch.setattr(run, "run_cli_session", fake_session)
-    monkeypatch.setattr(run, "case_inputs",
-                        lambda case: {"image_path": None, "audio_path": None, "voice_text": None})
-    case = {**_case(), "student_answers": ["Oui, série D."]}
+    monkeypatch.setattr(run, "case_inputs", lambda case: NO_FILES)
+    script = [{"when": ["serie"], "answer": "Oui, série D."}]
 
-    record = run.run_case(object(), case, "2026-11-03")
+    record = run.run_case(object(), {**_case(), "student_answers": script}, "2026-11-03")
 
-    assert seen["answer"] == "Oui, série D."
+    assert record["exchanges"] == [{"question": "Quelle est votre série ?",
+                                    "answer": "Oui, série D."}]
     assert record["usage"]["total_tokens"] == 15
     assert record["usage"]["by_model"] == {"model-a": {"prompt_tokens": 10, "completion_tokens": 5}}
     assert record["questions"] == ["Quelle série ?"]
     assert record["journal"][0]["tool"] == "ask_student"
-    assert record["outcome_status"] == "finished" and record["error"] is None
+    assert record["error"] is None
 
 
-def test_run_case_records_a_crash_instead_of_raising(monkeypatch):
-    def failing_session(*args, **kwargs):
+def test_run_case_keeps_tokens_duration_and_questions_when_the_run_crashes(monkeypatch):
+    def failing_session(client, model, *, journal, usage, **kwargs):
+        usage.add(SimpleNamespace(prompt_tokens=100, completion_tokens=20, total_tokens=120),
+                  "model-a")
+        journal.append({"step": 1, "tool": "ask_student", "args": {"question": "Quelle série ?"},
+                        "result": None, "decision": "suspend", "model": "model-a"})
         raise RuntimeError("upstream down")
 
     monkeypatch.setattr(run, "run_cli_session", failing_session)
-    monkeypatch.setattr(run, "case_inputs",
-                        lambda case: {"image_path": None, "audio_path": None, "voice_text": None})
+    monkeypatch.setattr(run, "case_inputs", lambda case: NO_FILES)
 
     record = run.run_case(object(), _case(), "2026-11-03")
 
     assert record["outcome_status"] == "error"
     assert record["error"] == "RuntimeError: upstream down"
+    assert record["usage"]["total_tokens"] == 120
+    assert summary.estimate_cost(record["usage"]) is None  # model-a has no rate: never guessed
+    assert record["questions"] == ["Quelle série ?"]
+    assert record["duration_seconds"] >= 0
+
+
+def test_a_finished_run_without_a_verified_report_is_not_called_finished():
+    usage = TokenUsage()
+    result = _fake_result([], usage)
+    result.report_text = None
+
+    assert run.status_of(result) == "no_verified_report"
+    assert run.status_of(None) == "error"
+
+
+def test_scripted_answers_follow_the_question_not_the_order():
+    exchanges: list[dict] = []
+    script = [{"when": ["serie", "series"], "answer": "série D"},
+              {"when": ["moyenne"], "answer": "garder 11,2"}]
+    ask = run.answers_from_script(script, exchanges)
+
+    assert ask("Quelle est votre MOYENNE ?") == "garder 11,2"
+    assert ask("Confirmez-vous la série ?") == "série D"
+    assert ask("Une autre question ?") == ""  # nothing matches: blank answer, the run stops
+    assert ask("Et la série encore ?") == ""  # each scripted answer is given once
+    assert [exchange["answer"] for exchange in exchanges] == ["garder 11,2", "série D", "", ""]
+
+
+def test_a_failed_or_unsuspended_ask_student_is_not_a_tool_call():
+    failed = {"tool": "ask_student", "args": {}, "result": {"error": "invalid question"},
+              "decision": "continue"}
+    unfinished = {"tool": "ask_student", "args": {}, "result": None, "decision": "stop_step_limit"}
+    suspended = {"tool": "ask_student", "args": {}, "result": {"status": "needs_input"},
+                 "decision": "suspend"}
+
+    assert checks.called_tools({"journal": [failed, unfinished]}) == set()
+    assert checks.called_tools({"journal": [failed, suspended]}) == {"ask_student"}
 
 
 def test_write_summary_rebuilds_the_table_from_raw_results_in_case_order(tmp_path):
     cases = [{**_case(), "id": "second"}, {**_case(), "id": "first"}]
     for case in cases:
-        run.write_record(tmp_path / "2026-11-03", {**_record(), "case_id": case["id"]})
+        run.write_record(tmp_path / "2026-11-03", {**_record(tools=["read_grade_sheet"]), "case_id": case["id"]})
 
     path = run.write_summary("2026-11-03", cases, results_root=tmp_path)
 
     text = path.read_text(encoding="utf-8")
     assert path == tmp_path / "summary.md"
     assert text.index("| second |") < text.index("| first |")
+    assert "model-a (" in text  # deciding models are read from the journals
 
 
 def test_unknown_case_id_is_refused():
@@ -204,13 +246,23 @@ def test_unknown_case_id_is_refused():
         run.select_cases(run.load_cases(), ["nope"])
 
 
+@pytest.mark.parametrize("value", ["../../tmp", "2026-13-01", "today", ""])
+def test_date_must_be_a_calendar_date(value, capsys):
+    with pytest.raises(SystemExit):
+        run.build_parser().parse_args(["--date", value])
+    assert "YYYY-MM-DD" in capsys.readouterr().err
+
+
 def test_committed_cases_with_a_voice_note_script_the_series_confirmation():
     cases = {case["id"]: case for case in run.load_cases()}
 
     for case_id in ("clear_sheet_d_medecin", "voice_contradicts_sheet",
                     "english_voice_d_medecin", "noisy_voice"):
-        answers = cases[case_id]["student_answers"]
-        assert answers and all(isinstance(answer, str) and answer for answer in answers)
+        script = cases[case_id]["student_answers"]
+        assert script
+        for entry in script:
+            assert entry["answer"] and entry["when"]
+            assert all(isinstance(word, str) and word for word in entry["when"])
 
 
 def test_without_live_nothing_reaches_the_api(monkeypatch, capsys):
@@ -226,23 +278,33 @@ def test_without_live_nothing_reaches_the_api(monkeypatch, capsys):
     assert "Dry run" in capsys.readouterr().out
 
 
-def test_live_runs_the_selected_case_and_writes_raw_result_and_summary(monkeypatch, tmp_path):
+def _live_with_fake_cases(monkeypatch, tmp_path):
+    """Real run_live and write_summary, redirected to tmp_path; only the agent is faked."""
     monkeypatch.setattr(run, "get_client", lambda: "fake-client")
     monkeypatch.setattr(run, "RESULTS_DIR", tmp_path)
-    ran = []
+    monkeypatch.setattr(run, "run_case",
+                        lambda client, case, date: {**_record(), "case_id": case["id"],
+                                                    "date": date})
 
-    def fake_run_live(client, cases, date, results_root=tmp_path):
-        ran.append((client, [case["id"] for case in cases], date))
-        run.write_record(results_root / date, {**_record(), "case_id": cases[0]["id"]})
 
-    monkeypatch.setattr(run, "run_live", fake_run_live)
-    monkeypatch.setattr(run, "write_summary",
-                        lambda *args, **kwargs: tmp_path / "summary.md")
+def test_full_live_run_writes_one_raw_result_per_case_and_the_summary(monkeypatch, tmp_path):
+    _live_with_fake_cases(monkeypatch, tmp_path)
+
+    assert run.main(["--live", "--date", "2026-11-03"]) == 0
+
+    cases = run.load_cases()
+    assert len(list((tmp_path / "2026-11-03").glob("*.json"))) == len(cases)
+    assert f"of {len(cases)} cases conform" in (tmp_path / "summary.md").read_text(encoding="utf-8")
+
+
+def test_partial_live_run_writes_its_result_but_leaves_the_summary_alone(monkeypatch, tmp_path):
+    _live_with_fake_cases(monkeypatch, tmp_path)
+    (tmp_path / "summary.md").write_text("full table", encoding="utf-8")
 
     assert run.main(["--live", "--case", "clear_sheet_d_medecin", "--date", "2026-11-03"]) == 0
 
-    assert ran == [("fake-client", ["clear_sheet_d_medecin"], "2026-11-03")]
     assert (tmp_path / "2026-11-03" / "clear_sheet_d_medecin.json").is_file()
+    assert (tmp_path / "summary.md").read_text(encoding="utf-8") == "full table"
 
 
 def test_neither_pytest_nor_the_ci_launch_the_evaluations():
