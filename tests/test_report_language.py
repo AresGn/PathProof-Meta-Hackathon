@@ -13,6 +13,7 @@ from fastapi.testclient import TestClient
 from src.agent import loop
 from src.agent.prompts import SYSTEM_PROMPT, system_prompt_for
 from src.api import server
+from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.domain.report_text import REPORT_TEXT, SUPPORTED_LANGUAGES
 from src.tools.build_report import build_report
 from tests.fake_client import ScriptedFakeClient
@@ -87,6 +88,24 @@ def test_loop_pins_the_language_on_build_report(monkeypatch):
     loop.run(client, "fake-model", None, "Draft.", journal=[], language="en")
     assert received["language"] == "en"
     assert client.calls[0]["messages"][0]["content"] == system_prompt_for("en")
+
+
+def test_language_is_not_offered_to_the_model_but_still_reaches_build_report(monkeypatch):
+    # A caller's own schemas without `language` must not drop it back to French.
+    build_schema = next(schema for schema in TOOL_SCHEMAS
+                        if schema["function"]["name"] == "build_report")
+    assert "language" not in build_schema["function"]["parameters"]["properties"]
+    verified = {"schema_version": 1, "claims": []}
+    stub_verify_report(monkeypatch, [[]])
+    received = {}
+    monkeypatch.setitem(loop.TOOLS, "build_report",
+                        lambda **kwargs: received.update(kwargs) or "Report.")
+    client = ScriptedFakeClient([
+        assistant_message(tool_calls=[tool_call("v", "verify_report", {"report": verified, "context": {}})]),
+        assistant_message(tool_calls=[tool_call("b", "build_report", {"report": verified, "context": {}})]),
+        assistant_message(content="Report.")])
+    loop.run(client, "fake-model", [build_schema], "Draft.", journal=[], language="en")
+    assert received["language"] == "en"
 
 
 def test_language_survives_a_question_to_the_student(monkeypatch):

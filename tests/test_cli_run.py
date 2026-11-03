@@ -10,6 +10,7 @@ from src.cli_run import (
     CliInputError,
     CliRunResult,
     TokenUsage,
+    UsageTrackingClient,
     answers_from_lines,
     build_user_message,
     default_journal_path,
@@ -137,6 +138,16 @@ def test_token_usage_adds_fields():
     usage = TokenUsage()
     usage.add(SimpleNamespace(prompt_tokens=10, completion_tokens=5, total_tokens=15))
     assert usage.total_tokens == 15
+
+
+def test_wonder_responses_calls_are_counted():
+    usage = TokenUsage()
+    response = SimpleNamespace(usage=SimpleNamespace(input_tokens=40, output_tokens=60, total_tokens=100))
+    inner = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=None)),
+                            responses=SimpleNamespace(create=lambda **kwargs: response))
+    client = UsageTrackingClient(inner, usage)
+    assert client.responses.create(model="muse-wonder-1.0") is response
+    assert (usage.prompt_tokens, usage.completion_tokens, usage.total_tokens) == (40, 60, 100)
 
 
 def test_answers_from_lines_keeps_blank_lines_so_answers_stay_aligned():
@@ -316,3 +327,21 @@ def test_main_returns_2_for_an_unsafe_run_label(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "sheet.jpg").write_bytes(b"x")
     assert main_module.main(["--image", "sheet.jpg", "--run-label", "../../x"]) == 2
+
+
+def test_main_runs_the_same_models_as_the_demo_server(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "sheet.jpg").write_bytes(b"x")
+    seen = {}
+
+    def fake_session(client, model, image_path, audio_path, ask, **kwargs):
+        seen.update(model=model, **kwargs)
+        raise RuntimeError("stop after recording the arguments")
+
+    monkeypatch.setattr(main_module, "get_client", lambda: object())
+    monkeypatch.setattr(main_module, "run_cli_session", fake_session)
+    monkeypatch.setattr(main_module, "persist_run_artifacts", lambda *args: None)
+    assert main_module.main(["--image", "sheet.jpg", "--language", "en"]) == 1
+    assert seen["model"] == "muse-spark-1.3-contributor"
+    assert seen["drafting_model"] == "muse-wonder-1.0"
+    assert seen["language"] == "en"
