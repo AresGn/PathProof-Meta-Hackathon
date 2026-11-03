@@ -118,7 +118,7 @@ Full agent run (E4.4, needs `MUSE_API_KEY` and ffmpeg for voice): `python -m src
 
 ## Evaluation
 
-Ten fictional cases and their machine-checkable assertions are listed in `evals/cases.jsonl`; their images, audio and text fallbacks are in `data/samples/`. Four cases are adversarial (unverified row, false-friend job, contest-entry program, voice contradicting the sheet). Target: 9 of 10 compliant and zero claims without proof. An eleventh case, `english_voice_d_medecin`, checks an English voice note outside that target. The evaluation runner is not implemented yet; no new results have been measured.
+Ten fictional cases and their machine-checkable assertions are listed in `evals/cases.jsonl`; their images, audio and text fallbacks are in `data/samples/`. Four cases are adversarial (unverified row, false-friend job, contest-entry program, voice contradicting the sheet). Target: 9 of 10 compliant and zero claims without proof. An eleventh case, `english_voice_d_medecin`, checks an English voice note outside that target. `python -m evals.run --live` runs them with the real agent loop (it spends API credits; without `--live` nothing is sent) and writes one raw result per case under `evals/results/<date>/` plus `evals/results/summary.md`. First run, 3 November, one pass per case: **7 of 11 cases comply** (4 fail: `voice_contradicts_sheet`, `unverified_trap`, `false_friend`, `concours_entry`), so the 9-of-10 target is not reached yet; the failures are listed assertion by assertion in the summary. A full run used 451,221 tokens. The "zero claims without proof" target is not measured by this table.
 
 ## Limitations
 
