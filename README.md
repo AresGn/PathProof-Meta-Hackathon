@@ -118,7 +118,7 @@ Full agent run (E4.4, needs `MUSE_API_KEY` and ffmpeg for voice): `python -m src
 
 ## Evaluation
 
-Ten fictional cases and their machine-checkable assertions are listed in `evals/cases.jsonl`; their images, audio and text fallbacks are in `data/samples/`. Four cases are adversarial (unverified row, false-friend job, contest-entry program, voice contradicting the sheet). Target: 9 of 10 compliant and zero claims without proof. The evaluation runner is not implemented yet; no new results have been measured.
+Ten fictional cases and their machine-checkable assertions are listed in `evals/cases.jsonl`; their images, audio and text fallbacks are in `data/samples/`. Four cases are adversarial (unverified row, false-friend job, contest-entry program, voice contradicting the sheet). Target: 9 of 10 compliant and zero claims without proof. An eleventh case, `english_voice_d_medecin`, checks an English voice note outside that target. The evaluation runner is not implemented yet; no new results have been measured.
 
 ## Limitations
 
@@ -129,6 +129,7 @@ Ten fictional cases and their machine-checkable assertions are listed in `evals/
 - Only fictional sample data; no real-student testing.
 - Handwritten grade sheets will likely be unreliable; the first tests use printed fictional sheets.
 - No voice output.
+- An English voice note works (one manual run, `evals/results/e6.1_english_voice_d_medecin.json`): the agent asks its questions in English and maps the target job to the guide's French words, but the verified report stays in French.
 
 ## Team
 

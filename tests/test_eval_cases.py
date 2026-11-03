@@ -21,6 +21,7 @@ CASE_IDS = {
     "unverified_trap",
     "false_friend",
     "concours_entry",
+    "english_voice_d_medecin",  # beyond the 10 PRD cases: the jury mostly speaks English
 }
 VOICE_CASE_IDS = {
     "noisy_voice",
@@ -28,6 +29,7 @@ VOICE_CASE_IDS = {
     "unverified_trap",
     "false_friend",
     "concours_entry",
+    "english_voice_d_medecin",
 }
 
 
