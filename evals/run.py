@@ -87,7 +87,8 @@ def build_record(case: dict, date: str, result: CliRunResult | None, journal: li
         "usage": {"prompt_tokens": usage.prompt_tokens if usage else 0,
                   "completion_tokens": usage.completion_tokens if usage else 0,
                   "total_tokens": usage.total_tokens if usage else 0,
-                  "streaming_calls": usage.streaming_calls if usage else 0},
+                  "streaming_calls": usage.streaming_calls if usage else 0,
+                  "by_model": usage.by_model if usage else {}},
         "error": error,
         "journal": journal,
     }
@@ -116,11 +117,10 @@ def write_record(results_dir: Path, record: dict) -> Path:
     return path
 
 
-def write_summary(date: str, cases: list[dict], price_input: float | None,
-                  price_output: float | None, results_root: Path = RESULTS_DIR) -> Path:
+def write_summary(date: str, cases: list[dict], results_root: Path = RESULTS_DIR) -> Path:
     pairs = load_records(results_root / date, cases)
     summary_path = results_root / SUMMARY_NAME
-    summary_path.write_text(render_summary(date, pairs, price_input, price_output) + "\n",
+    summary_path.write_text(render_summary(date, pairs) + "\n",
                             encoding="utf-8")
     return summary_path
 
@@ -143,10 +143,6 @@ def build_parser() -> argparse.ArgumentParser:
                         help="rebuild summary.md from evals/results/<DATE>/, no API call")
     parser.add_argument("--replay", metavar="RESULT_JSON",
                         help="re-run verify_report on a recorded result, no agent, no API")
-    parser.add_argument("--price-input", type=float,
-                        help="USD per million input tokens, for the cost column")
-    parser.add_argument("--price-output", type=float,
-                        help="USD per million output tokens, for the cost column")
     return parser
 
 
@@ -174,15 +170,14 @@ def main(argv: list[str] | None = None) -> int:
             return _print_replay(Path(args.replay))
         cases = select_cases(load_cases(), args.case)
         if args.summarize:
-            print(write_summary(args.summarize, load_cases(), args.price_input,
-                                args.price_output))
+            print(write_summary(args.summarize, load_cases()))
             return 0
         if not args.live:
             _print_plan(cases)
             return 0
         date = args.date or calendar_date.today().isoformat()
         run_live(get_client(), cases, date)
-        print(write_summary(date, load_cases(), args.price_input, args.price_output))
+        print(write_summary(date, load_cases()))
         return 0
     except Exception as error:  # one clean exit for a missing key, file or case id
         print(f"{type(error).__name__}: {error}", file=sys.stderr)

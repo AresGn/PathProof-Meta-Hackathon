@@ -23,7 +23,11 @@ def _record(report: str | None = None, questions: list[str] | None = None,
             "models": {"deciding": "model-a", "drafting": "model-b"},
             "report_text": report, "questions": questions or [], "duration_seconds": 12.0,
             "usage": {"prompt_tokens": 800_000, "completion_tokens": 100_000,
-                      "total_tokens": 900_000, "streaming_calls": 0},
+                      "total_tokens": 900_000, "streaming_calls": 0,
+                      "by_model": {"muse-spark-1.3-contributor":
+                                   {"prompt_tokens": 500_000, "completion_tokens": 50_000},
+                                   "muse-wonder-1.0":
+                                   {"prompt_tokens": 300_000, "completion_tokens": 50_000}}},
             "error": None,
             "journal": [{"step": index, "tool": tool, "args": {}, "result": None,
                          "decision": "continue"} for index, tool in enumerate(tools or [])]}
@@ -111,25 +115,35 @@ def test_summary_table_reports_conformity_counts_duration_tokens_and_cost():
     record = _record(report="13,15 / 20", questions=["Quelle série ?"],
                      tools=["read_grade_sheet", "ask_student"])
 
-    text = summary.render_summary("2026-11-03", [(case, record)], 1.0, 4.0)
+    text = summary.render_summary("2026-11-03", [(case, record)])
 
-    assert "| case | pass | 3/3 | 2 | 1 | 12 s | 900,000 | $1.20 |" in text
+    # 0.5 M x 0.10 + 0.05 M x 0.20 (Contributor) + 0.3 M x 4 + 0.05 M x 20 (Wonder)
+    assert "| case | pass | 3/3 | 2 | 1 | 12 s | 900,000 | $2.26 |" in text
     assert "1 of 1 cases conform" in text
     assert "- pass `required_tool: ask_student`" in text
 
 
-def test_summary_marks_failures_and_leaves_the_cost_open_without_rates():
+def test_summary_leaves_the_cost_open_without_per_model_tokens_or_with_an_unpriced_model():
+    older = {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2, "streaming_calls": 0}
+    unpriced = {**older, "by_model": {"some-new-model": {"prompt_tokens": 1,
+                                                          "completion_tokens": 1}}}
+
+    assert summary.estimate_cost(older) is None
+    assert summary.estimate_cost(unpriced) is None
+
+
+def test_summary_marks_failures():
     case = _case(required_tools=["ask_student"])
 
     text = summary.render_summary("2026-11-03", [(case, _record())])
 
     assert "| case | FAIL | 0/1 |" in text
-    assert "n/a (rate not given)" in text
     assert "- FAIL `required_tool: ask_student` (never called)" in text
 
 
 def _fake_result(journal: list) -> CliRunResult:
     usage = TokenUsage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
+    usage.by_model["model-a"] = {"prompt_tokens": 10, "completion_tokens": 5}
     return CliRunResult(image_path=None, audio_path=None, journal=journal, outcome="done",
                         report_text="13,15 / 20", usage=usage, duration_seconds=3.5,
                         questions=["Quelle série ?"])
@@ -153,6 +167,7 @@ def test_run_case_records_the_raw_output_with_the_scripted_answers(monkeypatch):
 
     assert seen["answer"] == "Oui, série D."
     assert record["usage"]["total_tokens"] == 15
+    assert record["usage"]["by_model"] == {"model-a": {"prompt_tokens": 10, "completion_tokens": 5}}
     assert record["questions"] == ["Quelle série ?"]
     assert record["journal"][0]["tool"] == "ask_student"
     assert record["outcome_status"] == "finished" and record["error"] is None
@@ -177,7 +192,7 @@ def test_write_summary_rebuilds_the_table_from_raw_results_in_case_order(tmp_pat
     for case in cases:
         run.write_record(tmp_path / "2026-11-03", {**_record(), "case_id": case["id"]})
 
-    path = run.write_summary("2026-11-03", cases, None, None, results_root=tmp_path)
+    path = run.write_summary("2026-11-03", cases, results_root=tmp_path)
 
     text = path.read_text(encoding="utf-8")
     assert path == tmp_path / "summary.md"

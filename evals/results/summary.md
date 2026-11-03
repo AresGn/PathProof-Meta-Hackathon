@@ -2,24 +2,24 @@
 
 7 of 11 cases conform (every assertion passes).
 
-| Case | Result | Assertions | Tool calls | Questions | Duration | Tokens | Cost |
+| Case | Result | Assertions | Tool calls | Questions | Duration | Loop tokens | Loop cost |
 |---|---|---|---|---|---|---|---|
-| clear_sheet_d_medecin | pass | 12/12 | 7 | 1 | 113 s | 72,517 | n/a (rate not given) |
-| clear_sheet_c | pass | 9/9 | 5 | 0 | 89 s | 61,662 | n/a (rate not given) |
-| blurry_photo | pass | 4/4 | 2 | 1 | 25 s | 7,535 | n/a (rate not given) |
-| missing_grade | pass | 4/4 | 2 | 1 | 27 s | 7,748 | n/a (rate not given) |
-| out_of_range_grade | pass | 4/4 | 2 | 1 | 24 s | 7,623 | n/a (rate not given) |
-| noisy_voice | pass | 4/4 | 4 | 2 | 50 s | 15,907 | n/a (rate not given) |
-| voice_contradicts_sheet | FAIL | 4/5 | 8 | 2 | 115 s | 72,833 | n/a (rate not given) |
-| unverified_trap | FAIL | 8/9 | 5 | 0 | 70 s | 59,327 | n/a (rate not given) |
-| false_friend | FAIL | 6/7 | 5 | 0 | 41 s | 35,418 | n/a (rate not given) |
-| concours_entry | FAIL | 8/10 | 5 | 0 | 68 s | 39,528 | n/a (rate not given) |
-| english_voice_d_medecin | pass | 12/12 | 7 | 1 | 103 s | 71,123 | n/a (rate not given) |
+| clear_sheet_d_medecin | pass | 12/12 | 7 | 1 | 113 s | 72,517 | n/a (no per-model usage) |
+| clear_sheet_c | pass | 9/9 | 5 | 0 | 89 s | 61,662 | n/a (no per-model usage) |
+| blurry_photo | pass | 4/4 | 2 | 1 | 25 s | 7,535 | n/a (no per-model usage) |
+| missing_grade | pass | 4/4 | 2 | 1 | 27 s | 7,748 | n/a (no per-model usage) |
+| out_of_range_grade | pass | 4/4 | 2 | 1 | 24 s | 7,623 | n/a (no per-model usage) |
+| noisy_voice | pass | 4/4 | 4 | 2 | 50 s | 15,907 | n/a (no per-model usage) |
+| voice_contradicts_sheet | FAIL | 4/5 | 8 | 2 | 115 s | 72,833 | n/a (no per-model usage) |
+| unverified_trap | FAIL | 8/9 | 5 | 0 | 70 s | 59,327 | n/a (no per-model usage) |
+| false_friend | FAIL | 6/7 | 5 | 0 | 41 s | 35,418 | n/a (no per-model usage) |
+| concours_entry | FAIL | 8/10 | 5 | 0 | 68 s | 39,528 | n/a (no per-model usage) |
+| english_voice_d_medecin | pass | 12/12 | 7 | 1 | 103 s | 71,123 | n/a (no per-model usage) |
 
-**Total: 451,221 tokens, 726 s, cost n/a (rate not given).**
+**Total: 451,221 loop tokens, 726 s, cost n/a (no per-model usage).**
 
 Models: deciding: muse-spark-1.3-contributor; drafting: muse-wonder-1.0.
-Tokens are the sum of the non-streaming chat and Responses calls (0 streaming call(s) not counted). Duration excludes the time spent waiting for the student's answer. The cost is tokens times the rates given with `--price-input` / `--price-output` (USD per million tokens); the repository does not record an official rate.
+Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 streaming call(s) not counted); the tools' own calls (vision, profile extraction, transcription) are not counted. Loop cost is those tokens at the official rates of dev.meta.ai/docs/pricing-rate-limits (3 Nov 2026), cached input priced in full, so the real bill is slightly different; Billing is the reference. Duration excludes the time spent waiting for the student's answer.
 
 ## Detail per assertion
 

@@ -31,16 +31,24 @@ class TokenUsage:
     completion_tokens: int = 0
     total_tokens: int = 0
     streaming_calls: int = 0
+    # model name -> {"prompt_tokens", "completion_tokens"}: the models are billed at different rates
+    by_model: dict[str, dict[str, int]] = field(default_factory=dict)
 
-    def add(self, usage: object) -> None:
+    def add(self, usage: object, model: str | None = None) -> None:
         if usage is None:
             return
         # Chat completions say prompt/completion; the Responses API (Wonder) says input/output.
-        self.prompt_tokens += int(getattr(usage, "prompt_tokens", None)
-                                  or getattr(usage, "input_tokens", 0) or 0)
-        self.completion_tokens += int(getattr(usage, "completion_tokens", None)
-                                      or getattr(usage, "output_tokens", 0) or 0)
+        prompt = int(getattr(usage, "prompt_tokens", None)
+                     or getattr(usage, "input_tokens", 0) or 0)
+        completion = int(getattr(usage, "completion_tokens", None)
+                         or getattr(usage, "output_tokens", 0) or 0)
+        self.prompt_tokens += prompt
+        self.completion_tokens += completion
         self.total_tokens += int(getattr(usage, "total_tokens", 0) or 0)
+        if model:
+            counts = self.by_model.setdefault(model, {"prompt_tokens": 0, "completion_tokens": 0})
+            counts["prompt_tokens"] += prompt
+            counts["completion_tokens"] += completion
 
 
 @dataclass
@@ -113,7 +121,7 @@ class _UsageTrackingCompletions:
                 usage.streaming_calls += 1
                 return original_create(**kwargs)
             response = original_create(**kwargs)
-            usage.add(getattr(response, "usage", None))
+            usage.add(getattr(response, "usage", None), kwargs.get("model"))
             return response
 
         self.create = tracked_create
@@ -129,7 +137,7 @@ class _UsageTrackingResponses:
 
     def create(self, **kwargs):
         response = self._responses.create(**kwargs)
-        self._usage.add(getattr(response, "usage", None))
+        self._usage.add(getattr(response, "usage", None), kwargs.get("model"))
         return response
 
     def __getattr__(self, name: str):

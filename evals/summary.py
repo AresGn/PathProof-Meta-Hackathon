@@ -11,7 +11,13 @@ from pathlib import Path
 from evals.checks import AssertionResult, evaluate_case, is_conform
 
 TOKENS_PER_MILLION = 1_000_000
-NO_PRICE = "n/a (rate not given)"
+NO_COST = "n/a (no per-model usage)"
+# USD per million (input, output) tokens, standard billing: https://dev.meta.ai/docs/pricing-rate-limits,
+# consulted 3 Nov 2026. Cached input is billed lower; every input token is priced in full here.
+PRICE_PER_MILLION_TOKENS = {
+    "muse-spark-1.3-contributor": (0.10, 0.20),
+    "muse-wonder-1.0": (4.00, 20.00),
+}
 
 
 def load_records(results_dir: Path, cases: list[dict]) -> list[tuple[dict, dict]]:
@@ -24,16 +30,23 @@ def load_records(results_dir: Path, cases: list[dict]) -> list[tuple[dict, dict]
     return pairs
 
 
-def estimate_cost(usage: dict, price_input: float | None, price_output: float | None) -> float | None:
-    """USD from the token counts and the rates given on the command line; None without rates."""
-    if price_input is None or price_output is None:
+def estimate_cost(usage: dict) -> float | None:
+    """USD of the agent-loop calls, from the tokens counted per model.
+
+    None when the record has no per-model counts (older results) or a model has no
+    known rate: a cost is never guessed. The tools' own calls (vision, profile,
+    transcription) go through clients the loop does not see, so they are not in it.
+    """
+    by_model = usage.get("by_model")
+    if not by_model or any(model not in PRICE_PER_MILLION_TOKENS for model in by_model):
         return None
-    return (usage["prompt_tokens"] * price_input
-            + usage["completion_tokens"] * price_output) / TOKENS_PER_MILLION
+    return sum((counts["prompt_tokens"] * PRICE_PER_MILLION_TOKENS[model][0]
+                + counts["completion_tokens"] * PRICE_PER_MILLION_TOKENS[model][1])
+               / TOKENS_PER_MILLION for model, counts in by_model.items())
 
 
 def _format_cost(cost: float | None) -> str:
-    return NO_PRICE if cost is None else f"${cost:.2f}"
+    return NO_COST if cost is None else f"${cost:.2f}"
 
 
 def _mark(is_passed: bool) -> str:
@@ -64,17 +77,15 @@ def _detail_lines(case: dict, record: dict, results: list[AssertionResult]) -> l
     return lines
 
 
-def render_summary(date: str, pairs: list[tuple[dict, dict]],
-                   price_input: float | None = None,
-                   price_output: float | None = None) -> str:
+def render_summary(date: str, pairs: list[tuple[dict, dict]]) -> str:
     """The summary.md text for the given (case, record) pairs."""
     evaluated = [(case, record, evaluate_case(case, record)) for case, record in pairs]
-    costs = [estimate_cost(record["usage"], price_input, price_output)
+    costs = [estimate_cost(record["usage"])
              for _, record, _ in evaluated]
     lines = [f"# Evaluation summary — {date}", "",
              f"{sum(is_conform(results) for _, _, results in evaluated)} of "
              f"{len(evaluated)} cases conform (every assertion passes).", "",
-             "| Case | Result | Assertions | Tool calls | Questions | Duration | Tokens | Cost |",
+             "| Case | Result | Assertions | Tool calls | Questions | Duration | Loop tokens | Loop cost |",
              "|---|---|---|---|---|---|---|---|"]
     lines += [_row(case, record, results, cost)
               for (case, record, results), cost in zip(evaluated, costs)]
@@ -88,7 +99,7 @@ def _totals_line(evaluated: list, costs: list[float | None]) -> str:
     tokens = sum(record["usage"]["total_tokens"] for _, record, _ in evaluated)
     seconds = sum(record["duration_seconds"] for _, record, _ in evaluated)
     cost = None if any(value is None for value in costs) else sum(costs)
-    return (f"**Total: {tokens:,} tokens, {seconds:.0f} s, cost {_format_cost(cost)}.**")
+    return (f"**Total: {tokens:,} loop tokens, {seconds:.0f} s, cost {_format_cost(cost)}.**")
 
 
 def _notes(pairs: list[tuple[dict, dict]]) -> list[str]:
@@ -96,8 +107,9 @@ def _notes(pairs: list[tuple[dict, dict]]) -> list[str]:
                      for key, value in record["models"].items()})
     streaming = sum(record["usage"]["streaming_calls"] for _, record in pairs)
     return ["Models: " + "; ".join(models) + ".",
-            "Tokens are the sum of the non-streaming chat and Responses calls "
-            f"({streaming} streaming call(s) not counted). Duration excludes the time "
-            "spent waiting for the student's answer. The cost is tokens times the rates "
-            "given with `--price-input` / `--price-output` (USD per million tokens); "
-            "the repository does not record an official rate.", ""]
+            "Loop tokens are the non-streaming chat and Responses calls of the agent loop "
+            f"({streaming} streaming call(s) not counted); the tools' own calls (vision, "
+            "profile extraction, transcription) are not counted. Loop cost is those tokens at "
+            "the official rates of dev.meta.ai/docs/pricing-rate-limits (3 Nov 2026), cached "
+            "input priced in full, so the real bill is slightly different; Billing is the "
+            "reference. Duration excludes the time spent waiting for the student's answer.", ""]
