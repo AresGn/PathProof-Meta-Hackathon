@@ -1,6 +1,7 @@
 // Live trace view: one timeline card per streamed tool step.
 import { t } from "./i18n.js";
 import { escapeHtml, formatDetail } from "./format.js";
+import { MODELS, ORCHESTRATOR, modelOfTool } from "./models.js";
 
 export const TOOL_ICONS = {
   transcribe_voice: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 19v3"/>',
@@ -60,6 +61,22 @@ export function lastStep(steps, tool) {
   return null;
 }
 
+function modelChip(label, model, tone) {
+  const id = model ? `<code class="model-id">${escapeHtml(model.id)}</code>` : "";
+  return `<span class="model-chip model-${tone}">${escapeHtml(label)}${id}</span>`;
+}
+
+// Who decided and who ran this step: every step is a Muse Spark turn; the
+// tool then runs on its own model, or on plain code when it has none.
+function modelLine(step) {
+  const orchestrator = MODELS[ORCHESTRATOR];
+  const runner = modelOfTool(step.tool);
+  const runs = runner
+    ? modelChip(t("modelRuns", { model: runner.name }), runner, runner === orchestrator ? "spark" : "voice")
+    : modelChip(t("modelRunsCode"), null, "code");
+  return `<p class="model-line">${modelChip(t("modelDecides", { model: orchestrator.name }), orchestrator, "spark")}${runs}</p>`;
+}
+
 function renderStep(step) {
   const label = t(`tool_${step.tool}`) !== `tool_${step.tool}` ? t(`tool_${step.tool}`) : t("tool_other");
   const decisionKey = `decision_${step.decision}`;
@@ -76,6 +93,7 @@ function renderStep(step) {
     `<span class="kind-tag kind-tag-${kind}">${escapeHtml(t(`kind${kind[0].toUpperCase()}${kind.slice(1)}`))}</span>` +
     `<span class="step-num">${escapeHtml(t("stepWord"))} ${escapeHtml(step.step)} · ${escapeHtml(step.tool || "")}</span>` +
     `<span class="pill decision-${escapeHtml(step.decision || "continue")}">${escapeHtml(decision)}</span></div>` +
+    modelLine(step) +
     summaryHtml +
     `<details><summary>${escapeHtml(t("inputOutput"))}</summary>` +
     `<pre>${escapeHtml(t("input"))} : ${escapeHtml(formatDetail(step.args))}</pre>` +

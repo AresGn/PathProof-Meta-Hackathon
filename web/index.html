@@ -10,11 +10,15 @@
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="#top" aria-label="PathProof">
+      <a class="brand" href="index.html" aria-label="PathProof">
         <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0b3527" stroke="#5ef0b0" stroke-width="1.2"/><path d="M7 12.5 10.5 16 17 8" stroke="#5ef0b0" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="wordmark">Path<em>Proof</em></span>
       </a>
-      <p id="server-status" data-i18n="serverChecking">Checking the demo server…</p>
+      <nav class="topnav" aria-label="Sections">
+        <a href="#how" data-i18n="navHow">How it works</a>
+        <a href="#models" data-i18n="navModels">Under the hood</a>
+      </nav>
+      <a class="btn-primary btn-small" href="demo.html" data-i18n="navDemo">Open the demo</a>
       <div class="lang-switch" role="group" aria-label="Language">
         <button type="button" class="lang-btn active" data-set-lang="en">EN</button>
         <button type="button" class="lang-btn" data-set-lang="fr">FR</button>
@@ -29,7 +33,7 @@
           <h1><span data-i18n="heroTitleA">Every study path</span> <span class="grad" data-i18n="heroTitleB">comes with its proof.</span></h1>
           <p class="tagline" data-i18n="tagline">Every study path comes with its proof. The agent picks its own tools, deterministic code does the math, and only proven claims reach the report.</p>
           <div class="hero-cta">
-            <a class="btn-primary" href="#demo" data-i18n="ctaTry">Try a live example</a>
+            <a class="btn-primary" href="demo.html" data-i18n="ctaTry">Try a live example</a>
             <a class="btn-ghost" href="#how" data-i18n="ctaHow">See how it works</a>
           </div>
           <div class="badges">
@@ -57,107 +61,49 @@
       <div class="how-step"><span class="how-num">2</span><p data-i18n="how2">The agent reads, transcribes, computes by code, and asks when something is unsure.</p></div>
       <div class="how-step"><span class="how-num">3</span><p data-i18n="how3">You get a verified report where every claim opens its proof.</p></div>
     </section>
-
-    <div class="layout" id="demo">
-      <div class="side">
-        <section class="panel reveal">
-          <fieldset>
-            <legend data-i18n="examplesLegend">Fictional examples — one click, nothing to prepare</legend>
-            <button type="button" class="example-btn" data-example="coherent">
-              <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14l-3-3"/></svg></span>
-              <span class="ex-text"><strong data-i18n="ex1Title">Clear serie D sheet + matching voice note</strong>
-              <span class="ex-desc" data-i18n="ex1Desc">Serie D, “maybe a doctor”: expect a full report.</span></span>
-            </button>
-            <button type="button" class="example-btn" data-example="blurry">
-              <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
-              <span class="ex-text"><strong data-i18n="ex2Title">Blurry sheet</strong>
-              <span class="ex-desc" data-i18n="ex2Desc">One unreadable grade: the agent asks instead of guessing.</span></span>
-            </button>
-            <button type="button" class="example-btn" data-example="contradictory">
-              <span class="ex-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
-              <span class="ex-text"><strong data-i18n="ex3Title">Contradictory voice note</strong>
-              <span class="ex-desc" data-i18n="ex3Desc">“14 average” said, 11.2 on the sheet: the agent flags the gap.</span></span>
-            </button>
-          </fieldset>
-        </section>
-
-        <form id="demo-form">
-          <section class="panel reveal">
-            <fieldset>
-              <legend data-i18n="formLegend">Student inputs</legend>
-              <label class="drop">
-                <span class="drop-title" data-i18n="photoTitle">Grade-sheet photo (JPEG/PNG)</span>
-                <input type="file" id="photo" accept="image/*" />
-                <span class="file-name" id="photo-name" data-i18n="noFile">No file chosen</span>
-              </label>
-              <label class="drop">
-                <span class="drop-title" data-i18n="voiceTitle">Voice note</span>
-                <input type="file" id="voice" accept="audio/*" />
-                <span class="file-name" id="voice-name" data-i18n="noFile">No file chosen</span>
-              </label>
-              <label>
-                <span class="field-label" data-i18n="fallbackLabel">Fallback text (if no voice note)</span>
-                <textarea id="fallback-text" rows="3" data-i18n-ph="fallbackPh" placeholder="Series, interests, target job…"></textarea>
-              </label>
-              <button type="submit" class="cta" id="submit-btn" data-i18n="submit">Start orientation</button>
-              <div id="busy-bar" hidden><i></i></div>
-              <p id="status" class="muted" aria-live="polite"></p>
-            </fieldset>
-          </section>
-        </form>
+    <section class="hood reveal" id="models">
+      <h2 data-i18n="underHoodTitle">Under the hood</h2>
+      <p class="hood-sub" data-i18n="underHoodSub">Two Meta models inside one agent loop. Every number comes from deterministic code.</p>
+      <div class="hood-grid">
+        <article class="hood-card tile-spark">
+          <span class="hood-kind kind-tag kind-tag-model">AI model</span>
+          <h3>Muse Spark 1.3</h3>
+          <code>muse-spark-1.3</code>
+          <p data-i18n="modelSparkRole">Decides every step, reads the grade sheet, extracts the student profile.</p>
+        </article>
+        <article class="hood-card tile-voice">
+          <span class="hood-kind kind-tag kind-tag-model">AI model</span>
+          <h3>Muse Voice Transcribe 1.0</h3>
+          <code>muse-voice-transcribe-1.0</code>
+          <p data-i18n="modelVoiceRole">Transcribes the student’s voice note.</p>
+        </article>
+        <article class="hood-card tile-code">
+          <span class="hood-kind kind-tag kind-tag-code">Code</span>
+          <h3 data-i18n="modelCodeName">Deterministic code</h3>
+          <code>python</code>
+          <p data-i18n="modelCodeRole">Computes the average, searches the guide, verifies every proof, builds the report.</p>
+        </article>
       </div>
+      <p class="hood-note"><strong data-i18n="modelNeverCalculates">The model never calculates.</strong> <span data-i18n="modelDroppedNote">Tested and dropped: SAM 3.1 found the table but never a single cell (0 out of 3).</span></p>
+    </section>
 
-      <main class="stage">
-        <section class="panel agent-panel" id="agent-panel" data-agent-map-root data-agent-state="idle">
-          <div class="agent-head">
-            <div>
-              <h2 data-i18n="agentPanelTitle">Agent in action</h2>
-              <p class="muted" data-i18n="agentPanelSub">Every tool the agent calls lights up here, in the order it happens.</p>
-            </div>
-            <p class="agent-status" data-agent-status aria-live="polite"></p>
-          </div>
-          <div class="agent-map" id="agent-map"></div>
-          <p class="legend-hint" data-i18n="legendHint">AI model reads and decides · deterministic code computes and verifies</p>
-          <h3 class="trace-title" data-i18n="stepsHeading">Agent steps</h3>
-          <div id="steps"><p class="muted" data-i18n="stepsEmpty">No run yet.</p></div>
-        </section>
+    <section class="proof-kinds reveal">
+      <h2 data-i18n="proofsTitle">Four kinds of proof</h2>
+      <div class="proof-kinds-grid">
+        <p><span class="proof-chip chip-grade">Grade · SVT 15/20</span><span data-i18n="proofKind_grade">A grade read on the sheet</span></p>
+        <p><span class="proof-chip chip-transcript">Quote · “maybe a doctor”</span><span data-i18n="proofKind_transcript">A quote from the voice note</span></p>
+        <p><span class="proof-chip chip-filiere">Guide · PUB-062 (page 36)</span><span data-i18n="proofKind_filiere">A guide row with its page</span></p>
+        <p><span class="proof-chip chip-calc">Result · 13.15</span><span data-i18n="proofKind_calc">A calculation, step by step</span></p>
+      </div>
+    </section>
 
-        <div id="answer-block" hidden>
-          <h2 data-i18n="questionHeading">A question from the agent</h2>
-          <p id="question"></p>
-          <label>
-            <span class="field-label" data-i18n="answerLabel">Your answer</span>
-            <input type="text" id="answer-input" />
-          </label>
-          <button type="button" id="answer-btn" data-i18n="answerButton">Reply</button>
-        </div>
-
-        <section class="panel paper" id="report-panel">
-          <h2 data-i18n="reportHeading">Report</h2>
-          <p id="recorded-banner" class="recorded-banner" role="status" hidden data-i18n="recordedRun">Une exécution enregistrée — exemple fictif issu d’une exécution antérieure réussie.</p>
-          <div id="verified-banner" hidden>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path class="check" d="m9 12 2 2 4-4"/></svg>
-            <span data-i18n="verifiedBanner">Verified report — every claim checked by code</span>
-          </div>
-          <p class="muted" data-i18n="reportNote">The verified report is written in French for the student; each claim below opens its proof.</p>
-          <div id="report"><p class="muted" data-i18n="reportEmpty">The report will appear here.</p></div>
-          <div id="proofs" hidden>
-            <h3 data-i18n="proofsHeading">Claims and proofs</h3>
-            <p class="muted" data-i18n="proofsIntro">Every proof is clickable and opens its source: a read grade, a voice quote, a guide row, or the calculation detail.</p>
-            <div id="claims"></div>
-          </div>
-        </section>
-      </main>
-    </div>
+    <section class="final-cta reveal">
+      <h2 data-i18n="finalCtaTitle">See it work on a fictional student</h2>
+      <a class="btn-primary" href="demo.html" data-i18n="finalCtaBtn">Open the demo</a>
+    </section>
 
     <footer data-i18n="footer">Demo on fictional data only. Recommendations are limited to public offers for series C and D of the 2026-2027 guide whose row passed quality control.</footer>
 
-    <dialog id="proof-dialog">
-      <h3 id="proof-title"></h3>
-      <div id="proof-body"></div>
-      <button type="button" id="proof-close" data-i18n="close">Close</button>
-    </dialog>
-
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/landing.js"></script>
   </body>
 </html>

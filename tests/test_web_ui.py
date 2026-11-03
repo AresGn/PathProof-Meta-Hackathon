@@ -14,8 +14,9 @@ from src.api import server
 ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = ROOT / "web"
 INDEX_HTML = (WEB_DIR / "index.html").read_text(encoding="utf-8")
+DEMO_HTML = (WEB_DIR / "demo.html").read_text(encoding="utf-8")
 STYLES_CSS = (WEB_DIR / "styles.css").read_text(encoding="utf-8")
-JS_MODULES = ("i18n.js", "format.js", "api.js", "steps.js", "agent-map.js", "motion.js",
+JS_MODULES = ("i18n.js", "format.js", "api.js", "steps.js", "agent-map.js", "models.js", "motion.js", "landing.js",
               "proofs.js", "report.js", "app.js")
 APP_JS = "\n".join((WEB_DIR / "js" / name).read_text(encoding="utf-8") for name in JS_MODULES)
 MODULES = {
@@ -52,29 +53,30 @@ def test_interface_offers_the_three_one_click_examples():
                  "releve_serie_d_flou.jpg", "note_vocale_contradictoire.mp3"):
         assert name in APP_JS, name
     assert "/samples/" in APP_JS
-    assert INDEX_HTML.count("data-example") >= 3
+    assert DEMO_HTML.count("data-example") >= 3
 
 
 def test_interface_forbidden_word_is_absent():
+    assert "chatbot" not in DEMO_HTML.casefold()
     assert "chatbot" not in INDEX_HTML.casefold()
     assert "chatbot" not in APP_JS.casefold()
 
 
 def test_interface_is_readable_at_375_px():
-    assert 'name="viewport"' in INDEX_HTML
+    assert 'name="viewport"' in DEMO_HTML and 'name="viewport"' in INDEX_HTML
     assert "@media" in STYLES_CSS and "480px" in STYLES_CSS
 
 
 def test_interface_keeps_photo_voice_text_question_and_live_steps():
     for element_id in ("photo", "voice", "fallback-text", "steps",
                        "question", "answer-input", "report"):
-        assert f'id="{element_id}"' in INDEX_HTML, element_id
+        assert f'id="{element_id}"' in DEMO_HTML, element_id
     for event_type in ('"step"', '"needs_input"', '"done"', '"error"'):
         assert event_type in APP_JS, event_type
 
 
 def test_report_proofs_are_clickable_and_open_their_source():
-    assert 'id="proof-dialog"' in INDEX_HTML
+    assert 'id="proof-dialog"' in DEMO_HTML
     for proof_type in ("grade", "transcript", "filiere", "calc"):
         assert f'proof.type === "{proof_type}"' in MODULES["proofs.js"], proof_type
     assert 'row.Offre_ID === offreId' in MODULES["proofs.js"]
@@ -113,9 +115,9 @@ def test_page_finds_the_local_api_when_served_statically():
 
 def test_frontend_files_are_split_by_responsibility():
     # Markup, styles and one module per concern (SRP): no monolith left.
-    assert "<style>" not in INDEX_HTML
-    assert 'href="styles.css"' in INDEX_HTML
-    assert 'type="module" src="js/app.js"' in INDEX_HTML
+    assert "<style>" not in DEMO_HTML
+    assert 'href="styles.css"' in DEMO_HTML
+    assert 'type="module" src="js/app.js"' in DEMO_HTML
     assert not (WEB_DIR / "app.js").exists()
     for name in JS_MODULES:
         assert (WEB_DIR / "js" / name).is_file(), name
@@ -126,9 +128,9 @@ def test_frontend_files_are_split_by_responsibility():
 
 def test_interface_is_english_by_default_with_french_toggle():
     # Anglophone jury: English first, French one click away (docs/decisions.md).
-    assert '<html lang="en">' in INDEX_HTML
-    assert 'data-set-lang="en"' in INDEX_HTML
-    assert 'data-set-lang="fr"' in INDEX_HTML
+    assert '<html lang="en">' in DEMO_HTML
+    assert 'data-set-lang="en"' in DEMO_HTML
+    assert 'data-set-lang="fr"' in DEMO_HTML
     assert 'statusDone: "Run complete."' in MODULES["i18n.js"]
     assert 'statusDone: "Exécution terminée."' in MODULES["i18n.js"]
     assert 'const STORAGE_KEY = "pathproof-lang"' in MODULES["i18n.js"]
@@ -264,8 +266,8 @@ def test_recorded_run_is_served_as_a_fictional_successful_execution():
 def test_recorded_run_fallback_is_explicit_in_both_languages():
     app = MODULES["app.js"]
     i18n = MODULES["i18n.js"]
-    assert 'id="recorded-banner"' in INDEX_HTML
-    assert 'data-i18n="recordedRun"' in INDEX_HTML
+    assert 'id="recorded-banner"' in DEMO_HTML
+    assert 'data-i18n="recordedRun"' in DEMO_HTML
     assert "exécution enregistrée" in i18n.casefold()
     assert "Recorded execution" in i18n
     assert "fetchRecordedRun" in app
@@ -280,7 +282,7 @@ def test_live_agent_map_lists_every_tool_and_never_claims_a_running_tool():
         assert f'"{tool}"' in agent_map, tool
     # Steps are streamed after execution: the map shows answered tools only.
     assert "is-done" in agent_map and "is-flash" in agent_map
-    assert 'id="agent-map"' in INDEX_HTML
+    assert 'id="agent-map"' in DEMO_HTML
     assert "agentMap.update(seenSteps" in MODULES["app.js"]
 
 
@@ -289,3 +291,41 @@ def test_interface_layout_is_responsive_and_respects_reduced_motion():
     assert "@media (min-width: 640px)" in STYLES_CSS
     assert "prefers-reduced-motion: reduce" in STYLES_CSS
     assert "prefers-reduced-motion" in MODULES["motion.js"]
+
+
+def test_demo_is_a_separate_page_from_the_landing():
+    assert 'href="demo.html"' in INDEX_HTML
+    assert 'src="js/landing.js"' in INDEX_HTML and 'src="js/app.js"' not in INDEX_HTML
+    assert 'id="demo-form"' in DEMO_HTML and 'id="demo-form"' not in INDEX_HTML
+    assert 'href="index.html"' in DEMO_HTML
+    assert TestClient(server.app).get("/demo.html").status_code == 200
+
+
+def test_landing_names_the_two_meta_models_and_nothing_unused():
+    assert "muse-spark-1.3" in INDEX_HTML and "muse-voice-transcribe-1.0" in INDEX_HTML
+    # Only the models the code really calls (docs/decisions.md E0.6 dropped SAM 3.1).
+    for unused in ("Muse Wonder", "wonder"):
+        assert unused.casefold() not in (INDEX_HTML + APP_JS).casefold(), unused
+
+
+def test_model_identifiers_shown_in_the_trace_match_the_clients():
+    from src.clients.muse_spark import MUSE_SPARK_MODEL
+    from src.clients.voice import VOICE_MODEL
+    models = MODULES["models.js"]
+    assert f'id: "{MUSE_SPARK_MODEL}"' in models
+    assert f'id: "{VOICE_MODEL}"' in models
+    assert 'transcribe_voice: "voice"' in models
+    for tool in ("read_grade_sheet", "extract_profile"):
+        assert f'{tool}: "spark"' in models, tool
+
+
+def test_every_step_card_names_who_decided_and_who_ran_it():
+    steps = MODULES["steps.js"]
+    assert 't("modelDecides"' in steps and 't("modelRuns"' in steps
+    assert 't("modelRunsCode")' in steps
+    assert "modelLine(step)" in steps
+
+
+def test_run_requests_carry_the_interface_language():
+    app = MODULES["app.js"]
+    assert app.count('body.append("language", getLanguage())') == 2

@@ -1,7 +1,7 @@
 // Demo orchestration: wires the form, examples, answer flow and language
 // switch to the API stream and the views. No rendering or HTTP code here:
 // see steps.js, proofs.js, report.js, api.js, i18n.js and format.js.
-import { applyTranslations, setLanguage, t } from "./i18n.js";
+import { applyTranslations, getLanguage, setLanguage, t } from "./i18n.js";
 import {
   describeClientError, ensureApiBase, fetchRecordedRun, fetchSampleFile,
   recordedFailureReason, shouldUseRecordedRun,
@@ -264,6 +264,7 @@ async function runExample(key) {
     const body = new FormData();
     body.append("image", await fetchSampleFile(example.image));
     if (example.audio) body.append("audio", await fetchSampleFile(example.audio));
+    body.append("language", getLanguage());
     setStatus(t("statusSending"));
     await streamRun(body, handleEvent);
   } catch (err) {
@@ -336,6 +337,7 @@ form.addEventListener("submit", async (event) => {
   if (photo) body.append("image", photo);
   if (voice) body.append("audio", voice);
   if (submittedText) body.append("text", submittedText);
+  body.append("language", getLanguage());
   await startRun(body);
 });
 
