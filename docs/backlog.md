@@ -127,7 +127,7 @@ E1.4 format des preuves ─► E2.4 verify_report ──────────
 
 - [x] **E6.1 (M)** [#34](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/34) Fichiers d'exemple des 10 cas de `evals/cases.jsonl`. *Dép. :* E0.3. *Fait le 3 nov :* les 10 entrées référencent des images, audios ou textes de secours fictifs ; leurs assertions déclarent les outils obligatoires, chaînes interdites, `Offre_ID` attendus et question attendue. `tests/test_eval_cases.py` valide le JSONL, les fichiers et l'absence de chargement de la vérité terrain par `src/`.
   *Acceptation :* plus aucune ligne « sample file TODO » ; les assertions des cas ne sont jamais chargées dans le prompt, les outils ou le contexte de l'agent (aucun module de `src/` ne lit `evals/`).
-- [x] **E6.2 (M)** [#35](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/35) Lanceur d'évaluation. *Dép. :* E4.4. *Fait le 3 nov :* `python -m evals.run`, 11 cas exécutés en réel (7 conformes), `verify_report` rejouable (`--replay`).
+- [x] **E6.2 (M)** [#35](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/35) Lanceur d'évaluation. *Dép. :* E4.4. *Fait le 3 nov :* `python -m evals.run`, 11 cas exécutés en réel deux fois (7 puis 6 conformes), coût 2,06 $, `verify_report` rejouable (`--replay`).
   *Acceptation :* `evals/results/` contient une sortie brute par cas et un tableau (conformité, appels d'outils, questions posées, durée). *Facultatif :* `verify_report` rejouable sur un résultat enregistré, sans relancer l'agent.
 - [ ] **E6.3 (L)** [#36](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/36) Corrections jusqu'à 9 cas sur 10 conformes et 0 affirmation sans preuve. *Dép. :* E6.2.
   *Acceptation (O2 à O5) :* tableau commité, échecs expliqués.

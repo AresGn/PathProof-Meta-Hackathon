@@ -19,15 +19,21 @@
   "outcome_status": "needs_input",
   "report_text": null,
   "questions": [
-    "Je vous ai entendu depuis le marché malgré le bruit, merci pour votre message. Avant de continuer, pouvez-vous confirmer votre série du Bac : êtes-vous en série C ou en série D ?",
-    "Merci d'avoir confirmé que vous êtes en série D. Pour continuer, pouvez-vous me fournir une photo lisible de votre relevé de notes du Bac (ou me indiquer le chemin du fichier image) ?"
+    "Je n'ai pas bien entendu ta série dans ta note vocale (le marché faisait beaucoup de bruit). Peux-tu me confirmer : es-tu en série C ou en série D ?",
+    "Merci pour ta confirmation en série D. Pour continuer, peux-tu me fournir la photo de ton relevé de notes (le chemin du fichier image) afin que je puisse lire tes notes ?"
   ],
-  "duration_seconds": 50.42200000002049,
+  "duration_seconds": 51.51599999994505,
   "usage": {
-    "prompt_tokens": 14448,
-    "completion_tokens": 1459,
-    "total_tokens": 15907,
-    "streaming_calls": 0
+    "prompt_tokens": 14489,
+    "completion_tokens": 1453,
+    "total_tokens": 15942,
+    "streaming_calls": 0,
+    "by_model": {
+      "muse-spark-1.3-contributor": {
+        "prompt_tokens": 14489,
+        "completion_tokens": 1453
+      }
+    }
   },
   "error": null,
   "journal": [
@@ -38,8 +44,8 @@
         "audio_path": "data/samples/note_vocale_bruitee.mp3"
       },
       "result": {
-        "text": "Allô? Bonjour? je vous parle depuis le marché il y a beaucoup de bruit excusez-moi. Je suis en terminale terminale série euh ce que j'aime c'est la biologie, et la chimie, j'aime comprendre comment le corps fonctionne plus tard je voudrais travailler dans la santé peut-être pharmacien ou médecin je ne sais pas encore mes parents veulent que je reste de la maison et il me faudra une bourse sinon ce sera difficile difficile voilà merci",
-        "text_normalized": "Allô? Bonjour? je vous parle depuis le marché il y a beaucoup de bruit excusez-moi. Je suis en terminale terminale série euh ce que j'aime c'est la biologie, et la chimie, j'aime comprendre comment le corps fonctionne plus tard je voudrais travailler dans la santé peut-être pharmacien ou médecin je ne sais pas encore mes parents veulent que je reste de la maison et il me faudra une bourse sinon ce sera difficile difficile voilà merci",
+        "text": "Allo, bonjour. Je vous parle depuis le marché, il y a beaucoup de bruit excusez-moi. Je suis en terminale série euh ce que j'aime c'est la biologie et la chimie j'aime comprendre comment le corps fonctionne plus tard je je voudrais travailler dans la santé. Peut-être pharmacien ou médecin médecin je ne sais pas encore. Mes parents veulent que je reste de la maison et il me faudra une bourse. Sinon ce sera difficile. Dans la merci.",
+        "text_normalized": "Allo, bonjour. Je vous parle depuis le marché, il y a beaucoup de bruit excusez-moi. Je suis en terminale série euh ce que j'aime c'est la biologie et la chimie j'aime comprendre comment le corps fonctionne plus tard je je voudrais travailler dans la santé. Peut-être pharmacien ou médecin médecin je ne sais pas encore. Mes parents veulent que je reste de la maison et il me faudra une bourse. Sinon ce sera difficile. Dans la merci.",
         "confidence": null
       },
       "decision": "continue",
@@ -49,7 +55,7 @@
       "step": 2,
       "tool": "extract_profile",
       "args": {
-        "transcript": "Allô? Bonjour? je vous parle depuis le marché il y a beaucoup de bruit excusez-moi. Je suis en terminale terminale série euh ce que j'aime c'est la biologie, et la chimie, j'aime comprendre comment le corps fonctionne plus tard je voudrais travailler dans la santé peut-être pharmacien ou médecin je ne sais pas encore mes parents veulent que je reste de la maison et il me faudra une bourse sinon ce sera difficile difficile voilà merci"
+        "transcript": "Allo, bonjour. Je vous parle depuis le marché, il y a beaucoup de bruit excusez-moi. Je suis en terminale série euh ce que j'aime c'est la biologie et la chimie j'aime comprendre comment le corps fonctionne plus tard je je voudrais travailler dans la santé. Peut-être pharmacien ou médecin médecin je ne sais pas encore. Mes parents veulent que je reste de la maison et il me faudra une bourse. Sinon ce sera difficile. Dans la merci."
       },
       "result": {
         "serie_declaree": null,
@@ -71,12 +77,12 @@
         "metier_vise": null,
         "contraintes": [
           {
-            "value": "je reste de la maison",
-            "quote": "mes parents veulent que je reste de la maison"
+            "value": "Mes parents veulent que je reste de la maison",
+            "quote": "Mes parents veulent que je reste de la maison"
           },
           {
             "value": "il me faudra une bourse",
-            "quote": "il me faudra une bourse sinon ce sera difficile difficile"
+            "quote": "il me faudra une bourse"
           }
         ],
         "flags": []
@@ -88,11 +94,11 @@
       "step": 3,
       "tool": "ask_student",
       "args": {
-        "question": "Je vous ai entendu depuis le marché malgré le bruit, merci pour votre message. Avant de continuer, pouvez-vous confirmer votre série du Bac : êtes-vous en série C ou en série D ?"
+        "question": "Je n'ai pas bien entendu ta série dans ta note vocale (le marché faisait beaucoup de bruit). Peux-tu me confirmer : es-tu en série C ou en série D ?"
       },
       "result": {
         "status": "needs_input",
-        "question": "Je vous ai entendu depuis le marché malgré le bruit, merci pour votre message. Avant de continuer, pouvez-vous confirmer votre série du Bac : êtes-vous en série C ou en série D ?"
+        "question": "Je n'ai pas bien entendu ta série dans ta note vocale (le marché faisait beaucoup de bruit). Peux-tu me confirmer : es-tu en série C ou en série D ?"
       },
       "decision": "suspend",
       "model": "muse-spark-1.3-contributor"
@@ -101,11 +107,11 @@
       "step": 4,
       "tool": "ask_student",
       "args": {
-        "question": "Merci d'avoir confirmé que vous êtes en série D. Pour continuer, pouvez-vous me fournir une photo lisible de votre relevé de notes du Bac (ou me indiquer le chemin du fichier image) ?"
+        "question": "Merci pour ta confirmation en série D. Pour continuer, peux-tu me fournir la photo de ton relevé de notes (le chemin du fichier image) afin que je puisse lire tes notes ?"
       },
       "result": {
         "status": "needs_input",
-        "question": "Merci d'avoir confirmé que vous êtes en série D. Pour continuer, pouvez-vous me fournir une photo lisible de votre relevé de notes du Bac (ou me indiquer le chemin du fichier image) ?"
+        "question": "Merci pour ta confirmation en série D. Pour continuer, peux-tu me fournir la photo de ton relevé de notes (le chemin du fichier image) afin que je puisse lire tes notes ?"
       },
       "decision": "suspend",
       "model": "muse-spark-1.3-contributor"

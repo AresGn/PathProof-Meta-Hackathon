@@ -22,16 +22,26 @@
     "Oui, je confirme : série D."
   ],
   "outcome_status": "finished",
-  "report_text": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Sciences de la Vie et de la Terre (Faculté des Sciences Techniques (FAST)) — PUB-081, page 44 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « les SVT ».\n- Tu as dit : « je préfère rester à Cotonou près de mes parents ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n- Sciences de la Vie et de la Terre (PUB-081) : Débouchés « Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n- Sciences de la Vie et de la Terre (PUB-081) : 50 bourses et 120 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n- Sciences de la Vie et de la Terre (PUB-081) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+  "report_text": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Sciences de la Vie et de la Terre (Faculté des Sciences Techniques (FAST)) — PUB-081, page 44 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « série D ».\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « les SVT ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n- Sciences de la Vie et de la Terre (PUB-081) : Débouchés « Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n- Sciences de la Vie et de la Terre (PUB-081) : 50 bourses et 120 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n- Sciences de la Vie et de la Terre (PUB-081) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
   "questions": [
     "Pouvez-vous confirmer que vous êtes bien en série D, comme indiqué sur votre relevé ?"
   ],
-  "duration_seconds": 112.60999999998603,
+  "duration_seconds": 96.89099999994505,
   "usage": {
-    "prompt_tokens": 61678,
-    "completion_tokens": 10839,
-    "total_tokens": 72517,
-    "streaming_calls": 0
+    "prompt_tokens": 61468,
+    "completion_tokens": 10057,
+    "total_tokens": 71525,
+    "streaming_calls": 0,
+    "by_model": {
+      "muse-spark-1.3-contributor": {
+        "prompt_tokens": 15856,
+        "completion_tokens": 1036
+      },
+      "muse-wonder-1.0": {
+        "prompt_tokens": 45612,
+        "completion_tokens": 9021
+      }
+    }
   },
   "error": null,
   "journal": [
@@ -42,8 +52,8 @@
         "audio_path": "data/samples/note_vocale_coherente.mp3"
       },
       "result": {
-        "text": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter hein",
-        "text_normalized": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter hein",
+        "text": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille et mon quartier pour la ville euh je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous. Voilà. Voilà. Merci de m'écouter",
+        "text_normalized": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille et mon quartier pour la ville euh je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous. Voilà. Voilà. Merci de m'écouter",
         "confidence": null
       },
       "decision": "continue",
@@ -117,7 +127,7 @@
       "step": 2,
       "tool": "extract_profile",
       "args": {
-        "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter hein"
+        "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille et mon quartier pour la ville euh je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous. Voilà. Voilà. Merci de m'écouter"
       },
       "result": {
         "serie_declaree": {
@@ -126,7 +136,7 @@
         },
         "moyenne_declaree": {
           "value": 11.2,
-          "quote": "11 virgule 2"
+          "quote": "onze virgule deux de moyenne"
         },
         "interets": [
           {
@@ -144,12 +154,12 @@
         },
         "contraintes": [
           {
-            "value": "rester à Cotonou près de mes parents",
-            "quote": "je préfère rester à Cotonou près de mes parents"
+            "value": "rester à Cotonou, près de mes parents",
+            "quote": "je préfère rester à Cotonou, près de mes parents"
           },
           {
             "value": "besoin d'une bourse",
-            "quote": "j'aurais besoin d'une bourse"
+            "quote": "j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous."
           }
         ],
         "flags": []
@@ -209,8 +219,8 @@
           }
         ],
         "interets": [
-          "biologie",
-          "SVT"
+          "la biologie",
+          "les SVT"
         ],
         "metier_vise": "médecin",
         "serie": "D"
@@ -357,7 +367,7 @@
               "Statut_qualité = OK",
               "page 62 du guide officiel",
               "Mode d'entrée : Classement",
-              "intérêt « biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+              "intérêt « la biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
               "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
             ],
             "score": 20,
@@ -419,7 +429,7 @@
               "Statut_qualité = OK",
               "page 45 du guide officiel",
               "Mode d'entrée : Classement",
-              "intérêt « biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+              "intérêt « la biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
               "moyenne de classement 12.91 calculée sur Français, Sciences Physiques (PCT/SPCT), SVT"
             ],
             "score": 20,
@@ -481,7 +491,7 @@
               "Statut_qualité = OK",
               "page 44 du guide officiel",
               "Mode d'entrée : Classement",
-              "intérêt « SVT » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+              "intérêt « les SVT » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
               "moyenne de classement 12.91 calculée sur Français, Sciences Physiques (PCT/SPCT), SVT"
             ],
             "score": 20,
@@ -858,7 +868,7 @@
             {
               "lisible": true,
               "matiere": "Anglais",
-              "note": 8.0
+              "note": 8
             },
             {
               "lisible": true,
@@ -868,27 +878,27 @@
             {
               "lisible": true,
               "matiere": "Histoire-Géographie",
-              "note": 7.0
+              "note": 7
             },
             {
               "lisible": true,
               "matiere": "Mathématiques",
-              "note": 12.0
+              "note": 12
             },
             {
               "lisible": true,
               "matiere": "Philosophie",
-              "note": 8.0
+              "note": 8
             },
             {
               "lisible": true,
               "matiere": "Sciences Physiques (PCT/SPCT)",
-              "note": 12.0
+              "note": 12
             },
             {
               "lisible": true,
               "matiere": "SVT",
-              "note": 15.0
+              "note": 15
             },
             {
               "lisible": true,
@@ -897,7 +907,7 @@
             }
           ],
           "serie": "D",
-          "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter hein"
+          "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille et mon quartier pour la ville euh je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous. Voilà. Voilà. Merci de m'écouter"
         },
         "report": {
           "claims": [
@@ -905,25 +915,35 @@
               "claim_id": "c01",
               "proofs": [
                 {
-                  "matiere": "SVT",
-                  "note": 15.0,
-                  "type": "grade"
+                  "quote": "série D",
+                  "type": "transcript"
                 }
               ],
-              "text": "Votre relevé indique une note de SVT de 15."
+              "text": "Vous avez déclaré être en série D."
             },
             {
               "claim_id": "c02",
+              "proofs": [
+                {
+                  "matiere": "SVT",
+                  "note": 15,
+                  "type": "grade"
+                }
+              ],
+              "text": "Sur votre relevé, votre note de SVT est de 15."
+            },
+            {
+              "claim_id": "c03",
               "proofs": [
                 {
                   "quote": "peut-être médecin",
                   "type": "transcript"
                 }
               ],
-              "text": "Vous avez déclaré comme métier visé : « peut-être médecin »."
+              "text": "Vous avez indiqué viser peut-être le métier de médecin."
             },
             {
-              "claim_id": "c03",
+              "claim_id": "c04",
               "proofs": [
                 {
                   "quote": "la biologie",
@@ -934,20 +954,10 @@
                   "type": "transcript"
                 }
               ],
-              "text": "Vous avez déclaré comme intérêts : « la biologie » et « les SVT »."
+              "text": "Vous avez cités comme intérêts la biologie et les SVT."
             },
             {
-              "claim_id": "c04",
-              "proofs": [
-                {
-                  "quote": "je préfère rester à Cotonou près de mes parents",
-                  "type": "transcript"
-                }
-              ],
-              "text": "Vous avez déclaré : « je préfère rester à Cotonou près de mes parents »."
-            },
-            {
-              "claim_id": "c05",
+              "claim_id": "o01",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -992,10 +1002,10 @@
                   "valeur": "20"
                 }
               ],
-              "text": "Offre PUB-062 : Médecine Générale — Faculté des Sciences de la Santé (FSS). Bac recommandé : C, D. Mode d'entrée : Classement. Le guide publie Bourse : 95 et Aide_FPP : 20."
+              "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 95 ; Aide_FPP 20 (chiffres du guide)."
             },
             {
-              "claim_id": "c06",
+              "claim_id": "calc01",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1027,10 +1037,10 @@
                   "valeur": "Médecine Générale"
                 }
               ],
-              "text": "Pour Médecine Générale (PUB-062), la moyenne de classement calculée est de 13.15."
+              "text": "Pour Médecine Générale, la moyenne de classement calculée est de 13.15."
             },
             {
-              "claim_id": "c07",
+              "claim_id": "o02",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1075,10 +1085,10 @@
                   "valeur": "30"
                 }
               ],
-              "text": "Offre PUB-133 : Médecine Humaine — Faculté de Médecine (FM). Bac recommandé : C, D. Mode d'entrée : Classement. Le guide publie Bourse : 100 et Aide_FPP : 30."
+              "text": "Médecine Humaine — Faculté de Médecine (FM) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 100 ; Aide_FPP 30 (chiffres du guide)."
             },
             {
-              "claim_id": "c08",
+              "claim_id": "calc02",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1110,10 +1120,10 @@
                   "valeur": "Médecine Humaine"
                 }
               ],
-              "text": "Pour Médecine Humaine (PUB-133), la moyenne de classement calculée est de 13.15."
+              "text": "Pour Médecine Humaine, la moyenne de classement calculée est de 13.15."
             },
             {
-              "claim_id": "c09",
+              "claim_id": "o03",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1158,10 +1168,10 @@
                   "valeur": "7"
                 }
               ],
-              "text": "Offre PUB-162 : Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA). Bac recommandé : C, D. Mode d'entrée : Classement. Le guide publie Bourse : 35 et Aide_FPP : 7."
+              "text": "Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 35 ; Aide_FPP 7 (chiffres du guide)."
             },
             {
-              "claim_id": "c10",
+              "claim_id": "calc03",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1193,10 +1203,10 @@
                   "valeur": "Génie Biologique et Bioprocédés (GBB)"
                 }
               ],
-              "text": "Pour Génie Biologique et Bioprocédés (GBB) (PUB-162), la moyenne de classement calculée est de 13.15."
+              "text": "Pour Génie Biologique et Bioprocédés (GBB), la moyenne de classement calculée est de 13.15."
             },
             {
-              "claim_id": "c11",
+              "claim_id": "o04",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1241,10 +1251,10 @@
                   "valeur": "10"
                 }
               ],
-              "text": "Offre PUB-077 : Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST). Bac recommandé : C, D, DEAT. Mode d'entrée : Classement. Le guide publie Bourse : 51 et Aide_FPP : 10."
+              "text": "Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, DEAT ; mode d'entrée Classement ; Bourse 51 ; Aide_FPP 10 (chiffres du guide)."
             },
             {
-              "claim_id": "c12",
+              "claim_id": "calc04",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1276,10 +1286,10 @@
                   "valeur": "Hydrobiologie Appliquée"
                 }
               ],
-              "text": "Pour Hydrobiologie Appliquée (PUB-077), la moyenne de classement calculée est de 12.91."
+              "text": "Pour Hydrobiologie Appliquée, la moyenne de classement calculée est de 12.91."
             },
             {
-              "claim_id": "c13",
+              "claim_id": "o05",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1324,10 +1334,10 @@
                   "valeur": "120"
                 }
               ],
-              "text": "Offre PUB-081 : Sciences de la Vie et de la Terre — Faculté des Sciences Techniques (FAST). Bac recommandé : C, D. Mode d'entrée : Classement. Le guide publie Bourse : 50 et Aide_FPP : 120."
+              "text": "Sciences de la Vie et de la Terre — Faculté des Sciences Techniques (FAST) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 50 ; Aide_FPP 120 (chiffres du guide)."
             },
             {
-              "claim_id": "c14",
+              "claim_id": "calc05",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1359,7 +1369,7 @@
                   "valeur": "Sciences de la Vie et de la Terre"
                 }
               ],
-              "text": "Pour Sciences de la Vie et de la Terre (PUB-081), la moyenne de classement calculée est de 12.91."
+              "text": "Pour Sciences de la Vie et de la Terre, la moyenne de classement calculée est de 12.91."
             }
           ],
           "schema_version": 1
@@ -1378,7 +1388,7 @@
             {
               "lisible": true,
               "matiere": "Anglais",
-              "note": 8.0
+              "note": 8
             },
             {
               "lisible": true,
@@ -1388,27 +1398,27 @@
             {
               "lisible": true,
               "matiere": "Histoire-Géographie",
-              "note": 7.0
+              "note": 7
             },
             {
               "lisible": true,
               "matiere": "Mathématiques",
-              "note": 12.0
+              "note": 12
             },
             {
               "lisible": true,
               "matiere": "Philosophie",
-              "note": 8.0
+              "note": 8
             },
             {
               "lisible": true,
               "matiere": "Sciences Physiques (PCT/SPCT)",
-              "note": 12.0
+              "note": 12
             },
             {
               "lisible": true,
               "matiere": "SVT",
-              "note": 15.0
+              "note": 15
             },
             {
               "lisible": true,
@@ -1417,7 +1427,7 @@
             }
           ],
           "serie": "D",
-          "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille et mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter hein"
+          "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille et mon quartier pour la ville euh je préfère rester à Cotonou, près de mes parents et honnêtement, j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous. Voilà. Voilà. Merci de m'écouter"
         },
         "refused_claims": [],
         "report": {
@@ -1426,25 +1436,35 @@
               "claim_id": "c01",
               "proofs": [
                 {
-                  "matiere": "SVT",
-                  "note": 15.0,
-                  "type": "grade"
+                  "quote": "série D",
+                  "type": "transcript"
                 }
               ],
-              "text": "Votre relevé indique une note de SVT de 15."
+              "text": "Vous avez déclaré être en série D."
             },
             {
               "claim_id": "c02",
+              "proofs": [
+                {
+                  "matiere": "SVT",
+                  "note": 15,
+                  "type": "grade"
+                }
+              ],
+              "text": "Sur votre relevé, votre note de SVT est de 15."
+            },
+            {
+              "claim_id": "c03",
               "proofs": [
                 {
                   "quote": "peut-être médecin",
                   "type": "transcript"
                 }
               ],
-              "text": "Vous avez déclaré comme métier visé : « peut-être médecin »."
+              "text": "Vous avez indiqué viser peut-être le métier de médecin."
             },
             {
-              "claim_id": "c03",
+              "claim_id": "c04",
               "proofs": [
                 {
                   "quote": "la biologie",
@@ -1455,20 +1475,10 @@
                   "type": "transcript"
                 }
               ],
-              "text": "Vous avez déclaré comme intérêts : « la biologie » et « les SVT »."
+              "text": "Vous avez cités comme intérêts la biologie et les SVT."
             },
             {
-              "claim_id": "c04",
-              "proofs": [
-                {
-                  "quote": "je préfère rester à Cotonou près de mes parents",
-                  "type": "transcript"
-                }
-              ],
-              "text": "Vous avez déclaré : « je préfère rester à Cotonou près de mes parents »."
-            },
-            {
-              "claim_id": "c05",
+              "claim_id": "o01",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1513,10 +1523,10 @@
                   "valeur": "20"
                 }
               ],
-              "text": "Offre PUB-062 : Médecine Générale — Faculté des Sciences de la Santé (FSS). Bac recommandé : C, D. Mode d'entrée : Classement. Le guide publie Bourse : 95 et Aide_FPP : 20."
+              "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 95 ; Aide_FPP 20 (chiffres du guide)."
             },
             {
-              "claim_id": "c06",
+              "claim_id": "calc01",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1548,10 +1558,10 @@
                   "valeur": "Médecine Générale"
                 }
               ],
-              "text": "Pour Médecine Générale (PUB-062), la moyenne de classement calculée est de 13.15."
+              "text": "Pour Médecine Générale, la moyenne de classement calculée est de 13.15."
             },
             {
-              "claim_id": "c07",
+              "claim_id": "o02",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1596,10 +1606,10 @@
                   "valeur": "30"
                 }
               ],
-              "text": "Offre PUB-133 : Médecine Humaine — Faculté de Médecine (FM). Bac recommandé : C, D. Mode d'entrée : Classement. Le guide publie Bourse : 100 et Aide_FPP : 30."
+              "text": "Médecine Humaine — Faculté de Médecine (FM) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 100 ; Aide_FPP 30 (chiffres du guide)."
             },
             {
-              "claim_id": "c08",
+              "claim_id": "calc02",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1631,10 +1641,10 @@
                   "valeur": "Médecine Humaine"
                 }
               ],
-              "text": "Pour Médecine Humaine (PUB-133), la moyenne de classement calculée est de 13.15."
+              "text": "Pour Médecine Humaine, la moyenne de classement calculée est de 13.15."
             },
             {
-              "claim_id": "c09",
+              "claim_id": "o03",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1679,10 +1689,10 @@
                   "valeur": "7"
                 }
               ],
-              "text": "Offre PUB-162 : Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA). Bac recommandé : C, D. Mode d'entrée : Classement. Le guide publie Bourse : 35 et Aide_FPP : 7."
+              "text": "Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 35 ; Aide_FPP 7 (chiffres du guide)."
             },
             {
-              "claim_id": "c10",
+              "claim_id": "calc03",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1714,10 +1724,10 @@
                   "valeur": "Génie Biologique et Bioprocédés (GBB)"
                 }
               ],
-              "text": "Pour Génie Biologique et Bioprocédés (GBB) (PUB-162), la moyenne de classement calculée est de 13.15."
+              "text": "Pour Génie Biologique et Bioprocédés (GBB), la moyenne de classement calculée est de 13.15."
             },
             {
-              "claim_id": "c11",
+              "claim_id": "o04",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1762,10 +1772,10 @@
                   "valeur": "10"
                 }
               ],
-              "text": "Offre PUB-077 : Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST). Bac recommandé : C, D, DEAT. Mode d'entrée : Classement. Le guide publie Bourse : 51 et Aide_FPP : 10."
+              "text": "Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, DEAT ; mode d'entrée Classement ; Bourse 51 ; Aide_FPP 10 (chiffres du guide)."
             },
             {
-              "claim_id": "c12",
+              "claim_id": "calc04",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1797,10 +1807,10 @@
                   "valeur": "Hydrobiologie Appliquée"
                 }
               ],
-              "text": "Pour Hydrobiologie Appliquée (PUB-077), la moyenne de classement calculée est de 12.91."
+              "text": "Pour Hydrobiologie Appliquée, la moyenne de classement calculée est de 12.91."
             },
             {
-              "claim_id": "c13",
+              "claim_id": "o05",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1845,10 +1855,10 @@
                   "valeur": "120"
                 }
               ],
-              "text": "Offre PUB-081 : Sciences de la Vie et de la Terre — Faculté des Sciences Techniques (FAST). Bac recommandé : C, D. Mode d'entrée : Classement. Le guide publie Bourse : 50 et Aide_FPP : 120."
+              "text": "Sciences de la Vie et de la Terre — Faculté des Sciences Techniques (FAST) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 50 ; Aide_FPP 120 (chiffres du guide)."
             },
             {
-              "claim_id": "c14",
+              "claim_id": "calc05",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1880,14 +1890,14 @@
                   "valeur": "Sciences de la Vie et de la Terre"
                 }
               ],
-              "text": "Pour Sciences de la Vie et de la Terre (PUB-081), la moyenne de classement calculée est de 12.91."
+              "text": "Pour Sciences de la Vie et de la Terre, la moyenne de classement calculée est de 12.91."
             }
           ],
           "schema_version": 1
         },
         "language": "fr"
       },
-      "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Sciences de la Vie et de la Terre (Faculté des Sciences Techniques (FAST)) — PUB-081, page 44 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « les SVT ».\n- Tu as dit : « je préfère rester à Cotonou près de mes parents ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n- Sciences de la Vie et de la Terre (PUB-081) : Débouchés « Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n- Sciences de la Vie et de la Terre (PUB-081) : 50 bourses et 120 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n- Sciences de la Vie et de la Terre (PUB-081) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+      "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Sciences de la Vie et de la Terre (Faculté des Sciences Techniques (FAST)) — PUB-081, page 44 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « série D ».\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « les SVT ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n- Sciences de la Vie et de la Terre (PUB-081) : Débouchés « Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n- Sciences de la Vie et de la Terre (PUB-081) : 50 bourses et 120 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n- Sciences de la Vie et de la Terre (PUB-081) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
       "decision": "continue",
       "model": "muse-wonder-1.0"
     }
