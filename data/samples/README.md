@@ -104,6 +104,9 @@ des accents.
 - `forbidden_strings` : absentes du rapport vérifié et des questions posées.
 - `required_strings` : présentes dans le rapport vérifié (texte rendu par
   `build_report`, par exemple « 13,15 / 20 » ou « (PUB-119) : Concours »).
+- `required_tools` : outils appelés au moins une fois. `compute_ranking_average`
+  n'y figure pas : `lookup_filieres` renvoie déjà la moyenne qu'il calcule, et
+  `verify_report` recalcule chaque preuve `calc`.
 - `expected_question` : liste d'alternatives ; au moins une apparaît dans une
   question posée par `ask_student`. `null` : aucune question attendue.
 

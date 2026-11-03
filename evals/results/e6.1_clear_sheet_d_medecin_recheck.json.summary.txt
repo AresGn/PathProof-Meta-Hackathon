@@ -1,0 +1,13 @@
+CLI run E4.4 — e6.1_clear_sheet_d_medecin_recheck.json
+Image: data/samples/releve_serie_d.jpg
+Audio: data/samples/note_vocale_coherente.mp3
+Duration: 121.2s
+Tool call events in journal: 7
+Distinct tools: 7
+Max model step reached: 6 (limit 12)
+Token usage (non-streaming Muse Spark completions): prompt=63075, completion=15294, total=78369
+Student questions asked: 1
+  Q1: Peux-tu confirmer que tu es bien en série D, comme indiqué sur ton relevé de notes ?
+Outcome: finished
+Last verify_report problems: 0
+Report: verified (printed on stdout)
