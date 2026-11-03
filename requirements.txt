@@ -5,3 +5,4 @@ pytest>=8.0
 fastapi>=0.115
 python-multipart>=0.0.18
 uvicorn[standard]>=0.32
+imageio-ffmpeg>=0.6

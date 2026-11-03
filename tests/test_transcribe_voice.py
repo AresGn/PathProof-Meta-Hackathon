@@ -257,3 +257,24 @@ def test_oversize_converted_audio_raises_before_any_call(tmp_path, client, post,
     with pytest.raises(TranscriptionError, match="converted audio too large"):
         transcribe(str(path), client)
     assert post.calls == []
+
+
+def test_convert_to_wav_falls_back_to_bundled_ffmpeg(monkeypatch, tmp_path):
+    from src.clients import voice
+
+    calls = []
+    monkeypatch.setattr(voice.shutil, "which", lambda name: None)
+    monkeypatch.setattr(voice.imageio_ffmpeg, "get_ffmpeg_exe", lambda: "/bundled/ffmpeg")
+    monkeypatch.setattr(voice.subprocess, "run", lambda command, **kwargs: calls.append(command))
+    voice.convert_to_wav(tmp_path / "in.mp3", tmp_path / "out.wav")
+    assert calls[0][0] == "/bundled/ffmpeg"
+
+
+def test_convert_to_wav_prefers_system_ffmpeg(monkeypatch, tmp_path):
+    from src.clients import voice
+
+    calls = []
+    monkeypatch.setattr(voice.shutil, "which", lambda name: "/usr/bin/ffmpeg")
+    monkeypatch.setattr(voice.subprocess, "run", lambda command, **kwargs: calls.append(command))
+    voice.convert_to_wav(tmp_path / "in.mp3", tmp_path / "out.wav")
+    assert calls[0][0] == "/usr/bin/ffmpeg"
