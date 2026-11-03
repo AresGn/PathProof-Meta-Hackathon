@@ -186,3 +186,14 @@ def test_prompt_unsupported_serie_asks_and_never_reaches_lookup():
 def test_prompt_text_input_replaces_the_voice_note():
     assert "text instead of a voice note" in PROMPT
     assert "skip transcribe_voice" in PROMPT
+
+
+def test_prompt_passes_metier_and_interets_to_lookup_in_the_guide_french_words():
+    # lookup_filieres matches whole French words: "doctor" found no offer (E6.1 English run)
+    assert "pass metier_vise and interets as their french equivalents" in PROMPT
+    assert "doctor -> médecin" in PROMPT
+    assert "keep the student's own words in transcript quotes" in PROMPT
+
+
+def test_prompt_asks_questions_in_the_student_language():
+    assert "in the student's language (french by default)" in PROMPT
