@@ -48,6 +48,27 @@ Local web demo: `uvicorn src.api.server:app --port 8000`, then open http://127.0
 
 On a network failure, interrupted stream, categorized SSE infrastructure error, or HTTP 5xx, the interface displays the saved fictional run from `web/recorded-run.json` and keeps a recorded-sample notice visible; HTTP 4xx/429 and SSE application/capacity errors remain attached to the live request. The sample report is not verified for the current input and its proof controls stay disabled. A failed answer can be retried with the original session, trace, question, and typed answer restored while that server session still exists; if `/answer` returns 404, the prior trace is restored and the expired session is closed. The 127 KB fixture is preloaded intentionally so it remains available if connectivity drops after the page loads. Regenerate it only from a successful live run on the fixed fictional samples with `python scripts/record_demo.py` (requires `MUSE_API_KEY` and uses API credits).
 
+### Screenshots
+
+Captured on 3 November 2026 from a live run of the fictional serie D example (clear sheet and matching voice note) on a local server with the real Meta API: nothing here is the recorded fallback run. The interface was in English; the report quotes the student and the guide as published.
+
+| | |
+|---|---|
+| ![Overview page](docs/screenshots/landing.png) | ![The agent asks a question](docs/screenshots/agent-question.png) |
+| The overview page (`index.html`). | The agent pauses on a question to the student instead of guessing (`ask_student`). |
+
+![The agent's tool trace after the run, with the Meta model that decided and the one that ran each step](docs/screenshots/agent-finished.png)
+
+*The tool trace once the run is finished: each step shows the Meta model that decided it and the model (or plain code) that ran it.*
+
+![Top of the verified report](docs/screenshots/report.png)
+
+*The verified report (top). Each claim below it carries clickable proofs.*
+
+![A quote proof opened from the report](docs/screenshots/proof-dialog.png)
+
+*A voice-note proof opened from the report: the exact quote, highlighted in the transcript.*
+
 ## How the agent decides
 
 ```mermaid
@@ -147,7 +168,7 @@ The target of 9 of 10 PRD cases is reached on this run. Limits of the measure: o
 
 ## Team
 
-Solo entry: Arès Gnimagnon ([@AresGn](https://github.com/AresGn)). `Billions229` also pushed commits to this repository (PRs merged from a fork); they are not registered as a team member on the hackathon platform.
+Solo entry: Arès Gnimagnon ([@AresGn](https://github.com/AresGn)). `Billions229` is my second GitHub account.
 
 ## License
 
