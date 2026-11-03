@@ -19,7 +19,10 @@ Sections (docs/prd.md sections 3.3 and 3.4): accessibilité,
 correspondance, quotas du guide, moyenne de classement (formula and
 provenance), 3 choix pour apresmonbac.bj (at least one Faculte
 classique, with the allocation and official-site reminders), and
-"Ce que je n'ai pas pu vérifier". At most 5 offers; every offer shows
+"Ce que je n'ai pas pu vérifier". With a student quote naming a job that no guide row cites,
+Correspondance says so (PRD §5 false_friend); a quote that the
+guide does cite, or a series-only quote, never yields that sentence.
+At most 5 offers; every offer shows
 its Offre_ID and its guide page, with a verified `Bac_recommandé` proof
 backing the serie line and a verified `Mode_entrée` proof backing the
 entry-mode line; with no verified offer the report says so instead of
@@ -52,6 +55,7 @@ from src.domain.guide import (
 from src.domain.offer_subjects import ALL_SERIES_HEADER
 from src.domain.report_text import DEFAULT_LANGUAGE, REPORT_TEXT, report_text
 from src.tools.compute_ranking_average import COEFFICIENT_SOURCE, FORMULA
+from src.tools.lookup_filieres import content_words, folded_words, guide_cites_metier
 from src.tools.verify_report import verify_report
 
 MAX_OFFERS = 5  # docs/prd.md section 3.2: the report shows at most 5 offers
@@ -325,9 +329,31 @@ def _correspondance_section(verified: list[dict], offre_ids: list[str], rows: di
         lines.append(text_of["outlets_line"].format(
             filiere=row.get("Filière", ""), offre_id=offre_id,
             debouches=row.get("Débouchés_Métiers", "")))
-    if len(lines) == 1:
+    if not offre_ids:
+        lines.append(text_of["no_outlet" if _quotes_name_uncited_job(quotes)
+                             else "no_match"])
+    elif len(lines) == 1:
         lines.append(text_of["no_match"])
     return "\n".join(lines)
+
+
+def _quotes_name_uncited_job(quotes: list[str]) -> bool:
+    """True only when a quote names a job and no guide row cites that job."""
+    job_quotes = [quote for quote in quotes if "serie" not in folded_words(quote)]
+    if not job_quotes:
+        return False
+    for quote in job_quotes:
+        if _quote_cites_a_guide_job(quote):
+            return False
+    return True
+
+
+def _quote_cites_a_guide_job(quote: str) -> bool:
+    if guide_cites_metier(quote):
+        return True
+    content = content_words(quote)
+    return any(len(content) >= count and guide_cites_metier(" ".join(content[-count:]))
+               for count in (3, 2))
 
 
 def _quotas_section(offre_ids: list[str], rows: dict, pages: dict,

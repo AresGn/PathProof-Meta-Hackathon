@@ -2,10 +2,6 @@
   "case_id": "unverified_trap",
   "date": "2026-11-03",
   "language": "fr",
-  "models": {
-    "deciding": "muse-spark-1.3-contributor",
-    "drafting": "muse-wonder-1.0"
-  },
   "files": [
     {
       "role": "grade_sheet",
@@ -19,23 +15,24 @@
     }
   ],
   "student_answers": [],
+  "exchanges": [],
   "outcome_status": "finished",
-  "report_text": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Analyse Biomédicale (Ecole Polytechnique d'Abomey-Calavi (EPAC)) — PUB-031, page 37 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Production et Santé animales (Ecole Polytechnique d'Abomey-Calavi (EPAC)) — PUB-042, page 37 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Nutrition et Technologie Alimentaires (Faculté des Sciences Agronomiques (FSA)) — PUB-057, page 36 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Kinésithérapie (Faculté des Sciences de la Santé (FSS)) — PUB-061, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « Je voudrais devenir pharmacien ».\n- Tu as dit : « travailler dans la santé ».\n- Analyse Biomédicale (PUB-031) : Débouchés « Technicien de laboratoire des centres de santé, Assistant de recherche ».\n- Production et Santé animales (PUB-042) : Débouchés « Cliniques et Pharmacie vétérinaires, Abattoirs et decontrôle des produits halieutiques, Contrôlevétérinaire, Industries agro-alimentaires animales ethalieutiques, fermes Agro-Pastorales et halieutiques,Usines d'alimentation, Enseignement dans lesLycées et Col, Lèges Agricoles, Recherche enproduction et santé animales et halieutiques ».\n- Nutrition et Technologie Alimentaires (PUB-057) : Débouchés « Technique de diététique, Nutrition dans les hôpitaux, centres de santé et industries agroalimentaires ».\n- Kinésithérapie (PUB-061) : Débouchés « Kinésithérapie, Spécialisations en sciences de la santé, option kinésithérapie ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n\n## Quotas du guide\n- Analyse Biomédicale (PUB-031) : 20 bourses et 5 aides FPP prévues (guide, page 37).\n- Production et Santé animales (PUB-042) : 35 bourses et 4 aides FPP prévues (guide, page 37).\n- Nutrition et Technologie Alimentaires (PUB-057) : 23 bourses et 4 aides FPP prévues (guide, page 36).\n- Kinésithérapie (PUB-061) : 20 bourses et 15 aides FPP prévues (guide, page 36).\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Analyse Biomédicale (PUB-031) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Production et Santé animales (PUB-042) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Nutrition et Technologie Alimentaires (PUB-057) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Kinésithérapie (PUB-061) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Nutrition et Technologie Alimentaires (Faculté des Sciences Agronomiques (FSA)) — PUB-057, page 36 (Faculté classique : oui)\n2. Kinésithérapie (Faculté des Sciences de la Santé (FSS)) — PUB-061, page 36 (Faculté classique : oui)\n3. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+  "report_text": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydraulique et Assainissement (Institut National de l'Eau (INE)) — PUB-105, page 27 du guide officiel — série D dans Bac_recommandé (C, D, EA) — Mode d'entrée : Classement\n- Eau Hygiène et Assainissement(EHA) (Institut National de l'Eau (INE)) — PUB-101, page 27 du guide officiel — série D dans Bac_recommandé (C, D, EA, DEAT) — Mode d'entrée : Classement\n- Santé publique polyvalente (Institut Régional de Santé Publique (IRSP)) — PUB-121, page 23 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « Je voudrais devenir pharmacien ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Hydraulique et Assainissement (PUB-105) : Débouchés « Hydrologues, hydrogéologues, Chimistes des eaux, Analyse, contrôle de qualité, Ecohydrologues, Hydrogéophysiciens, Contrôle de qualité hygiénique, Contrôleur des travaux d’assainissement de base, Action communautaire en génie sanitaire, Auto-emploi, Contrôleur du Génie rural,Contrôleur des travaux d’aménagement hydro agricoles ».\n- Eau Hygiène et Assainissement(EHA) (PUB-101) : Débouchés « Hydrologues, hydrogéologues, Chimistes des eaux, Analyse, contrôle de qualité, Ecohydrologues, Hydrogéophysiciens, Contrôle de qualité hygiénique, Contrôleur des travaux d'assainissement de base, Action communautaire en génie sanitaire, Auto-emploi, Contrôleur du Génie rural, Contrôleur des travaux d'aménagement hydro agricoles ».\n- Santé publique polyvalente (PUB-121) : Débouchés « Agent de santé communautaire, Responsable de surveillance épidémiologique, Attaché de recherche en santé, Assistant en planification, suivi et évaluation en santé, Agent d'hygiène et d'assainissement du milieu ».\n\n## Quotas du guide\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Hydraulique et Assainissement (PUB-105) : 52 bourses et 10 aides FPP prévues (guide, page 27).\n- Eau Hygiène et Assainissement(EHA) (PUB-101) : 50 bourses et 10 aides FPP prévues (guide, page 27).\n- Santé publique polyvalente (PUB-121) : 50 bourses et 7 aides FPP prévues (guide, page 23).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydraulique et Assainissement (PUB-105) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Eau Hygiène et Assainissement(EHA) (PUB-101) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Santé publique polyvalente (PUB-121) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n2. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n3. Hydraulique et Assainissement (Institut National de l'Eau (INE)) — PUB-105, page 27 (Faculté classique : non)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
   "questions": [],
-  "duration_seconds": 92.57799999997951,
+  "duration_seconds": 64.25,
   "usage": {
-    "prompt_tokens": 50366,
-    "completion_tokens": 9290,
-    "total_tokens": 59656,
+    "prompt_tokens": 50892,
+    "completion_tokens": 9588,
+    "total_tokens": 60480,
     "streaming_calls": 0,
     "by_model": {
       "muse-spark-1.3-contributor": {
-        "prompt_tokens": 6972,
-        "completion_tokens": 732
+        "prompt_tokens": 7115,
+        "completion_tokens": 720
       },
       "muse-wonder-1.0": {
-        "prompt_tokens": 43394,
-        "completion_tokens": 8558
+        "prompt_tokens": 43777,
+        "completion_tokens": 8868
       }
     }
   },
@@ -141,7 +138,7 @@
           {
             "lisible": true,
             "matiere": "Anglais",
-            "note": 8.0
+            "note": 8
           },
           {
             "lisible": true,
@@ -151,27 +148,27 @@
           {
             "lisible": true,
             "matiere": "Histoire-Géographie",
-            "note": 7.0
+            "note": 7
           },
           {
             "lisible": true,
             "matiere": "Mathématiques",
-            "note": 12.0
+            "note": 12
           },
           {
             "lisible": true,
             "matiere": "Philosophie",
-            "note": 8.0
+            "note": 8
           },
           {
             "lisible": true,
             "matiere": "Sciences Physiques (PCT/SPCT)",
-            "note": 12.0
+            "note": 12
           },
           {
             "lisible": true,
             "matiere": "SVT",
-            "note": 15.0
+            "note": 15
           },
           {
             "lisible": true,
@@ -180,7 +177,7 @@
           }
         ],
         "interets": [
-          "santé"
+          "travailler dans la santé"
         ],
         "metier_vise": "pharmacien",
         "serie": "D"
@@ -188,25 +185,25 @@
       "result": {
         "accessible": [
           {
-            "Offre_ID": "PUB-031",
-            "Filière": "Analyse Biomédicale",
-            "Établissement": "Ecole Polytechnique d'Abomey-Calavi (EPAC)",
-            "page_pdf": 37,
+            "Offre_ID": "PUB-133",
+            "Filière": "Médecine Humaine",
+            "Établissement": "Faculté de Médecine (FM)",
+            "page_pdf": 47,
             "Mode_entrée": "Classement",
             "Bac_recommandé": "C, D",
             "Statut_qualité": "OK",
-            "Bourse": "20",
-            "Aide_FPP": "5",
-            "Débouchés_Métiers": "Technicien de laboratoire des centres de santé, Assistant de recherche",
+            "Bourse": "100",
+            "Aide_FPP": "30",
+            "Débouchés_Métiers": "Médecin généraliste dans les hôpitaux et centre de santé",
             "raisons": [
               "série D dans Bac_recommandé (C, D)",
               "Statut_qualité = OK",
-              "page 37 du guide officiel",
+              "page 47 du guide officiel",
               "Mode d'entrée : Classement",
-              "intérêt « santé » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+              "métier visé « pharmacien » cité par le guide hors ligne OK ; classement par moyenne de classement",
               "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
             ],
-            "score": 20,
+            "score": 0,
             "moyenne_classement": 13.15,
             "calcul": {
               "status": "calculé",
@@ -217,7 +214,7 @@
               "details": [
                 {
                   "matiere": "Mathématiques",
-                  "note": 12.0,
+                  "note": 12,
                   "coefficient": 4,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -227,7 +224,7 @@
                 },
                 {
                   "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 12.0,
+                  "note": 12,
                   "coefficient": 4,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -237,193 +234,7 @@
                 },
                 {
                   "matiere": "SVT",
-                  "note": 15.0,
-                  "coefficient": 5,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "SVT"
-                  }
-                }
-              ]
-            },
-            "epreuves": []
-          },
-          {
-            "Offre_ID": "PUB-042",
-            "Filière": "Production et Santé animales",
-            "Établissement": "Ecole Polytechnique d'Abomey-Calavi (EPAC)",
-            "page_pdf": 37,
-            "Mode_entrée": "Classement",
-            "Bac_recommandé": "C, D, DEAT",
-            "Statut_qualité": "OK",
-            "Bourse": "35",
-            "Aide_FPP": "4",
-            "Débouchés_Métiers": "Cliniques et Pharmacie vétérinaires, Abattoirs et decontrôle des produits halieutiques, Contrôlevétérinaire, Industries agro-alimentaires animales ethalieutiques, fermes Agro-Pastorales et halieutiques,Usines d'alimentation, Enseignement dans lesLycées et Col, Lèges Agricoles, Recherche enproduction et santé animales et halieutiques",
-            "raisons": [
-              "série D dans Bac_recommandé (C, D, DEAT)",
-              "Statut_qualité = OK",
-              "page 37 du guide officiel",
-              "Mode d'entrée : Classement",
-              "intérêt « santé » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
-              "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
-            ],
-            "score": 20,
-            "moyenne_classement": 13.15,
-            "calcul": {
-              "status": "calculé",
-              "moyenne": 13.153846153846153,
-              "moyenne_arrondie": 13.15,
-              "formule": "M = Σ(mi·ci) / Σci",
-              "somme_coefficients": 13,
-              "details": [
-                {
-                  "matiere": "Mathématiques",
-                  "note": 12.0,
-                  "coefficient": 4,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "Mathématiques"
-                  }
-                },
-                {
-                  "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 12.0,
-                  "coefficient": 4,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "Sciences Physiques (PCT/SPCT)"
-                  }
-                },
-                {
-                  "matiere": "SVT",
-                  "note": 15.0,
-                  "coefficient": 5,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "SVT"
-                  }
-                }
-              ]
-            },
-            "epreuves": []
-          },
-          {
-            "Offre_ID": "PUB-057",
-            "Filière": "Nutrition et Technologie Alimentaires",
-            "Établissement": "Faculté des Sciences Agronomiques (FSA)",
-            "page_pdf": 36,
-            "Mode_entrée": "Classement",
-            "Bac_recommandé": "C, D, DEAT",
-            "Statut_qualité": "OK",
-            "Bourse": "23",
-            "Aide_FPP": "4",
-            "Débouchés_Métiers": "Technique de diététique, Nutrition dans les hôpitaux, centres de santé et industries agroalimentaires",
-            "raisons": [
-              "série D dans Bac_recommandé (C, D, DEAT)",
-              "Statut_qualité = OK",
-              "page 36 du guide officiel",
-              "Mode d'entrée : Classement",
-              "intérêt « santé » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
-              "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
-            ],
-            "score": 20,
-            "moyenne_classement": 13.15,
-            "calcul": {
-              "status": "calculé",
-              "moyenne": 13.153846153846153,
-              "moyenne_arrondie": 13.15,
-              "formule": "M = Σ(mi·ci) / Σci",
-              "somme_coefficients": 13,
-              "details": [
-                {
-                  "matiere": "Mathématiques",
-                  "note": 12.0,
-                  "coefficient": 4,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "Mathématiques"
-                  }
-                },
-                {
-                  "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 12.0,
-                  "coefficient": 4,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "Sciences Physiques (PCT/SPCT)"
-                  }
-                },
-                {
-                  "matiere": "SVT",
-                  "note": 15.0,
-                  "coefficient": 5,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "SVT"
-                  }
-                }
-              ]
-            },
-            "epreuves": []
-          },
-          {
-            "Offre_ID": "PUB-061",
-            "Filière": "Kinésithérapie",
-            "Établissement": "Faculté des Sciences de la Santé (FSS)",
-            "page_pdf": 36,
-            "Mode_entrée": "Classement",
-            "Bac_recommandé": "C, D",
-            "Statut_qualité": "OK",
-            "Bourse": "20",
-            "Aide_FPP": "15",
-            "Débouchés_Métiers": "Kinésithérapie, Spécialisations en sciences de la santé, option kinésithérapie",
-            "raisons": [
-              "série D dans Bac_recommandé (C, D)",
-              "Statut_qualité = OK",
-              "page 36 du guide officiel",
-              "Mode d'entrée : Classement",
-              "intérêt « santé » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
-              "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
-            ],
-            "score": 20,
-            "moyenne_classement": 13.15,
-            "calcul": {
-              "status": "calculé",
-              "moyenne": 13.153846153846153,
-              "moyenne_arrondie": 13.15,
-              "formule": "M = Σ(mi·ci) / Σci",
-              "somme_coefficients": 13,
-              "details": [
-                {
-                  "matiere": "Mathématiques",
-                  "note": 12.0,
-                  "coefficient": 4,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "Mathématiques"
-                  }
-                },
-                {
-                  "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 12.0,
-                  "coefficient": 4,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "D",
-                    "matiere": "Sciences Physiques (PCT/SPCT)"
-                  }
-                },
-                {
-                  "matiere": "SVT",
-                  "note": 15.0,
+                  "note": 15,
                   "coefficient": 5,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -451,10 +262,10 @@
               "Statut_qualité = OK",
               "page 36 du guide officiel",
               "Mode d'entrée : Classement",
-              "intérêt « santé » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+              "métier visé « pharmacien » cité par le guide hors ligne OK ; classement par moyenne de classement",
               "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
             ],
-            "score": 20,
+            "score": 0,
             "moyenne_classement": 13.15,
             "calcul": {
               "status": "calculé",
@@ -465,7 +276,7 @@
               "details": [
                 {
                   "matiere": "Mathématiques",
-                  "note": 12.0,
+                  "note": 12,
                   "coefficient": 4,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -475,7 +286,7 @@
                 },
                 {
                   "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 12.0,
+                  "note": 12,
                   "coefficient": 4,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -485,7 +296,193 @@
                 },
                 {
                   "matiere": "SVT",
-                  "note": 15.0,
+                  "note": 15,
+                  "coefficient": 5,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "SVT"
+                  }
+                }
+              ]
+            },
+            "epreuves": []
+          },
+          {
+            "Offre_ID": "PUB-105",
+            "Filière": "Hydraulique et Assainissement",
+            "Établissement": "Institut National de l'Eau (INE)",
+            "page_pdf": 27,
+            "Mode_entrée": "Classement",
+            "Bac_recommandé": "C, D, EA",
+            "Statut_qualité": "OK",
+            "Bourse": "52",
+            "Aide_FPP": "10",
+            "Débouchés_Métiers": "Hydrologues, hydrogéologues, Chimistes des eaux, Analyse, contrôle de qualité, Ecohydrologues, Hydrogéophysiciens, Contrôle de qualité hygiénique, Contrôleur des travaux d’assainissement de base, Action communautaire en génie sanitaire, Auto-emploi, Contrôleur du Génie rural,Contrôleur des travaux d’aménagement hydro agricoles",
+            "raisons": [
+              "série D dans Bac_recommandé (C, D, EA)",
+              "Statut_qualité = OK",
+              "page 27 du guide officiel",
+              "Mode d'entrée : Classement",
+              "métier visé « pharmacien » cité par le guide hors ligne OK ; classement par moyenne de classement",
+              "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
+            ],
+            "score": 0,
+            "moyenne_classement": 13.15,
+            "calcul": {
+              "status": "calculé",
+              "moyenne": 13.153846153846153,
+              "moyenne_arrondie": 13.15,
+              "formule": "M = Σ(mi·ci) / Σci",
+              "somme_coefficients": 13,
+              "details": [
+                {
+                  "matiere": "Mathématiques",
+                  "note": 12,
+                  "coefficient": 4,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "Mathématiques"
+                  }
+                },
+                {
+                  "matiere": "Sciences Physiques (PCT/SPCT)",
+                  "note": 12,
+                  "coefficient": 4,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "Sciences Physiques (PCT/SPCT)"
+                  }
+                },
+                {
+                  "matiere": "SVT",
+                  "note": 15,
+                  "coefficient": 5,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "SVT"
+                  }
+                }
+              ]
+            },
+            "epreuves": []
+          },
+          {
+            "Offre_ID": "PUB-101",
+            "Filière": "Eau Hygiène et Assainissement(EHA)",
+            "Établissement": "Institut National de l'Eau (INE)",
+            "page_pdf": 27,
+            "Mode_entrée": "Classement",
+            "Bac_recommandé": "C, D, EA, DEAT",
+            "Statut_qualité": "OK",
+            "Bourse": "50",
+            "Aide_FPP": "10",
+            "Débouchés_Métiers": "Hydrologues, hydrogéologues, Chimistes des eaux, Analyse, contrôle de qualité, Ecohydrologues, Hydrogéophysiciens, Contrôle de qualité hygiénique, Contrôleur des travaux d'assainissement de base, Action communautaire en génie sanitaire, Auto-emploi, Contrôleur du Génie rural, Contrôleur des travaux d'aménagement hydro agricoles",
+            "raisons": [
+              "série D dans Bac_recommandé (C, D, EA, DEAT)",
+              "Statut_qualité = OK",
+              "page 27 du guide officiel",
+              "Mode d'entrée : Classement",
+              "métier visé « pharmacien » cité par le guide hors ligne OK ; classement par moyenne de classement",
+              "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
+            ],
+            "score": 0,
+            "moyenne_classement": 13.15,
+            "calcul": {
+              "status": "calculé",
+              "moyenne": 13.153846153846153,
+              "moyenne_arrondie": 13.15,
+              "formule": "M = Σ(mi·ci) / Σci",
+              "somme_coefficients": 13,
+              "details": [
+                {
+                  "matiere": "Mathématiques",
+                  "note": 12,
+                  "coefficient": 4,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "Mathématiques"
+                  }
+                },
+                {
+                  "matiere": "Sciences Physiques (PCT/SPCT)",
+                  "note": 12,
+                  "coefficient": 4,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "Sciences Physiques (PCT/SPCT)"
+                  }
+                },
+                {
+                  "matiere": "SVT",
+                  "note": 15,
+                  "coefficient": 5,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "SVT"
+                  }
+                }
+              ]
+            },
+            "epreuves": []
+          },
+          {
+            "Offre_ID": "PUB-121",
+            "Filière": "Santé publique polyvalente",
+            "Établissement": "Institut Régional de Santé Publique (IRSP)",
+            "page_pdf": 23,
+            "Mode_entrée": "Classement",
+            "Bac_recommandé": "C, D",
+            "Statut_qualité": "OK",
+            "Bourse": "50",
+            "Aide_FPP": "7",
+            "Débouchés_Métiers": "Agent de santé communautaire, Responsable de surveillance épidémiologique, Attaché de recherche en santé, Assistant en planification, suivi et évaluation en santé, Agent d'hygiène et d'assainissement du milieu",
+            "raisons": [
+              "série D dans Bac_recommandé (C, D)",
+              "Statut_qualité = OK",
+              "page 23 du guide officiel",
+              "Mode d'entrée : Classement",
+              "métier visé « pharmacien » cité par le guide hors ligne OK ; classement par moyenne de classement",
+              "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
+            ],
+            "score": 0,
+            "moyenne_classement": 13.15,
+            "calcul": {
+              "status": "calculé",
+              "moyenne": 13.153846153846153,
+              "moyenne_arrondie": 13.15,
+              "formule": "M = Σ(mi·ci) / Σci",
+              "somme_coefficients": 13,
+              "details": [
+                {
+                  "matiere": "Mathématiques",
+                  "note": 12,
+                  "coefficient": 4,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "Mathématiques"
+                  }
+                },
+                {
+                  "matiere": "Sciences Physiques (PCT/SPCT)",
+                  "note": 12,
+                  "coefficient": 4,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "D",
+                    "matiere": "Sciences Physiques (PCT/SPCT)"
+                  }
+                },
+                {
+                  "matiere": "SVT",
+                  "note": 15,
                   "coefficient": 5,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -824,530 +821,503 @@
       "tool": "verify_report",
       "args": {
         "context": {
-          "serie": "D",
           "grades": [
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Anglais",
-              "note": 8,
-              "lisible": true,
-              "flags": []
+              "note": 8
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Français",
-              "note": 9.5,
-              "lisible": true,
-              "flags": []
+              "note": 9.5
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Histoire-Géographie",
-              "note": 7,
-              "lisible": true,
-              "flags": []
+              "note": 7
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Mathématiques",
-              "note": 12,
-              "lisible": true,
-              "flags": []
+              "note": 12
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Philosophie",
-              "note": 8,
-              "lisible": true,
-              "flags": []
+              "note": 8
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Sciences Physiques (PCT/SPCT)",
-              "note": 12,
-              "lisible": true,
-              "flags": []
+              "note": 12
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "SVT",
-              "note": 15,
-              "lisible": true,
-              "flags": []
+              "note": 15
             },
             {
-              "matiere": "EPS",
-              "note": 10.5,
+              "flags": [],
               "lisible": true,
-              "flags": []
+              "matiere": "EPS",
+              "note": 10.5
             }
           ],
+          "serie": "D",
           "transcript": "Bonjour, je suis en série D. Je voudrais devenir pharmacien et travailler dans la santé."
         },
         "report": {
-          "schema_version": 1,
           "claims": [
             {
-              "claim_id": "c1",
-              "text": "Vous avez déclaré : « je suis en série D ».",
+              "claim_id": "c01",
               "proofs": [
                 {
-                  "type": "transcript",
-                  "quote": "je suis en série D"
+                  "quote": "je suis en série D",
+                  "type": "transcript"
+                },
+                {
+                  "quote": "Je voudrais devenir pharmacien",
+                  "type": "transcript"
                 }
-              ]
+              ],
+              "text": "Vous êtes en série D et vous voudriez devenir pharmacien."
             },
             {
-              "claim_id": "c2",
-              "text": "Vous avez déclaré : « Je voudrais devenir pharmacien ».",
+              "claim_id": "c02",
               "proofs": [
                 {
-                  "type": "transcript",
-                  "quote": "Je voudrais devenir pharmacien"
-                }
-              ]
-            },
-            {
-              "claim_id": "c3",
-              "text": "Vous avez déclaré : « travailler dans la santé ».",
-              "proofs": [
-                {
-                  "type": "transcript",
-                  "quote": "travailler dans la santé"
-                }
-              ]
-            },
-            {
-              "claim_id": "c4",
-              "text": "Sur le relevé, la note de SVT est de 15.",
-              "proofs": [
-                {
-                  "type": "grade",
                   "matiere": "SVT",
-                  "note": 15
+                  "note": 15,
+                  "type": "grade"
                 }
-              ]
+              ],
+              "text": "Sur votre relevé, votre note en SVT est de 15/20."
             },
             {
-              "claim_id": "c5",
-              "text": "Sur le relevé, la note de Mathématiques est de 12.",
+              "claim_id": "c03",
               "proofs": [
                 {
-                  "type": "grade",
-                  "matiere": "Mathématiques",
-                  "note": 12
-                }
-              ]
-            },
-            {
-              "claim_id": "c6",
-              "text": "Analyse Biomédicale — Ecole Polytechnique d'Abomey-Calavi (EPAC) — Bac_recommandé : C, D — Mode_entrée : Classement — Bourse : 20 — Aide_FPP : 5",
-              "proofs": [
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Filière",
-                  "valeur": "Analyse Biomédicale"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "Médecine Humaine"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Établissement",
-                  "valeur": "Ecole Polytechnique d'Abomey-Calavi (EPAC)"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "Faculté de Médecine (FM)"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Bac_recommandé",
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
                   "valeur": "C, D"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Mode_entrée",
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
                   "valeur": "Classement"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Bourse",
-                  "valeur": "20"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "100"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Aide_FPP",
-                  "valeur": "5"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "30"
                 }
-              ]
+              ],
+              "text": "Offre PUB-133 : Médecine Humaine — Faculté de Médecine (FM). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse (figure du guide) : 100. Aide_FPP (figure du guide) : 30."
             },
             {
-              "claim_id": "c7",
-              "text": "Pour Analyse Biomédicale, la moyenne de classement est de 13.15.",
+              "claim_id": "c04",
               "proofs": [
                 {
-                  "type": "calc",
                   "formula": "M = Σ(mi·ci) / Σci",
                   "inputs": [
                     {
+                      "coefficient": 4,
                       "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
+                      "note": 12
                     },
                     {
+                      "coefficient": 4,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
+                      "note": 12
                     },
                     {
+                      "coefficient": 5,
                       "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
+                      "note": 15
                     }
                   ],
-                  "result": 13.15
+                  "result": 13.15,
+                  "type": "calc"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Filière",
-                  "valeur": "Analyse Biomédicale"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "Médecine Humaine"
                 }
-              ]
+              ],
+              "text": "Pour l'offre PUB-133 (Médecine Humaine), la moyenne de classement calculée est de 13.15."
             },
             {
-              "claim_id": "c8",
-              "text": "Production et Santé animales — Ecole Polytechnique d'Abomey-Calavi (EPAC) — Bac_recommandé : C, D, DEAT — Mode_entrée : Classement — Bourse : 35 — Aide_FPP : 4",
+              "claim_id": "c05",
               "proofs": [
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
                   "champ": "Filière",
-                  "valeur": "Production et Santé animales"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Établissement",
-                  "valeur": "Ecole Polytechnique d'Abomey-Calavi (EPAC)"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Bac_recommandé",
-                  "valeur": "C, D, DEAT"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Mode_entrée",
-                  "valeur": "Classement"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Bourse",
-                  "valeur": "35"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Aide_FPP",
-                  "valeur": "4"
-                }
-              ]
-            },
-            {
-              "claim_id": "c9",
-              "text": "Pour Production et Santé animales, la moyenne de classement est de 13.15.",
-              "proofs": [
-                {
-                  "type": "calc",
-                  "formula": "M = Σ(mi·ci) / Σci",
-                  "inputs": [
-                    {
-                      "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
-                    }
-                  ],
-                  "result": 13.15
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Filière",
-                  "valeur": "Production et Santé animales"
-                }
-              ]
-            },
-            {
-              "claim_id": "c10",
-              "text": "Nutrition et Technologie Alimentaires — Faculté des Sciences Agronomiques (FSA) — Bac_recommandé : C, D, DEAT — Mode_entrée : Classement — Bourse : 23 — Aide_FPP : 4",
-              "proofs": [
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Filière",
-                  "valeur": "Nutrition et Technologie Alimentaires"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Établissement",
-                  "valeur": "Faculté des Sciences Agronomiques (FSA)"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Bac_recommandé",
-                  "valeur": "C, D, DEAT"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Mode_entrée",
-                  "valeur": "Classement"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Bourse",
-                  "valeur": "23"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Aide_FPP",
-                  "valeur": "4"
-                }
-              ]
-            },
-            {
-              "claim_id": "c11",
-              "text": "Pour Nutrition et Technologie Alimentaires, la moyenne de classement est de 13.15.",
-              "proofs": [
-                {
-                  "type": "calc",
-                  "formula": "M = Σ(mi·ci) / Σci",
-                  "inputs": [
-                    {
-                      "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
-                    }
-                  ],
-                  "result": 13.15
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Filière",
-                  "valeur": "Nutrition et Technologie Alimentaires"
-                }
-              ]
-            },
-            {
-              "claim_id": "c12",
-              "text": "Kinésithérapie — Faculté des Sciences de la Santé (FSS) — Bac_recommandé : C, D — Mode_entrée : Classement — Bourse : 20 — Aide_FPP : 15",
-              "proofs": [
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Filière",
-                  "valeur": "Kinésithérapie"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Établissement",
-                  "valeur": "Faculté des Sciences de la Santé (FSS)"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Bac_recommandé",
-                  "valeur": "C, D"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Mode_entrée",
-                  "valeur": "Classement"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Bourse",
-                  "valeur": "20"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Aide_FPP",
-                  "valeur": "15"
-                }
-              ]
-            },
-            {
-              "claim_id": "c13",
-              "text": "Pour Kinésithérapie, la moyenne de classement est de 13.15.",
-              "proofs": [
-                {
-                  "type": "calc",
-                  "formula": "M = Σ(mi·ci) / Σci",
-                  "inputs": [
-                    {
-                      "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
-                    }
-                  ],
-                  "result": 13.15
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Filière",
-                  "valeur": "Kinésithérapie"
-                }
-              ]
-            },
-            {
-              "claim_id": "c14",
-              "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) — Bac_recommandé : C, D — Mode_entrée : Classement — Bourse : 95 — Aide_FPP : 20",
-              "proofs": [
-                {
-                  "type": "filiere",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Filière",
+                  "type": "filiere",
                   "valeur": "Médecine Générale"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Établissement",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Établissement",
+                  "type": "filiere",
                   "valeur": "Faculté des Sciences de la Santé (FSS)"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Bac_recommandé",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Bac_recommandé",
+                  "type": "filiere",
                   "valeur": "C, D"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Mode_entrée",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Mode_entrée",
+                  "type": "filiere",
                   "valeur": "Classement"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Bourse",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Bourse",
+                  "type": "filiere",
                   "valeur": "95"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Aide_FPP",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Aide_FPP",
+                  "type": "filiere",
                   "valeur": "20"
                 }
-              ]
+              ],
+              "text": "Offre PUB-062 : Médecine Générale — Faculté des Sciences de la Santé (FSS). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse (figure du guide) : 95. Aide_FPP (figure du guide) : 20."
             },
             {
-              "claim_id": "c15",
-              "text": "Pour Médecine Générale, la moyenne de classement est de 13.15.",
+              "claim_id": "c06",
               "proofs": [
                 {
-                  "type": "calc",
                   "formula": "M = Σ(mi·ci) / Σci",
                   "inputs": [
                     {
+                      "coefficient": 4,
                       "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
+                      "note": 12
                     },
                     {
+                      "coefficient": 4,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
+                      "note": 12
                     },
                     {
+                      "coefficient": 5,
                       "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
+                      "note": 15
                     }
                   ],
-                  "result": 13.15
+                  "result": 13.15,
+                  "type": "calc"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Filière",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Filière",
+                  "type": "filiere",
                   "valeur": "Médecine Générale"
                 }
-              ]
+              ],
+              "text": "Pour l'offre PUB-062 (Médecine Générale), la moyenne de classement calculée est de 13.15."
+            },
+            {
+              "claim_id": "c07",
+              "proofs": [
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Hydraulique et Assainissement"
+                },
+                {
+                  "champ": "Établissement",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Institut National de l'Eau (INE)"
+                },
+                {
+                  "champ": "Bac_recommandé",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "C, D, EA"
+                },
+                {
+                  "champ": "Mode_entrée",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Classement"
+                },
+                {
+                  "champ": "Bourse",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "52"
+                },
+                {
+                  "champ": "Aide_FPP",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "10"
+                }
+              ],
+              "text": "Offre PUB-105 : Hydraulique et Assainissement — Institut National de l'Eau (INE). Bac recommandé : C, D, EA. Mode d'entrée : Classement. Bourse (figure du guide) : 52. Aide_FPP (figure du guide) : 10."
+            },
+            {
+              "claim_id": "c08",
+              "proofs": [
+                {
+                  "formula": "M = Σ(mi·ci) / Σci",
+                  "inputs": [
+                    {
+                      "coefficient": 4,
+                      "matiere": "Mathématiques",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 4,
+                      "matiere": "Sciences Physiques (PCT/SPCT)",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 5,
+                      "matiere": "SVT",
+                      "note": 15
+                    }
+                  ],
+                  "result": 13.15,
+                  "type": "calc"
+                },
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Hydraulique et Assainissement"
+                }
+              ],
+              "text": "Pour l'offre PUB-105 (Hydraulique et Assainissement), la moyenne de classement calculée est de 13.15."
+            },
+            {
+              "claim_id": "c09",
+              "proofs": [
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Eau Hygiène et Assainissement(EHA)"
+                },
+                {
+                  "champ": "Établissement",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Institut National de l'Eau (INE)"
+                },
+                {
+                  "champ": "Bac_recommandé",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "C, D, EA, DEAT"
+                },
+                {
+                  "champ": "Mode_entrée",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Classement"
+                },
+                {
+                  "champ": "Bourse",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "50"
+                },
+                {
+                  "champ": "Aide_FPP",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "10"
+                }
+              ],
+              "text": "Offre PUB-101 : Eau Hygiène et Assainissement(EHA) — Institut National de l'Eau (INE). Bac recommandé : C, D, EA, DEAT. Mode d'entrée : Classement. Bourse (figure du guide) : 50. Aide_FPP (figure du guide) : 10."
+            },
+            {
+              "claim_id": "c10",
+              "proofs": [
+                {
+                  "formula": "M = Σ(mi·ci) / Σci",
+                  "inputs": [
+                    {
+                      "coefficient": 4,
+                      "matiere": "Mathématiques",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 4,
+                      "matiere": "Sciences Physiques (PCT/SPCT)",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 5,
+                      "matiere": "SVT",
+                      "note": 15
+                    }
+                  ],
+                  "result": 13.15,
+                  "type": "calc"
+                },
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Eau Hygiène et Assainissement(EHA)"
+                }
+              ],
+              "text": "Pour l'offre PUB-101 (Eau Hygiène et Assainissement(EHA)), la moyenne de classement calculée est de 13.15."
+            },
+            {
+              "claim_id": "c11",
+              "proofs": [
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "Santé publique polyvalente"
+                },
+                {
+                  "champ": "Établissement",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "Institut Régional de Santé Publique (IRSP)"
+                },
+                {
+                  "champ": "Bac_recommandé",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "C, D"
+                },
+                {
+                  "champ": "Mode_entrée",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "Classement"
+                },
+                {
+                  "champ": "Bourse",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "50"
+                },
+                {
+                  "champ": "Aide_FPP",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "7"
+                }
+              ],
+              "text": "Offre PUB-121 : Santé publique polyvalente — Institut Régional de Santé Publique (IRSP). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse (figure du guide) : 50. Aide_FPP (figure du guide) : 7."
+            },
+            {
+              "claim_id": "c12",
+              "proofs": [
+                {
+                  "formula": "M = Σ(mi·ci) / Σci",
+                  "inputs": [
+                    {
+                      "coefficient": 4,
+                      "matiere": "Mathématiques",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 4,
+                      "matiere": "Sciences Physiques (PCT/SPCT)",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 5,
+                      "matiere": "SVT",
+                      "note": 15
+                    }
+                  ],
+                  "result": 13.15,
+                  "type": "calc"
+                },
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "Santé publique polyvalente"
+                }
+              ],
+              "text": "Pour l'offre PUB-121 (Santé publique polyvalente), la moyenne de classement calculée est de 13.15."
             }
-          ]
+          ],
+          "schema_version": 1
         }
       },
       "result": [],
@@ -1359,535 +1329,508 @@
       "tool": "build_report",
       "args": {
         "context": {
-          "serie": "D",
           "grades": [
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Anglais",
-              "note": 8,
-              "lisible": true,
-              "flags": []
+              "note": 8
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Français",
-              "note": 9.5,
-              "lisible": true,
-              "flags": []
+              "note": 9.5
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Histoire-Géographie",
-              "note": 7,
-              "lisible": true,
-              "flags": []
+              "note": 7
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Mathématiques",
-              "note": 12,
-              "lisible": true,
-              "flags": []
+              "note": 12
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Philosophie",
-              "note": 8,
-              "lisible": true,
-              "flags": []
+              "note": 8
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "Sciences Physiques (PCT/SPCT)",
-              "note": 12,
-              "lisible": true,
-              "flags": []
+              "note": 12
             },
             {
+              "flags": [],
+              "lisible": true,
               "matiere": "SVT",
-              "note": 15,
-              "lisible": true,
-              "flags": []
+              "note": 15
             },
             {
-              "matiere": "EPS",
-              "note": 10.5,
+              "flags": [],
               "lisible": true,
-              "flags": []
+              "matiere": "EPS",
+              "note": 10.5
             }
           ],
+          "serie": "D",
           "transcript": "Bonjour, je suis en série D. Je voudrais devenir pharmacien et travailler dans la santé."
         },
         "refused_claims": [],
         "report": {
-          "schema_version": 1,
           "claims": [
             {
-              "claim_id": "c1",
-              "text": "Vous avez déclaré : « je suis en série D ».",
+              "claim_id": "c01",
               "proofs": [
                 {
-                  "type": "transcript",
-                  "quote": "je suis en série D"
+                  "quote": "je suis en série D",
+                  "type": "transcript"
+                },
+                {
+                  "quote": "Je voudrais devenir pharmacien",
+                  "type": "transcript"
                 }
-              ]
+              ],
+              "text": "Vous êtes en série D et vous voudriez devenir pharmacien."
             },
             {
-              "claim_id": "c2",
-              "text": "Vous avez déclaré : « Je voudrais devenir pharmacien ».",
+              "claim_id": "c02",
               "proofs": [
                 {
-                  "type": "transcript",
-                  "quote": "Je voudrais devenir pharmacien"
-                }
-              ]
-            },
-            {
-              "claim_id": "c3",
-              "text": "Vous avez déclaré : « travailler dans la santé ».",
-              "proofs": [
-                {
-                  "type": "transcript",
-                  "quote": "travailler dans la santé"
-                }
-              ]
-            },
-            {
-              "claim_id": "c4",
-              "text": "Sur le relevé, la note de SVT est de 15.",
-              "proofs": [
-                {
-                  "type": "grade",
                   "matiere": "SVT",
-                  "note": 15
+                  "note": 15,
+                  "type": "grade"
                 }
-              ]
+              ],
+              "text": "Sur votre relevé, votre note en SVT est de 15/20."
             },
             {
-              "claim_id": "c5",
-              "text": "Sur le relevé, la note de Mathématiques est de 12.",
+              "claim_id": "c03",
               "proofs": [
                 {
-                  "type": "grade",
-                  "matiere": "Mathématiques",
-                  "note": 12
-                }
-              ]
-            },
-            {
-              "claim_id": "c6",
-              "text": "Analyse Biomédicale — Ecole Polytechnique d'Abomey-Calavi (EPAC) — Bac_recommandé : C, D — Mode_entrée : Classement — Bourse : 20 — Aide_FPP : 5",
-              "proofs": [
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Filière",
-                  "valeur": "Analyse Biomédicale"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "Médecine Humaine"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Établissement",
-                  "valeur": "Ecole Polytechnique d'Abomey-Calavi (EPAC)"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "Faculté de Médecine (FM)"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Bac_recommandé",
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
                   "valeur": "C, D"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Mode_entrée",
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
                   "valeur": "Classement"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Bourse",
-                  "valeur": "20"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "100"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Aide_FPP",
-                  "valeur": "5"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "30"
                 }
-              ]
+              ],
+              "text": "Offre PUB-133 : Médecine Humaine — Faculté de Médecine (FM). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse (figure du guide) : 100. Aide_FPP (figure du guide) : 30."
             },
             {
-              "claim_id": "c7",
-              "text": "Pour Analyse Biomédicale, la moyenne de classement est de 13.15.",
+              "claim_id": "c04",
               "proofs": [
                 {
-                  "type": "calc",
                   "formula": "M = Σ(mi·ci) / Σci",
                   "inputs": [
                     {
+                      "coefficient": 4,
                       "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
+                      "note": 12
                     },
                     {
+                      "coefficient": 4,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
+                      "note": 12
                     },
                     {
+                      "coefficient": 5,
                       "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
+                      "note": 15
                     }
                   ],
-                  "result": 13.15
+                  "result": 13.15,
+                  "type": "calc"
                 },
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-031",
-                  "page_pdf": 37,
                   "champ": "Filière",
-                  "valeur": "Analyse Biomédicale"
+                  "offre_id": "PUB-133",
+                  "page_pdf": 47,
+                  "type": "filiere",
+                  "valeur": "Médecine Humaine"
                 }
-              ]
+              ],
+              "text": "Pour l'offre PUB-133 (Médecine Humaine), la moyenne de classement calculée est de 13.15."
             },
             {
-              "claim_id": "c8",
-              "text": "Production et Santé animales — Ecole Polytechnique d'Abomey-Calavi (EPAC) — Bac_recommandé : C, D, DEAT — Mode_entrée : Classement — Bourse : 35 — Aide_FPP : 4",
+              "claim_id": "c05",
               "proofs": [
                 {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
                   "champ": "Filière",
-                  "valeur": "Production et Santé animales"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Établissement",
-                  "valeur": "Ecole Polytechnique d'Abomey-Calavi (EPAC)"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Bac_recommandé",
-                  "valeur": "C, D, DEAT"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Mode_entrée",
-                  "valeur": "Classement"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Bourse",
-                  "valeur": "35"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Aide_FPP",
-                  "valeur": "4"
-                }
-              ]
-            },
-            {
-              "claim_id": "c9",
-              "text": "Pour Production et Santé animales, la moyenne de classement est de 13.15.",
-              "proofs": [
-                {
-                  "type": "calc",
-                  "formula": "M = Σ(mi·ci) / Σci",
-                  "inputs": [
-                    {
-                      "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
-                    }
-                  ],
-                  "result": 13.15
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-042",
-                  "page_pdf": 37,
-                  "champ": "Filière",
-                  "valeur": "Production et Santé animales"
-                }
-              ]
-            },
-            {
-              "claim_id": "c10",
-              "text": "Nutrition et Technologie Alimentaires — Faculté des Sciences Agronomiques (FSA) — Bac_recommandé : C, D, DEAT — Mode_entrée : Classement — Bourse : 23 — Aide_FPP : 4",
-              "proofs": [
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Filière",
-                  "valeur": "Nutrition et Technologie Alimentaires"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Établissement",
-                  "valeur": "Faculté des Sciences Agronomiques (FSA)"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Bac_recommandé",
-                  "valeur": "C, D, DEAT"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Mode_entrée",
-                  "valeur": "Classement"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Bourse",
-                  "valeur": "23"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Aide_FPP",
-                  "valeur": "4"
-                }
-              ]
-            },
-            {
-              "claim_id": "c11",
-              "text": "Pour Nutrition et Technologie Alimentaires, la moyenne de classement est de 13.15.",
-              "proofs": [
-                {
-                  "type": "calc",
-                  "formula": "M = Σ(mi·ci) / Σci",
-                  "inputs": [
-                    {
-                      "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
-                    }
-                  ],
-                  "result": 13.15
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-057",
-                  "page_pdf": 36,
-                  "champ": "Filière",
-                  "valeur": "Nutrition et Technologie Alimentaires"
-                }
-              ]
-            },
-            {
-              "claim_id": "c12",
-              "text": "Kinésithérapie — Faculté des Sciences de la Santé (FSS) — Bac_recommandé : C, D — Mode_entrée : Classement — Bourse : 20 — Aide_FPP : 15",
-              "proofs": [
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Filière",
-                  "valeur": "Kinésithérapie"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Établissement",
-                  "valeur": "Faculté des Sciences de la Santé (FSS)"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Bac_recommandé",
-                  "valeur": "C, D"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Mode_entrée",
-                  "valeur": "Classement"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Bourse",
-                  "valeur": "20"
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Aide_FPP",
-                  "valeur": "15"
-                }
-              ]
-            },
-            {
-              "claim_id": "c13",
-              "text": "Pour Kinésithérapie, la moyenne de classement est de 13.15.",
-              "proofs": [
-                {
-                  "type": "calc",
-                  "formula": "M = Σ(mi·ci) / Σci",
-                  "inputs": [
-                    {
-                      "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
-                    },
-                    {
-                      "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
-                    }
-                  ],
-                  "result": 13.15
-                },
-                {
-                  "type": "filiere",
-                  "offre_id": "PUB-061",
-                  "page_pdf": 36,
-                  "champ": "Filière",
-                  "valeur": "Kinésithérapie"
-                }
-              ]
-            },
-            {
-              "claim_id": "c14",
-              "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) — Bac_recommandé : C, D — Mode_entrée : Classement — Bourse : 95 — Aide_FPP : 20",
-              "proofs": [
-                {
-                  "type": "filiere",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Filière",
+                  "type": "filiere",
                   "valeur": "Médecine Générale"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Établissement",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Établissement",
+                  "type": "filiere",
                   "valeur": "Faculté des Sciences de la Santé (FSS)"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Bac_recommandé",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Bac_recommandé",
+                  "type": "filiere",
                   "valeur": "C, D"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Mode_entrée",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Mode_entrée",
+                  "type": "filiere",
                   "valeur": "Classement"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Bourse",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Bourse",
+                  "type": "filiere",
                   "valeur": "95"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Aide_FPP",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Aide_FPP",
+                  "type": "filiere",
                   "valeur": "20"
                 }
-              ]
+              ],
+              "text": "Offre PUB-062 : Médecine Générale — Faculté des Sciences de la Santé (FSS). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse (figure du guide) : 95. Aide_FPP (figure du guide) : 20."
             },
             {
-              "claim_id": "c15",
-              "text": "Pour Médecine Générale, la moyenne de classement est de 13.15.",
+              "claim_id": "c06",
               "proofs": [
                 {
-                  "type": "calc",
                   "formula": "M = Σ(mi·ci) / Σci",
                   "inputs": [
                     {
+                      "coefficient": 4,
                       "matiere": "Mathématiques",
-                      "note": 12.0,
-                      "coefficient": 4
+                      "note": 12
                     },
                     {
+                      "coefficient": 4,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 12.0,
-                      "coefficient": 4
+                      "note": 12
                     },
                     {
+                      "coefficient": 5,
                       "matiere": "SVT",
-                      "note": 15.0,
-                      "coefficient": 5
+                      "note": 15
                     }
                   ],
-                  "result": 13.15
+                  "result": 13.15,
+                  "type": "calc"
                 },
                 {
-                  "type": "filiere",
+                  "champ": "Filière",
                   "offre_id": "PUB-062",
                   "page_pdf": 36,
-                  "champ": "Filière",
+                  "type": "filiere",
                   "valeur": "Médecine Générale"
                 }
-              ]
+              ],
+              "text": "Pour l'offre PUB-062 (Médecine Générale), la moyenne de classement calculée est de 13.15."
+            },
+            {
+              "claim_id": "c07",
+              "proofs": [
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Hydraulique et Assainissement"
+                },
+                {
+                  "champ": "Établissement",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Institut National de l'Eau (INE)"
+                },
+                {
+                  "champ": "Bac_recommandé",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "C, D, EA"
+                },
+                {
+                  "champ": "Mode_entrée",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Classement"
+                },
+                {
+                  "champ": "Bourse",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "52"
+                },
+                {
+                  "champ": "Aide_FPP",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "10"
+                }
+              ],
+              "text": "Offre PUB-105 : Hydraulique et Assainissement — Institut National de l'Eau (INE). Bac recommandé : C, D, EA. Mode d'entrée : Classement. Bourse (figure du guide) : 52. Aide_FPP (figure du guide) : 10."
+            },
+            {
+              "claim_id": "c08",
+              "proofs": [
+                {
+                  "formula": "M = Σ(mi·ci) / Σci",
+                  "inputs": [
+                    {
+                      "coefficient": 4,
+                      "matiere": "Mathématiques",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 4,
+                      "matiere": "Sciences Physiques (PCT/SPCT)",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 5,
+                      "matiere": "SVT",
+                      "note": 15
+                    }
+                  ],
+                  "result": 13.15,
+                  "type": "calc"
+                },
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-105",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Hydraulique et Assainissement"
+                }
+              ],
+              "text": "Pour l'offre PUB-105 (Hydraulique et Assainissement), la moyenne de classement calculée est de 13.15."
+            },
+            {
+              "claim_id": "c09",
+              "proofs": [
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Eau Hygiène et Assainissement(EHA)"
+                },
+                {
+                  "champ": "Établissement",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Institut National de l'Eau (INE)"
+                },
+                {
+                  "champ": "Bac_recommandé",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "C, D, EA, DEAT"
+                },
+                {
+                  "champ": "Mode_entrée",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Classement"
+                },
+                {
+                  "champ": "Bourse",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "50"
+                },
+                {
+                  "champ": "Aide_FPP",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "10"
+                }
+              ],
+              "text": "Offre PUB-101 : Eau Hygiène et Assainissement(EHA) — Institut National de l'Eau (INE). Bac recommandé : C, D, EA, DEAT. Mode d'entrée : Classement. Bourse (figure du guide) : 50. Aide_FPP (figure du guide) : 10."
+            },
+            {
+              "claim_id": "c10",
+              "proofs": [
+                {
+                  "formula": "M = Σ(mi·ci) / Σci",
+                  "inputs": [
+                    {
+                      "coefficient": 4,
+                      "matiere": "Mathématiques",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 4,
+                      "matiere": "Sciences Physiques (PCT/SPCT)",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 5,
+                      "matiere": "SVT",
+                      "note": 15
+                    }
+                  ],
+                  "result": 13.15,
+                  "type": "calc"
+                },
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-101",
+                  "page_pdf": 27,
+                  "type": "filiere",
+                  "valeur": "Eau Hygiène et Assainissement(EHA)"
+                }
+              ],
+              "text": "Pour l'offre PUB-101 (Eau Hygiène et Assainissement(EHA)), la moyenne de classement calculée est de 13.15."
+            },
+            {
+              "claim_id": "c11",
+              "proofs": [
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "Santé publique polyvalente"
+                },
+                {
+                  "champ": "Établissement",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "Institut Régional de Santé Publique (IRSP)"
+                },
+                {
+                  "champ": "Bac_recommandé",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "C, D"
+                },
+                {
+                  "champ": "Mode_entrée",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "Classement"
+                },
+                {
+                  "champ": "Bourse",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "50"
+                },
+                {
+                  "champ": "Aide_FPP",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "7"
+                }
+              ],
+              "text": "Offre PUB-121 : Santé publique polyvalente — Institut Régional de Santé Publique (IRSP). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse (figure du guide) : 50. Aide_FPP (figure du guide) : 7."
+            },
+            {
+              "claim_id": "c12",
+              "proofs": [
+                {
+                  "formula": "M = Σ(mi·ci) / Σci",
+                  "inputs": [
+                    {
+                      "coefficient": 4,
+                      "matiere": "Mathématiques",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 4,
+                      "matiere": "Sciences Physiques (PCT/SPCT)",
+                      "note": 12
+                    },
+                    {
+                      "coefficient": 5,
+                      "matiere": "SVT",
+                      "note": 15
+                    }
+                  ],
+                  "result": 13.15,
+                  "type": "calc"
+                },
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-121",
+                  "page_pdf": 23,
+                  "type": "filiere",
+                  "valeur": "Santé publique polyvalente"
+                }
+              ],
+              "text": "Pour l'offre PUB-121 (Santé publique polyvalente), la moyenne de classement calculée est de 13.15."
             }
-          ]
+          ],
+          "schema_version": 1
         },
         "language": "fr"
       },
-      "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Analyse Biomédicale (Ecole Polytechnique d'Abomey-Calavi (EPAC)) — PUB-031, page 37 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Production et Santé animales (Ecole Polytechnique d'Abomey-Calavi (EPAC)) — PUB-042, page 37 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Nutrition et Technologie Alimentaires (Faculté des Sciences Agronomiques (FSA)) — PUB-057, page 36 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Kinésithérapie (Faculté des Sciences de la Santé (FSS)) — PUB-061, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « Je voudrais devenir pharmacien ».\n- Tu as dit : « travailler dans la santé ».\n- Analyse Biomédicale (PUB-031) : Débouchés « Technicien de laboratoire des centres de santé, Assistant de recherche ».\n- Production et Santé animales (PUB-042) : Débouchés « Cliniques et Pharmacie vétérinaires, Abattoirs et decontrôle des produits halieutiques, Contrôlevétérinaire, Industries agro-alimentaires animales ethalieutiques, fermes Agro-Pastorales et halieutiques,Usines d'alimentation, Enseignement dans lesLycées et Col, Lèges Agricoles, Recherche enproduction et santé animales et halieutiques ».\n- Nutrition et Technologie Alimentaires (PUB-057) : Débouchés « Technique de diététique, Nutrition dans les hôpitaux, centres de santé et industries agroalimentaires ».\n- Kinésithérapie (PUB-061) : Débouchés « Kinésithérapie, Spécialisations en sciences de la santé, option kinésithérapie ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n\n## Quotas du guide\n- Analyse Biomédicale (PUB-031) : 20 bourses et 5 aides FPP prévues (guide, page 37).\n- Production et Santé animales (PUB-042) : 35 bourses et 4 aides FPP prévues (guide, page 37).\n- Nutrition et Technologie Alimentaires (PUB-057) : 23 bourses et 4 aides FPP prévues (guide, page 36).\n- Kinésithérapie (PUB-061) : 20 bourses et 15 aides FPP prévues (guide, page 36).\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Analyse Biomédicale (PUB-031) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Production et Santé animales (PUB-042) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Nutrition et Technologie Alimentaires (PUB-057) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Kinésithérapie (PUB-061) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Nutrition et Technologie Alimentaires (Faculté des Sciences Agronomiques (FSA)) — PUB-057, page 36 (Faculté classique : oui)\n2. Kinésithérapie (Faculté des Sciences de la Santé (FSS)) — PUB-061, page 36 (Faculté classique : oui)\n3. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+      "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydraulique et Assainissement (Institut National de l'Eau (INE)) — PUB-105, page 27 du guide officiel — série D dans Bac_recommandé (C, D, EA) — Mode d'entrée : Classement\n- Eau Hygiène et Assainissement(EHA) (Institut National de l'Eau (INE)) — PUB-101, page 27 du guide officiel — série D dans Bac_recommandé (C, D, EA, DEAT) — Mode d'entrée : Classement\n- Santé publique polyvalente (Institut Régional de Santé Publique (IRSP)) — PUB-121, page 23 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « Je voudrais devenir pharmacien ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Hydraulique et Assainissement (PUB-105) : Débouchés « Hydrologues, hydrogéologues, Chimistes des eaux, Analyse, contrôle de qualité, Ecohydrologues, Hydrogéophysiciens, Contrôle de qualité hygiénique, Contrôleur des travaux d’assainissement de base, Action communautaire en génie sanitaire, Auto-emploi, Contrôleur du Génie rural,Contrôleur des travaux d’aménagement hydro agricoles ».\n- Eau Hygiène et Assainissement(EHA) (PUB-101) : Débouchés « Hydrologues, hydrogéologues, Chimistes des eaux, Analyse, contrôle de qualité, Ecohydrologues, Hydrogéophysiciens, Contrôle de qualité hygiénique, Contrôleur des travaux d'assainissement de base, Action communautaire en génie sanitaire, Auto-emploi, Contrôleur du Génie rural, Contrôleur des travaux d'aménagement hydro agricoles ».\n- Santé publique polyvalente (PUB-121) : Débouchés « Agent de santé communautaire, Responsable de surveillance épidémiologique, Attaché de recherche en santé, Assistant en planification, suivi et évaluation en santé, Agent d'hygiène et d'assainissement du milieu ».\n\n## Quotas du guide\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Hydraulique et Assainissement (PUB-105) : 52 bourses et 10 aides FPP prévues (guide, page 27).\n- Eau Hygiène et Assainissement(EHA) (PUB-101) : 50 bourses et 10 aides FPP prévues (guide, page 27).\n- Santé publique polyvalente (PUB-121) : 50 bourses et 7 aides FPP prévues (guide, page 23).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydraulique et Assainissement (PUB-105) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Eau Hygiène et Assainissement(EHA) (PUB-101) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Santé publique polyvalente (PUB-121) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n2. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n3. Hydraulique et Assainissement (Institut National de l'Eau (INE)) — PUB-105, page 27 (Faculté classique : non)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
       "decision": "continue",
       "model": "muse-wonder-1.0"
     }

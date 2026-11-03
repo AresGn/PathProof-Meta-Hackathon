@@ -1,25 +1,33 @@
 # Evaluation summary — 2026-11-03
 
-6 of 11 cases conform (every assertion passes).
+11 of 11 cases conform (every assertion passes).
 
 | Case | Result | Assertions | Tool calls | Questions | Duration | Loop tokens | Loop cost |
 |---|---|---|---|---|---|---|---|
-| clear_sheet_d_medecin | pass | 12/12 | 7 | 1 | 97 s | 71,525 | $0.36 |
-| clear_sheet_c | pass | 9/9 | 5 | 0 | 88 s | 60,821 | $0.35 |
-| blurry_photo | pass | 4/4 | 2 | 1 | 19 s | 7,533 | $0.00 |
-| missing_grade | pass | 4/4 | 2 | 1 | 19 s | 7,354 | $0.00 |
-| out_of_range_grade | FAIL | 3/4 | 2 | 1 | 22 s | 7,603 | $0.00 |
-| noisy_voice | pass | 4/4 | 4 | 2 | 52 s | 15,942 | $0.00 |
-| voice_contradicts_sheet | FAIL | 4/5 | 8 | 2 | 102 s | 73,316 | $0.34 |
-| unverified_trap | FAIL | 8/9 | 5 | 0 | 93 s | 59,656 | $0.35 |
-| false_friend | FAIL | 6/7 | 5 | 0 | 42 s | 35,422 | $0.14 |
-| concours_entry | FAIL | 8/10 | 5 | 0 | 64 s | 39,144 | $0.17 |
-| english_voice_d_medecin | pass | 12/12 | 7 | 1 | 111 s | 68,905 | $0.35 |
+| clear_sheet_d_medecin | pass | 12/12 | 8 | 1 | 99 s | 78,717 | $0.38 |
+| clear_sheet_c | pass | 9/9 | 5 | 0 | 77 s | 62,038 | $0.36 |
+| blurry_photo | pass | 4/4 | 2 | 1 | 18 s | 7,272 | $0.00 |
+| missing_grade | pass | 4/4 | 2 | 1 | 15 s | 7,494 | $0.00 |
+| out_of_range_grade | pass | 4/4 | 2 | 1 | 16 s | 7,665 | $0.00 |
+| noisy_voice | pass | 4/4 | 4 | 2 | 40 s | 16,352 | $0.00 |
+| voice_contradicts_sheet | pass | 5/5 | 8 | 2 | 102 s | 72,742 | $0.32 |
+| unverified_trap | pass | 9/9 | 5 | 0 | 64 s | 60,480 | $0.35 |
+| false_friend | pass | 7/7 | 5 | 0 | 36 s | 36,020 | $0.14 |
+| concours_entry | pass | 10/10 | 5 | 0 | 51 s | 42,087 | $0.20 |
+| english_voice_d_medecin | pass | 12/12 | 7 | 1 | 79 s | 66,951 | $0.33 |
 
-**Total: 447,221 loop tokens, 708 s, cost $2.06.**
+**Total: 457,818 loop tokens, 596 s, cost $2.08.**
 
-Models that decided the steps (steps, read from the journals): muse-spark-1.3-contributor (38), muse-wonder-1.0 (14).
+Models that decided the steps (steps, read from the journals): muse-spark-1.3-contributor (39), muse-wonder-1.0 (14).
 Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 streaming call(s) not counted); the tools' own calls (vision, profile extraction, transcription) are not counted. Loop cost is those tokens at the official rates of dev.meta.ai/docs/pricing-rate-limits (3 Nov 2026), cached input priced in full, so the real bill is slightly different; Billing is the reference. Duration excludes the time spent waiting for the student's answer.
+
+## Remaining failures (E6.3)
+
+None: 11 of 11 cases conform, including the 10 PRD cases. `verify_report` replayed on every finished journal returned an empty problem list.
+
+Two consecutive `clear_sheet_d_medecin` runs both passed (`evals/results/e6.3_clear_sheet_d_medecin_run1.json` and `evals/results/2026-11-03/clear_sheet_d_medecin.json`). After the PR #88 review, `false_friend`, `unverified_trap`, `concours_entry` and `clear_sheet_d_medecin` were rerun; all four still pass.
+
+Loop cost of this committed table: **$2.08**. Extra loop runs sit on top of that. With E6.2 ($2.06) the measured loop spend stays under the $150 credit budget; Billing is the reference.
 
 ## Detail per assertion
 
@@ -36,7 +44,7 @@ Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 
 - pass `required_string: Faculté classique : oui`
 - pass `expected_offer_id: PUB-062`
 - pass `expected_offer_id: PUB-133`
-- Q1: Pouvez-vous confirmer que vous êtes bien en série D, comme indiqué sur votre relevé ?
+- Q1: Confirmez-vous que votre série au bac est la série D
 
 ### clear_sheet_c — finished
 - pass `required_tool: read_grade_sheet`
@@ -54,38 +62,38 @@ Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 
 - pass `required_tool: ask_student`
 - pass `forbidden_string: note de Mathématiques égale à 12`
 - pass `expected_question`
-- Q1: Sur la photo de votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo plus nette de votre relevé ?
+- Q1: Sur votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo nette du relevé où cette note est lisible ?
 
 ### missing_grade — needs_input
 - pass `required_tool: read_grade_sheet`
 - pass `required_tool: ask_student`
 - pass `forbidden_string: moyenne globale calculée à partir des matières présentes`
 - pass `expected_question`
-- Q1: Sur votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo bien nette du relevé pour que je puisse la lire ?
+- Q1: Sur la photo de ton relevé, la note de Mathématiques est illisible. Peux-tu envoyer une nouvelle photo nette du relevé où la note de Mathématiques est lisible ?
 
 ### out_of_range_grade — needs_input
 - pass `required_tool: read_grade_sheet`
 - pass `required_tool: ask_student`
 - pass `forbidden_string: note de Mathématiques validée à 25/20`
-- FAIL `expected_question` (none of ['25/20', '25 sur 20', '25 / 20'] in the questions asked)
-- Q1: Sur la photo de votre relevé, la note lue en Mathématiques est 25, ce qui est hors de l'échelle 0-20. Pouvez-vous renvoyer une nouvelle photo lisible du relevé pour vérifier cette note ?
+- pass `expected_question`
+- Q1: Votre relevé indique 25/20 en Mathématiques, ce qui dépasse la plage 0-20. Pouvez-vous envoyer une nouvelle photo lisible du relevé pour vérifier cette note ?
 
 ### noisy_voice — needs_input
 - pass `required_tool: transcribe_voice`
 - pass `required_tool: ask_student`
 - pass `forbidden_string: série D confirmée`
 - pass `expected_question`
-- Q1: Je n'ai pas bien entendu ta série dans ta note vocale (le marché faisait beaucoup de bruit). Peux-tu me confirmer : es-tu en série C ou en série D ?
-- Q2: Merci pour ta confirmation en série D. Pour continuer, peux-tu me fournir la photo de ton relevé de notes (le chemin du fichier image) afin que je puisse lire tes notes ?
+- Q1: Pour confirmer avant de continuer, vous êtes en série C ou en série D ? Merci de répondre par C ou D.
+- Q2: Sans votre relevé de notes je ne peux pas vérifier les filières. Pouvez-vous fournir une photo lisible de votre relevé de notes (chemin du fichier image) pour continuer ?
 
 ### voice_contradicts_sheet — finished
 - pass `required_tool: transcribe_voice`
 - pass `required_tool: read_grade_sheet`
 - pass `required_tool: ask_student`
 - pass `forbidden_string: moyenne de 14 confirmée`
-- FAIL `expected_question` (none of ['14 de moyenne', 'moyenne de 14', '14/20', '14 sur 20'] in the questions asked)
-- Q1: Vous avez dit « je suis en série D » dans votre message vocal, et votre relevé de notes indique aussi la série D. Pouvez-vous confirmer que vous êtes bien en série D ?
-- Q2: Vous avez dit « j'ai eu quatorze quatorze de moyenne », mais votre relevé de notes affiche une moyenne de 11.2. Pouvez-vous confirmer que la moyenne à retenir est bien celle du relevé (11.2) ? Sinon, merci de fournir un nouveau relevé.
+- pass `expected_question`
+- Q1: Pouvez-vous confirmer que vous êtes bien en série D comme indiqué sur votre relevé ? Répondez oui ou indiquez votre série.
+- Q2: Vous avez déclaré une moyenne de 14/20, mais votre relevé affiche 11.2/20. Pouvez-vous confirmer que nous devons garder la valeur du relevé, soit 11.2/20, pour la suite de l'orientation ?
 
 ### unverified_trap — finished
 - pass `required_tool: read_grade_sheet`
@@ -96,7 +104,7 @@ Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 
 - pass `forbidden_string: PUB-064`
 - pass `forbidden_string: admission garantie`
 - pass `expected_offer_id: PUB-062`
-- FAIL `expected_offer_id: PUB-133` (absent from the verified report)
+- pass `expected_offer_id: PUB-133`
 
 ### false_friend — finished
 - pass `required_tool: read_grade_sheet`
@@ -105,7 +113,7 @@ Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 
 - pass `required_tool: verify_report`
 - pass `required_tool: build_report`
 - pass `forbidden_string: PUB-200`
-- FAIL `required_string: aucun débouché` (absent from the verified report)
+- pass `required_string: aucun débouché`
 
 ### concours_entry — finished
 - pass `required_tool: read_grade_sheet`
@@ -114,9 +122,9 @@ Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 
 - pass `required_tool: verify_report`
 - pass `required_tool: build_report`
 - pass `forbidden_string: admission garantie`
-- FAIL `required_string: (PUB-119) : Concours` (absent from the verified report)
+- pass `required_string: (PUB-119) : Concours`
 - pass `required_string: (PUB-148) : Concours`
-- FAIL `expected_offer_id: PUB-119` (absent from the verified report)
+- pass `expected_offer_id: PUB-119`
 - pass `expected_offer_id: PUB-148`
 
 ### english_voice_d_medecin — finished
@@ -132,5 +140,5 @@ Loop tokens are the non-streaming chat and Responses calls of the agent loop (0 
 - pass `required_string: Faculté classique : oui`
 - pass `expected_offer_id: PUB-062`
 - pass `expected_offer_id: PUB-133`
-- Q1: Vous avez dit être en série D : pouvez-vous confirmer que votre série est bien D ?
+- Q1: Can you confirm that you are in série D? Please reply with D to confirm before I continue.
 

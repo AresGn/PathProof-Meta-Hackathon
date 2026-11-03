@@ -49,10 +49,11 @@ def test_access_is_strict_ok_serie_and_established_page():
 def test_medecin_ranks_pub_062_and_pub_133_first():
     result = lookup_filieres(serie="D", metier_vise="médecin", grades=GRADES_D)
     assert accessible_ids(result)[:2] == ["PUB-062", "PUB-133"]
-    medecine = result["accessible"][0]
-    assert medecine["page_pdf"] == 36
-    assert medecine["moyenne_classement"] == 13.15
-    assert any("médecin" in raison for raison in medecine["raisons"])
+    by_id = {offer["Offre_ID"]: offer for offer in result["accessible"]}
+    assert by_id["PUB-062"]["page_pdf"] == 36
+    assert by_id["PUB-133"]["page_pdf"] == 47
+    assert by_id["PUB-062"]["moyenne_classement"] == 13.15
+    assert any("médecin" in raison for raison in by_id["PUB-062"]["raisons"])
 
 
 def test_unverified_trap_pub_064_is_excluded_with_its_status():
@@ -80,12 +81,37 @@ def test_pilote_alone_does_not_rank_foresterie_by_substring():
 def test_concours_entry_is_marked_and_no_average_is_computed():
     result = lookup_filieres(serie="D", metier_vise="infirmier", grades=GRADES_D)
     assert result["accessible"]
+    assert "PUB-119" in accessible_ids(result)
+    assert "PUB-148" in accessible_ids(result)
     for offer in result["accessible"]:
         assert offer["Mode_entrée"] == "Concours"
         assert offer["moyenne_classement"] is None
         assert offer["calcul"] is None
         assert any("les notes du Bac ne suffisent pas" in raison
                    for raison in offer["raisons"])
+
+
+def test_french_plural_matches_infirmier_but_not_a_different_stem():
+    from src.tools.lookup_filieres import _phrase_matches
+    assert _phrase_matches("infirmier", "Soins infirmiers dans les hôpitaux")
+    assert _phrase_matches("infirmier", "Sciences Infirmières")
+    assert _phrase_matches("infirmieres", "Soins infirmiers")
+    assert not _phrase_matches("pharmacien", "Pharmacie, spécialisations")
+    assert not _phrase_matches("pilote de ligne",
+                               "opérateur pilote de drones, Foresterie Tropicale")
+    assert not _phrase_matches("marin", "marine marchande")
+    assert not _phrase_matches("port", "porte")
+    assert not _phrase_matches("medecin", "Médecine vétérinaire")
+
+
+def test_unverified_trap_ranks_verified_medicine_when_pharmacie_is_excluded():
+    # Pharmacie PUB-064 is excluded; the job is still cited in the guide, so
+    # ranking falls back to the average (PRD §3.2), not to a Bourse tie-break.
+    result = lookup_filieres(serie="D", metier_vise="pharmacien",
+                             interets=["santé"], grades=GRADES_D)
+    ids = accessible_ids(result)
+    assert "PUB-064" not in ids
+    assert set(ids[:2]) == {"PUB-062", "PUB-133"}
 
 
 def test_at_most_five_accessible_and_no_ville_or_admission_chance():
@@ -108,6 +134,28 @@ def test_interets_match_whole_words_in_filiere_or_debouches():
     result = lookup_filieres(serie="D", interets=["biologie"])
     assert result["accessible"]
     assert all(offer["score"] > 0 for offer in result["accessible"])
+
+
+def test_guide_cites_pharmacien_but_not_pilote_de_ligne():
+    from src.tools.lookup_filieres import guide_cites_metier
+    assert guide_cites_metier("pharmacien")
+    assert guide_cites_metier("médecin")
+    assert not guide_cites_metier("pilote de ligne")
+
+
+def test_interest_preposition_does_not_rank():
+    result = lookup_filieres(serie="D", interets=["dans la"])
+    assert result["accessible"] == []
+
+
+def test_interest_phrase_ranks_sante_and_names_the_matched_word():
+    result = lookup_filieres(serie="D", interets=["travailler dans la santé"])
+    assert result["accessible"]
+    for offer in result["accessible"]:
+        joined = " ".join(offer["raisons"])
+        assert "« santé »" in joined
+        assert "intérêt « dans »" not in joined
+        assert "intérêt « travailler »" not in joined
 
 
 def test_missing_serie_asks_rather_than_guesses():

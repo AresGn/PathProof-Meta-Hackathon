@@ -129,7 +129,7 @@ E1.4 format des preuves ─► E2.4 verify_report ──────────
   *Acceptation :* plus aucune ligne « sample file TODO » ; les assertions des cas ne sont jamais chargées dans le prompt, les outils ou le contexte de l'agent (aucun module de `src/` ne lit `evals/`).
 - [x] **E6.2 (M)** [#35](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/35) Lanceur d'évaluation. *Dép. :* E4.4. *Fait le 3 nov :* `python -m evals.run`, 11 cas exécutés en réel deux fois (7 puis 6 conformes), coût 2,06 $, `verify_report` rejouable (`--replay`).
   *Acceptation :* `evals/results/` contient une sortie brute par cas et un tableau (conformité, appels d'outils, questions posées, durée). *Facultatif :* `verify_report` rejouable sur un résultat enregistré, sans relancer l'agent.
-- [ ] **E6.3 (L)** [#36](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/36) Corrections jusqu'à 9 cas sur 10 conformes et 0 affirmation sans preuve. *Dép. :* E6.2.
+- [x] **E6.3 (L)** [#36](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/36) Corrections jusqu'à 9 cas sur 10 conformes et 0 affirmation sans preuve. *Dép. :* E6.2. *Fait le 3 nov :* 11/11 conformes, `verify_report` rejoué vide, deux `clear_sheet_d_medecin` au même verdict, coût de boucle $2.07 sur le tableau commité.
   *Acceptation (O2 à O5) :* tableau commité, échecs expliqués.
 - [ ] **E6.4 (S)** [#37](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/37) Démo testée depuis un autre appareil ; équipe inscrite sur la plateforme CV. *Dép. :* E5.4.
   *Acceptation (O6) :* journal daté dans `docs/decisions.md`.

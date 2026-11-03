@@ -2,10 +2,6 @@
   "case_id": "blurry_photo",
   "date": "2026-11-03",
   "language": "fr",
-  "models": {
-    "deciding": "muse-spark-1.3-contributor",
-    "drafting": "muse-wonder-1.0"
-  },
   "files": [
     {
       "role": "grade_sheet",
@@ -14,21 +10,27 @@
     }
   ],
   "student_answers": [],
+  "exchanges": [
+    {
+      "question": "Sur votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo nette du relevé où cette note est lisible ?",
+      "answer": ""
+    }
+  ],
   "outcome_status": "needs_input",
   "report_text": null,
   "questions": [
-    "Sur la photo de votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo plus nette de votre relevé ?"
+    "Sur votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo nette du relevé où cette note est lisible ?"
   ],
-  "duration_seconds": 19.07799999997951,
+  "duration_seconds": 17.530999999959022,
   "usage": {
-    "prompt_tokens": 6686,
-    "completion_tokens": 847,
-    "total_tokens": 7533,
+    "prompt_tokens": 6832,
+    "completion_tokens": 440,
+    "total_tokens": 7272,
     "streaming_calls": 0,
     "by_model": {
       "muse-spark-1.3-contributor": {
-        "prompt_tokens": 6686,
-        "completion_tokens": 847
+        "prompt_tokens": 6832,
+        "completion_tokens": 440
       }
     }
   },
@@ -102,11 +104,11 @@
       "step": 2,
       "tool": "ask_student",
       "args": {
-        "question": "Sur la photo de votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo plus nette de votre relevé ?"
+        "question": "Sur votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo nette du relevé où cette note est lisible ?"
       },
       "result": {
         "status": "needs_input",
-        "question": "Sur la photo de votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo plus nette de votre relevé ?"
+        "question": "Sur votre relevé, la note de Mathématiques est illisible. Pouvez-vous envoyer une nouvelle photo nette du relevé où cette note est lisible ?"
       },
       "decision": "suspend",
       "model": "muse-spark-1.3-contributor"

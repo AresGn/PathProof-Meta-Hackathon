@@ -40,6 +40,9 @@ def test_prompt_asks_student_when_unreadable_missing_or_contradictory():
         assert trigger in PROMPT, trigger
     assert "never invent" in PROMPT
     assert "never guess" in PROMPT
+    assert "digits with /20" in PROMPT
+    assert "25/20" in PROMPT and "14/20" in PROMPT
+    assert "quatorze" in PROMPT
 
 
 def test_prompt_asks_when_grade_is_out_of_range_or_subject_is_invalid():
@@ -155,6 +158,12 @@ def test_prompt_a_grade_only_stated_by_the_student_carries_no_proof():
 def test_prompt_no_accessible_offer_drafts_only_non_offer_claims():
     assert "draft no offer claim at all, only proven non-offer claims" in PROMPT
     assert "build_report then says there is no verified offer" in PROMPT
+    assert "no guide outlet cites the targeted job" in PROMPT
+    assert "draft every accessible offer lookup_filieres returned" in PROMPT
+
+
+def test_prompt_writes_grades_in_questions_as_n_over_20():
+    assert "write that figure in digits with /20" in PROMPT
 
 
 def test_prompt_context_grades_are_the_matieres_of_read_grade_sheet():

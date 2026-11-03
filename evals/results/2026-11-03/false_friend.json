@@ -2,10 +2,6 @@
   "case_id": "false_friend",
   "date": "2026-11-03",
   "language": "fr",
-  "models": {
-    "deciding": "muse-spark-1.3-contributor",
-    "drafting": "muse-wonder-1.0"
-  },
   "files": [
     {
       "role": "grade_sheet",
@@ -19,23 +15,24 @@
     }
   ],
   "student_answers": [],
+  "exchanges": [],
   "outcome_status": "finished",
-  "report_text": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\nAucune offre vérifiée pour ce profil ; aucune recommandation.\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « Mon métier préféré serait pilote de ligne ».\n\n## Quotas du guide\nSans offre vérifiée, aucun quota à afficher.\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\nSans offre vérifiée, aucune moyenne à afficher.\n\n## 3 choix pour apresmonbac.bj\nAucune offre vérifiée pour ce profil ; aucune recommandation.\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+  "report_text": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\nAucune offre vérifiée pour ce profil ; aucune recommandation.\n\n## Correspondance\n- Tu as dit : « je suis en série D. ».\n- Tu as dit : « Mon métier préféré serait pilote de ligne. ».\nAucun débouché du guide ne cite ce métier.\n\n## Quotas du guide\nSans offre vérifiée, aucun quota à afficher.\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\nSans offre vérifiée, aucune moyenne à afficher.\n\n## 3 choix pour apresmonbac.bj\nAucune offre vérifiée pour ce profil ; aucune recommandation.\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
   "questions": [],
-  "duration_seconds": 42.15700000000652,
+  "duration_seconds": 36.15600000007544,
   "usage": {
-    "prompt_tokens": 33331,
-    "completion_tokens": 2091,
-    "total_tokens": 35422,
+    "prompt_tokens": 33671,
+    "completion_tokens": 2349,
+    "total_tokens": 36020,
     "streaming_calls": 0,
     "by_model": {
       "muse-spark-1.3-contributor": {
-        "prompt_tokens": 6945,
-        "completion_tokens": 553
+        "prompt_tokens": 7092,
+        "completion_tokens": 605
       },
       "muse-wonder-1.0": {
-        "prompt_tokens": 26386,
-        "completion_tokens": 1538
+        "prompt_tokens": 26579,
+        "completion_tokens": 1744
       }
     }
   },
@@ -50,13 +47,13 @@
       "result": {
         "serie_declaree": {
           "value": "D",
-          "quote": "je suis en série D"
+          "quote": "je suis en série D."
         },
         "moyenne_declaree": null,
         "interets": [],
         "metier_vise": {
           "value": "pilote de ligne",
-          "quote": "Mon métier préféré serait pilote de ligne"
+          "quote": "Mon métier préféré serait pilote de ligne."
         },
         "contraintes": [],
         "flags": []
@@ -498,94 +495,86 @@
       "tool": "verify_report",
       "args": {
         "context": {
-          "serie": "D",
           "grades": [
             {
+              "lisible": true,
               "matiere": "Anglais",
-              "note": 8,
-              "lisible": true,
-              "flags": []
+              "note": 8
             },
             {
+              "lisible": true,
               "matiere": "Français",
-              "note": 9.5,
-              "lisible": true,
-              "flags": []
+              "note": 9.5
             },
             {
+              "lisible": true,
               "matiere": "Histoire-Géographie",
-              "note": 7,
-              "lisible": true,
-              "flags": []
+              "note": 7
             },
             {
+              "lisible": true,
               "matiere": "Mathématiques",
-              "note": 12,
-              "lisible": true,
-              "flags": []
+              "note": 12
             },
             {
+              "lisible": true,
               "matiere": "Philosophie",
-              "note": 8,
-              "lisible": true,
-              "flags": []
+              "note": 8
             },
             {
+              "lisible": true,
               "matiere": "Sciences Physiques (PCT/SPCT)",
-              "note": 12,
-              "lisible": true,
-              "flags": []
+              "note": 12
             },
             {
+              "lisible": true,
               "matiere": "SVT",
-              "note": 15,
-              "lisible": true,
-              "flags": []
+              "note": 15
             },
             {
-              "matiere": "EPS",
-              "note": 10.5,
               "lisible": true,
-              "flags": []
+              "matiere": "EPS",
+              "note": 10.5
             }
           ],
+          "serie": "D",
           "transcript": "Bonjour, je suis en série D. Mon métier préféré serait pilote de ligne."
         },
         "report": {
-          "schema_version": 1,
           "claims": [
             {
               "claim_id": "c1",
-              "text": "Vous êtes en série D.",
               "proofs": [
                 {
-                  "type": "transcript",
-                  "quote": "je suis en série D"
+                  "quote": "je suis en série D.",
+                  "type": "transcript"
                 }
-              ]
+              ],
+              "text": "Vous avez déclaré : « je suis en série D. »"
             },
             {
               "claim_id": "c2",
-              "text": "Mon métier préféré serait pilote de ligne.",
               "proofs": [
                 {
-                  "type": "transcript",
-                  "quote": "Mon métier préféré serait pilote de ligne"
+                  "quote": "Mon métier préféré serait pilote de ligne.",
+                  "type": "transcript"
                 }
-              ]
+              ],
+              "text": "Vous avez déclaré : « Mon métier préféré serait pilote de ligne. »"
             },
             {
               "claim_id": "c3",
-              "text": "Note lue sur le relevé : SVT 15/20.",
               "proofs": [
                 {
-                  "type": "grade",
                   "matiere": "SVT",
-                  "note": 15
+                  "note": 15,
+                  "type": "grade"
                 }
-              ]
+              ],
+              "text": "En SVT, votre relevé indique 15/20."
             }
-          ]
+          ],
+          "schema_version": 1
         }
       },
       "result": [],
@@ -597,99 +586,91 @@
       "tool": "build_report",
       "args": {
         "context": {
-          "serie": "D",
           "grades": [
             {
+              "lisible": true,
               "matiere": "Anglais",
-              "note": 8,
-              "lisible": true,
-              "flags": []
+              "note": 8
             },
             {
+              "lisible": true,
               "matiere": "Français",
-              "note": 9.5,
-              "lisible": true,
-              "flags": []
+              "note": 9.5
             },
             {
+              "lisible": true,
               "matiere": "Histoire-Géographie",
-              "note": 7,
-              "lisible": true,
-              "flags": []
+              "note": 7
             },
             {
+              "lisible": true,
               "matiere": "Mathématiques",
-              "note": 12,
-              "lisible": true,
-              "flags": []
+              "note": 12
             },
             {
+              "lisible": true,
               "matiere": "Philosophie",
-              "note": 8,
-              "lisible": true,
-              "flags": []
+              "note": 8
             },
             {
+              "lisible": true,
               "matiere": "Sciences Physiques (PCT/SPCT)",
-              "note": 12,
-              "lisible": true,
-              "flags": []
+              "note": 12
             },
             {
+              "lisible": true,
               "matiere": "SVT",
-              "note": 15,
-              "lisible": true,
-              "flags": []
+              "note": 15
             },
             {
-              "matiere": "EPS",
-              "note": 10.5,
               "lisible": true,
-              "flags": []
+              "matiere": "EPS",
+              "note": 10.5
             }
           ],
+          "serie": "D",
           "transcript": "Bonjour, je suis en série D. Mon métier préféré serait pilote de ligne."
         },
         "refused_claims": [],
         "report": {
-          "schema_version": 1,
           "claims": [
             {
               "claim_id": "c1",
-              "text": "Vous êtes en série D.",
               "proofs": [
                 {
-                  "type": "transcript",
-                  "quote": "je suis en série D"
+                  "quote": "je suis en série D.",
+                  "type": "transcript"
                 }
-              ]
+              ],
+              "text": "Vous avez déclaré : « je suis en série D. »"
             },
             {
               "claim_id": "c2",
-              "text": "Mon métier préféré serait pilote de ligne.",
               "proofs": [
                 {
-                  "type": "transcript",
-                  "quote": "Mon métier préféré serait pilote de ligne"
+                  "quote": "Mon métier préféré serait pilote de ligne.",
+                  "type": "transcript"
                 }
-              ]
+              ],
+              "text": "Vous avez déclaré : « Mon métier préféré serait pilote de ligne. »"
             },
             {
               "claim_id": "c3",
-              "text": "Note lue sur le relevé : SVT 15/20.",
               "proofs": [
                 {
-                  "type": "grade",
                   "matiere": "SVT",
-                  "note": 15
+                  "note": 15,
+                  "type": "grade"
                 }
-              ]
+              ],
+              "text": "En SVT, votre relevé indique 15/20."
             }
-          ]
+          ],
+          "schema_version": 1
         },
         "language": "fr"
       },
-      "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\nAucune offre vérifiée pour ce profil ; aucune recommandation.\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « Mon métier préféré serait pilote de ligne ».\n\n## Quotas du guide\nSans offre vérifiée, aucun quota à afficher.\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\nSans offre vérifiée, aucune moyenne à afficher.\n\n## 3 choix pour apresmonbac.bj\nAucune offre vérifiée pour ce profil ; aucune recommandation.\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+      "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\nAucune offre vérifiée pour ce profil ; aucune recommandation.\n\n## Correspondance\n- Tu as dit : « je suis en série D. ».\n- Tu as dit : « Mon métier préféré serait pilote de ligne. ».\nAucun débouché du guide ne cite ce métier.\n\n## Quotas du guide\nSans offre vérifiée, aucun quota à afficher.\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\nSans offre vérifiée, aucune moyenne à afficher.\n\n## 3 choix pour apresmonbac.bj\nAucune offre vérifiée pour ce profil ; aucune recommandation.\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
       "decision": "continue",
       "model": "muse-wonder-1.0"
     }
