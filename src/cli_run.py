@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import sys
 import time
+from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
@@ -15,7 +16,6 @@ from typing import Callable
 from src.agent import loop
 from src.domain.report_text import DEFAULT_LANGUAGE
 from src.agent.tool_schemas import TOOL_SCHEMAS
-from src.clients.muse_spark import MUSE_SPARK_MODEL
 
 BUILD_REPORT_TOOL = "build_report"
 VERIFY_REPORT_TOOL = "verify_report"
@@ -263,6 +263,12 @@ def _path_for_log(path: Path | None) -> str:
     return path_for_agent(path)
 
 
+def _models_of(journal: list) -> str:
+    """Steps per deciding model, read from the journal (who really answered)."""
+    counts = Counter(event.get("model") for event in journal if event.get("model"))
+    return ", ".join(f"{model} ({count})" for model, count in counts.items()) or "(none)"
+
+
 def write_run_summary(journal_path: Path, result: CliRunResult) -> None:
     summary_path = summary_path_for_journal(journal_path)
     lines = [
@@ -273,7 +279,8 @@ def write_run_summary(journal_path: Path, result: CliRunResult) -> None:
         f"Tool call events in journal: {len(result.journal)}",
         f"Distinct tools: {result.distinct_tool_count}",
         f"Max model step reached: {result.max_model_step} (limit {loop.MAX_STEPS})",
-        (f"Token usage (non-streaming Muse Spark completions): prompt="
+        f"Models that decided the steps: {_models_of(result.journal)}",
+        (f"Token usage (non-streaming chat completions and Responses calls): prompt="
          f"{result.usage.prompt_tokens}, completion={result.usage.completion_tokens}, "
          f"total={result.usage.total_tokens}"),
     ]

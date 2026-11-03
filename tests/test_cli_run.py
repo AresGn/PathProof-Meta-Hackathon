@@ -187,7 +187,10 @@ def test_write_run_summary_uses_summary_suffix(tmp_path):
     result = CliRunResult(
         image_path=Path("data/samples/a.jpg"),
         audio_path=None,
-        journal=[{"step": 1, "tool": "read_grade_sheet", "result": {}}],
+        journal=[{"step": 1, "tool": "read_grade_sheet", "result": {},
+                  "model": "muse-spark-1.3-contributor"},
+                 {"step": 2, "tool": "verify_report", "result": [], "model": "muse-wonder-1.0"},
+                 {"step": 3, "tool": "verify_report", "result": [], "model": "muse-wonder-1.0"}],
         outcome={"status": "unverified"},
         report_text=None,
         duration_seconds=1.0,
@@ -197,6 +200,8 @@ def test_write_run_summary_uses_summary_suffix(tmp_path):
     assert summary.is_file()
     text = summary.read_text(encoding="utf-8")
     assert "Report: not verified (unverified stop)" in text
+    assert ("Models that decided the steps: muse-spark-1.3-contributor (1), "
+            "muse-wonder-1.0 (2)") in text
 
 
 def test_persist_run_artifacts_writes_journal_only_when_result_missing(tmp_path, capsys):
