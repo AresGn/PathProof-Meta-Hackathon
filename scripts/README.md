@@ -53,3 +53,14 @@ dans `docs/data-audit.md` (libellés en quarantaine, pages rétablies,
 espaces de `PUB-032`, séries `DEAT`/`EA` de `PUB-211`, filière de
 `PUB-189`, marqueur « non publié » sur les cellules « – »). Idempotent ;
 à ne relancer que sur une nouvelle extraction.
+
+## Fichiers d'exemple fictifs (E0.3, E6.1)
+
+```bash
+pip install pillow                                       # outil de dev, hors requirements.txt
+python scripts/make_grade_sheets.py                      # relevés JPEG (Arial ou Liberation Sans)
+python scripts/make_voice_notes.py note_vocale_bruitee.mp3   # ElevenLabs, ELEVENLABS_API_KEY dans .env
+```
+
+Pillow reste hors de `requirements.txt` pour ne pas alourdir la fonction
+Vercel. `make_voice_notes.py` utilise le ffmpeg de `imageio-ffmpeg`.
