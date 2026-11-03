@@ -131,8 +131,8 @@ E1.4 format des preuves ─► E2.4 verify_report ──────────
   *Acceptation :* `evals/results/` contient une sortie brute par cas et un tableau (conformité, appels d'outils, questions posées, durée). *Facultatif :* `verify_report` rejouable sur un résultat enregistré, sans relancer l'agent.
 - [x] **E6.3 (L)** [#36](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/36) Corrections jusqu'à 9 cas sur 10 conformes et 0 affirmation sans preuve. *Dép. :* E6.2. *Fait le 3 nov :* 11/11 conformes, `verify_report` rejoué vide, deux `clear_sheet_d_medecin` au même verdict, coût de boucle $2.07 sur le tableau commité.
   *Acceptation (O2 à O5) :* tableau commité, échecs expliqués.
-- [ ] **E6.4 (S)** [#37](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/37) Démo testée depuis un autre appareil ; équipe inscrite sur la plateforme CV. *Dép. :* E5.4.
-  *Acceptation (O6) :* journal daté dans `docs/decisions.md`.
+- [x] **E6.4 (S)** [#37](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/37) Démo testée depuis un autre appareil ; équipe inscrite sur la plateforme CV. *Dép. :* E5.4. *Fait le 3 nov :* exemple série D complet avec rapport vérifié ; porteur inscrit en solo, crédits réclamés (66 $ restants sur 150 $, selon sa confirmation).
+  *Acceptation (O6) :* journal daté dans `docs/decisions.md` ; appareil, réseau, inscription et crédits confirmés par le porteur.
 
 > **Checkpoint E (fin J7) :** O1 à O6 mesurés. Sinon, on réduit le périmètre, on n'ajoute rien.
 
