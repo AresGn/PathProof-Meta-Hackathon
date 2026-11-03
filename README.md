@@ -6,7 +6,7 @@
 
 An agent that takes a post-BAC student's grade-sheet photo and a short voice note, chooses its own tools step by step, and produces an orientation report in which every sentence points to its proof: a grade read on the photo, a quote from the transcript, a row of the official guide, or a calculation. It recommends only what it can prove, and it stops to ask the student instead of guessing.
 
-> **Status: build period 27 Oct - 3 Nov 2026.** The agent loop runs end to end from the CLI (`python -m src.main --image … --audio …`, story E4.4): real tools, journal in `evals/results/`, `ask_student` on stdin. The web demo streams the same loop as SSE (`POST /run` + `POST /answer`, story E5.1) behind an interface with a live tool trace, agent questions, one-click fictional examples and a verified report whose every proof opens its source (story E5.2; browser capture at 375 px: `docs/e5.2-demo-report-375px.png`, `docs/e5.2-demo-375px.png`). If a live run fails, story E5.3 replays a committed fictional execution and labels it as recorded. Unit tests still use a fake model only; CI never calls the Meta API. Nothing in this README describes behavior that does not run.
+> **Status: build period 27 Oct - 3 Nov 2026.** The agent loop runs end to end from the CLI (`python -m src.main --image … --audio …`, story E4.4): real tools, journal in `evals/results/`, `ask_student` on stdin. The web demo streams the same loop as SSE (`POST /run` + `POST /answer`, story E5.1) behind an interface with a live tool trace, agent questions, one-click fictional examples and a verified report whose every proof opens its source (story E5.2; browser capture at 375 px: `docs/e5.2-demo-report-375px.png`, `docs/e5.2-demo-375px.png`). If a live run fails, story E5.3 replays a committed fictional execution and labels it as recorded. The interface and the report follow the chosen language (E5.6), and the loop combines four Meta models (E5.7, see **Meta models used**). The 11 evaluation cases were run live on 3 November (11 of 11 comply, see **Evaluation**). Unit tests still use a fake model only; CI never calls the Meta API. Nothing in this README describes behavior that does not run.
 
 **Track:** Indie Developer. **Theme:** Build for Your World. Full plan: [`docs/prd.md`](docs/prd.md).
 
@@ -14,7 +14,7 @@ An agent that takes a post-BAC student's grade-sheet photo and a short voice not
 
 A student in Benin often picks a program on vague grounds (the BAC series, family opinion, rumor) without seeing which programs are open to the real profile, or where the official information is.
 
-- Sourced figure on the number of BAC candidates: **TODO** (see `docs/impact.md`). No number is stated until an official source is added.
+- **77,101 candidates** sat the written BAC exams in Benin in June 2026, according to the Office du Baccalauréat figures relayed by the press ([Bénin Web TV, 14 June 2026](https://beninwebtv.bj/bac-2026-au-benin-77-101-candidats-repartis-dans-140-centres-attendus-ce-lundi/)). This is a press relay of the Office's data, not a page of the Office itself; the previous session's figure (79,588 registered, [gouv.bj, 16 June 2025](https://www.gouv.bj/article/3120/baccalaureat-2025-benin-serenite-recommandee-79.588-candidats-inscrits/)) and the caveats are in [`docs/impact.md`](docs/impact.md).
 
 ## What PathProof does differently
 
@@ -28,7 +28,7 @@ All the code in this repository is written during the hackathon: the agent loop,
 
 **An earlier prototype** by the same author (OrientBot V1, a fixed WhatsApp workflow, 7 users, now paused) explored this problem. No code from it is reused here. PathProof is built from scratch during the hackathon. Only public official rules (the MESRS weighted-average formula, subject-name normalization) are re-implemented. See [`docs/v1-reuse.md`](docs/v1-reuse.md).
 
-**Data** comes from the official public *Guide d'information 2026-2027* (MESRS). Its CSV extraction was done before the event; it is data, not code. The guide PDF itself is not republished here. Every recommendation is meant to link back to the guide page it comes from (`data/pages_offres.csv` maps all 224 offers to their PDF page: 180 matched without ambiguity, 23 disambiguated by establishment sigle, the rest checked by hand against the local PDF, including the 7 formerly quarantined rows whose labels E3.5 repaired).
+**Data** comes from the official public *Guide d'information 2026-2027* (MESRS). Its CSV extraction was done before the event; it is data, not code. The guide PDF itself is not republished here; the official copy is on the [MESRS website](https://enseignementsuperieur.gouv.bj/uploads/document_actualite/4fa961e0a40ad936d2999887d6721e15.pdf) (a second upload with the same title exists, see [`docs/impact.md`](docs/impact.md)). Every recommendation is meant to link back to the guide page it comes from (`data/pages_offres.csv` maps all 224 offers to their PDF page: 180 matched without ambiguity, 23 disambiguated by establishment sigle, the rest checked by hand against the local PDF, including the 7 formerly quarantined rows whose labels E3.5 repaired).
 
 | File | Content |
 |---|---|
@@ -42,7 +42,7 @@ Private-institution offers (753) are not used: the guide gives no series, subjec
 
 ## Demo
 
-Video: TODO. Public demo URL: https://pathproof-six.vercel.app (Vercel; per-IP limit and known limits in `docs/deploy.md`).
+Public demo URL: https://pathproof-six.vercel.app (Vercel; per-IP limit and known limits in `docs/deploy.md`). The demo video is not published yet, so it is not linked here.
 
 Local web demo: `uvicorn src.api.server:app --port 8000`, then open http://127.0.0.1:8000/ for the overview and http://127.0.0.1:8000/demo.html for the demo (open the page served by uvicorn itself, not a static preview such as Live Server; opened locally by mistake, the page still finds the API on port 8000 and says so). The interface is in English by default with a French toggle (the verified report and the agent's questions follow the language chosen when the run starts; guide values and student quotes stay as published). Upload a grade-sheet photo and a voice note (or use the fallback text), or launch a fictional example in one click (clear serie D sheet with a matching voice note, blurry sheet, contradictory voice note). Each tool step appears live with the Meta model that decided it and the one that ran it (Muse Spark 1.3 Contributor, Muse Wonder 1.0 at high reasoning effort, Muse Spark 1.3, Muse Voice Transcribe 1.0, or plain code), agent questions take an answer inline, and in the final report every claim carries clickable proofs (grade read, voice quote, guide row with its PDF page, ranking-average detail).
 
@@ -55,7 +55,7 @@ flowchart TD
     IN([Student input: grade-sheet photo and voice note]) --> AGENT
 
     subgraph LOOP [Agent loop - max 12 steps]
-        AGENT{{"Muse Spark 1.3<br/>chooses next action"}}
+        AGENT{{"Muse Spark 1.3 Contributor<br/>chooses next action"}}
         AGENT -->|audio| T1[transcribe_voice]
         T1 --> T2[extract_profile]
         AGENT -->|image| T3[read_grade_sheet]
@@ -75,7 +75,7 @@ flowchart TD
     B --> OUT([Report with proofs])
 ```
 
-Design intent: the loop is implemented (tool schemas in `src/agent/tool_schemas.py`, journal of `{step, tool, args, result, decision}` events) and wired to the CLI (E4.4).
+The loop is implemented (tool schemas in `src/agent/tool_schemas.py`, journal of `{step, tool, args, result, decision}` events) and wired to the CLI (E4.4) and to the web demo (E5.1). The diagram shows the Contributor; the Wonder turns that draft the report are described in **Meta models used**.
 
 | Tool | Purpose | State |
 |---|---|---|
@@ -91,12 +91,17 @@ Design intent: the loop is implemented (tool schemas in `src/agent/tool_schemas.
 
 ## Meta models used
 
+Four Meta models are called by the code (`src/clients/`), and each step of the journal names the model that actually answered ([`docs/decisions.md`](docs/decisions.md), entries E5.6 and E5.7):
+
 | Task | Model | Role |
 |---|---|---|
-| Reasoning, tool choice, text | Muse Spark 1.3 | Agent brain |
-| Grade-sheet reading | Muse Spark 1.3 (vision) | Extract grades from photos |
-| Voice note transcription | Muse Voice Transcribe | Speech to text |
-| Doubtful cell zoom | SAM 3.1 | Dropped: tested, finds the table but not a single cell (0/3) |
+| Reading turns, tool choice | Muse Spark 1.3 Contributor (`muse-spark-1.3-contributor`) | Agent brain: decides which tool runs next |
+| Report draft and its corrections | Muse Wonder 1.0 (`muse-wonder-1.0`, Responses API, high reasoning effort) | Takes the turns after `lookup_filieres`: writes the draft with its proofs, fixes it if `verify_report` refuses it; a failed Wonder turn is replayed on the Contributor and the journal says so |
+| Grade-sheet reading, profile extraction | Muse Spark 1.3 (`muse-spark-1.3`, vision) | Extract grades from photos, series and interests from the transcript |
+| Voice note transcription | Muse Voice Transcribe 1.0 (`muse-voice-transcribe-1.0`) | Speech to text |
+| Doubtful cell zoom | SAM 3.1 | Not used: tested, finds the table but not a single cell (0/3) |
+
+The benefit of the Wonder turns is not measured: the 11 evaluation cases below were run with this combination, but no run compares it with a single model.
 
 Tool calling in Muse Spark 1.3 was observed working in a small test (1 tool, 5/5 runs, see [`docs/muse-spark-tool-call-results.md`](docs/muse-spark-tool-call-results.md)); a second test with 2 tools and the tool result sent back gave 5/5 correct final answers, one turn at a time, with chained calls not observed (see [`docs/muse-spark-roundtrip-results.md`](docs/muse-spark-roundtrip-results.md)). Vision and voice were tested on day 1 (see [`docs/decisions.md`](docs/decisions.md)). SAM 3.1 was tested on day 1: it finds the table but never the single cell asked for (0/3 on the sharp and the blurry sheet), so `zoom_cell` is dropped and the agent asks for a new photo instead. There is no text-to-speech.
 
@@ -118,22 +123,31 @@ Full agent run (E4.4, needs `MUSE_API_KEY` and ffmpeg for voice): `python -m src
 
 ## Evaluation
 
-Ten fictional cases and their machine-checkable assertions are listed in `evals/cases.jsonl`; their images, audio and text fallbacks are in `data/samples/`. Four cases are adversarial (unverified row, false-friend job, contest-entry program, voice contradicting the sheet). Target: 9 of 10 compliant and zero claims without proof. An eleventh case, `english_voice_d_medecin`, checks an English voice note outside that target. `python -m evals.run --live` runs them with the real agent loop (it spends API credits; without `--live` nothing is sent) and writes one raw result per case under `evals/results/<date>/` plus `evals/results/summary.md`. Run twice on 3 November (one pass per case each time): **7 then 6 of 11 cases comply**, so the 9-of-10 target is not reached yet and one case (`out_of_range_grade`) flipped between the two runs; the committed run is the second one, with the failures listed assertion by assertion in the summary. A full run costs about 2.06 USD of loop tokens (447,221 tokens, official rates; the tools' own calls are not counted). The "zero claims without proof" target is not measured by this table.
+Eleven fictional cases and their machine-checkable assertions are listed in `evals/cases.jsonl`; their images, audio and text fallbacks are in `data/samples/`. Ten are the PRD cases (four adversarial: unverified row, false-friend job, contest-entry program, voice contradicting the sheet); the eleventh, `english_voice_d_medecin`, checks an English voice note. `python -m evals.run --live` runs them with the real agent loop (it spends API credits; without `--live` nothing is sent) and writes one raw result per case under `evals/results/<date>/` plus `evals/results/summary.md`.
+
+| Run (3 Nov 2026, one pass per case) | Cases that comply | Story |
+|---|---|---|
+| First run | 7 of 11 | E6.2 |
+| Second run | 6 of 11 (`out_of_range_grade` flipped between the two runs) | E6.2 |
+| Committed run, after the corrections | **11 of 11** (every assertion passes, 457,818 loop tokens, 2.08 USD) | E6.3 |
+
+The target of 9 of 10 PRD cases is reached on this run. Limits of the measure: one pass per case, so the instability seen in E6.2 is not ruled out; only `clear_sheet_d_medecin` was run twice with the same verdict, and four cases were rerun after the review of PR #88 (`docs/decisions.md`, entries E6.2 and E6.3). "Zero claims without proof" is checked by replaying `verify_report` on every finished journal: it returned no problem. The cost is the agent loop only (Contributor and Wonder tokens at the official rates, cached input priced in full); the tools' own vision, profile and transcription calls are not counted, so Billing is the reference. Per-case table and per-assertion detail: [`evals/results/summary.md`](evals/results/summary.md).
 
 ## Limitations
 
 - End-to-end runs consume Meta API credits and are manual only; CI runs deterministic tests with a fake model.
-- Tool calling was checked on one tool (5/5 runs) and on 2 tools with the result returned (5/5 runs, one question per tool); chained calls were not observed and the test is small. SAM 3.1 cannot locate a single table cell from a text prompt (day-1 test), so there is no cell zoom.
+- The day-1 tool-calling tests were small (1 tool, then 2 tools, 5 runs each, no chained calls); multi-step tool use is now exercised only by the 11 live evaluation cases, with one pass each. SAM 3.1 cannot locate a single table cell from a text prompt (day-1 test), so there is no cell zoom.
+- The Wonder-plus-Contributor combination was not compared with a single model, and evaluation results can vary between runs (a case flipped between the two runs of E6.2).
 - Target scope: public offers for series C and D of the 2026-2027 guide whose row passed the quality check (206 of 224 rows are `OK`; the others are listed under "what I could not verify"). The guide gives no city, no admission threshold and no cost, so the agent never states them and never speaks of admission chances.
 - OCR extraction errors may remain in `OK` rows; a hand audit of 20 rows against the PDF is published (`docs/data-audit.md`): 5 gaps in 20 rows (missing spaces, omitted series, values inferred from dash cells), above the 3-line threshold, so the extraction was fixed by a traced script and restricted in E3.5 (see `docs/decisions.md`). Verified, except the guide's dash cells, which are reported as "not published in the guide", never asserted.
 - Only fictional sample data; no real-student testing.
 - Handwritten grade sheets will likely be unreliable; the first tests use printed fictional sheets.
 - No voice output.
-- An English voice note works (one manual run, `evals/results/e6.1_english_voice_d_medecin.json`): the agent asks its questions in English and maps the target job to the guide's French words, but the verified report stays in French.
+- An English voice note works (one manual run, `evals/results/e6.1_english_voice_d_medecin.json`): the agent asks its questions in English and maps the target job to the guide's French words. Since E5.6 the verified report and the questions follow the language chosen in the interface (guide values and student quotes stay as published); the English case passes in the evaluation below.
 
 ## Team
 
-TODO: list all teammates.
+Solo entry: Arès Gnimagnon ([@AresGn](https://github.com/AresGn)). `Billions229` also pushed commits to this repository (PRs merged from a fork); they are not registered as a team member on the hackathon platform.
 
 ## License
 
