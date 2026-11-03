@@ -211,6 +211,20 @@ def test_admission_sentence_in_draft_fails_the_report():
         build_report(report, CONTEXT)
 
 
+@pytest.mark.parametrize("promise", [
+    "You have a good chance of getting in.",
+    "You will likely be accepted.",
+    "Your place is guaranteed.",
+])
+def test_english_admission_promise_fails_the_report(promise):
+    report = valid_report()
+    report["claims"].append(
+        {"claim_id": "promise", "text": promise,
+         "proofs": [{"type": "transcript", "quote": "peut-être médecin"}]})
+    with pytest.raises(ValueError):
+        build_report(report, CONTEXT)
+
+
 def test_student_quote_with_admission_word_is_cited_not_promised():
     # Une citation de l'élève (« je veux être admis ») se cite entre
     # « ... » sans faire planter le rapport : le rapport répète ses mots,

@@ -174,6 +174,9 @@ def test_english_question_is_accepted_only_when_it_asks_about_the_serie():
     assert record_demo.is_expected_question("Can you confirm you are in serie D?", "en")
     assert record_demo.is_expected_question("Are you in series D, as on your sheet?", "en")
     assert not record_demo.is_expected_question("What is your favourite subject?", "en")
+    assert not record_demo.is_expected_question("Is your series C or D?", "en")
+    assert not record_demo.is_expected_question(
+        "Which series are you in? I'd like to confirm it.", "en")
     assert record_demo.answer_fictional_question("Please send a new photo.", "en") == ""
     assert record_demo.answer_fictional_question(
         "Can you confirm you are in serie D?", "en") == "Yes, serie D."

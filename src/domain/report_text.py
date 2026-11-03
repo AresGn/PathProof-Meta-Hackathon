@@ -51,7 +51,7 @@ REPORT_TEXT: dict[str, dict[str, str]] = {
         "stay_free": "Tu restes libre : l'agent explique, il ne choisit pas à ta place.",
         "unverified_claim": ("- {claim_id} : affirmation non vérifiée, non retenue "
                              "(preuve {kinds})."),
-        "unverified_proof_kind": "preuve",
+        "unverified_proof_kind": "non typée",
         "unverified_quotas": "- {offre_id} : quotas non publiés par le guide (Bourse, Aide_FPP).",
         "all_verified": "Toutes les affirmations ci-dessus sont vérifiées.",
         "decimal_separator": ",",
@@ -96,8 +96,8 @@ REPORT_TEXT: dict[str, dict[str, str]] = {
         "reminder": "Reminder: {text}.",
         "stay_free": "You stay free to choose: the agent explains, it does not choose for you.",
         "unverified_claim": ("- {claim_id}: unverified claim, not kept "
-                             "({kinds} proof)."),
-        "unverified_proof_kind": "proof",
+                             "(proof: {kinds})."),
+        "unverified_proof_kind": "untyped",
         "unverified_quotas": "- {offre_id}: quotas not published by the guide (Bourse, Aide_FPP).",
         "all_verified": "All the claims above are verified.",
         "decimal_separator": ".",

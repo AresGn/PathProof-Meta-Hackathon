@@ -81,6 +81,10 @@ _FORBIDDEN_SUBSTRINGS = (
     "probabilite",
     "admitted",
     "probability",
+    "chance",
+    "likely",
+    "accepted",
+    "guarantee",
 )
 
 # Places the agent never writes itself (acceptance check on safe offers).

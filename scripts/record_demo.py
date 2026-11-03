@@ -13,7 +13,7 @@ from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.cli_run import run_cli_session, verified_report_from_journal
 from src.clients.meta_client import get_client
 from src.clients.muse_wonder import MUSE_CONTRIBUTOR_MODEL, MUSE_WONDER_MODEL
-from src.domain.report_text import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES
+from src.domain.report_text import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES, report_text
 
 # Fixed fictional inputs documented in data/samples/README.md.
 IMAGE_PATH = Path("data/samples/releve_serie_d.jpg")
@@ -28,20 +28,19 @@ FICTIONAL_QUESTION = (
 )
 # English: the model words the question itself, so accept only a question that
 # asks about the serie D of the fixed sample, never an arbitrary one.
-ENGLISH_QUESTION_PATTERN = re.compile(r"\bseries?\b.*\bD\b", re.IGNORECASE | re.DOTALL)
+ENGLISH_QUESTION_PATTERN = re.compile(r"\bseries?\s+D\b", re.IGNORECASE)
 FICTIONAL_ANSWER = {"fr": "Oui, série D.", "en": "Yes, serie D."}
+# Replacements of the verified wording of src/domain/report_text.py, read from there.
 RECORDED_WORDING = {
     "fr": {
-        "title": ("PathProof — rapport vérifié", "PathProof — rapport enregistré"),
-        "limits": ("## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
-                   "## Limites du rapport enregistré\n"
+        "title": "PathProof — rapport enregistré",
+        "limits": ("## Limites du rapport enregistré\n"
                    "Les affirmations et leurs preuves sont reprises du journal de démonstration."),
         "claim_word": "vérifi",
     },
     "en": {
-        "title": ("PathProof — verified report", "PathProof — recorded report"),
-        "limits": ("## What I could not verify\nAll the claims above are verified.",
-                   "## Limits of the recorded report\n"
+        "title": "PathProof — recorded report",
+        "limits": ("## Limits of the recorded report\n"
                    "The claims and their proofs are taken from the demonstration log."),
         "claim_word": "verif",
     },
@@ -143,8 +142,11 @@ def validate_fictional_question_sequence(journal: list[dict],
 
 def make_recorded_report(report: str, language: str = DEFAULT_LANGUAGE) -> str:
     wording = RECORDED_WORDING[language]
-    report = report.replace(*wording["title"])
-    report = report.replace(*wording["limits"])
+    text_of = report_text(language)
+    verified_title = text_of["title"].split("\n", 1)[0]
+    verified_limits = f'{text_of["h_unverified"]}\n{text_of["all_verified"]}'
+    report = report.replace(verified_title, wording["title"])
+    report = report.replace(verified_limits, wording["limits"])
     if wording["claim_word"] in report.casefold():
         raise ValueError("recorded report must not claim verification")
     return report
