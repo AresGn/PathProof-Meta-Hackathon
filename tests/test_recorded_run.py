@@ -68,6 +68,7 @@ def test_recorded_run_rejects_mismatched_verified_context():
 def test_recorded_run_rejects_a_non_successful_live_outcome(monkeypatch):
     journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
+
     def fake_run(*args, **kwargs):
         kwargs["journal"].extend(journal)
         return SimpleNamespace(
@@ -75,6 +76,7 @@ def test_recorded_run_rejects_a_non_successful_live_outcome(monkeypatch):
             report_text=journal[-1]["result"],
         )
 
+    monkeypatch.setattr(record_demo, "get_client", lambda: object())
     monkeypatch.setattr(record_demo, "run_cli_session", fake_run)
 
     with pytest.raises(ValueError, match="successful verified report"):
