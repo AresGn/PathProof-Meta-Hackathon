@@ -36,5 +36,5 @@ https://pathproof-six.vercel.app
 ## Checklist after publishing
 
 - [ ] Open the post in a private window; the video plays and the links work.
-- [ ] Add the post URL to the README (next to the demo video link).
+- [x] Add the post URL to the README (next to the demo video link).
 - [ ] Give the same URL to the submission platform (E7.5).

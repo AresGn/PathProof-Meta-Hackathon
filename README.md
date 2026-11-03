@@ -42,7 +42,7 @@ Private-institution offers (753) are not used: the guide gives no series, subjec
 
 ## Demo
 
-Public demo URL: https://pathproof-six.vercel.app (Vercel; per-IP limit and known limits in `docs/deploy.md`). Demo video (2 min 58 s): https://youtu.be/NGVMj1RnXyQ.
+Public demo URL: https://pathproof-six.vercel.app (Vercel; per-IP limit and known limits in `docs/deploy.md`). Demo video (2 min 58 s): https://youtu.be/NGVMj1RnXyQ. X post: https://x.com/A18140Ares/status/2117662599462748416.
 
 Local web demo: `uvicorn src.api.server:app --port 8000`, then open http://127.0.0.1:8000/ for the overview and http://127.0.0.1:8000/demo.html for the demo (open the page served by uvicorn itself, not a static preview such as Live Server; opened locally by mistake, the page still finds the API on port 8000 and says so). The interface is in English by default with a French toggle (the verified report and the agent's questions follow the language chosen when the run starts; guide values and student quotes stay as published). Upload a grade-sheet photo and a voice note (or use the fallback text), or launch a fictional example in one click (clear serie D sheet with a matching voice note, blurry sheet, contradictory voice note). Each tool step appears live with the Meta model that decided it and the one that ran it (Muse Spark 1.3 Contributor, Muse Wonder 1.0 at high reasoning effort, Muse Spark 1.3, Muse Voice Transcribe 1.0, or plain code), agent questions take an answer inline, and in the final report every claim carries clickable proofs (grade read, voice quote, guide row with its PDF page, ranking-average detail).
 
