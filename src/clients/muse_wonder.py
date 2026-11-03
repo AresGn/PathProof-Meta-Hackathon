@@ -56,6 +56,10 @@ def _schemas_to_tools(tool_schemas: list[dict]) -> list[dict]:
 
 def _output_to_message(response: object) -> ChatCompletionMessage:
     """Turn a Responses output into the chat assistant message the loop expects."""
+    if getattr(response, "status", None) == "incomplete":
+        # Same trap as finish_reason=length: partial text must never pass for a final answer.
+        details = getattr(response, "incomplete_details", None)
+        raise WonderTurnError(f"incomplete answer, reason={getattr(details, 'reason', None)}")
     texts: list[str] = []
     calls: list[ChatCompletionMessageToolCall] = []
     for item in getattr(response, "output", None) or []:

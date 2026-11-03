@@ -103,6 +103,18 @@ def test_empty_wonder_answer_is_an_error_not_a_silent_turn():
         raise AssertionError("an empty answer must raise")
 
 
+def test_incomplete_wonder_answer_is_an_error_not_a_final_answer():
+    response = SimpleNamespace(status="incomplete", output=[_text_item("Partial")],
+                               incomplete_details=SimpleNamespace(reason="max_output_tokens"))
+    client = SimpleNamespace(responses=SimpleNamespace(create=lambda **kwargs: response))
+    try:
+        request_wonder_turn(client, [{"role": "user", "content": "go"}], TOOL_SCHEMAS)
+    except WonderTurnError as error:
+        assert "max_output_tokens" in str(error)
+    else:
+        raise AssertionError("an incomplete answer must raise")
+
+
 def test_turn_model_switches_to_wonder_after_the_guide_search():
     assert loop._turn_model("base", MUSE_WONDER_MODEL, []) == "base"
     assert loop._turn_model("base", MUSE_WONDER_MODEL, [{"tool": "read_grade_sheet"}]) == "base"
@@ -143,7 +155,7 @@ def test_failed_wonder_turn_falls_back_and_the_journal_says_so(monkeypatch):
                       drafting_model=MUSE_WONDER_MODEL)
     assert result == "Done."
     # Wonder was tried, failed, and must never be credited with the step.
-    assert len(client.responses.calls) == 2  # tried on both drafting turns
+    assert len(client.responses.calls) == 1  # a failed Wonder is not retried on later turns
     assert journal[-1]["tool"] == "verify_report"
     assert journal[-1]["model"] == MUSE_CONTRIBUTOR_MODEL
 

@@ -47,6 +47,7 @@ problems by `claim_id` is routing, not verification: the loop never
 recomputes or rechecks a proof itself.
 """
 import json
+import logging
 
 from src.agent.prompts import system_prompt_for
 from src.clients.muse_wonder import MUSE_WONDER_MODEL, request_wonder_turn
@@ -71,6 +72,7 @@ DECISION_CONTINUE = "continue"
 DECISION_SUSPEND = "suspend"
 DECISION_STOP_UNVERIFIED = "stop_unverified"
 DECISION_STOP_STEP_LIMIT = "stop_step_limit"
+_LOGGER = logging.getLogger(__name__)
 TOOLS = {
     "transcribe_voice": transcribe_voice,
     "extract_profile": extract_profile,
@@ -180,6 +182,9 @@ def _continue_loop(client, model: str, tool_schemas: list[dict] | None,
     while steps_used < MAX_STEPS:
         turn_model = _turn_model(model, drafting_model, journal)
         msg, decided_by = _next_message(client, turn_model, model, messages, tool_schemas)
+        if decided_by != turn_model:
+            # A failed Wonder turn is not retried: the rest of this run stays on `model`.
+            drafting_model = None
         steps_used += 1
         messages.append(msg)
         if not msg.tool_calls:
@@ -205,14 +210,16 @@ def _next_message(client, turn_model: str, model: str, messages: list,
                   tool_schemas: list[dict]):
     """Ask one turn; return (assistant message, model that really answered).
 
-    A Wonder turn that fails (network, upstream error, empty answer) is retried
-    once on `model`, and the journal then names `model`, never Wonder: the demo
-    shows who really decided.
+    A Wonder turn that fails (network, upstream error, empty or incomplete
+    answer) is logged and retried once on `model`, and the journal then names
+    `model`, never Wonder: the demo shows who really decided.
     """
     if turn_model == MUSE_WONDER_MODEL:
         try:
             return request_wonder_turn(client, messages, tool_schemas), MUSE_WONDER_MODEL
-        except Exception:  # fall back to the base model, named honestly in the journal
+        except Exception as error:  # fall back to the base model, named honestly in the journal
+            _LOGGER.warning("Muse Wonder turn failed (%s: %s), falling back to %s",
+                            type(error).__name__, error, model)
             turn_model = model
     reply = client.chat.completions.create(
         model=turn_model, messages=messages, tools=tool_schemas)
@@ -239,11 +246,13 @@ def _execute_calls(tool_calls: list, messages: list, steps_used: int, journal: l
             _record(journal, steps_used, call.function.name, journal_args, None,
                     parse_error, DECISION_CONTINUE, decided_by=decided_by)
             continue
+        routed = None
         if call.function.name == BUILD_REPORT_TOOL:
-            # The interface language is routing, like the pinned draft: the model
-            # never picks the wording of the verified report.
-            args = {**_pin_verified_draft(args, journal), "language": language}
-        result, error, filtered = _execute_tool(call.function.name, args, tool_schemas)
+            args = _pin_verified_draft(args, journal)
+            # The interface language is routing, like the pinned draft: it is not in
+            # the model-facing schema, so the model never picks the report wording.
+            routed = {"language": language}
+        result, error, filtered = _execute_tool(call.function.name, args, tool_schemas, routed)
         messages.append(_tool_observation(call, result, error))
         if call.function.name == VERIFY_REPORT_TOOL and error is None:
             verify_refusals, outcome = _verify_outcome(
@@ -380,19 +389,21 @@ def _parse_arguments(call) -> tuple[dict, str | None, dict]:
 
 
 def _execute_tool(name: str, args: dict,
-                  tool_schemas: list[dict] | None = None) -> tuple[object, str | None, dict]:
+                  tool_schemas: list[dict] | None = None,
+                  routed: dict | None = None) -> tuple[object, str | None, dict]:
     """Run one registered tool; return (result, error, filtered_args).
 
     The single filtering place for tool calls: only the keys declared in
     the tool schema reach the function, so the model can never inject
     `client` or another off-schema argument. A tool exception (including
     `verify_report`) becomes an observation: it neither resets nor
-    increments the consecutive-refusal counter.
+    increments the consecutive-refusal counter. `routed` arguments come from
+    the loop, not the model, and are added after filtering.
     """
     tool = TOOLS.get(name)
     if tool is None:
         return None, f"unknown tool: {name}", dict(args)
-    filtered = _filter_arguments(name, args, tool_schemas)
+    filtered = {**_filter_arguments(name, args, tool_schemas), **(routed or {})}
     try:
         return tool(**filtered), None, filtered
     except Exception as error:  # tool error becomes an observation, not a crash
