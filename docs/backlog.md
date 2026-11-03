@@ -142,7 +142,7 @@ E1.4 proof format ─► E2.4 verify_report ────────────
   *Acceptance:* no `TODO` in the README; each claim matches a committed result. *Done on 3 Nov:* README and `docs/impact.md` without `TODO`; figure 77,101 (press relaying the Office, not an official page); 4 Meta models; evaluation 11/11; solo team. Video link added with E7.2. **Still open:** README opening in a private window (to check on GitHub).
 - [x] **E7.2 (L)** [#39](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/39) 3-minute video, English subtitles, strong moment first (`docs/demo-script.md`). *Dep.:* E6.3. *Done on 3 Nov:* FR/EN voice-over texts and production plan in `docs/video/`; video published on YouTube (https://youtu.be/NGVMj1RnXyQ), 4 exports of 2:58 (YouTube and vertical, English and French). The video files are not in the repository (176 MB: the Vercel preview had failed with them).
   *Acceptance:* duration ≤ 3:00; each shot shows a real run.
-- [ ] **E7.3 (S)** [#40](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/40) X post with the video. *Dep.:* E7.2.
+- [x] **E7.3 (S)** [#40](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/40) X post with the video. *Dep.:* E7.2. *Done on 3 Nov:* post text in `docs/video/post-x.md`, post published (https://x.com/A18140Ares/status/2117662599462748416), linked in the README.
   *Acceptance:* link noted for the submission.
 - [ ] **E7.4 (S)** [#41](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/41) Pre-submission check: search for secrets in the tree and the history, repository open without login, no personal path. *Dep.:* E7.1.
   *Acceptance:* checklist of section 15 of the PRD fully ticked.
