@@ -32,6 +32,7 @@ REPORT_TEXT: dict[str, dict[str, str]] = {
         "you_said": "- Tu as dit : « {quote} ».",
         "outlets_line": "- {filiere} ({offre_id}) : Débouchés « {debouches} ».",
         "no_match": "Aucun rapprochement vérifié à afficher.",
+        "no_outlet": "Aucun débouché du guide ne cite ce métier.",
         "no_offer_quotas": "Sans offre vérifiée, aucun quota à afficher.",
         "quotas_unpublished": ("- {filiere} ({offre_id}) : le guide ne publie pas les quotas "
                                "(Bourse, Aide_FPP), page {page}."),
@@ -78,6 +79,7 @@ REPORT_TEXT: dict[str, dict[str, str]] = {
         "you_said": "- You said: « {quote} ».",
         "outlets_line": "- {filiere} ({offre_id}): Career paths « {debouches} ».",
         "no_match": "No verified match to show.",
+        "no_outlet": "No career path in the guide cites this job.",
         "no_offer_quotas": "Without a verified offer, there is no quota to show.",
         "quotas_unpublished": ("- {filiere} ({offre_id}): the guide does not publish the quotas "
                                "(Bourse, Aide_FPP), page {page}."),

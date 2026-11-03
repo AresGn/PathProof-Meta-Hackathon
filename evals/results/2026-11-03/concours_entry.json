@@ -2,10 +2,6 @@
   "case_id": "concours_entry",
   "date": "2026-11-03",
   "language": "fr",
-  "models": {
-    "deciding": "muse-spark-1.3-contributor",
-    "drafting": "muse-wonder-1.0"
-  },
   "files": [
     {
       "role": "grade_sheet",
@@ -19,23 +15,24 @@
     }
   ],
   "student_answers": [],
+  "exchanges": [],
   "outcome_status": "finished",
-  "report_text": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Soins Infirmiers (Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)) — PUB-148, page 48 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Concours\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « Je voudrais devenir infirmier ».\n- Soins Infirmiers (PUB-148) : Débouchés « Infirmier diplômé d'Etat ».\n\n## Quotas du guide\n- Soins Infirmiers (PUB-148) : 50 bourses et 0 aides FPP prévues (guide, page 48).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Soins Infirmiers (PUB-148) : Concours : les notes du Bac ne suffisent pas, par épreuve séparée.\n\n## 3 choix pour apresmonbac.bj\n1. Soins Infirmiers (Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)) — PUB-148, page 48 (Faculté classique : non)\nSeules 1 offres vérifiées pour ce profil ; 1 choix proposés.\nAucune des offres vérifiées n'est en Faculté classique : la page 9 du guide en demande au moins une parmi les 3 choix.\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+  "report_text": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Sciences Infirmières (Institut National Médico-Sanitaire (INMeS)) — PUB-119, page 26 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Concours\n- Soins Infirmiers (Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)) — PUB-148, page 48 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Concours\n\n## Correspondance\n- Tu as dit : « Je voudrais devenir infirmier ».\n- Tu as dit : « soigner les gens ».\n- Sciences Infirmières (PUB-119) : Débouchés « Soins infirmiers dans les hôpitaux et centres de santé ».\n- Soins Infirmiers (PUB-148) : Débouchés « Infirmier diplômé d'Etat ».\n\n## Quotas du guide\n- Sciences Infirmières (PUB-119) : 40 bourses et 0 aides FPP prévues (guide, page 26).\n- Soins Infirmiers (PUB-148) : 50 bourses et 0 aides FPP prévues (guide, page 48).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Sciences Infirmières (PUB-119) : Concours : les notes du Bac ne suffisent pas, par épreuve séparée.\n- Soins Infirmiers (PUB-148) : Concours : les notes du Bac ne suffisent pas, par épreuve séparée.\n\n## 3 choix pour apresmonbac.bj\n1. Sciences Infirmières (Institut National Médico-Sanitaire (INMeS)) — PUB-119, page 26 (Faculté classique : non)\n2. Soins Infirmiers (Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)) — PUB-148, page 48 (Faculté classique : non)\nSeules 2 offres vérifiées pour ce profil ; 2 choix proposés.\nAucune des offres vérifiées n'est en Faculté classique : la page 9 du guide en demande au moins une parmi les 3 choix.\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
   "questions": [],
-  "duration_seconds": 63.67200000002049,
+  "duration_seconds": 50.75,
   "usage": {
-    "prompt_tokens": 35527,
-    "completion_tokens": 3617,
-    "total_tokens": 39144,
+    "prompt_tokens": 37777,
+    "completion_tokens": 4310,
+    "total_tokens": 42087,
     "streaming_calls": 0,
     "by_model": {
       "muse-spark-1.3-contributor": {
-        "prompt_tokens": 6966,
-        "completion_tokens": 807
+        "prompt_tokens": 7116,
+        "completion_tokens": 705
       },
       "muse-wonder-1.0": {
-        "prompt_tokens": 28561,
-        "completion_tokens": 2810
+        "prompt_tokens": 30661,
+        "completion_tokens": 3605
       }
     }
   },
@@ -180,6 +177,34 @@
       "result": {
         "accessible": [
           {
+            "Offre_ID": "PUB-119",
+            "Filière": "Sciences Infirmières",
+            "Établissement": "Institut National Médico-Sanitaire (INMeS)",
+            "page_pdf": 26,
+            "Mode_entrée": "Concours",
+            "Bac_recommandé": "C, D",
+            "Statut_qualité": "OK",
+            "Bourse": "40",
+            "Aide_FPP": "0",
+            "Débouchés_Métiers": "Soins infirmiers dans les hôpitaux et centres de santé",
+            "raisons": [
+              "série D dans Bac_recommandé (C, D)",
+              "Statut_qualité = OK",
+              "page 26 du guide officiel",
+              "Mode d'entrée : Concours",
+              "métier visé « infirmier » retrouvé comme mots entiers dans Débouchés_Métiers",
+              "métier visé « infirmier » retrouvé comme mots entiers dans Filière",
+              "Concours : les notes du Bac ne suffisent pas, admission par épreuve séparée"
+            ],
+            "score": 150,
+            "moyenne_classement": null,
+            "calcul": null,
+            "epreuves": [
+              "PCT",
+              "SVT"
+            ]
+          },
+          {
             "Offre_ID": "PUB-148",
             "Filière": "Soins Infirmiers",
             "Établissement": "Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)",
@@ -196,9 +221,10 @@
               "page 48 du guide officiel",
               "Mode d'entrée : Concours",
               "métier visé « infirmier » retrouvé comme mots entiers dans Débouchés_Métiers",
+              "métier visé « infirmier » retrouvé comme mots entiers dans Filière",
               "Concours : les notes du Bac ne suffisent pas, admission par épreuve séparée"
             ],
-            "score": 100,
+            "score": 150,
             "moyenne_classement": null,
             "calcul": null,
             "epreuves": [
@@ -533,147 +559,184 @@
       "tool": "verify_report",
       "args": {
         "context": {
+          "serie": "D",
           "grades": [
             {
-              "lisible": true,
               "matiere": "Anglais",
-              "note": 8
+              "note": 8,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Français",
-              "note": 9.5
+              "note": 9.5,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Histoire-Géographie",
-              "note": 7
+              "note": 7,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Mathématiques",
-              "note": 12
+              "note": 12,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Philosophie",
-              "note": 8
+              "note": 8,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Sciences Physiques (PCT/SPCT)",
-              "note": 12
+              "note": 12,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "SVT",
-              "note": 15
+              "note": 15,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "EPS",
-              "note": 10.5
+              "note": 10.5,
+              "lisible": true,
+              "flags": []
             }
           ],
-          "serie": "D",
           "transcript": "Bonjour, je suis en série D. Je voudrais devenir infirmier et soigner les gens."
         },
         "report": {
+          "schema_version": 1,
           "claims": [
             {
               "claim_id": "c1",
+              "text": "Vous avez déclaré : « Je voudrais devenir infirmier » et « soigner les gens ».",
               "proofs": [
                 {
-                  "quote": "je suis en série D",
-                  "type": "transcript"
+                  "type": "transcript",
+                  "quote": "Je voudrais devenir infirmier"
+                },
+                {
+                  "type": "transcript",
+                  "quote": "soigner les gens"
                 }
-              ],
-              "text": "Vous avez déclaré : je suis en série D."
+              ]
             },
             {
               "claim_id": "c2",
+              "text": "Sur votre relevé, votre note de SVT est de 15/20.",
               "proofs": [
                 {
-                  "quote": "Je voudrais devenir infirmier",
-                  "type": "transcript"
+                  "type": "grade",
+                  "matiere": "SVT",
+                  "note": 15
                 }
-              ],
-              "text": "Vous avez déclaré : Je voudrais devenir infirmier et soigner les gens."
+              ]
             },
             {
               "claim_id": "c3",
+              "text": "Offre PUB-119 : Sciences Infirmières, Institut National Médico-Sanitaire (INMeS), Bac recommandé « C, D », mode d'entrée « Concours », Bourse : 40, Aide_FPP : 0.",
               "proofs": [
                 {
-                  "matiere": "SVT",
-                  "note": 15,
-                  "type": "grade"
-                }
-              ],
-              "text": "Sur votre relevé, votre note de SVT est de 15."
-            },
-            {
-              "claim_id": "c4",
-              "proofs": [
-                {
+                  "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
                   "champ": "Filière",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
-                  "type": "filiere",
-                  "valeur": "Soins Infirmiers"
+                  "valeur": "Sciences Infirmières"
                 },
                 {
+                  "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
                   "champ": "Établissement",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
-                  "type": "filiere",
-                  "valeur": "Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)"
+                  "valeur": "Institut National Médico-Sanitaire (INMeS)"
                 },
                 {
-                  "champ": "Bac_recommandé",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
                   "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
+                  "champ": "Bac_recommandé",
                   "valeur": "C, D"
                 },
                 {
-                  "champ": "Mode_entrée",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
                   "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
+                  "champ": "Mode_entrée",
                   "valeur": "Concours"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
+                  "champ": "Bourse",
+                  "valeur": "40"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
+                  "champ": "Aide_FPP",
+                  "valeur": "0"
                 }
-              ],
-              "text": "Soins Infirmiers — Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO) — Bac_recommandé : C, D — Mode_entrée : Concours."
+              ]
             },
             {
-              "claim_id": "c5",
+              "claim_id": "c4",
+              "text": "Offre PUB-148 : Soins Infirmiers, Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO), Bac recommandé « C, D », mode d'entrée « Concours », Bourse : 50, Aide_FPP : 0.",
               "proofs": [
                 {
-                  "champ": "Bourse",
+                  "type": "filiere",
                   "offre_id": "PUB-148",
                   "page_pdf": 48,
+                  "champ": "Filière",
+                  "valeur": "Soins Infirmiers"
+                },
+                {
                   "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
+                  "champ": "Établissement",
+                  "valeur": "Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
+                  "champ": "Bac_recommandé",
+                  "valeur": "C, D"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
+                  "champ": "Mode_entrée",
+                  "valeur": "Concours"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
+                  "champ": "Bourse",
                   "valeur": "50"
                 },
                 {
+                  "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
                   "champ": "Aide_FPP",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
-                  "type": "filiere",
                   "valeur": "0"
-                },
-                {
-                  "champ": "Débouchés_Métiers",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
-                  "type": "filiere",
-                  "valeur": "Infirmier diplômé d'Etat"
                 }
-              ],
-              "text": "Pour Soins Infirmiers, le guide publie Bourse : 50, Aide_FPP : 0, et Débouchés_Métiers : Infirmier diplômé d'Etat."
+              ]
             }
-          ],
-          "schema_version": 1
+          ]
         }
       },
       "result": [],
@@ -685,152 +748,189 @@
       "tool": "build_report",
       "args": {
         "context": {
+          "serie": "D",
           "grades": [
             {
-              "lisible": true,
               "matiere": "Anglais",
-              "note": 8
+              "note": 8,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Français",
-              "note": 9.5
+              "note": 9.5,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Histoire-Géographie",
-              "note": 7
+              "note": 7,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Mathématiques",
-              "note": 12
+              "note": 12,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Philosophie",
-              "note": 8
+              "note": 8,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "Sciences Physiques (PCT/SPCT)",
-              "note": 12
+              "note": 12,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "SVT",
-              "note": 15
+              "note": 15,
+              "lisible": true,
+              "flags": []
             },
             {
-              "lisible": true,
               "matiere": "EPS",
-              "note": 10.5
+              "note": 10.5,
+              "lisible": true,
+              "flags": []
             }
           ],
-          "serie": "D",
           "transcript": "Bonjour, je suis en série D. Je voudrais devenir infirmier et soigner les gens."
         },
         "refused_claims": [],
         "report": {
+          "schema_version": 1,
           "claims": [
             {
               "claim_id": "c1",
+              "text": "Vous avez déclaré : « Je voudrais devenir infirmier » et « soigner les gens ».",
               "proofs": [
                 {
-                  "quote": "je suis en série D",
-                  "type": "transcript"
+                  "type": "transcript",
+                  "quote": "Je voudrais devenir infirmier"
+                },
+                {
+                  "type": "transcript",
+                  "quote": "soigner les gens"
                 }
-              ],
-              "text": "Vous avez déclaré : je suis en série D."
+              ]
             },
             {
               "claim_id": "c2",
+              "text": "Sur votre relevé, votre note de SVT est de 15/20.",
               "proofs": [
                 {
-                  "quote": "Je voudrais devenir infirmier",
-                  "type": "transcript"
+                  "type": "grade",
+                  "matiere": "SVT",
+                  "note": 15
                 }
-              ],
-              "text": "Vous avez déclaré : Je voudrais devenir infirmier et soigner les gens."
+              ]
             },
             {
               "claim_id": "c3",
+              "text": "Offre PUB-119 : Sciences Infirmières, Institut National Médico-Sanitaire (INMeS), Bac recommandé « C, D », mode d'entrée « Concours », Bourse : 40, Aide_FPP : 0.",
               "proofs": [
                 {
-                  "matiere": "SVT",
-                  "note": 15,
-                  "type": "grade"
-                }
-              ],
-              "text": "Sur votre relevé, votre note de SVT est de 15."
-            },
-            {
-              "claim_id": "c4",
-              "proofs": [
-                {
+                  "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
                   "champ": "Filière",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
-                  "type": "filiere",
-                  "valeur": "Soins Infirmiers"
+                  "valeur": "Sciences Infirmières"
                 },
                 {
+                  "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
                   "champ": "Établissement",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
-                  "type": "filiere",
-                  "valeur": "Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)"
+                  "valeur": "Institut National Médico-Sanitaire (INMeS)"
                 },
                 {
-                  "champ": "Bac_recommandé",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
                   "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
+                  "champ": "Bac_recommandé",
                   "valeur": "C, D"
                 },
                 {
-                  "champ": "Mode_entrée",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
                   "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
+                  "champ": "Mode_entrée",
                   "valeur": "Concours"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
+                  "champ": "Bourse",
+                  "valeur": "40"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-119",
+                  "page_pdf": 26,
+                  "champ": "Aide_FPP",
+                  "valeur": "0"
                 }
-              ],
-              "text": "Soins Infirmiers — Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO) — Bac_recommandé : C, D — Mode_entrée : Concours."
+              ]
             },
             {
-              "claim_id": "c5",
+              "claim_id": "c4",
+              "text": "Offre PUB-148 : Soins Infirmiers, Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO), Bac recommandé « C, D », mode d'entrée « Concours », Bourse : 50, Aide_FPP : 0.",
               "proofs": [
                 {
-                  "champ": "Bourse",
+                  "type": "filiere",
                   "offre_id": "PUB-148",
                   "page_pdf": 48,
+                  "champ": "Filière",
+                  "valeur": "Soins Infirmiers"
+                },
+                {
                   "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
+                  "champ": "Établissement",
+                  "valeur": "Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
+                  "champ": "Bac_recommandé",
+                  "valeur": "C, D"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
+                  "champ": "Mode_entrée",
+                  "valeur": "Concours"
+                },
+                {
+                  "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
+                  "champ": "Bourse",
                   "valeur": "50"
                 },
                 {
+                  "type": "filiere",
+                  "offre_id": "PUB-148",
+                  "page_pdf": 48,
                   "champ": "Aide_FPP",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
-                  "type": "filiere",
                   "valeur": "0"
-                },
-                {
-                  "champ": "Débouchés_Métiers",
-                  "offre_id": "PUB-148",
-                  "page_pdf": 48,
-                  "type": "filiere",
-                  "valeur": "Infirmier diplômé d'Etat"
                 }
-              ],
-              "text": "Pour Soins Infirmiers, le guide publie Bourse : 50, Aide_FPP : 0, et Débouchés_Métiers : Infirmier diplômé d'Etat."
+              ]
             }
-          ],
-          "schema_version": 1
+          ]
         },
         "language": "fr"
       },
-      "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Soins Infirmiers (Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)) — PUB-148, page 48 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Concours\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « Je voudrais devenir infirmier ».\n- Soins Infirmiers (PUB-148) : Débouchés « Infirmier diplômé d'Etat ».\n\n## Quotas du guide\n- Soins Infirmiers (PUB-148) : 50 bourses et 0 aides FPP prévues (guide, page 48).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Soins Infirmiers (PUB-148) : Concours : les notes du Bac ne suffisent pas, par épreuve séparée.\n\n## 3 choix pour apresmonbac.bj\n1. Soins Infirmiers (Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)) — PUB-148, page 48 (Faculté classique : non)\nSeules 1 offres vérifiées pour ce profil ; 1 choix proposés.\nAucune des offres vérifiées n'est en Faculté classique : la page 9 du guide en demande au moins une parmi les 3 choix.\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+      "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Sciences Infirmières (Institut National Médico-Sanitaire (INMeS)) — PUB-119, page 26 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Concours\n- Soins Infirmiers (Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)) — PUB-148, page 48 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Concours\n\n## Correspondance\n- Tu as dit : « Je voudrais devenir infirmier ».\n- Tu as dit : « soigner les gens ».\n- Sciences Infirmières (PUB-119) : Débouchés « Soins infirmiers dans les hôpitaux et centres de santé ».\n- Soins Infirmiers (PUB-148) : Débouchés « Infirmier diplômé d'Etat ».\n\n## Quotas du guide\n- Sciences Infirmières (PUB-119) : 40 bourses et 0 aides FPP prévues (guide, page 26).\n- Soins Infirmiers (PUB-148) : 50 bourses et 0 aides FPP prévues (guide, page 48).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Sciences Infirmières (PUB-119) : Concours : les notes du Bac ne suffisent pas, par épreuve séparée.\n- Soins Infirmiers (PUB-148) : Concours : les notes du Bac ne suffisent pas, par épreuve séparée.\n\n## 3 choix pour apresmonbac.bj\n1. Sciences Infirmières (Institut National Médico-Sanitaire (INMeS)) — PUB-119, page 26 (Faculté classique : non)\n2. Soins Infirmiers (Institut de Formation en Soins Infirmiers et Obstétricaux (IFSIO)) — PUB-148, page 48 (Faculté classique : non)\nSeules 2 offres vérifiées pour ce profil ; 2 choix proposés.\nAucune des offres vérifiées n'est en Faculté classique : la page 9 du guide en demande au moins une parmi les 3 choix.\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
       "decision": "continue",
       "model": "muse-wonder-1.0"
     }

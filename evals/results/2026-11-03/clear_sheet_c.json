@@ -2,10 +2,6 @@
   "case_id": "clear_sheet_c",
   "date": "2026-11-03",
   "language": "fr",
-  "models": {
-    "deciding": "muse-spark-1.3-contributor",
-    "drafting": "muse-wonder-1.0"
-  },
   "files": [
     {
       "role": "grade_sheet",
@@ -19,23 +15,24 @@
     }
   ],
   "student_answers": [],
+  "exchanges": [],
   "outcome_status": "finished",
-  "report_text": "PathProof — rapport vérifié\nSérie : C\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Mathématiques Informatiques (Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou)) — PUB-184, page 63 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Mathématiques Informatique et Applications (Faculté des Sciences Techniques (FAST)) — PUB-078, page 44 du guide officiel — série C dans Bac_recommandé (C) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en terminale série C. ».\n- Tu as dit : « les mathématiques ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « je voudrais étudier la médecine. ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Mathématiques Informatiques (PUB-184) : Débouchés « Cadres de télécommunications optiques et des nouvelles technologies de l'information et de la communication, Enseignants des lycées et collèges (BAPES et CAPES en MI) après complément de formation en sciences de l'éducation, Accès aux écoles d'ingénieur, Accès à un master recherche ou professionnel en mathématique ou en informatique pouvant déboucher sur une thèse de doctorat ».\n- Mathématiques Informatique et Applications (PUB-078) : Débouchés « Enseignement Maths, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Mathématiques Informatiques (PUB-184) : 63 bourses et 43 aides FPP prévues (guide, page 63).\n- Mathématiques Informatique et Applications (PUB-078) : 200 bourses et 119 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série C.\n- Médecine Générale (PUB-062) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Mathématiques Informatiques (PUB-184) : Anglais 12 × 2, Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5 : 13,31 / 20.\n- Mathématiques Informatique et Applications (PUB-078) : Français 11 × 2, Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5 : 13,15 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Mathématiques Informatiques (Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou)) — PUB-184, page 63 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+  "report_text": "PathProof — rapport vérifié\nSérie : C\n\n## Accessibilité\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Mathématiques Informatiques (Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou)) — PUB-184, page 63 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Mathématiques Informatique et Applications (Faculté des Sciences Techniques (FAST)) — PUB-078, page 44 du guide officiel — série C dans Bac_recommandé (C) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « série C ».\n- Tu as dit : « les mathématiques ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « je voudrais étudier la médecine ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Mathématiques Informatiques (PUB-184) : Débouchés « Cadres de télécommunications optiques et des nouvelles technologies de l'information et de la communication, Enseignants des lycées et collèges (BAPES et CAPES en MI) après complément de formation en sciences de l'éducation, Accès aux écoles d'ingénieur, Accès à un master recherche ou professionnel en mathématique ou en informatique pouvant déboucher sur une thèse de doctorat ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Mathématiques Informatique et Applications (PUB-078) : Débouchés « Enseignement Maths, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Mathématiques Informatiques (PUB-184) : 63 bourses et 43 aides FPP prévues (guide, page 63).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Mathématiques Informatique et Applications (PUB-078) : 200 bourses et 119 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série C.\n- Médecine Humaine (PUB-133) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Médecine Générale (PUB-062) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Mathématiques Informatiques (PUB-184) : Anglais 12 × 2, Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5 : 13,31 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Mathématiques Informatique et Applications (PUB-078) : Français 11 × 2, Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5 : 13,15 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n2. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n3. Mathématiques Informatiques (Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou)) — PUB-184, page 63 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
   "questions": [],
-  "duration_seconds": 87.95299999997951,
+  "duration_seconds": 77.43699999991804,
   "usage": {
-    "prompt_tokens": 50784,
-    "completion_tokens": 10037,
-    "total_tokens": 60821,
+    "prompt_tokens": 51429,
+    "completion_tokens": 10609,
+    "total_tokens": 62038,
     "streaming_calls": 0,
     "by_model": {
       "muse-spark-1.3-contributor": {
-        "prompt_tokens": 7085,
-        "completion_tokens": 1343
+        "prompt_tokens": 7221,
+        "completion_tokens": 1672
       },
       "muse-wonder-1.0": {
-        "prompt_tokens": 43699,
-        "completion_tokens": 8694
+        "prompt_tokens": 44208,
+        "completion_tokens": 8937
       }
     }
   },
@@ -114,19 +111,19 @@
       "result": {
         "serie_declaree": {
           "value": "C",
-          "quote": "je suis en terminale série C."
+          "quote": "série C"
         },
         "moyenne_declaree": {
           "value": 12.36,
-          "quote": "douze virgule trente-six de moyenne au bac."
+          "quote": "douze virgule trente-six de moyenne au bac"
         },
         "interets": [
           {
-            "value": "les mathématiques",
+            "value": "mathématiques",
             "quote": "les mathématiques"
           },
           {
-            "value": "la biologie",
+            "value": "biologie",
             "quote": "la biologie"
           }
         ],
@@ -145,42 +142,42 @@
           {
             "lisible": true,
             "matiere": "Anglais",
-            "note": 12
+            "note": 12.0
           },
           {
             "lisible": true,
             "matiere": "Français",
-            "note": 11
+            "note": 11.0
           },
           {
             "lisible": true,
             "matiere": "Histoire-Géographie",
-            "note": 10
+            "note": 10.0
           },
           {
             "lisible": true,
             "matiere": "Mathématiques",
-            "note": 14
+            "note": 14.0
           },
           {
             "lisible": true,
             "matiere": "Philosophie",
-            "note": 9
+            "note": 9.0
           },
           {
             "lisible": true,
             "matiere": "Sciences Physiques (PCT/SPCT)",
-            "note": 13
+            "note": 13.0
           },
           {
             "lisible": true,
             "matiere": "SVT",
-            "note": 12
+            "note": 12.0
           },
           {
             "lisible": true,
             "matiere": "EPS",
-            "note": 15
+            "note": 15.0
           }
         ],
         "interets": [
@@ -192,68 +189,6 @@
       },
       "result": {
         "accessible": [
-          {
-            "Offre_ID": "PUB-062",
-            "Filière": "Médecine Générale",
-            "Établissement": "Faculté des Sciences de la Santé (FSS)",
-            "page_pdf": 36,
-            "Mode_entrée": "Classement",
-            "Bac_recommandé": "C, D",
-            "Statut_qualité": "OK",
-            "Bourse": "95",
-            "Aide_FPP": "20",
-            "Débouchés_Métiers": "Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé",
-            "raisons": [
-              "série C dans Bac_recommandé (C, D)",
-              "Statut_qualité = OK",
-              "page 36 du guide officiel",
-              "Mode d'entrée : Classement",
-              "métier visé « médecine » retrouvé comme mots entiers dans Filière",
-              "moyenne de classement 13.31 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
-            ],
-            "score": 50,
-            "moyenne_classement": 13.31,
-            "calcul": {
-              "status": "calculé",
-              "moyenne": 13.307692307692308,
-              "moyenne_arrondie": 13.31,
-              "formule": "M = Σ(mi·ci) / Σci",
-              "somme_coefficients": 13,
-              "details": [
-                {
-                  "matiere": "Mathématiques",
-                  "note": 14,
-                  "coefficient": 6,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "C",
-                    "matiere": "Mathématiques"
-                  }
-                },
-                {
-                  "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 13,
-                  "coefficient": 5,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "C",
-                    "matiere": "Sciences Physiques (PCT/SPCT)"
-                  }
-                },
-                {
-                  "matiere": "SVT",
-                  "note": 12,
-                  "coefficient": 2,
-                  "provenance": {
-                    "fichier": "coefficients_bac_benin.json",
-                    "serie": "C",
-                    "matiere": "SVT"
-                  }
-                }
-              ]
-            },
-            "epreuves": []
-          },
           {
             "Offre_ID": "PUB-133",
             "Filière": "Médecine Humaine",
@@ -270,10 +205,11 @@
               "Statut_qualité = OK",
               "page 47 du guide officiel",
               "Mode d'entrée : Classement",
+              "métier visé « médecine » retrouvé comme mots entiers dans Débouchés_Métiers",
               "métier visé « médecine » retrouvé comme mots entiers dans Filière",
               "moyenne de classement 13.31 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
             ],
-            "score": 50,
+            "score": 150,
             "moyenne_classement": 13.31,
             "calcul": {
               "status": "calculé",
@@ -284,7 +220,7 @@
               "details": [
                 {
                   "matiere": "Mathématiques",
-                  "note": 14,
+                  "note": 14.0,
                   "coefficient": 6,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -294,7 +230,7 @@
                 },
                 {
                   "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 13,
+                  "note": 13.0,
                   "coefficient": 5,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -304,7 +240,7 @@
                 },
                 {
                   "matiere": "SVT",
-                  "note": 12,
+                  "note": 12.0,
                   "coefficient": 2,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -317,25 +253,26 @@
             "epreuves": []
           },
           {
-            "Offre_ID": "PUB-162",
-            "Filière": "Génie Biologique et Bioprocédés (GBB)",
-            "Établissement": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)",
-            "page_pdf": 62,
+            "Offre_ID": "PUB-062",
+            "Filière": "Médecine Générale",
+            "Établissement": "Faculté des Sciences de la Santé (FSS)",
+            "page_pdf": 36,
             "Mode_entrée": "Classement",
             "Bac_recommandé": "C, D",
             "Statut_qualité": "OK",
-            "Bourse": "35",
-            "Aide_FPP": "7",
-            "Débouchés_Métiers": "Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi",
+            "Bourse": "95",
+            "Aide_FPP": "20",
+            "Débouchés_Métiers": "Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé",
             "raisons": [
               "série C dans Bac_recommandé (C, D)",
               "Statut_qualité = OK",
-              "page 62 du guide officiel",
+              "page 36 du guide officiel",
               "Mode d'entrée : Classement",
-              "intérêt « biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+              "métier visé « médecine » retrouvé comme mots entiers dans Débouchés_Métiers",
+              "métier visé « médecine » retrouvé comme mots entiers dans Filière",
               "moyenne de classement 13.31 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
             ],
-            "score": 20,
+            "score": 150,
             "moyenne_classement": 13.31,
             "calcul": {
               "status": "calculé",
@@ -346,7 +283,7 @@
               "details": [
                 {
                   "matiere": "Mathématiques",
-                  "note": 14,
+                  "note": 14.0,
                   "coefficient": 6,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -356,7 +293,7 @@
                 },
                 {
                   "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 13,
+                  "note": 13.0,
                   "coefficient": 5,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -366,7 +303,7 @@
                 },
                 {
                   "matiere": "SVT",
-                  "note": 12,
+                  "note": 12.0,
                   "coefficient": 2,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -408,7 +345,7 @@
               "details": [
                 {
                   "matiere": "Anglais",
-                  "note": 12,
+                  "note": 12.0,
                   "coefficient": 2,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -418,7 +355,7 @@
                 },
                 {
                   "matiere": "Mathématiques",
-                  "note": 14,
+                  "note": 14.0,
                   "coefficient": 6,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -428,12 +365,74 @@
                 },
                 {
                   "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 13,
+                  "note": 13.0,
                   "coefficient": 5,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
                     "serie": "C",
                     "matiere": "Sciences Physiques (PCT/SPCT)"
+                  }
+                }
+              ]
+            },
+            "epreuves": []
+          },
+          {
+            "Offre_ID": "PUB-162",
+            "Filière": "Génie Biologique et Bioprocédés (GBB)",
+            "Établissement": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)",
+            "page_pdf": 62,
+            "Mode_entrée": "Classement",
+            "Bac_recommandé": "C, D",
+            "Statut_qualité": "OK",
+            "Bourse": "35",
+            "Aide_FPP": "7",
+            "Débouchés_Métiers": "Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi",
+            "raisons": [
+              "série C dans Bac_recommandé (C, D)",
+              "Statut_qualité = OK",
+              "page 62 du guide officiel",
+              "Mode d'entrée : Classement",
+              "intérêt « biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+              "moyenne de classement 13.31 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
+            ],
+            "score": 20,
+            "moyenne_classement": 13.31,
+            "calcul": {
+              "status": "calculé",
+              "moyenne": 13.307692307692308,
+              "moyenne_arrondie": 13.31,
+              "formule": "M = Σ(mi·ci) / Σci",
+              "somme_coefficients": 13,
+              "details": [
+                {
+                  "matiere": "Mathématiques",
+                  "note": 14.0,
+                  "coefficient": 6,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "C",
+                    "matiere": "Mathématiques"
+                  }
+                },
+                {
+                  "matiere": "Sciences Physiques (PCT/SPCT)",
+                  "note": 13.0,
+                  "coefficient": 5,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "C",
+                    "matiere": "Sciences Physiques (PCT/SPCT)"
+                  }
+                },
+                {
+                  "matiere": "SVT",
+                  "note": 12.0,
+                  "coefficient": 2,
+                  "provenance": {
+                    "fichier": "coefficients_bac_benin.json",
+                    "serie": "C",
+                    "matiere": "SVT"
                   }
                 }
               ]
@@ -470,7 +469,7 @@
               "details": [
                 {
                   "matiere": "Français",
-                  "note": 11,
+                  "note": 11.0,
                   "coefficient": 2,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -480,7 +479,7 @@
                 },
                 {
                   "matiere": "Mathématiques",
-                  "note": 14,
+                  "note": 14.0,
                   "coefficient": 6,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -490,7 +489,7 @@
                 },
                 {
                   "matiere": "Sciences Physiques (PCT/SPCT)",
-                  "note": 13,
+                  "note": 13.0,
                   "coefficient": 5,
                   "provenance": {
                     "fichier": "coefficients_bac_benin.json",
@@ -877,17 +876,28 @@
         "report": {
           "claims": [
             {
-              "claim_id": "serie",
+              "claim_id": "c1",
               "proofs": [
                 {
-                  "quote": "je suis en terminale série C.",
+                  "quote": "série C",
                   "type": "transcript"
                 }
               ],
-              "text": "Vous êtes en terminale série C."
+              "text": "Vous êtes en série C."
             },
             {
-              "claim_id": "interets-metier",
+              "claim_id": "c2",
+              "proofs": [
+                {
+                  "matiere": "Mathématiques",
+                  "note": 14,
+                  "type": "grade"
+                }
+              ],
+              "text": "Votre note en Mathématiques est de 14/20."
+            },
+            {
+              "claim_id": "c3",
               "proofs": [
                 {
                   "quote": "les mathématiques",
@@ -896,110 +906,22 @@
                 {
                   "quote": "la biologie",
                   "type": "transcript"
-                },
+                }
+              ],
+              "text": "Vos intérêts déclarés sont les mathématiques et la biologie."
+            },
+            {
+              "claim_id": "c4",
+              "proofs": [
                 {
-                  "quote": "je voudrais étudier la médecine.",
+                  "quote": "je voudrais étudier la médecine",
                   "type": "transcript"
                 }
               ],
-              "text": "Vos intérêts déclarés sont les mathématiques et la biologie, et vous voudriez étudier la médecine."
+              "text": "Vous voudriez étudier la médecine."
             },
             {
-              "claim_id": "note-maths",
-              "proofs": [
-                {
-                  "matiere": "Mathématiques",
-                  "note": 14,
-                  "type": "grade"
-                }
-              ],
-              "text": "Sur votre relevé, votre note de Mathématiques est de 14/20."
-            },
-            {
-              "claim_id": "offre-PUB-062",
-              "proofs": [
-                {
-                  "champ": "Filière",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "Médecine Générale"
-                },
-                {
-                  "champ": "Établissement",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "Faculté des Sciences de la Santé (FSS)"
-                },
-                {
-                  "champ": "Bac_recommandé",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "C, D"
-                },
-                {
-                  "champ": "Mode_entrée",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "Classement"
-                },
-                {
-                  "champ": "Bourse",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "95"
-                },
-                {
-                  "champ": "Aide_FPP",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "20"
-                }
-              ],
-              "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) : Bac recommandé « C, D », mode d'entrée « Classement », Bourse (figure du guide) : 95, Aide_FPP (figure du guide) : 20."
-            },
-            {
-              "claim_id": "calc-PUB-062",
-              "proofs": [
-                {
-                  "formula": "M = Σ(mi·ci) / Σci",
-                  "inputs": [
-                    {
-                      "coefficient": 6,
-                      "matiere": "Mathématiques",
-                      "note": 14
-                    },
-                    {
-                      "coefficient": 5,
-                      "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
-                    },
-                    {
-                      "coefficient": 2,
-                      "matiere": "SVT",
-                      "note": 12
-                    }
-                  ],
-                  "result": 13.31,
-                  "type": "calc"
-                },
-                {
-                  "champ": "Filière",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "Médecine Générale"
-                }
-              ],
-              "text": "Moyenne de classement pour Médecine Générale : 13.31."
-            },
-            {
-              "claim_id": "offre-PUB-133",
+              "claim_id": "o1",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1044,10 +966,10 @@
                   "valeur": "30"
                 }
               ],
-              "text": "Médecine Humaine — Faculté de Médecine (FM) : Bac recommandé « C, D », mode d'entrée « Classement », Bourse (figure du guide) : 100, Aide_FPP (figure du guide) : 30."
+              "text": "Offre PUB-133 : Médecine Humaine, Faculté de Médecine (FM) — Bac recommandé : C, D ; Mode d'entrée : Classement ; Bourse : 100 ; Aide_FPP : 30."
             },
             {
-              "claim_id": "calc-PUB-133",
+              "claim_id": "o1-calc",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1055,17 +977,17 @@
                     {
                       "coefficient": 6,
                       "matiere": "Mathématiques",
-                      "note": 14
+                      "note": 14.0
                     },
                     {
                       "coefficient": 5,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
+                      "note": 13.0
                     },
                     {
                       "coefficient": 2,
                       "matiere": "SVT",
-                      "note": 12
+                      "note": 12.0
                     }
                   ],
                   "result": 13.31,
@@ -1079,58 +1001,58 @@
                   "valeur": "Médecine Humaine"
                 }
               ],
-              "text": "Moyenne de classement pour Médecine Humaine : 13.31."
+              "text": "Pour l'offre PUB-133, votre moyenne de classement est de 13.31/20."
             },
             {
-              "claim_id": "offre-PUB-162",
+              "claim_id": "o2",
               "proofs": [
                 {
                   "champ": "Filière",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                  "valeur": "Médecine Générale"
                 },
                 {
                   "champ": "Établissement",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)"
+                  "valeur": "Faculté des Sciences de la Santé (FSS)"
                 },
                 {
                   "champ": "Bac_recommandé",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
                   "valeur": "C, D"
                 },
                 {
                   "champ": "Mode_entrée",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
                   "valeur": "Classement"
                 },
                 {
                   "champ": "Bourse",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "35"
+                  "valeur": "95"
                 },
                 {
                   "champ": "Aide_FPP",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "7"
+                  "valeur": "20"
                 }
               ],
-              "text": "Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé « C, D », mode d'entrée « Classement », Bourse (figure du guide) : 35, Aide_FPP (figure du guide) : 7."
+              "text": "Offre PUB-062 : Médecine Générale, Faculté des Sciences de la Santé (FSS) — Bac recommandé : C, D ; Mode d'entrée : Classement ; Bourse : 95 ; Aide_FPP : 20."
             },
             {
-              "claim_id": "calc-PUB-162",
+              "claim_id": "o2-calc",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1138,17 +1060,17 @@
                     {
                       "coefficient": 6,
                       "matiere": "Mathématiques",
-                      "note": 14
+                      "note": 14.0
                     },
                     {
                       "coefficient": 5,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
+                      "note": 13.0
                     },
                     {
                       "coefficient": 2,
                       "matiere": "SVT",
-                      "note": 12
+                      "note": 12.0
                     }
                   ],
                   "result": 13.31,
@@ -1156,16 +1078,16 @@
                 },
                 {
                   "champ": "Filière",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                  "valeur": "Médecine Générale"
                 }
               ],
-              "text": "Moyenne de classement pour Génie Biologique et Bioprocédés (GBB) : 13.31."
+              "text": "Pour l'offre PUB-062, votre moyenne de classement est de 13.31/20."
             },
             {
-              "claim_id": "offre-PUB-184",
+              "claim_id": "o3",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1210,10 +1132,10 @@
                   "valeur": "43"
                 }
               ],
-              "text": "Mathématiques Informatiques — Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou) : Bac recommandé « C, D », mode d'entrée « Classement », Bourse (figure du guide) : 63, Aide_FPP (figure du guide) : 43."
+              "text": "Offre PUB-184 : Mathématiques Informatiques, Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou) — Bac recommandé : C, D ; Mode d'entrée : Classement ; Bourse : 63 ; Aide_FPP : 43."
             },
             {
-              "claim_id": "calc-PUB-184",
+              "claim_id": "o3-calc",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1221,17 +1143,17 @@
                     {
                       "coefficient": 2,
                       "matiere": "Anglais",
-                      "note": 12
+                      "note": 12.0
                     },
                     {
                       "coefficient": 6,
                       "matiere": "Mathématiques",
-                      "note": 14
+                      "note": 14.0
                     },
                     {
                       "coefficient": 5,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
+                      "note": 13.0
                     }
                   ],
                   "result": 13.31,
@@ -1245,10 +1167,93 @@
                   "valeur": "Mathématiques Informatiques"
                 }
               ],
-              "text": "Moyenne de classement pour Mathématiques Informatiques : 13.31."
+              "text": "Pour l'offre PUB-184, votre moyenne de classement est de 13.31/20."
             },
             {
-              "claim_id": "offre-PUB-078",
+              "claim_id": "o4",
+              "proofs": [
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                },
+                {
+                  "champ": "Établissement",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)"
+                },
+                {
+                  "champ": "Bac_recommandé",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "C, D"
+                },
+                {
+                  "champ": "Mode_entrée",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "Classement"
+                },
+                {
+                  "champ": "Bourse",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "35"
+                },
+                {
+                  "champ": "Aide_FPP",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "7"
+                }
+              ],
+              "text": "Offre PUB-162 : Génie Biologique et Bioprocédés (GBB), Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) — Bac recommandé : C, D ; Mode d'entrée : Classement ; Bourse : 35 ; Aide_FPP : 7."
+            },
+            {
+              "claim_id": "o4-calc",
+              "proofs": [
+                {
+                  "formula": "M = Σ(mi·ci) / Σci",
+                  "inputs": [
+                    {
+                      "coefficient": 6,
+                      "matiere": "Mathématiques",
+                      "note": 14.0
+                    },
+                    {
+                      "coefficient": 5,
+                      "matiere": "Sciences Physiques (PCT/SPCT)",
+                      "note": 13.0
+                    },
+                    {
+                      "coefficient": 2,
+                      "matiere": "SVT",
+                      "note": 12.0
+                    }
+                  ],
+                  "result": 13.31,
+                  "type": "calc"
+                },
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                }
+              ],
+              "text": "Pour l'offre PUB-162, votre moyenne de classement est de 13.31/20."
+            },
+            {
+              "claim_id": "o5",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1293,10 +1298,10 @@
                   "valeur": "119"
                 }
               ],
-              "text": "Mathématiques Informatique et Applications — Faculté des Sciences Techniques (FAST) : Bac recommandé « C », mode d'entrée « Classement », Bourse (figure du guide) : 200, Aide_FPP (figure du guide) : 119."
+              "text": "Offre PUB-078 : Mathématiques Informatique et Applications, Faculté des Sciences Techniques (FAST) — Bac recommandé : C ; Mode d'entrée : Classement ; Bourse : 200 ; Aide_FPP : 119."
             },
             {
-              "claim_id": "calc-PUB-078",
+              "claim_id": "o5-calc",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1304,17 +1309,17 @@
                     {
                       "coefficient": 2,
                       "matiere": "Français",
-                      "note": 11
+                      "note": 11.0
                     },
                     {
                       "coefficient": 6,
                       "matiere": "Mathématiques",
-                      "note": 14
+                      "note": 14.0
                     },
                     {
                       "coefficient": 5,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
+                      "note": 13.0
                     }
                   ],
                   "result": 13.15,
@@ -1328,7 +1333,7 @@
                   "valeur": "Mathématiques Informatique et Applications"
                 }
               ],
-              "text": "Moyenne de classement pour Mathématiques Informatique et Applications : 13.15."
+              "text": "Pour l'offre PUB-078, votre moyenne de classement est de 13.15/20."
             }
           ],
           "schema_version": 1
@@ -1388,20 +1393,32 @@
           "serie": "C",
           "transcript": "Bonjour, je suis en terminale série C. J'ai eu douze virgule trente-six de moyenne au bac. J'aime beaucoup les mathématiques et la biologie, et je voudrais étudier la médecine. Je n'ai pas de préférence de ville."
         },
+        "refused_claims": [],
         "report": {
           "claims": [
             {
-              "claim_id": "serie",
+              "claim_id": "c1",
               "proofs": [
                 {
-                  "quote": "je suis en terminale série C.",
+                  "quote": "série C",
                   "type": "transcript"
                 }
               ],
-              "text": "Vous êtes en terminale série C."
+              "text": "Vous êtes en série C."
             },
             {
-              "claim_id": "interets-metier",
+              "claim_id": "c2",
+              "proofs": [
+                {
+                  "matiere": "Mathématiques",
+                  "note": 14,
+                  "type": "grade"
+                }
+              ],
+              "text": "Votre note en Mathématiques est de 14/20."
+            },
+            {
+              "claim_id": "c3",
               "proofs": [
                 {
                   "quote": "les mathématiques",
@@ -1410,110 +1427,22 @@
                 {
                   "quote": "la biologie",
                   "type": "transcript"
-                },
+                }
+              ],
+              "text": "Vos intérêts déclarés sont les mathématiques et la biologie."
+            },
+            {
+              "claim_id": "c4",
+              "proofs": [
                 {
-                  "quote": "je voudrais étudier la médecine.",
+                  "quote": "je voudrais étudier la médecine",
                   "type": "transcript"
                 }
               ],
-              "text": "Vos intérêts déclarés sont les mathématiques et la biologie, et vous voudriez étudier la médecine."
+              "text": "Vous voudriez étudier la médecine."
             },
             {
-              "claim_id": "note-maths",
-              "proofs": [
-                {
-                  "matiere": "Mathématiques",
-                  "note": 14,
-                  "type": "grade"
-                }
-              ],
-              "text": "Sur votre relevé, votre note de Mathématiques est de 14/20."
-            },
-            {
-              "claim_id": "offre-PUB-062",
-              "proofs": [
-                {
-                  "champ": "Filière",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "Médecine Générale"
-                },
-                {
-                  "champ": "Établissement",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "Faculté des Sciences de la Santé (FSS)"
-                },
-                {
-                  "champ": "Bac_recommandé",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "C, D"
-                },
-                {
-                  "champ": "Mode_entrée",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "Classement"
-                },
-                {
-                  "champ": "Bourse",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "95"
-                },
-                {
-                  "champ": "Aide_FPP",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "20"
-                }
-              ],
-              "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) : Bac recommandé « C, D », mode d'entrée « Classement », Bourse (figure du guide) : 95, Aide_FPP (figure du guide) : 20."
-            },
-            {
-              "claim_id": "calc-PUB-062",
-              "proofs": [
-                {
-                  "formula": "M = Σ(mi·ci) / Σci",
-                  "inputs": [
-                    {
-                      "coefficient": 6,
-                      "matiere": "Mathématiques",
-                      "note": 14
-                    },
-                    {
-                      "coefficient": 5,
-                      "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
-                    },
-                    {
-                      "coefficient": 2,
-                      "matiere": "SVT",
-                      "note": 12
-                    }
-                  ],
-                  "result": 13.31,
-                  "type": "calc"
-                },
-                {
-                  "champ": "Filière",
-                  "offre_id": "PUB-062",
-                  "page_pdf": 36,
-                  "type": "filiere",
-                  "valeur": "Médecine Générale"
-                }
-              ],
-              "text": "Moyenne de classement pour Médecine Générale : 13.31."
-            },
-            {
-              "claim_id": "offre-PUB-133",
+              "claim_id": "o1",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1558,10 +1487,10 @@
                   "valeur": "30"
                 }
               ],
-              "text": "Médecine Humaine — Faculté de Médecine (FM) : Bac recommandé « C, D », mode d'entrée « Classement », Bourse (figure du guide) : 100, Aide_FPP (figure du guide) : 30."
+              "text": "Offre PUB-133 : Médecine Humaine, Faculté de Médecine (FM) — Bac recommandé : C, D ; Mode d'entrée : Classement ; Bourse : 100 ; Aide_FPP : 30."
             },
             {
-              "claim_id": "calc-PUB-133",
+              "claim_id": "o1-calc",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1569,17 +1498,17 @@
                     {
                       "coefficient": 6,
                       "matiere": "Mathématiques",
-                      "note": 14
+                      "note": 14.0
                     },
                     {
                       "coefficient": 5,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
+                      "note": 13.0
                     },
                     {
                       "coefficient": 2,
                       "matiere": "SVT",
-                      "note": 12
+                      "note": 12.0
                     }
                   ],
                   "result": 13.31,
@@ -1593,58 +1522,58 @@
                   "valeur": "Médecine Humaine"
                 }
               ],
-              "text": "Moyenne de classement pour Médecine Humaine : 13.31."
+              "text": "Pour l'offre PUB-133, votre moyenne de classement est de 13.31/20."
             },
             {
-              "claim_id": "offre-PUB-162",
+              "claim_id": "o2",
               "proofs": [
                 {
                   "champ": "Filière",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                  "valeur": "Médecine Générale"
                 },
                 {
                   "champ": "Établissement",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)"
+                  "valeur": "Faculté des Sciences de la Santé (FSS)"
                 },
                 {
                   "champ": "Bac_recommandé",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
                   "valeur": "C, D"
                 },
                 {
                   "champ": "Mode_entrée",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
                   "valeur": "Classement"
                 },
                 {
                   "champ": "Bourse",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "35"
+                  "valeur": "95"
                 },
                 {
                   "champ": "Aide_FPP",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "7"
+                  "valeur": "20"
                 }
               ],
-              "text": "Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé « C, D », mode d'entrée « Classement », Bourse (figure du guide) : 35, Aide_FPP (figure du guide) : 7."
+              "text": "Offre PUB-062 : Médecine Générale, Faculté des Sciences de la Santé (FSS) — Bac recommandé : C, D ; Mode d'entrée : Classement ; Bourse : 95 ; Aide_FPP : 20."
             },
             {
-              "claim_id": "calc-PUB-162",
+              "claim_id": "o2-calc",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1652,17 +1581,17 @@
                     {
                       "coefficient": 6,
                       "matiere": "Mathématiques",
-                      "note": 14
+                      "note": 14.0
                     },
                     {
                       "coefficient": 5,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
+                      "note": 13.0
                     },
                     {
                       "coefficient": 2,
                       "matiere": "SVT",
-                      "note": 12
+                      "note": 12.0
                     }
                   ],
                   "result": 13.31,
@@ -1670,16 +1599,16 @@
                 },
                 {
                   "champ": "Filière",
-                  "offre_id": "PUB-162",
-                  "page_pdf": 62,
+                  "offre_id": "PUB-062",
+                  "page_pdf": 36,
                   "type": "filiere",
-                  "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                  "valeur": "Médecine Générale"
                 }
               ],
-              "text": "Moyenne de classement pour Génie Biologique et Bioprocédés (GBB) : 13.31."
+              "text": "Pour l'offre PUB-062, votre moyenne de classement est de 13.31/20."
             },
             {
-              "claim_id": "offre-PUB-184",
+              "claim_id": "o3",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1724,10 +1653,10 @@
                   "valeur": "43"
                 }
               ],
-              "text": "Mathématiques Informatiques — Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou) : Bac recommandé « C, D », mode d'entrée « Classement », Bourse (figure du guide) : 63, Aide_FPP (figure du guide) : 43."
+              "text": "Offre PUB-184 : Mathématiques Informatiques, Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou) — Bac recommandé : C, D ; Mode d'entrée : Classement ; Bourse : 63 ; Aide_FPP : 43."
             },
             {
-              "claim_id": "calc-PUB-184",
+              "claim_id": "o3-calc",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1735,17 +1664,17 @@
                     {
                       "coefficient": 2,
                       "matiere": "Anglais",
-                      "note": 12
+                      "note": 12.0
                     },
                     {
                       "coefficient": 6,
                       "matiere": "Mathématiques",
-                      "note": 14
+                      "note": 14.0
                     },
                     {
                       "coefficient": 5,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
+                      "note": 13.0
                     }
                   ],
                   "result": 13.31,
@@ -1759,10 +1688,93 @@
                   "valeur": "Mathématiques Informatiques"
                 }
               ],
-              "text": "Moyenne de classement pour Mathématiques Informatiques : 13.31."
+              "text": "Pour l'offre PUB-184, votre moyenne de classement est de 13.31/20."
             },
             {
-              "claim_id": "offre-PUB-078",
+              "claim_id": "o4",
+              "proofs": [
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                },
+                {
+                  "champ": "Établissement",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)"
+                },
+                {
+                  "champ": "Bac_recommandé",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "C, D"
+                },
+                {
+                  "champ": "Mode_entrée",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "Classement"
+                },
+                {
+                  "champ": "Bourse",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "35"
+                },
+                {
+                  "champ": "Aide_FPP",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "7"
+                }
+              ],
+              "text": "Offre PUB-162 : Génie Biologique et Bioprocédés (GBB), Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) — Bac recommandé : C, D ; Mode d'entrée : Classement ; Bourse : 35 ; Aide_FPP : 7."
+            },
+            {
+              "claim_id": "o4-calc",
+              "proofs": [
+                {
+                  "formula": "M = Σ(mi·ci) / Σci",
+                  "inputs": [
+                    {
+                      "coefficient": 6,
+                      "matiere": "Mathématiques",
+                      "note": 14.0
+                    },
+                    {
+                      "coefficient": 5,
+                      "matiere": "Sciences Physiques (PCT/SPCT)",
+                      "note": 13.0
+                    },
+                    {
+                      "coefficient": 2,
+                      "matiere": "SVT",
+                      "note": 12.0
+                    }
+                  ],
+                  "result": 13.31,
+                  "type": "calc"
+                },
+                {
+                  "champ": "Filière",
+                  "offre_id": "PUB-162",
+                  "page_pdf": 62,
+                  "type": "filiere",
+                  "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                }
+              ],
+              "text": "Pour l'offre PUB-162, votre moyenne de classement est de 13.31/20."
+            },
+            {
+              "claim_id": "o5",
               "proofs": [
                 {
                   "champ": "Filière",
@@ -1807,10 +1819,10 @@
                   "valeur": "119"
                 }
               ],
-              "text": "Mathématiques Informatique et Applications — Faculté des Sciences Techniques (FAST) : Bac recommandé « C », mode d'entrée « Classement », Bourse (figure du guide) : 200, Aide_FPP (figure du guide) : 119."
+              "text": "Offre PUB-078 : Mathématiques Informatique et Applications, Faculté des Sciences Techniques (FAST) — Bac recommandé : C ; Mode d'entrée : Classement ; Bourse : 200 ; Aide_FPP : 119."
             },
             {
-              "claim_id": "calc-PUB-078",
+              "claim_id": "o5-calc",
               "proofs": [
                 {
                   "formula": "M = Σ(mi·ci) / Σci",
@@ -1818,17 +1830,17 @@
                     {
                       "coefficient": 2,
                       "matiere": "Français",
-                      "note": 11
+                      "note": 11.0
                     },
                     {
                       "coefficient": 6,
                       "matiere": "Mathématiques",
-                      "note": 14
+                      "note": 14.0
                     },
                     {
                       "coefficient": 5,
                       "matiere": "Sciences Physiques (PCT/SPCT)",
-                      "note": 13
+                      "note": 13.0
                     }
                   ],
                   "result": 13.15,
@@ -1842,14 +1854,14 @@
                   "valeur": "Mathématiques Informatique et Applications"
                 }
               ],
-              "text": "Moyenne de classement pour Mathématiques Informatique et Applications : 13.15."
+              "text": "Pour l'offre PUB-078, votre moyenne de classement est de 13.15/20."
             }
           ],
           "schema_version": 1
         },
         "language": "fr"
       },
-      "result": "PathProof — rapport vérifié\nSérie : C\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Mathématiques Informatiques (Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou)) — PUB-184, page 63 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Mathématiques Informatique et Applications (Faculté des Sciences Techniques (FAST)) — PUB-078, page 44 du guide officiel — série C dans Bac_recommandé (C) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en terminale série C. ».\n- Tu as dit : « les mathématiques ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « je voudrais étudier la médecine. ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Mathématiques Informatiques (PUB-184) : Débouchés « Cadres de télécommunications optiques et des nouvelles technologies de l'information et de la communication, Enseignants des lycées et collèges (BAPES et CAPES en MI) après complément de formation en sciences de l'éducation, Accès aux écoles d'ingénieur, Accès à un master recherche ou professionnel en mathématique ou en informatique pouvant déboucher sur une thèse de doctorat ».\n- Mathématiques Informatique et Applications (PUB-078) : Débouchés « Enseignement Maths, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Mathématiques Informatiques (PUB-184) : 63 bourses et 43 aides FPP prévues (guide, page 63).\n- Mathématiques Informatique et Applications (PUB-078) : 200 bourses et 119 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série C.\n- Médecine Générale (PUB-062) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Mathématiques Informatiques (PUB-184) : Anglais 12 × 2, Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5 : 13,31 / 20.\n- Mathématiques Informatique et Applications (PUB-078) : Français 11 × 2, Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5 : 13,15 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Mathématiques Informatiques (Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou)) — PUB-184, page 63 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+      "result": "PathProof — rapport vérifié\nSérie : C\n\n## Accessibilité\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Mathématiques Informatiques (Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou)) — PUB-184, page 63 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série C dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Mathématiques Informatique et Applications (Faculté des Sciences Techniques (FAST)) — PUB-078, page 44 du guide officiel — série C dans Bac_recommandé (C) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « série C ».\n- Tu as dit : « les mathématiques ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « je voudrais étudier la médecine ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Mathématiques Informatiques (PUB-184) : Débouchés « Cadres de télécommunications optiques et des nouvelles technologies de l'information et de la communication, Enseignants des lycées et collèges (BAPES et CAPES en MI) après complément de formation en sciences de l'éducation, Accès aux écoles d'ingénieur, Accès à un master recherche ou professionnel en mathématique ou en informatique pouvant déboucher sur une thèse de doctorat ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Mathématiques Informatique et Applications (PUB-078) : Débouchés « Enseignement Maths, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Mathématiques Informatiques (PUB-184) : 63 bourses et 43 aides FPP prévues (guide, page 63).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Mathématiques Informatique et Applications (PUB-078) : 200 bourses et 119 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série C.\n- Médecine Humaine (PUB-133) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Médecine Générale (PUB-062) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Mathématiques Informatiques (PUB-184) : Anglais 12 × 2, Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5 : 13,31 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5, SVT 12 × 2 : 13,31 / 20.\n- Mathématiques Informatique et Applications (PUB-078) : Français 11 × 2, Mathématiques 14 × 6, Sciences Physiques (PCT/SPCT) 13 × 5 : 13,15 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n2. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n3. Mathématiques Informatiques (Faculté des Sciences et Techniques de Natitingou (FAST/Natitingou)) — PUB-184, page 63 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
       "decision": "continue",
       "model": "muse-wonder-1.0"
     }

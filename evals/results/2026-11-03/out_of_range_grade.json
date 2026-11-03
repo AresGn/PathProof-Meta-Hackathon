@@ -2,10 +2,6 @@
   "case_id": "out_of_range_grade",
   "date": "2026-11-03",
   "language": "fr",
-  "models": {
-    "deciding": "muse-spark-1.3-contributor",
-    "drafting": "muse-wonder-1.0"
-  },
   "files": [
     {
       "role": "grade_sheet",
@@ -14,21 +10,27 @@
     }
   ],
   "student_answers": [],
+  "exchanges": [
+    {
+      "question": "Votre relevé indique 25/20 en Mathématiques, ce qui dépasse la plage 0-20. Pouvez-vous envoyer une nouvelle photo lisible du relevé pour vérifier cette note ?",
+      "answer": ""
+    }
+  ],
   "outcome_status": "needs_input",
   "report_text": null,
   "questions": [
-    "Sur la photo de votre relevé, la note lue en Mathématiques est 25, ce qui est hors de l'échelle 0-20. Pouvez-vous renvoyer une nouvelle photo lisible du relevé pour vérifier cette note ?"
+    "Votre relevé indique 25/20 en Mathématiques, ce qui dépasse la plage 0-20. Pouvez-vous envoyer une nouvelle photo lisible du relevé pour vérifier cette note ?"
   ],
-  "duration_seconds": 21.75,
+  "duration_seconds": 16.45299999997951,
   "usage": {
-    "prompt_tokens": 6697,
-    "completion_tokens": 906,
-    "total_tokens": 7603,
+    "prompt_tokens": 6839,
+    "completion_tokens": 826,
+    "total_tokens": 7665,
     "streaming_calls": 0,
     "by_model": {
       "muse-spark-1.3-contributor": {
-        "prompt_tokens": 6697,
-        "completion_tokens": 906
+        "prompt_tokens": 6839,
+        "completion_tokens": 826
       }
     }
   },
@@ -104,11 +106,11 @@
       "step": 2,
       "tool": "ask_student",
       "args": {
-        "question": "Sur la photo de votre relevé, la note lue en Mathématiques est 25, ce qui est hors de l'échelle 0-20. Pouvez-vous renvoyer une nouvelle photo lisible du relevé pour vérifier cette note ?"
+        "question": "Votre relevé indique 25/20 en Mathématiques, ce qui dépasse la plage 0-20. Pouvez-vous envoyer une nouvelle photo lisible du relevé pour vérifier cette note ?"
       },
       "result": {
         "status": "needs_input",
-        "question": "Sur la photo de votre relevé, la note lue en Mathématiques est 25, ce qui est hors de l'échelle 0-20. Pouvez-vous renvoyer une nouvelle photo lisible du relevé pour vérifier cette note ?"
+        "question": "Votre relevé indique 25/20 en Mathématiques, ce qui dépasse la plage 0-20. Pouvez-vous envoyer une nouvelle photo lisible du relevé pour vérifier cette note ?"
       },
       "decision": "suspend",
       "model": "muse-spark-1.3-contributor"

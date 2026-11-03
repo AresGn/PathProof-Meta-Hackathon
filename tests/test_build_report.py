@@ -328,7 +328,28 @@ def test_no_verified_offer_says_so_instead_of_recommending():
     assert verify_report(report, CONTEXT) == []
     text = build_report(report, CONTEXT)
     assert "Aucune offre vérifiée" in text
+    # The guide cites médecin (PUB-062): do not claim the opposite.
+    assert "Aucun débouché du guide ne cite ce métier." not in text
     assert "PUB-" not in text.split("## 3 choix")[1].split("Rappel")[0]
+
+
+def test_no_offer_report_says_no_outlet_only_when_the_guide_is_silent():
+    transcript = "je suis en série D. Mon métier préféré serait pilote de ligne."
+    context = {"serie": "D", "grades": GRADES, "transcript": transcript}
+    report = {"schema_version": 1,
+              "claims": [
+                  {"claim_id": "svt-grade", "text": "SVT : 15/20 au relevé.",
+                   "proofs": [{"type": "grade", "matiere": "SVT", "note": 15}]},
+                  {"claim_id": "pilot-goal",
+                   "text": "Tu as dit vouloir être pilote de ligne.",
+                   "proofs": [{"type": "transcript",
+                               "quote": "Mon métier préféré serait pilote de ligne"}]},
+              ]}
+    assert verify_report(report, context) == []
+    french = build_report(report, context, language="fr")
+    english = build_report(report, context, language="en")
+    assert "Aucun débouché du guide ne cite ce métier." in french
+    assert "No career path in the guide cites this job." in english
 
 
 def test_at_most_five_offers():

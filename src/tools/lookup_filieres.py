@@ -4,9 +4,15 @@ Access is strict and deterministic (docs/prd.md section 3.1): an offer is
 accessible only when its row has Statut_qualité = OK, the serie appears in
 Bac_recommandé (or the row is open to all series), and its page of the
 official PDF is established. Ranking is soft and explained (section 3.2):
-the metier_vise and the interets are matched as whole words against
-Débouchés_Métiers and Filière, and the ranking average is computed by
-compute_ranking_average when grades are given, never for a Concours.
+the metier_vise is matched as whole words against Débouchés_Métiers
+and Filière (French plural s/es only: infirmier ↔ infirmiers, not
+pharmacien ↔ Pharmacie and not médecin ↔ Médecine). An interest
+phrase ranks on any of its content words (prepositions like « dans »
+are stopwords). Then the ranking average. Remaining ties keep Offre_ID.
+If the targeted job is cited on a guide row that is not recommendable
+and no accessible row matches that job, ranking falls back to the
+average (PRD §3.2); equal averages are then ordered by the published
+Bourse figure, only on that fallback.
 
 Returns {"accessible": [...], "excluded": [...]}: the excluded rows are
 the ones open to the serie that strict access rejected, with the reason
@@ -25,13 +31,24 @@ from src.tools.compute_ranking_average import compute_ranking_average
 MAX_ACCESSIBLE = 5  # docs/prd.md section 3.2: the report shows at most 5 offers
 CONCOURS_NOTE = "les notes du Bac ne suffisent pas"  # docs/prd.md section 3.1, Concours entry
 MODE_NOT_PUBLISHED_REASON = "mode d'entrée non publié par le guide"  # dash cell, page 86/87/89
-_STOPWORDS = {"de", "des", "du", "la", "le", "les", "en", "et", "d", "au", "aux", "un", "une"}
+_STOPWORDS = {
+    "de", "des", "du", "la", "le", "les", "en", "et", "d", "au", "aux",
+    "un", "une", "dans", "pour", "avec", "sur", "par", "que", "qui", "dont",
+    "mais", "pas", "plus", "moins", "comme", "son", "sa", "ses", "leur",
+    "vos", "nos", "cette", "cet", "ces", "je", "tu", "il", "elle", "nous",
+    "vous", "ils", "on", "mon", "ma", "mes", "ton", "ta", "tes",
+    "etre", "suis", "est", "sont", "serais", "serait", "voudrais",
+    "veux", "veut", "faire", "fait", "devenir", "travailler", "travaille",
+    "prefere", "preferee", "metier", "peut", "etre", "aussi", "bien",
+}
 # Ranking weights only order the accessible offers (PRD section 3.2 lists
 # metier, then interets, then the average): a metier match in the careers
 # outweighs one in the program name, which outweighs a single interest.
 _SCORE_METIER_DEBOUCHES = 100
 _SCORE_METIER_FILIERE = 50
 _SCORE_INTERET = 20
+# pharmacien / Pharmacie share this prefix; marin / marine do not.
+_MIN_FAMILY_PREFIX = 7
 
 
 def lookup_filieres(serie: str | None = None, metier_vise: str | None = None,
@@ -58,9 +75,12 @@ def lookup_filieres(serie: str | None = None, metier_vise: str | None = None,
         entry = _accessible_entry(row, serie, pages, metier_vise, interets, grades)
         if entry is not None:
             accessible.append(entry)
-    accessible.sort(key=lambda offer: (-offer["score"],
-                                       -(offer["moyenne_classement"] or -1),
-                                       offer["Offre_ID"]))
+    if _should_rank_by_average_only(metier_vise, accessible):
+        accessible = _accessible_by_average(serie, pages, grades, metier_vise)
+    else:
+        accessible.sort(key=lambda offer: (-offer["score"],
+                                           -(offer["moyenne_classement"] or -1),
+                                           offer["Offre_ID"]))
     return {"accessible": accessible[:MAX_ACCESSIBLE],
             "excluded": sorted(excluded, key=lambda offer: offer["Offre_ID"])}
 
@@ -169,11 +189,13 @@ def _ranking_reasons(row: dict, metier_vise: str | None,
             raisons.append(f"métier visé « {metier_vise} » retrouvé comme mots entiers "
                            f"dans Filière")
     for interet in _as_phrases(interets):
-        if _phrase_matches(interet, row.get("Débouchés_Métiers", "")) \
-                or _phrase_matches(interet, row.get("Filière", "")):
+        haystack = f"{row.get('Filière', '')} {row.get('Débouchés_Métiers', '')}"
+        matched = _matched_content_words(interet, haystack)
+        if matched:
             score += _SCORE_INTERET
-            raisons.append(f"intérêt « {interet} » retrouvé comme mots entiers "
-                           f"dans Filière ou Débouchés_Métiers")
+            found = ", ".join(matched)
+            raisons.append(f"intérêt « {found} » (de « {interet} ») retrouvé "
+                           f"comme mot entier dans Filière ou Débouchés_Métiers")
     return score, raisons
 
 
@@ -183,18 +205,128 @@ def _as_phrases(interets: list[str] | str | None) -> list[str]:
     return [interets] if isinstance(interets, str) else list(interets)
 
 
-def _phrase_matches(phrase: str, text: str) -> bool:
-    """True when every meaningful word of `phrase` is a whole word of `text`.
+def content_words(phrase: str) -> list[str]:
+    """Meaningful words of `phrase` (stopwords removed, accents folded)."""
+    return _content_words(phrase)
+
+
+def folded_words(text: str) -> list[str]:
+    """Lowercased, accent-folded tokens of `text`."""
+    return _words(text)
+
+
+def guide_cites_metier(metier: str) -> bool:
+    """True when any guide row (any Statut_qualité) cites `metier`.
+
+    Ranking stays on whole words. This check also treats a single-token
+    job and a field name that share a long prefix as the same career
+    (pharmacien / Pharmacie), so the report never says the guide is
+    silent about a job it actually publishes.
+    """
+    if not isinstance(metier, str) or not metier.strip():
+        return False
+    for row in load_offer_rows():
+        haystack = f"{row.get('Filière', '')} {row.get('Débouchés_Métiers', '')}"
+        if _phrase_matches(metier, haystack) or _family_cites(metier, haystack):
+            return True
+    return False
+
+
+def _should_rank_by_average_only(metier_vise: str | None, accessible: list) -> bool:
+    if not metier_vise or not guide_cites_metier(metier_vise):
+        return False
+    return not any(_phrase_matches(metier_vise, offer.get("Filière", ""))
+                   or _phrase_matches(metier_vise, offer.get("Débouchés_Métiers", ""))
+                   for offer in accessible)
+
+
+def _accessible_by_average(serie: str, pages: dict, grades: list[dict] | None,
+                           metier_vise: str) -> list[dict]:
+    accessible = []
+    for row in load_offer_rows():
+        if _access_failures(row, serie, pages):
+            continue
+        entry = _base_entry(row, pages)
+        entry["raisons"] = _access_reasons(row, serie, pages) + [
+            f"métier visé « {metier_vise} » cité par le guide hors ligne OK ; "
+            f"classement par moyenne de classement"]
+        entry["score"] = 0
+        entry.update(_average_fields(row, serie, grades, entry))
+        accessible.append(entry)
+    # Same three BAC grades yield the same page-8 average on every
+    # calculable Classement offer: Offre_ID would bury PUB-133. The
+    # published Bourse figure is the remaining official number; it is
+    # not used in the normal metier / interets ranking (PRD §3.2).
+    accessible.sort(key=lambda offer: (-(offer["moyenne_classement"] or -1),
+                                       -_published_quota(offer),
+                                       offer["Offre_ID"]))
+    return accessible
+
+
+def _published_quota(offer: dict) -> int:
+    raw = str(offer.get("Bourse") or "").strip()
+    return int(raw) if raw.isdigit() else -1
+
+
+def _phrase_matches(phrase: str, text: str, *, every: bool = True) -> bool:
+    """True when meaningful words of `phrase` are whole words of `text`.
 
     Whole words only, never substrings: "pilote de ligne" needs both
     "pilote" and "ligne", so the drone operator of Foresterie Tropicale
-    does not match (docs/prd.md section 3.2, case false_friend).
+    does not match (docs/prd.md section 3.2, case false_friend). French
+    plural is s/es only ("infirmier" in "Soins infirmiers"); "pharmacien"
+    is not "Pharmacie" and "médecin" is not "Médecine".
     """
-    words = [word for word in _words(phrase) if word not in _STOPWORDS]
-    if not words:
+    wanted = _content_words(phrase)
+    if not wanted:
         return False
-    text_words = set(_words(text))
-    return all(word in text_words for word in words)
+    stems = _text_stems(text)
+    hits = (_plural_stem(word) in stems for word in wanted)
+    return all(hits) if every else any(hits)
+
+
+def _matched_content_words(phrase: str, text: str) -> list[str]:
+    stems = _text_stems(text)
+    matched = []
+    for token in re.findall(r"[A-Za-zÀ-ÿ0-9]+", phrase):
+        folded = _words(token)
+        if folded and folded[0] not in _STOPWORDS and _plural_stem(folded[0]) in stems:
+            matched.append(token)
+    return matched
+
+
+def _content_words(phrase: str) -> list[str]:
+    return [word for word in _words(phrase) if word not in _STOPWORDS]
+
+
+def _text_stems(text: str) -> set[str]:
+    return {_plural_stem(word) for word in _words(text)}
+
+
+def _plural_stem(word: str) -> str:
+    if len(word) >= 6 and word.endswith("es"):
+        return word[:-2]
+    if len(word) >= 5 and word.endswith("s"):
+        return word[:-1]
+    return word
+
+
+def _family_cites(phrase: str, text: str) -> bool:
+    wanted = _content_words(phrase)
+    if len(wanted) != 1 or len(wanted[0]) < _MIN_FAMILY_PREFIX:
+        return False
+    job = wanted[0]
+    return any(_common_prefix_len(job, word) >= _MIN_FAMILY_PREFIX
+               for word in _words(text))
+
+
+def _common_prefix_len(left: str, right: str) -> int:
+    length = 0
+    for first, second in zip(left, right):
+        if first != second:
+            break
+        length += 1
+    return length
 
 
 def _words(text: str) -> list[str]:
