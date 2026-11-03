@@ -9,10 +9,12 @@ from scripts.record_demo import create_recorded_run
 from src.agent import loop
 
 ROOT = Path(__file__).resolve().parents[1]
+# Frozen copy of a verified fictional run: evals/results/ is rerun by hand and may change.
+VERIFIED_JOURNAL = ROOT / "tests" / "fixtures" / "verified_fictional_journal.json"
 
 
 def test_recorded_run_is_built_from_a_verified_fictional_journal():
-    journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
+    journal_path = VERIFIED_JOURNAL
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
 
     recording = create_recorded_run(journal)
@@ -55,7 +57,7 @@ def test_recorded_run_rejects_journals_without_a_verified_report():
 
 
 def test_recorded_run_rejects_non_sample_inputs():
-    journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
+    journal_path = VERIFIED_JOURNAL
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
     image_step = next(event for event in journal if event["tool"] == "read_grade_sheet")
     image_step["args"]["image_path"] = "tmp/student-photo.jpg"
@@ -65,7 +67,7 @@ def test_recorded_run_rejects_non_sample_inputs():
 
 
 def test_recorded_run_accepts_absolute_paths_to_the_fixed_samples():
-    journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
+    journal_path = VERIFIED_JOURNAL
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
     image_step = next(event for event in journal if event["tool"] == "read_grade_sheet")
     audio_step = next(event for event in journal if event["tool"] == "transcribe_voice")
@@ -78,7 +80,7 @@ def test_recorded_run_accepts_absolute_paths_to_the_fixed_samples():
 
 
 def test_recorded_run_rejects_mismatched_verified_context():
-    journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
+    journal_path = VERIFIED_JOURNAL
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
     build = journal[-1]
     build["args"]["context"]["serie"] = "C"
@@ -88,7 +90,7 @@ def test_recorded_run_rejects_mismatched_verified_context():
 
 
 def test_recorded_run_rejects_a_non_successful_live_outcome(monkeypatch):
-    journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
+    journal_path = VERIFIED_JOURNAL
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
 
     def fake_run(*args, **kwargs):
@@ -106,7 +108,7 @@ def test_recorded_run_rejects_a_non_successful_live_outcome(monkeypatch):
 
 
 def test_recorded_run_rejects_unexpected_question_sequence(monkeypatch):
-    journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
+    journal_path = VERIFIED_JOURNAL
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
     question_event = next(event for event in journal if event["tool"] == "ask_student")
     question_event["args"]["question"] = "Quelle est votre série ?"
