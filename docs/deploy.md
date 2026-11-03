@@ -20,6 +20,9 @@ Règle Vercel Firewall sur `POST /run` et `POST /answer` : **5 requêtes par min
 
 Commande : voir la section « Vérification » ci-dessous pour la preuve du 429.
 
+## Dépense
+Le plan Vercel est Hobby, sans carte : Vercel ne facture rien (un quota dépassé bloque le service), donc aucune alerte de dépense Vercel n'est utile. Le coût réel est celui des crédits Meta consommés par chaque exécution ; il est borné par la limite par IP ci-dessus, par les 5 exécutions simultanées et par l'**alerte de dépense Meta** (Billing), activée dès le premier jour par le titulaire de la clé (E0.2, #4).
+
 ## Limite assumée : sessions `ask_student`
 `PendingRunStore` est en mémoire. Sur Vercel, `/answer` peut tomber sur une autre instance que `/run` : réponse 404, la page restaure la trace et ferme la session (l'enregistrement E5.3 ne remplace pas ce cas, par choix : voir `docs/decisions.md`). Un stockage partagé n'est pas mis en place avant le gel du 3 nov.
 
