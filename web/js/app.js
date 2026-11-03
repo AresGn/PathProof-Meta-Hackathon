@@ -3,7 +3,9 @@
 // see steps.js, proofs.js, report.js, api.js, i18n.js and format.js.
 import { applyTranslations, setLanguage, t } from "./i18n.js";
 import {
-  describeClientError, ensureApiBase, fetchSampleFile,
+  describeClientError, ensureApiBase, fetchRecordedRun, fetchSampleFile,
+  recordedFailureReason, shouldUseRecordedRun,
+  preloadRecordedRun,
   setServerStateListener, streamAnswer, streamRun,
 } from "./api.js";
 import { renderSteps } from "./steps.js";
@@ -16,6 +18,7 @@ const stepsEl = document.getElementById("steps");
 const submitBtn = document.getElementById("submit-btn");
 const busyBar = document.getElementById("busy-bar");
 const serverStatusEl = document.getElementById("server-status");
+const recordedBanner = document.getElementById("recorded-banner");
 const answerBlock = document.getElementById("answer-block");
 const questionEl = document.getElementById("question");
 const answerInput = document.getElementById("answer-input");
@@ -46,6 +49,7 @@ let serverState = "checking";
 let lastReport = null;
 let lastReportVerified = false;
 let lastProblems = null;
+let recordedRunState = null;
 
 const proofViewer = createProofViewer({
   dialog: proofDialog,
@@ -146,12 +150,77 @@ function handleEvent(event) {
 
 function resetRunView() {
   closeSession();
+  recordedRunState = null;
+  recordedBanner.hidden = true;
   seenSteps = [];
   lastReport = null;
   lastReportVerified = false;
   lastProblems = null;
   drawSteps();
   showReport(null);
+}
+
+function restoreAnswerState(state) {
+  recordedRunState = null;
+  recordedBanner.hidden = true;
+  currentRunId = state.runId;
+  seenSteps = state.steps;
+  questionEl.textContent = state.question;
+  answerInput.value = state.answer;
+  answerBlock.hidden = false;
+  lastProblems = state.problems;
+  if (state.problems) showProblems(state.problems);
+  else showReport(state.report, state.reportVerified);
+  drawSteps(true);
+}
+
+function restoreRecordedRetryState() {
+  if (!recordedRunState?.retryState) return;
+  const state = recordedRunState.retryState;
+  recordedRunState = null;
+  restoreAnswerState(state);
+  setStatus(t("askedStatus"));
+}
+
+async function showRecordedRun(error, { retryState = null } = {}) {
+  let recording;
+  try {
+    recording = await fetchRecordedRun();
+  } catch (recordedError) {
+    if (retryState) {
+      restoreAnswerState(retryState);
+    } else {
+      closeSession();
+      seenSteps = [];
+      lastProblems = null;
+      drawSteps();
+      showReport(null);
+    }
+    setStatus(
+      `${t("errorPrefix")}${recordedFailureReason(error)} — ` +
+        t("recordedRunUnavailable", { detail: recordedFailureReason(recordedError) }),
+      true
+    );
+    return;
+  }
+  resetRunView();
+  recordedRunState = { error, retryState };
+  recordedBanner.hidden = false;
+  for (const event of recording.events) {
+    if (event.type === "step") {
+      seenSteps.push(event);
+      drawSteps();
+    }
+  }
+  const done = recording.events[recording.events.length - 1];
+  showReport(done.report, false);
+  if (retryState) {
+    currentRunId = retryState.runId;
+    questionEl.textContent = retryState.question;
+    answerInput.value = retryState.answer;
+    answerBlock.hidden = false;
+  }
+  setStatus(t("recordedRunStatus", { reason: recordedFailureReason(error) }), true);
 }
 
 async function startRun(body) {
@@ -161,7 +230,8 @@ async function startRun(body) {
   try {
     await streamRun(body, handleEvent);
   } catch (err) {
-    setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
+    if (shouldUseRecordedRun(err)) await showRecordedRun(err);
+    else setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
   } finally {
     setRunBusy(false);
   }
@@ -181,7 +251,8 @@ async function runExample(key) {
     setStatus(t("statusSending"));
     await streamRun(body, handleEvent);
   } catch (err) {
-    setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
+    if (shouldUseRecordedRun(err)) await showRecordedRun(err);
+    else setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
   } finally {
     setRunBusy(false);
   }
@@ -198,6 +269,12 @@ function applyLanguage() {
   drawSteps(true);
   if (lastProblems) showProblems(lastProblems);
   else if (lastReport) showReport(lastReport, lastReportVerified);
+  if (recordedRunState) {
+    recordedBanner.hidden = false;
+    setStatus(t("recordedRunStatus", {
+      reason: recordedFailureReason(recordedRunState.error),
+    }), true);
+  }
 }
 
 for (const btn of langBtns) {
@@ -229,6 +306,7 @@ applyTranslations();
 renderServerStatus();
 drawSteps();
 showReport(null);
+preloadRecordedRun();
 ensureApiBase();
 
 form.addEventListener("submit", async (event) => {
@@ -247,21 +325,31 @@ form.addEventListener("submit", async (event) => {
 answerBtn.addEventListener("click", async () => {
   const answer = answerInput.value;
   if (!currentRunId || !answer.trim()) return;
+  restoreRecordedRetryState();
+  const retryState = {
+    runId: currentRunId,
+    question: questionEl.textContent,
+    answer,
+    steps: [...seenSteps],
+    report: lastReport,
+    reportVerified: lastReportVerified,
+    problems: lastProblems,
+  };
   setRunBusy(true);
   answerBtn.disabled = true;
-  const stepsBeforeAnswer = seenSteps.length;
   try {
-    const result = await streamAnswer(currentRunId, answer.trim(), handleEvent);
-    if (!result.terminalSeen) {
-      seenSteps = seenSteps.slice(0, stepsBeforeAnswer);
-      drawSteps();
-      setStatus(t("answerInterrupted"), true);
-    }
+    await streamAnswer(currentRunId, answer.trim(), handleEvent);
   } catch (err) {
-    seenSteps = seenSteps.slice(0, stepsBeforeAnswer);
-    drawSteps();
-    if (err && err.status === 404) closeSession();
-    setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
+    if (err?.status === 404) {
+      restoreAnswerState(retryState);
+      closeSession();
+      setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
+    } else if (shouldUseRecordedRun(err)) {
+      await showRecordedRun(err, { retryState });
+    } else {
+      const retrySuffix = currentRunId ? t("retrySuffix") : "";
+      setStatus(`${t("errorPrefix")}${describeClientError(err)}${retrySuffix}`, true);
+    }
   } finally {
     setRunBusy(false);
     answerBtn.disabled = false;

@@ -26,6 +26,7 @@ from src.api.run_store import MAX_PENDING_RUNS, PendingRunStore, cleanup_tmpdir
 from src.cli_run import path_for_agent, verified_report_from_journal
 from src.clients.meta_client import get_client
 from src.clients.muse_spark import MUSE_SPARK_MODEL
+from src.clients.upstream_errors import classify_run_error
 
 WEB_DIR = Path(__file__).resolve().parents[2] / "web"
 SAMPLES_DIR = Path(__file__).resolve().parents[2] / "data" / "samples"
@@ -201,13 +202,16 @@ def settle_agent_run(*, run_id: str, journal: list, tmpdir: Path | None,
             pending_run_store.restore_pending_run(run_id, restore_entry)
         else:
             cleanup_tmpdir(tmpdir)
-        return {"type": "error", "run_id": run_id, "error": describe_run_error(error)}
+        return {"type": "error", "run_id": run_id,
+                "category": classify_run_error(error),
+                "error": describe_run_error(error)}
     outcome = box.get("outcome")
     if isinstance(outcome, dict) and outcome.get("status") == "needs_input":
         if not pending_run_store.try_store_pending_run(
                 run_id, outcome, tmpdir, limit=pending_limit):
             cleanup_tmpdir(tmpdir)
             return {"type": "error", "run_id": run_id,
+                    "category": "capacity",
                     "error": "too many pending runs, retry later"}
         return {"type": "needs_input", "run_id": run_id,
                 "question": outcome.get("question"),
@@ -235,7 +239,9 @@ def settle_agent_run_safely(*, run_id: str, journal: list, tmpdir: Path | None,
                 cleanup_tmpdir(tmpdir)
         except Exception:
             pass
-        return {"type": "error", "run_id": run_id, "error": describe_run_error(error)}
+        return {"type": "error", "run_id": run_id,
+                "category": classify_run_error(error),
+                "error": describe_run_error(error)}
 
 
 SETTLE_DRAIN_TIMEOUT_SECONDS = 2.0  # E5.1 review (3rd pass): grace for a live consumer to drain before the background settle
