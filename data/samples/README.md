@@ -107,8 +107,13 @@ des accents.
 - `required_tools` : outils appelés au moins une fois. `compute_ranking_average`
   n'y figure pas : `lookup_filieres` renvoie déjà la moyenne qu'il calcule, et
   `verify_report` recalcule chaque preuve `calc`.
+- `expected_offer_ids` : chaque `Offre_ID` figure dans le rapport vérifié.
 - `expected_question` : liste d'alternatives ; au moins une apparaît dans une
-  question posée par `ask_student`. `null` : aucune question attendue.
+  question posée par `ask_student`. `null` : aucune question n'est exigée
+  (la confirmation de la série d'une note vocale reste permise).
+- `student_answers` (entrée, pas une assertion) : réponses scriptées de l'élève,
+  dans l'ordre des questions ; une fois épuisées, la réponse est vide et la
+  boucle s'arrête. Le lanceur `python -m evals.run` les rejoue.
 
 Les `.txt` se passent au CLI avec `--voice-text` ; `noisy_voice` se lance
 avec `--audio` seul. Transcription mesurée de `note_vocale_bruitee.mp3` par
