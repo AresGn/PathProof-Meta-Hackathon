@@ -20,3 +20,5 @@ tmp/
 # Vercel link (E5.4): project and org ids stay local
 .vercel/
 .env.local
+# Rendered demo videos (E7.2): published on YouTube, never committed (176 MB broke the Vercel preview)
+video/
