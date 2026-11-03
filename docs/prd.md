@@ -362,12 +362,14 @@ Text to put in the README:
 
 ## 15. Submission checklist
 
-- [ ] Public repository named PathProof, readable without login
-- [ ] README: real status, "What is new" section, V1 section, Meta models used, limits, team
-- [ ] 3-minute video, link in the README
-- [ ] Public demo URL, tested from another device
-- [ ] `evals/results/` with the raw outputs and the summary table
-- [ ] No key, no personal path, no real data
-- [ ] All teammates listed on the CV platform
-- [ ] Post on X with the video, link submitted for the Viral prize
-- [ ] Submission on the CV platform before 4 November, 21:00 ET
+Status on 3 Nov (E7.4, #41; evidence in the issue comment):
+
+- [x] Public repository named PathProof, readable without login (`AresGn/PathProof-Meta-Hackathon`, public, HTTP 200 without login)
+- [x] README: real status, "What is new" section, V1 section, Meta models used, limits, team
+- [x] 3-minute video, link in the README (https://youtu.be/NGVMj1RnXyQ, 2:58)
+- [x] Public demo URL, tested from another device (E6.4, attested by the owner)
+- [x] `evals/results/` with the raw outputs and the summary table
+- [x] No key, no personal path, no real data (E7.4 audit)
+- [x] All teammates listed on the CV platform (solo entry, E6.4, attested by the owner)
+- [ ] Post on X with the video, link submitted for the Viral prize (post published, https://x.com/A18140Ares/status/2117662599462748416; the link is given at submission, E7.5)
+- [ ] Submission on the CV platform before 4 November, 21:00 ET (E7.5)

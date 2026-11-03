@@ -145,7 +145,7 @@ E1.4 proof format ─► E2.4 verify_report ────────────
 - [x] **E7.3 (S)** [#40](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/40) X post with the video. *Dep.:* E7.2. *Done on 3 Nov:* post text in `docs/video/post-x.md`, post published (https://x.com/A18140Ares/status/2117662599462748416), linked in the README.
   *Acceptance:* link noted for the submission.
 - [ ] **E7.4 (S)** [#41](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/41) Pre-submission check: search for secrets in the tree and the history, repository open without login, no personal path. *Dep.:* E7.1.
-  *Acceptance:* checklist of section 15 of the PRD fully ticked.
+  *Acceptance:* checklist of section 15 of the PRD fully ticked. *Audit done on 3 Nov:* no secret in the tree nor in the history of the 58 refs (real `MUSE_API_KEY` and `ELEVENLABS_API_KEY` values searched: 0 occurrences; key-shaped patterns: only a fake test key), no `.env`/PDF ever tracked, only the guard test matches `/home/`, repository, README, video, demo and X post answer without login. Checklist of PRD §15 ticked except the last two lines, which are the submission itself (E7.5). `gitleaks` could not be installed here, so the scan was done with `git grep`/`git log -p`; GitGuardian is green on the PRs.
 - [ ] **E7.5 (S)** [#42](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/42) Submission on the CV platform. *Dep.:* everything.
   *Acceptance:* acknowledgement of receipt archived. **Target: the evening of 3 Nov**; limit: 4 Nov, 21:00 ET = 03:00 in Porto-Novo.
 
