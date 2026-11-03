@@ -9,6 +9,8 @@ import {
   setServerStateListener, streamAnswer, streamRun,
 } from "./api.js";
 import { renderSteps } from "./steps.js";
+import { createAgentMap } from "./agent-map.js";
+import { initReveal } from "./motion.js";
 import { createProofViewer, verifiedClaims, verifiedContext } from "./proofs.js";
 import { renderProblems, renderReport } from "./report.js";
 
@@ -24,6 +26,8 @@ const questionEl = document.getElementById("question");
 const answerInput = document.getElementById("answer-input");
 const answerBtn = document.getElementById("answer-btn");
 const proofDialog = document.getElementById("proof-dialog");
+const agentPanel = document.getElementById("agent-panel");
+const agentMap = createAgentMap(document.getElementById("agent-map"));
 const exampleBtns = [...document.querySelectorAll("[data-example]")];
 const langBtns = [...document.querySelectorAll("[data-set-lang]")];
 
@@ -73,8 +77,13 @@ function renderServerStatus() {
   serverStatusEl.className = serverState === "down" ? "bad" : "";
 }
 
+function drawAgent() {
+  agentMap.update(seenSteps, { busy: runBusy, waiting: !answerBlock.hidden });
+}
+
 function drawSteps(force = false) {
   renderSteps(stepsEl, seenSteps, runBusy, force);
+  drawAgent();
 }
 
 function showReport(report, isVerified = false) {
@@ -100,12 +109,18 @@ function setRunBusy(busy) {
   busyBar.hidden = !busy;
   for (const btn of exampleBtns) btn.disabled = busy;
   if (!seenSteps.length) drawSteps();
+  else drawAgent();
+  // On a phone the agent panel sits below the form: bring the action into view.
+  if (busy && window.matchMedia("(max-width: 959px)").matches) {
+    agentPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function closeSession() {
   currentRunId = null;
   answerBlock.hidden = true;
   answerInput.value = "";
+  drawAgent();
 }
 
 function handleEvent(event) {
@@ -122,6 +137,7 @@ function handleEvent(event) {
     questionEl.textContent = event.question || "";
     answerInput.value = "";
     answerBlock.hidden = false;
+    drawAgent();
     setStatus(t("askedStatus"));
     answerBlock.scrollIntoView({ behavior: "smooth", block: "center" });
     answerInput.focus({ preventScroll: true });
@@ -306,6 +322,7 @@ applyTranslations();
 renderServerStatus();
 drawSteps();
 showReport(null);
+initReveal();
 preloadRecordedRun();
 ensureApiBase();
 

@@ -15,7 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = ROOT / "web"
 INDEX_HTML = (WEB_DIR / "index.html").read_text(encoding="utf-8")
 STYLES_CSS = (WEB_DIR / "styles.css").read_text(encoding="utf-8")
-JS_MODULES = ("i18n.js", "format.js", "api.js", "steps.js", "proofs.js", "report.js", "app.js")
+JS_MODULES = ("i18n.js", "format.js", "api.js", "steps.js", "agent-map.js", "motion.js",
+              "proofs.js", "report.js", "app.js")
 APP_JS = "\n".join((WEB_DIR / "js" / name).read_text(encoding="utf-8") for name in JS_MODULES)
 MODULES = {
     name: (WEB_DIR / "js" / name).read_text(encoding="utf-8")
@@ -270,3 +271,21 @@ def test_recorded_run_fallback_is_explicit_in_both_languages():
     assert "fetchRecordedRun" in app
     assert "showRecordedRun" in app
     assert "recordedBanner.hidden = false" in app
+
+
+def test_live_agent_map_lists_every_tool_and_never_claims_a_running_tool():
+    agent_map = MODULES["agent-map.js"]
+    for tool in ("transcribe_voice", "read_grade_sheet", "extract_profile", "ask_student",
+                 "compute_ranking_average", "lookup_filieres", "verify_report", "build_report"):
+        assert f'"{tool}"' in agent_map, tool
+    # Steps are streamed after execution: the map shows answered tools only.
+    assert "is-done" in agent_map and "is-flash" in agent_map
+    assert 'id="agent-map"' in INDEX_HTML
+    assert "agentMap.update(seenSteps" in MODULES["app.js"]
+
+
+def test_interface_layout_is_responsive_and_respects_reduced_motion():
+    assert "@media (min-width: 960px)" in STYLES_CSS
+    assert "@media (min-width: 640px)" in STYLES_CSS
+    assert "prefers-reduced-motion: reduce" in STYLES_CSS
+    assert "prefers-reduced-motion" in MODULES["motion.js"]
