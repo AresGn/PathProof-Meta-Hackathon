@@ -19,7 +19,8 @@ Bacheliers (séries C et D pour la démo), puis leurs familles. À préciser et 
 ## Sources
 - *Guide d'information et de sensibilisation des nouveaux bacheliers 2026-2027 (Licence)*, MESRS, 116 pages, sur www.enseignementsuperieur.gouv.bj : https://enseignementsuperieur.gouv.bj/uploads/document_actualite/4fa961e0a40ad936d2999887d6721e15.pdf. Un second fichier de même titre et de même longueur existe (`.../9f8c40b846f394bcf5b3e4c89420b763.pdf`) avec une pagination de sommaire différente : le 3 nov, on n'a pas établi lequel est la version dont viennent les données de `data/`. Les numéros de page de `data/pages_offres.csv` viennent du PDF local `data/source/guide_2026.pdf` et sont à recouper avant de dire que l'un des deux fichiers en ligne est « le » guide cité.
 - Version numérique du guide (GUIDO) : https://guide.apresmonbac.bj/ (indiquée par https://www.gouv.bj/article/3618/).
-- Épreuves du Bac par série (Office du Baccalauréat) : https://www.officedubacbenin.bj/spip.php?article11. Page **injoignable** le 3 nov (aucune réponse HTTP) ; ne pas la citer dans la vidéo ni le README tant qu'elle n'est pas revérifiée. Les coefficients utilisés sont dans `data/coefficients_bac_benin.json`.
+- Direction du MESRS (page officielle) : https://enseignementsuperieur.gouv.bj/directions/show/DIR-YRdw8YgM-F68E21C
+- Plateforme officielle d'information post-bac : https://apresmonbac.bj/
 
 ## Prototype antérieur
 L'enseignement tiré des 7 premiers utilisateurs de la V1 n'est pas documenté dans le dépôt ; il n'est donc pas écrit ici. Voir `docs/v1-reuse.md` pour ce qui est (et n'est pas) repris.
