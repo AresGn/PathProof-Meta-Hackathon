@@ -49,3 +49,21 @@ PROVE, VERIFY, THEN BUILD
 - Call verify_report with that draft and the context {"serie", "grades", "transcript"}: "serie" is the grade sheet's serie, "grades" is the "matieres" list returned by read_grade_sheet, "transcript" is the exact transcript text. Only an empty problem list means fully proven.
 - If verify_report returns problems, fix the claim from the tool results or remove the claim, then call verify_report again. Never present a refused claim as a fact and never work around the verifier.
 - Only when verify_report returns an empty list, call build_report with the same draft and context, return its text unchanged and add nothing after it."""
+
+
+# Appended for an English interface (docs/decisions.md E5.6). The French prompt
+# above stays the reference: a French run sends it unchanged.
+ENGLISH_LANGUAGE_RULE = """
+
+REPORT LANGUAGE (overrides every "in French" above)
+- The student reads the interface in English: write every ask_student question and the "text" of every claim in English.
+- Never translate or alter a proof: a transcript quote stays word for word in the language it was said, and guide values are copied as published."""
+
+
+def system_prompt_for(language: str) -> str:
+    """System prompt for the interface language; French is the reference prompt."""
+    if language == "en":
+        return SYSTEM_PROMPT + ENGLISH_LANGUAGE_RULE
+    if language == "fr":
+        return SYSTEM_PROMPT
+    raise ValueError(f"unsupported language: {language!r}")

@@ -27,6 +27,7 @@ from src.cli_run import path_for_agent, verified_report_from_journal
 from src.clients.meta_client import get_client
 from src.clients.muse_spark import MUSE_SPARK_MODEL
 from src.clients.upstream_errors import classify_run_error
+from src.domain.report_text import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES
 
 WEB_DIR = Path(__file__).resolve().parents[2] / "web"
 SAMPLES_DIR = Path(__file__).resolve().parents[2] / "data" / "samples"
@@ -382,8 +383,15 @@ async def run_agent(
     audio: UploadFile | None = File(default=None),
     voice: UploadFile | None = File(default=None),
     text: str | None = Form(default=None),
+    language: str = Form(default=DEFAULT_LANGUAGE),
 ) -> StreamingResponse:
-    """Accept image + optional audio + fallback text, stream the loop as SSE."""
+    """Accept image + optional audio + fallback text, stream the loop as SSE.
+
+    `language` is the interface language ("fr" or "en"): the verified report
+    and the agent's questions follow it (docs/decisions.md E5.6).
+    """
+    if language not in SUPPORTED_LANGUAGES:
+        raise HTTPException(status_code=400, detail="language must be fr or en")
     pending_run_store.purge_expired_runs()
     if pending_run_store.pending_count() >= MAX_PENDING_RUNS:
         raise HTTPException(status_code=429, detail="too many pending runs, retry later")
@@ -425,7 +433,8 @@ async def run_agent(
 
         def call() -> str | dict:
             client = get_client()
-            return loop.run(client, MUSE_SPARK_MODEL, TOOL_SCHEMAS, user_input, journal=journal)
+            return loop.run(client, MUSE_SPARK_MODEL, TOOL_SCHEMAS, user_input,
+                            journal=journal, language=language)
 
         return StreamingResponse(
             stream_agent_run(run_id=run_id, journal=journal, start=0, tmpdir=tmpdir,

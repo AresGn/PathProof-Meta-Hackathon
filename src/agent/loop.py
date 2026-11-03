@@ -48,7 +48,8 @@ recomputes or rechecks a proof itself.
 """
 import json
 
-from src.agent.prompts import SYSTEM_PROMPT
+from src.agent.prompts import system_prompt_for
+from src.domain.report_text import DEFAULT_LANGUAGE
 from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.tools.ask_student import ask_student
 from src.tools.build_report import build_report
@@ -113,20 +114,21 @@ def _filter_arguments(name: str, args: dict,
 
 
 def run(client, model: str, tool_schemas: list[dict] | None, user_input: str,
-        journal: list | None = None) -> str | dict:
+        journal: list | None = None, language: str = DEFAULT_LANGUAGE) -> str | dict:
     """Run the loop from a student input.
 
     Returns the model's final text, the `needs_input` dict of `ask_student`
     when the loop suspends (see `resume`), the `unverified` dict after 3
     consecutive `verify_report` refusals, or the step-limit sentence.
     `tool_schemas` defaults to `TOOL_SCHEMAS` (single declaration place);
-    an empty list is treated like `None`.
+    an empty list is treated like `None`. `language` ("fr" or "en") is the
+    interface language: it words the agent's sentences and the final report.
     """
-    messages = [{"role": "system", "content": SYSTEM_PROMPT},
+    messages = [{"role": "system", "content": system_prompt_for(language)},
                 {"role": "user", "content": user_input}]
     return _continue_loop(client, model, tool_schemas, messages, steps_used=0,
                           journal=journal if journal is not None else [],
-                          verify_refusals=0)
+                          verify_refusals=0, language=language)
 
 
 def resume(client, model: str, tool_schemas: list[dict] | None, suspended: dict,
@@ -141,12 +143,14 @@ def resume(client, model: str, tool_schemas: list[dict] | None, suspended: dict,
     state fails loudly (missing key), never a silent `tool_call_id: None`.
     """
     messages = suspended["messages"]
+    language = suspended.get("language", DEFAULT_LANGUAGE)
     if not isinstance(student_answer, str) or not student_answer.strip():
         return {"status": "needs_input", "question": suspended["question"],
                 "messages": messages, "tool_call_id": suspended["tool_call_id"],
                 "pending_tool_call_ids": suspended["pending_tool_call_ids"],
                 "steps_used": suspended["steps_used"],
                 "journal": suspended.get("journal") or [],
+                "language": language,
                 "consecutive_verify_refusals": suspended.get(
                     "consecutive_verify_refusals", 0)}
     answer = json.dumps({"answer": student_answer.strip()}, ensure_ascii=False)
@@ -158,12 +162,14 @@ def resume(client, model: str, tool_schemas: list[dict] | None, suspended: dict,
                           steps_used=suspended["steps_used"],
                           journal=suspended.get("journal") or [],
                           verify_refusals=suspended.get(
-                              "consecutive_verify_refusals", 0))
+                              "consecutive_verify_refusals", 0),
+                          language=language)
 
 
 def _continue_loop(client, model: str, tool_schemas: list[dict] | None,
                    messages: list, steps_used: int, journal: list,
-                   verify_refusals: int) -> str | dict:
+                   verify_refusals: int,
+                   language: str = DEFAULT_LANGUAGE) -> str | dict:
     tool_schemas = _resolve_schemas(tool_schemas)
     while steps_used < MAX_STEPS:
         msg = client.chat.completions.create(
@@ -174,7 +180,7 @@ def _continue_loop(client, model: str, tool_schemas: list[dict] | None,
             return msg.content or ""
         outcome, verify_refusals = _execute_calls(
             msg.tool_calls, messages, steps_used, journal, verify_refusals,
-            tool_schemas)
+            tool_schemas, language)
         if outcome is not None:
             return outcome
     return STOPPED_STEP_LIMIT
@@ -182,13 +188,14 @@ def _continue_loop(client, model: str, tool_schemas: list[dict] | None,
 
 def _execute_calls(tool_calls: list, messages: list, steps_used: int, journal: list,
                    verify_refusals: int,
-                   tool_schemas: list[dict] | None = None) -> tuple[str | dict | None, int]:
+                   tool_schemas: list[dict] | None = None,
+                   language: str = DEFAULT_LANGUAGE) -> tuple[str | dict | None, int]:
     """Execute one assistant message's calls; return (terminal outcome, refusals)."""
     for index, call in enumerate(tool_calls):
         if call.function.name == ASK_STUDENT_TOOL:
             outcome = _ask_student_outcome(
                 call, tool_calls[index:], messages, steps_used, journal,
-                verify_refusals, tool_schemas)
+                verify_refusals, tool_schemas, language)
             if outcome is not None:
                 return outcome, verify_refusals
             continue
@@ -199,7 +206,9 @@ def _execute_calls(tool_calls: list, messages: list, steps_used: int, journal: l
                     parse_error, DECISION_CONTINUE)
             continue
         if call.function.name == BUILD_REPORT_TOOL:
-            args = _pin_verified_draft(args, journal)
+            # The interface language is routing, like the pinned draft: the model
+            # never picks the wording of the verified report.
+            args = {**_pin_verified_draft(args, journal), "language": language}
         result, error, filtered = _execute_tool(call.function.name, args, tool_schemas)
         messages.append(_tool_observation(call, result, error))
         if call.function.name == VERIFY_REPORT_TOOL and error is None:
@@ -277,7 +286,8 @@ def _refused_claims(report: object, problems: list) -> list:
 
 def _ask_student_outcome(call, remaining_calls: list, messages: list, steps_used: int,
                          journal: list, verify_refusals: int,
-                         tool_schemas: list[dict] | None = None) -> dict | str | None:
+                         tool_schemas: list[dict] | None = None,
+                         language: str = DEFAULT_LANGUAGE) -> dict | str | None:
     """Suspend on a valid question; an invalid one is an error observation.
 
     `remaining_calls` is the suspended call plus every later call of the same
@@ -307,7 +317,7 @@ def _ask_student_outcome(call, remaining_calls: list, messages: list, steps_used
             DECISION_SUSPEND)
     return {**result, "messages": messages, "tool_call_id": call.id,
             "pending_tool_call_ids": [pending.id for pending in remaining_calls],
-            "steps_used": steps_used, "journal": journal,
+            "steps_used": steps_used, "journal": journal, "language": language,
             "consecutive_verify_refusals": verify_refusals}
 
 

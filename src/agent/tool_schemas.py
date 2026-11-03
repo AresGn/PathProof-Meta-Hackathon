@@ -138,6 +138,7 @@ TOOL_SCHEMAS: list[dict] = [
                     "report": {"type": "object"},
                     "context": {"type": "object"},
                     "refused_claims": {"type": "array", "items": {"type": "object"}},
+                    "language": {"type": "string", "enum": ["fr", "en"]},
                 },
                 "required": ["report", "context"],
                 "additionalProperties": False,

@@ -50,17 +50,19 @@ from src.domain.guide import (
     load_pages_by_id,
 )
 from src.domain.offer_subjects import ALL_SERIES_HEADER
+from src.domain.report_text import DEFAULT_LANGUAGE, REPORT_TEXT, report_text
 from src.tools.compute_ranking_average import COEFFICIENT_SOURCE, FORMULA
 from src.tools.verify_report import verify_report
 
 MAX_OFFERS = 5  # docs/prd.md section 3.2: the report shows at most 5 offers
-CONCOURS_NOTE = "les notes du Bac ne suffisent pas"  # docs/prd.md section 3.1
-ALLOCATION_REMINDER = "tout changement de filière fait perdre l'allocation"
-OFFICIAL_SITE_REMINDER = "apresmonbac.bj est le seul site officiel"
-NO_OFFER_MESSAGE = "Aucune offre vérifiée pour ce profil ; aucune recommandation."
-FEWER_THAN_THREE_NOTE = "Seules {count} offres vérifiées pour ce profil ; {count} choix proposés."
-NO_FACULTE_NOTE = ("Aucune des offres vérifiées n'est en Faculté classique : "
-                   "la page 9 du guide en demande au moins une parmi les 3 choix.")
+# French reference wording (docs/prd.md sections 3.1 and 3.3); the English
+# wording lives next to it in src/domain/report_text.py.
+CONCOURS_NOTE = REPORT_TEXT["fr"]["concours_note"]
+ALLOCATION_REMINDER = REPORT_TEXT["fr"]["allocation_reminder"]
+OFFICIAL_SITE_REMINDER = REPORT_TEXT["fr"]["official_site_reminder"]
+NO_OFFER_MESSAGE = REPORT_TEXT["fr"]["no_offer"]
+FEWER_THAN_THREE_NOTE = REPORT_TEXT["fr"]["fewer_than_three"]
+NO_FACULTE_NOTE = REPORT_TEXT["fr"]["no_faculte"]
 
 # Admission promises never reach the student: "admis" also covers
 # "admission". "chances" is plural on purpose so "changement" stays
@@ -77,6 +79,8 @@ _FORBIDDEN_SUBSTRINGS = (
     "chances",
     "probabilité",
     "probabilite",
+    "admitted",
+    "probability",
 )
 
 # Places the agent never writes itself (acceptance check on safe offers).
@@ -102,13 +106,17 @@ _QUOTED_SPAN = re.compile("«.*?»", re.DOTALL)
 
 
 def build_report(report: dict, context: dict,
-                 refused_claims: list | None = None) -> str:
+                 refused_claims: list | None = None,
+                 language: str = DEFAULT_LANGUAGE) -> str:
     """Render the verified report text; raise when a proof is missing.
 
     `refused_claims` is the loop `unverified` contract (#26): the refused
     claims of the last draft, as dicts with `claim_id` (plain ids are
-    accepted too). None means the fully verified path.
+    accepted too). None means the fully verified path. `language` ("fr" or
+    "en") only chooses the wording of the fixed sentences; an unsupported
+    language raises instead of falling back.
     """
+    text_of = report_text(language)
     problems = verify_report(report, context)
     if refused_claims is None:
         if problems:
@@ -126,7 +134,7 @@ def build_report(report: dict, context: dict,
             raise ValueError(
                 f"report promises admission: {claim.get('claim_id')!r}")
     by_type = _problems_by_claim(problems)
-    text = _render(verified, context, refused_ids, by_type)
+    text = _render(verified, context, refused_ids, by_type, text_of)
     _assert_no_forbidden_admission(_strip_quoted(text))
     return text
 
@@ -180,7 +188,8 @@ def _problems_by_claim(problems: list) -> dict[str, list[str]]:
 
 
 def _render(verified: list[dict], context: object,
-            refused_ids: set[str], by_type: dict[str, list[str]]) -> str:
+            refused_ids: set[str], by_type: dict[str, list[str]],
+            text_of: dict[str, str]) -> str:
     serie = _context_serie(context)
     rows = {row["Offre_ID"]: row for row in load_offer_rows()}
     pages = load_pages_by_id()
@@ -189,13 +198,13 @@ def _render(verified: list[dict], context: object,
     proven = _proven_champs(verified)
     _require_access_proofs(offre_ids, proven, rows, serie)
     sections = [
-        f"PathProof — rapport vérifié\nSérie : {serie}",
-        _accessibility_section(offre_ids, rows, pages, serie),
-        _correspondance_section(verified, offre_ids, rows),
-        _quotas_section(offre_ids, rows, pages),
-        _average_section(verified, offre_ids, rows, pages, serie),
-        _choices_section(offre_ids, rows, pages, faculte),
-        _unverified_section(refused_ids, by_type, offre_ids, rows),
+        text_of["title"].format(serie=serie),
+        _accessibility_section(offre_ids, rows, pages, serie, text_of),
+        _correspondance_section(verified, offre_ids, rows, text_of),
+        _quotas_section(offre_ids, rows, pages, text_of),
+        _average_section(verified, offre_ids, rows, pages, serie, text_of),
+        _choices_section(offre_ids, rows, pages, faculte, text_of),
+        _unverified_section(refused_ids, by_type, offre_ids, rows, text_of),
     ]
     return "\n\n".join(sections)
 
@@ -276,26 +285,26 @@ def _require_access_proofs(offre_ids: list[str], proven: dict[str, set[str]],
 
 
 def _accessibility_section(offre_ids: list[str], rows: dict, pages: dict,
-                           serie: str) -> str:
-    lines = ["## Accessibilité"]
+                           serie: str, text_of: dict[str, str]) -> str:
+    lines = [text_of["h_access"]]
     if not offre_ids:
-        return "\n".join([*lines, NO_OFFER_MESSAGE])
+        return "\n".join([*lines, text_of["no_offer"]])
     for offre_id in offre_ids:
         row = rows[offre_id]
         if row.get("Mode_entrée", "").strip() == NOT_PUBLISHED:
-            entry_mode = "le guide ne publie pas le mode d'entrée"
+            entry_mode = text_of["entry_not_published"]
         else:
-            entry_mode = f"Mode d'entrée : {row.get('Mode_entrée', '')}"
-        lines.append(
-            f"- {row.get('Filière', '')} ({row.get('Établissement', '')}) — "
-            f"{offre_id}, page {pages.get(offre_id)} du guide officiel — "
-            f"série {serie} dans Bac_recommandé ({row.get('Bac_recommandé', '')}) — "
-            f"{entry_mode}")
+            entry_mode = text_of["entry_mode"].format(mode=row.get("Mode_entrée", ""))
+        lines.append(text_of["access_line"].format(
+            filiere=row.get("Filière", ""), etablissement=row.get("Établissement", ""),
+            offre_id=offre_id, page=pages.get(offre_id), serie=serie,
+            bac=row.get("Bac_recommandé", ""), entry=entry_mode))
     return "\n".join(lines)
 
 
-def _correspondance_section(verified: list[dict], offre_ids: list[str], rows: dict) -> str:
-    lines = ["## Correspondance"]
+def _correspondance_section(verified: list[dict], offre_ids: list[str], rows: dict,
+                            text_of: dict[str, str]) -> str:
+    lines = [text_of["h_match"]]
     quotes = []
     for claim in verified:
         if not isinstance(claim, dict):
@@ -305,67 +314,70 @@ def _correspondance_section(verified: list[dict], offre_ids: list[str], rows: di
                 quote = proof.get("quote")
                 if isinstance(quote, str) and quote.strip() and quote not in quotes:
                     quotes.append(quote)
-    if quotes:
-        for quote in quotes:
-            lines.append(f"- Tu as dit : « {quote} ».")
+    for quote in quotes:
+        lines.append(text_of["you_said"].format(quote=quote))
     for offre_id in offre_ids:
         row = rows[offre_id]
-        lines.append(f"- {row.get('Filière', '')} ({offre_id}) : "
-                     f"Débouchés « {row.get('Débouchés_Métiers', '')} ».")
+        lines.append(text_of["outlets_line"].format(
+            filiere=row.get("Filière", ""), offre_id=offre_id,
+            debouches=row.get("Débouchés_Métiers", "")))
     if len(lines) == 1:
-        lines.append("Aucun rapprochement vérifié à afficher.")
+        lines.append(text_of["no_match"])
     return "\n".join(lines)
 
 
-def _quotas_section(offre_ids: list[str], rows: dict, pages: dict) -> str:
-    lines = ["## Quotas du guide"]
+def _quotas_section(offre_ids: list[str], rows: dict, pages: dict,
+                    text_of: dict[str, str]) -> str:
+    lines = [text_of["h_quotas"]]
     if not offre_ids:
-        return "\n".join([*lines, "Sans offre vérifiée, aucun quota à afficher."])
+        return "\n".join([*lines, text_of["no_offer_quotas"]])
     for offre_id in offre_ids:
         row = rows[offre_id]
         bourse = (row.get("Bourse") or "").strip()
         aide = (row.get("Aide_FPP") or "").strip()
         page = pages.get(offre_id)
         if bourse == NOT_PUBLISHED or aide == NOT_PUBLISHED:
-            lines.append(f"- {row.get('Filière', '')} ({offre_id}) : "
-                         f"le guide ne publie pas les quotas (Bourse, Aide_FPP), "
-                         f"page {page}.")
+            lines.append(text_of["quotas_unpublished"].format(
+                filiere=row.get("Filière", ""), offre_id=offre_id, page=page))
         else:
-            lines.append(f"- {row.get('Filière', '')} ({offre_id}) : "
-                         f"{bourse} bourses et {aide} aides FPP prévues "
-                         f"(guide, page {page}).")
+            lines.append(text_of["quotas_line"].format(
+                filiere=row.get("Filière", ""), offre_id=offre_id,
+                bourse=bourse, aide=aide, page=page))
     return "\n".join(lines)
 
 
 def _average_section(verified: list[dict], offre_ids: list[str],
-                     rows: dict, pages: dict, serie: str) -> str:
-    lines = ["## Moyenne de classement",
-             f"Formule : {FORMULA} (guide, page 8). "
-             f"Coefficients : {COEFFICIENT_SOURCE}, série {serie}."]
+                     rows: dict, pages: dict, serie: str,
+                     text_of: dict[str, str]) -> str:
+    lines = [text_of["h_average"],
+             text_of["formula_line"].format(formula=FORMULA, source=COEFFICIENT_SOURCE,
+                                            serie=serie)]
     if not offre_ids:
-        return "\n".join([*lines, "Sans offre vérifiée, aucune moyenne à afficher."])
+        return "\n".join([*lines, text_of["no_offer_average"]])
     calc_by_offre = _calc_by_offre(verified)
+    separator = text_of["decimal_separator"]
     for offre_id in offre_ids:
         row = rows[offre_id]
+        filiere = row.get("Filière", "")
         calc = calc_by_offre.get(offre_id)
         if calc is None:
             if row.get("Mode_entrée") == "Concours":
-                lines.append(f"- {row.get('Filière', '')} ({offre_id}) : "
-                             f"Concours : {CONCOURS_NOTE}, par épreuve séparée.")
+                lines.append(text_of["concours_line"].format(
+                    filiere=filiere, offre_id=offre_id, note=text_of["concours_note"]))
             else:
-                lines.append(f"- {row.get('Filière', '')} ({offre_id}) : "
-                             f"moyenne non calculée pour cette offre.")
+                lines.append(text_of["average_not_computed"].format(
+                    filiere=filiere, offre_id=offre_id))
             continue
         try:
-            detail = ", ".join(f"{entry['matiere']} {_format_number(entry['note'])} "
+            detail = ", ".join(f"{entry['matiere']} {_format_number(entry['note'], separator)} "
                                 f"× {entry['coefficient']}"
                                 for entry in calc["inputs"])
-            result = _format_number(calc["result"])
+            result = _format_number(calc["result"], separator)
         except (KeyError, TypeError, ValueError) as error:
             raise ValueError(
                 f"calc proof of {offre_id} is unusable: asking, not guessing") from error
-        lines.append(f"- {row.get('Filière', '')} ({offre_id}) : "
-                     f"{detail} : {result} / 20.")
+        lines.append(text_of["average_line"].format(
+            filiere=filiere, offre_id=offre_id, detail=detail, result=result))
     return "\n".join(lines)
 
 
@@ -400,10 +412,11 @@ def _calc_by_offre(verified: list[dict]) -> dict[str, dict]:
     return calc_by_offre
 
 
-def _choices_section(offre_ids: list[str], rows: dict, pages: dict, faculte: dict) -> str:
-    lines = ["## 3 choix pour apresmonbac.bj"]
+def _choices_section(offre_ids: list[str], rows: dict, pages: dict, faculte: dict,
+                     text_of: dict[str, str]) -> str:
+    lines = [text_of["h_choices"]]
     if not offre_ids:
-        lines.append(NO_OFFER_MESSAGE)
+        lines.append(text_of["no_offer"])
     else:
         # Draft order first (the agent's ranking), Faculte classique first
         # within it so the page-9 consigne is met whenever possible.
@@ -412,46 +425,45 @@ def _choices_section(offre_ids: list[str], rows: dict, pages: dict, faculte: dic
         ranked = oui + non
         for rank, offre_id in enumerate(ranked[:3], start=1):
             row = rows[offre_id]
-            classique = faculte.get(offre_id, "non")
-            lines.append(f"{rank}. {row.get('Filière', '')} "
-                         f"({row.get('Établissement', '')}) — {offre_id}, "
-                         f"page {pages.get(offre_id)} "
-                         f"(Faculté classique : {classique})")
+            classique = text_of["faculte_yes" if faculte.get(offre_id) == "oui" else "faculte_no"]
+            lines.append(text_of["choice_line"].format(
+                rank=rank, filiere=row.get("Filière", ""),
+                etablissement=row.get("Établissement", ""), offre_id=offre_id,
+                page=pages.get(offre_id), classique=classique))
         if len(offre_ids) < 3:
-            lines.append(FEWER_THAN_THREE_NOTE.format(count=len(offre_ids)))
+            lines.append(text_of["fewer_than_three"].format(count=len(offre_ids)))
         if not oui:
-            lines.append(NO_FACULTE_NOTE)
-    lines.append(f"Rappel : {ALLOCATION_REMINDER}.")
-    lines.append(f"Rappel : {OFFICIAL_SITE_REMINDER}.")
-    lines.append("Tu restes libre : l'agent explique, il ne choisit pas à ta place.")
+            lines.append(text_of["no_faculte"])
+    lines.append(text_of["reminder"].format(text=text_of["allocation_reminder"]))
+    lines.append(text_of["reminder"].format(text=text_of["official_site_reminder"]))
+    lines.append(text_of["stay_free"])
     return "\n".join(lines)
 
 
 def _unverified_section(refused_ids: set[str], by_type: dict[str, list[str]],
-                        offre_ids: list[str], rows: dict) -> str:
-    lines = ["## Ce que je n'ai pas pu vérifier"]
+                        offre_ids: list[str], rows: dict,
+                        text_of: dict[str, str]) -> str:
+    lines = [text_of["h_unverified"]]
     for claim_id in sorted(refused_ids):
-        kinds = ", ".join(by_type.get(claim_id, ["preuve"]))
-        lines.append(f"- {claim_id} : affirmation non vérifiée, non retenue "
-                     f"(preuve {kinds}).")
+        kinds = ", ".join(by_type.get(claim_id, [text_of["unverified_proof_kind"]]))
+        lines.append(text_of["unverified_claim"].format(claim_id=claim_id, kinds=kinds))
     for offre_id in offre_ids:
         row = rows[offre_id]
         if (row.get("Bourse") or "").strip() == NOT_PUBLISHED \
                 or (row.get("Aide_FPP") or "").strip() == NOT_PUBLISHED:
-            lines.append(f"- {offre_id} : quotas non publiés par le guide "
-                         f"(Bourse, Aide_FPP).")
+            lines.append(text_of["unverified_quotas"].format(offre_id=offre_id))
     if len(lines) == 1:
-        lines.append("Toutes les affirmations ci-dessus sont vérifiées.")
+        lines.append(text_of["all_verified"])
     return "\n".join(lines)
 
 
-def _format_number(value: object) -> str:
+def _format_number(value: object, separator: str = ",") -> str:
     try:
         number = float(value)  # type: ignore[arg-type]
     except (TypeError, ValueError):
         raise ValueError("calc result is not a number: asking, not guessing")
-    text = str(number).replace(".", ",")
-    return text.rstrip("0").rstrip(",") if "," in text else text
+    text = str(number).replace(".", separator)
+    return text.rstrip("0").rstrip(separator) if separator in text else text
 
 
 def _strip_quoted(text: str) -> str:
