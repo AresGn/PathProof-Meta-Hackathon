@@ -6,11 +6,12 @@
       "audio_path": "data/samples/note_vocale_coherente.mp3"
     },
     "result": {
-      "text": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille mon quartier pour la ville euh je préfère rester à à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter",
-      "text_normalized": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille mon quartier pour la ville euh je préfère rester à à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter",
+      "text": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous. Voilà. voilà. merci de m'écouter",
+      "text_normalized": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous. Voilà. voilà. merci de m'écouter",
       "confidence": null
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 1,
@@ -73,27 +74,28 @@
       "moyenne_affichee": 11.2,
       "flags": []
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 2,
     "tool": "extract_profile",
     "args": {
-      "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille mon quartier pour la ville euh je préfère rester à à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter"
+      "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous. Voilà. voilà. merci de m'écouter"
     },
     "result": {
       "serie_declaree": {
         "value": "D",
-        "quote": "je suis en terminale série D"
+        "quote": "série D"
       },
       "moyenne_declaree": {
         "value": 11.2,
-        "quote": "j'ai eu 11 virgule 2 de moyenne"
+        "quote": "onze virgule deux de moyenne"
       },
       "interets": [
         {
           "value": "la biologie",
-          "quote": "ce que j'aime le plus c'est la biologie"
+          "quote": "la biologie"
         },
         {
           "value": "les SVT",
@@ -106,29 +108,31 @@
       },
       "contraintes": [
         {
-          "value": "je préfère rester à à Cotonou près de mes parents",
-          "quote": "je préfère rester à à Cotonou près de mes parents"
+          "value": "je préfère rester à Cotonou près de mes parents",
+          "quote": "je préfère rester à Cotonou près de mes parents"
         },
         {
-          "value": "j'aurais besoin d'une bourse",
-          "quote": "j'aurais besoin d'une bourse"
+          "value": "j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous.",
+          "quote": "j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous."
         }
       ],
       "flags": []
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 3,
     "tool": "ask_student",
     "args": {
-      "question": "Peux-tu confirmer que tu es bien en série D, comme indiqué sur ton relevé de notes ?"
+      "question": "Pour confirmer avant de continuer : êtes-vous bien en série D (D comme Daniel) ? Répondez oui ou précisez votre série."
     },
     "result": {
       "status": "needs_input",
-      "question": "Peux-tu confirmer que tu es bien en série D, comme indiqué sur ton relevé de notes ?"
+      "question": "Pour confirmer avant de continuer : êtes-vous bien en série D (D comme Daniel) ? Répondez oui ou précisez votre série."
     },
-    "decision": "suspend"
+    "decision": "suspend",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 4,
@@ -136,42 +140,34 @@
     "args": {
       "grades": [
         {
-          "lisible": true,
           "matiere": "Anglais",
-          "note": 8.0
+          "note": 8
         },
         {
-          "lisible": true,
           "matiere": "Français",
           "note": 9.5
         },
         {
-          "lisible": true,
           "matiere": "Histoire-Géographie",
-          "note": 7.0
+          "note": 7
         },
         {
-          "lisible": true,
           "matiere": "Mathématiques",
-          "note": 12.0
+          "note": 12
         },
         {
-          "lisible": true,
           "matiere": "Philosophie",
-          "note": 8.0
+          "note": 8
         },
         {
-          "lisible": true,
           "matiere": "Sciences Physiques (PCT/SPCT)",
-          "note": 12.0
+          "note": 12
         },
         {
-          "lisible": true,
           "matiere": "SVT",
-          "note": 15.0
+          "note": 15
         },
         {
-          "lisible": true,
           "matiere": "EPS",
           "note": 10.5
         }
@@ -215,7 +211,7 @@
             "details": [
               {
                 "matiere": "Mathématiques",
-                "note": 12.0,
+                "note": 12,
                 "coefficient": 4,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -225,7 +221,7 @@
               },
               {
                 "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0,
+                "note": 12,
                 "coefficient": 4,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -235,7 +231,7 @@
               },
               {
                 "matiere": "SVT",
-                "note": 15.0,
+                "note": 15,
                 "coefficient": 5,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -277,7 +273,7 @@
             "details": [
               {
                 "matiere": "Mathématiques",
-                "note": 12.0,
+                "note": 12,
                 "coefficient": 4,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -287,7 +283,7 @@
               },
               {
                 "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0,
+                "note": 12,
                 "coefficient": 4,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -297,7 +293,7 @@
               },
               {
                 "matiere": "SVT",
-                "note": 15.0,
+                "note": 15,
                 "coefficient": 5,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -339,7 +335,7 @@
             "details": [
               {
                 "matiere": "Mathématiques",
-                "note": 12.0,
+                "note": 12,
                 "coefficient": 4,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -349,7 +345,7 @@
               },
               {
                 "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0,
+                "note": 12,
                 "coefficient": 4,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -359,7 +355,7 @@
               },
               {
                 "matiere": "SVT",
-                "note": 15.0,
+                "note": 15,
                 "coefficient": 5,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -411,7 +407,7 @@
               },
               {
                 "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0,
+                "note": 12,
                 "coefficient": 4,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -421,7 +417,7 @@
               },
               {
                 "matiere": "SVT",
-                "note": 15.0,
+                "note": 15,
                 "coefficient": 5,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -473,7 +469,7 @@
               },
               {
                 "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0,
+                "note": 12,
                 "coefficient": 4,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -483,7 +479,7 @@
               },
               {
                 "matiere": "SVT",
-                "note": 15.0,
+                "note": 15,
                 "coefficient": 5,
                 "provenance": {
                   "fichier": "coefficients_bac_benin.json",
@@ -814,7 +810,8 @@
         }
       ]
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 5,
@@ -864,12 +861,22 @@
           }
         ],
         "serie": "D",
-        "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille mon quartier pour la ville euh je préfère rester à à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter"
+        "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous. Voilà. voilà. merci de m'écouter"
       },
       "report": {
         "claims": [
           {
-            "claim_id": "c_svt",
+            "claim_id": "c01",
+            "proofs": [
+              {
+                "quote": "série D",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez déclaré : « série D »."
+          },
+          {
+            "claim_id": "c02",
             "proofs": [
               {
                 "matiere": "SVT",
@@ -877,103 +884,54 @@
                 "type": "grade"
               }
             ],
-            "text": "Ton relevé indique 15 en SVT."
+            "text": "Note lue sur le relevé en SVT : 15."
           },
           {
-            "claim_id": "c_maths",
+            "claim_id": "c03",
             "proofs": [
               {
-                "matiere": "Mathématiques",
-                "note": 12,
-                "type": "grade"
-              }
-            ],
-            "text": "Ton relevé indique 12 en Mathématiques."
-          },
-          {
-            "claim_id": "c_pct",
-            "proofs": [
+                "quote": "la biologie",
+                "type": "transcript"
+              },
               {
-                "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12,
-                "type": "grade"
-              }
-            ],
-            "text": "Ton relevé indique 12 en Sciences Physiques (PCT/SPCT)."
-          },
-          {
-            "claim_id": "c_fr",
-            "proofs": [
-              {
-                "matiere": "Français",
-                "note": 9.5,
-                "type": "grade"
-              }
-            ],
-            "text": "Ton relevé indique 9,5 en Français."
-          },
-          {
-            "claim_id": "c_serie",
-            "proofs": [
-              {
-                "quote": "je suis en terminale série D",
+                "quote": "les SVT",
                 "type": "transcript"
               }
             ],
-            "text": "Tu as dit « je suis en terminale série D »."
+            "text": "Vous avez déclaré aimer « la biologie » et « les SVT »."
           },
           {
-            "claim_id": "c_moy",
-            "proofs": [
-              {
-                "quote": "j'ai eu 11 virgule 2 de moyenne",
-                "type": "transcript"
-              }
-            ],
-            "text": "Tu as dit « j'ai eu 11 virgule 2 de moyenne »."
-          },
-          {
-            "claim_id": "c_bio",
-            "proofs": [
-              {
-                "quote": "ce que j'aime le plus c'est la biologie",
-                "type": "transcript"
-              }
-            ],
-            "text": "Tu as dit « ce que j'aime le plus c'est la biologie »."
-          },
-          {
-            "claim_id": "c_metier",
+            "claim_id": "c04",
             "proofs": [
               {
                 "quote": "peut-être médecin",
                 "type": "transcript"
               }
             ],
-            "text": "Tu as dit « peut-être médecin »."
+            "text": "Vous avez déclaré : « peut-être médecin »."
           },
           {
-            "claim_id": "c_bourse_ct",
+            "claim_id": "c05",
             "proofs": [
               {
-                "quote": "j'aurais besoin d'une bourse",
+                "quote": "je préfère rester à Cotonou près de mes parents",
                 "type": "transcript"
               }
             ],
-            "text": "Tu as dit « j'aurais besoin d'une bourse »."
+            "text": "Vous avez déclaré : « je préfère rester à Cotonou près de mes parents »."
           },
           {
-            "claim_id": "c_ville",
+            "claim_id": "c06",
             "proofs": [
               {
-                "quote": "je préfère rester à à Cotonou près de mes parents",
+                "quote": "j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous.",
                 "type": "transcript"
               }
             ],
-            "text": "Tu as dit « je préfère rester à à Cotonou près de mes parents » et le guide ne publie pas de ville."
+            "text": "Vous avez déclaré : « j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous. »"
           },
           {
-            "claim_id": "c_offre_062",
+            "claim_id": "o01",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1018,10 +976,10 @@
                 "valeur": "20"
               }
             ],
-            "text": "Médecine Générale à la Faculté des Sciences de la Santé (FSS) : bacs recommandés C, D ; mode d'entrée Classement ; le guide publie 95 bourses et 20 aides FPP."
+            "text": "Offre PUB-062 : Médecine Générale — Faculté des Sciences de la Santé (FSS) (page 36 du guide). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse : 95 (figure du guide). Aide_FPP : 20 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_062",
+            "claim_id": "o01c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1053,10 +1011,10 @@
                 "valeur": "Médecine Générale"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Médecine Générale est 13,15 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Médecine Générale (PUB-062) : 13.15."
           },
           {
-            "claim_id": "c_offre_133",
+            "claim_id": "o02",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1101,10 +1059,10 @@
                 "valeur": "30"
               }
             ],
-            "text": "Médecine Humaine à la Faculté de Médecine (FM) : bacs recommandés C, D ; mode d'entrée Classement ; le guide publie 100 bourses et 30 aides FPP."
+            "text": "Offre PUB-133 : Médecine Humaine — Faculté de Médecine (FM) (page 47 du guide). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse : 100 (figure du guide). Aide_FPP : 30 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_133",
+            "claim_id": "o02c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1136,10 +1094,10 @@
                 "valeur": "Médecine Humaine"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Médecine Humaine est 13,15 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Médecine Humaine (PUB-133) : 13.15."
           },
           {
-            "claim_id": "c_offre_162",
+            "claim_id": "o03",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1184,10 +1142,10 @@
                 "valeur": "7"
               }
             ],
-            "text": "Génie Biologique et Bioprocédés (GBB) à l'Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : bacs recommandés C, D ; mode d'entrée Classement ; le guide publie 35 bourses et 7 aides FPP."
+            "text": "Offre PUB-162 : Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) (page 62 du guide). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse : 35 (figure du guide). Aide_FPP : 7 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_162",
+            "claim_id": "o03c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1219,10 +1177,10 @@
                 "valeur": "Génie Biologique et Bioprocédés (GBB)"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Génie Biologique et Bioprocédés (GBB) est 13,15 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Génie Biologique et Bioprocédés (GBB) (PUB-162) : 13.15."
           },
           {
-            "claim_id": "c_offre_077",
+            "claim_id": "o04",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1267,10 +1225,10 @@
                 "valeur": "10"
               }
             ],
-            "text": "Hydrobiologie Appliquée à la Faculté des Sciences Techniques (FAST) : bacs recommandés C, D, DEAT ; mode d'entrée Classement ; le guide publie 51 bourses et 10 aides FPP."
+            "text": "Offre PUB-077 : Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST) (page 45 du guide). Bac recommandé : C, D, DEAT. Mode d'entrée : Classement. Bourse : 51 (figure du guide). Aide_FPP : 10 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_077",
+            "claim_id": "o04c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1302,10 +1260,10 @@
                 "valeur": "Hydrobiologie Appliquée"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Hydrobiologie Appliquée est 12,91 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Hydrobiologie Appliquée (PUB-077) : 12.91."
           },
           {
-            "claim_id": "c_offre_081",
+            "claim_id": "o05",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1350,10 +1308,10 @@
                 "valeur": "120"
               }
             ],
-            "text": "Sciences de la Vie et de la Terre à la Faculté des Sciences Techniques (FAST) : bacs recommandés C, D ; mode d'entrée Classement ; le guide publie 50 bourses et 120 aides FPP."
+            "text": "Offre PUB-081 : Sciences de la Vie et de la Terre — Faculté des Sciences Techniques (FAST) (page 44 du guide). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse : 50 (figure du guide). Aide_FPP : 120 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_081",
+            "claim_id": "o05c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1385,14 +1343,15 @@
                 "valeur": "Sciences de la Vie et de la Terre"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Sciences de la Vie et de la Terre est 12,91 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Sciences de la Vie et de la Terre (PUB-081) : 12.91."
           }
         ],
         "schema_version": 1
       }
     },
     "result": [],
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-wonder-1.0"
   },
   {
     "step": 6,
@@ -1442,12 +1401,23 @@
           }
         ],
         "serie": "D",
-        "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu 11 virgule 2 de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille famille mon quartier pour la ville euh je préfère rester à à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse parce que les études euh ça coûte cher chez nous voilà merci de m'écouter"
+        "transcript": "Bonjour, alors euh je suis en terminale série D D comme Daniel au bac j'ai eu onze virgule deux de moyenne ce que j'aime le plus c'est la biologie les SVT vraiment c'est c'est ma matière préférée plus tard j'aimerais travailler dans la santé peut-être médecin depuis petite je veux soigner les gens aider ma famille mon quartier pour la ville euh je préfère rester à Cotonou près de mes parents et honnêtement j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous. Voilà. voilà. merci de m'écouter"
       },
+      "refused_claims": [],
       "report": {
         "claims": [
           {
-            "claim_id": "c_svt",
+            "claim_id": "c01",
+            "proofs": [
+              {
+                "quote": "série D",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez déclaré : « série D »."
+          },
+          {
+            "claim_id": "c02",
             "proofs": [
               {
                 "matiere": "SVT",
@@ -1455,103 +1425,54 @@
                 "type": "grade"
               }
             ],
-            "text": "Ton relevé indique 15 en SVT."
+            "text": "Note lue sur le relevé en SVT : 15."
           },
           {
-            "claim_id": "c_maths",
+            "claim_id": "c03",
             "proofs": [
               {
-                "matiere": "Mathématiques",
-                "note": 12,
-                "type": "grade"
-              }
-            ],
-            "text": "Ton relevé indique 12 en Mathématiques."
-          },
-          {
-            "claim_id": "c_pct",
-            "proofs": [
+                "quote": "la biologie",
+                "type": "transcript"
+              },
               {
-                "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12,
-                "type": "grade"
-              }
-            ],
-            "text": "Ton relevé indique 12 en Sciences Physiques (PCT/SPCT)."
-          },
-          {
-            "claim_id": "c_fr",
-            "proofs": [
-              {
-                "matiere": "Français",
-                "note": 9.5,
-                "type": "grade"
-              }
-            ],
-            "text": "Ton relevé indique 9,5 en Français."
-          },
-          {
-            "claim_id": "c_serie",
-            "proofs": [
-              {
-                "quote": "je suis en terminale série D",
+                "quote": "les SVT",
                 "type": "transcript"
               }
             ],
-            "text": "Tu as dit « je suis en terminale série D »."
+            "text": "Vous avez déclaré aimer « la biologie » et « les SVT »."
           },
           {
-            "claim_id": "c_moy",
-            "proofs": [
-              {
-                "quote": "j'ai eu 11 virgule 2 de moyenne",
-                "type": "transcript"
-              }
-            ],
-            "text": "Tu as dit « j'ai eu 11 virgule 2 de moyenne »."
-          },
-          {
-            "claim_id": "c_bio",
-            "proofs": [
-              {
-                "quote": "ce que j'aime le plus c'est la biologie",
-                "type": "transcript"
-              }
-            ],
-            "text": "Tu as dit « ce que j'aime le plus c'est la biologie »."
-          },
-          {
-            "claim_id": "c_metier",
+            "claim_id": "c04",
             "proofs": [
               {
                 "quote": "peut-être médecin",
                 "type": "transcript"
               }
             ],
-            "text": "Tu as dit « peut-être médecin »."
+            "text": "Vous avez déclaré : « peut-être médecin »."
           },
           {
-            "claim_id": "c_bourse_ct",
+            "claim_id": "c05",
             "proofs": [
               {
-                "quote": "j'aurais besoin d'une bourse",
+                "quote": "je préfère rester à Cotonou près de mes parents",
                 "type": "transcript"
               }
             ],
-            "text": "Tu as dit « j'aurais besoin d'une bourse »."
+            "text": "Vous avez déclaré : « je préfère rester à Cotonou près de mes parents »."
           },
           {
-            "claim_id": "c_ville",
+            "claim_id": "c06",
             "proofs": [
               {
-                "quote": "je préfère rester à à Cotonou près de mes parents",
+                "quote": "j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous.",
                 "type": "transcript"
               }
             ],
-            "text": "Tu as dit « je préfère rester à à Cotonou près de mes parents » et le guide ne publie pas de ville."
+            "text": "Vous avez déclaré : « j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous. »"
           },
           {
-            "claim_id": "c_offre_062",
+            "claim_id": "o01",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1596,10 +1517,10 @@
                 "valeur": "20"
               }
             ],
-            "text": "Médecine Générale à la Faculté des Sciences de la Santé (FSS) : bacs recommandés C, D ; mode d'entrée Classement ; le guide publie 95 bourses et 20 aides FPP."
+            "text": "Offre PUB-062 : Médecine Générale — Faculté des Sciences de la Santé (FSS) (page 36 du guide). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse : 95 (figure du guide). Aide_FPP : 20 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_062",
+            "claim_id": "o01c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1631,10 +1552,10 @@
                 "valeur": "Médecine Générale"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Médecine Générale est 13,15 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Médecine Générale (PUB-062) : 13.15."
           },
           {
-            "claim_id": "c_offre_133",
+            "claim_id": "o02",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1679,10 +1600,10 @@
                 "valeur": "30"
               }
             ],
-            "text": "Médecine Humaine à la Faculté de Médecine (FM) : bacs recommandés C, D ; mode d'entrée Classement ; le guide publie 100 bourses et 30 aides FPP."
+            "text": "Offre PUB-133 : Médecine Humaine — Faculté de Médecine (FM) (page 47 du guide). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse : 100 (figure du guide). Aide_FPP : 30 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_133",
+            "claim_id": "o02c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1714,10 +1635,10 @@
                 "valeur": "Médecine Humaine"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Médecine Humaine est 13,15 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Médecine Humaine (PUB-133) : 13.15."
           },
           {
-            "claim_id": "c_offre_162",
+            "claim_id": "o03",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1762,10 +1683,10 @@
                 "valeur": "7"
               }
             ],
-            "text": "Génie Biologique et Bioprocédés (GBB) à l'Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : bacs recommandés C, D ; mode d'entrée Classement ; le guide publie 35 bourses et 7 aides FPP."
+            "text": "Offre PUB-162 : Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) (page 62 du guide). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse : 35 (figure du guide). Aide_FPP : 7 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_162",
+            "claim_id": "o03c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1797,10 +1718,10 @@
                 "valeur": "Génie Biologique et Bioprocédés (GBB)"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Génie Biologique et Bioprocédés (GBB) est 13,15 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Génie Biologique et Bioprocédés (GBB) (PUB-162) : 13.15."
           },
           {
-            "claim_id": "c_offre_077",
+            "claim_id": "o04",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1845,10 +1766,10 @@
                 "valeur": "10"
               }
             ],
-            "text": "Hydrobiologie Appliquée à la Faculté des Sciences Techniques (FAST) : bacs recommandés C, D, DEAT ; mode d'entrée Classement ; le guide publie 51 bourses et 10 aides FPP."
+            "text": "Offre PUB-077 : Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST) (page 45 du guide). Bac recommandé : C, D, DEAT. Mode d'entrée : Classement. Bourse : 51 (figure du guide). Aide_FPP : 10 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_077",
+            "claim_id": "o04c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1880,10 +1801,10 @@
                 "valeur": "Hydrobiologie Appliquée"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Hydrobiologie Appliquée est 12,91 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Hydrobiologie Appliquée (PUB-077) : 12.91."
           },
           {
-            "claim_id": "c_offre_081",
+            "claim_id": "o05",
             "proofs": [
               {
                 "champ": "Filière",
@@ -1928,10 +1849,10 @@
                 "valeur": "120"
               }
             ],
-            "text": "Sciences de la Vie et de la Terre à la Faculté des Sciences Techniques (FAST) : bacs recommandés C, D ; mode d'entrée Classement ; le guide publie 50 bourses et 120 aides FPP."
+            "text": "Offre PUB-081 : Sciences de la Vie et de la Terre — Faculté des Sciences Techniques (FAST) (page 44 du guide). Bac recommandé : C, D. Mode d'entrée : Classement. Bourse : 50 (figure du guide). Aide_FPP : 120 (figure du guide)."
           },
           {
-            "claim_id": "c_calc_081",
+            "claim_id": "o05c",
             "proofs": [
               {
                 "formula": "M = Σ(mi·ci) / Σci",
@@ -1963,13 +1884,15 @@
                 "valeur": "Sciences de la Vie et de la Terre"
               }
             ],
-            "text": "Ta moyenne de classement calculée pour Sciences de la Vie et de la Terre est 12,91 selon la formule M = Σ(mi·ci) / Σci."
+            "text": "Moyenne de classement pour Sciences de la Vie et de la Terre (PUB-081) : 12.91."
           }
         ],
         "schema_version": 1
-      }
+      },
+      "language": "fr"
     },
-    "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Sciences de la Vie et de la Terre (Faculté des Sciences Techniques (FAST)) — PUB-081, page 44 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en terminale série D ».\n- Tu as dit : « j'ai eu 11 virgule 2 de moyenne ».\n- Tu as dit : « ce que j'aime le plus c'est la biologie ».\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « j'aurais besoin d'une bourse ».\n- Tu as dit : « je préfère rester à à Cotonou près de mes parents ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n- Sciences de la Vie et de la Terre (PUB-081) : Débouchés « Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n- Sciences de la Vie et de la Terre (PUB-081) : 50 bourses et 120 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n- Sciences de la Vie et de la Terre (PUB-081) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
-    "decision": "continue"
+    "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Sciences de la Vie et de la Terre (Faculté des Sciences Techniques (FAST)) — PUB-081, page 44 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « série D ».\n- Tu as dit : « la biologie ».\n- Tu as dit : « les SVT ».\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « je préfère rester à Cotonou près de mes parents ».\n- Tu as dit : « j'aurais besoin d'une bourse, parce que les études euh ça coûte cher chez nous. ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n- Sciences de la Vie et de la Terre (PUB-081) : Débouchés « Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n- Sciences de la Vie et de la Terre (PUB-081) : 50 bourses et 120 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n- Sciences de la Vie et de la Terre (PUB-081) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+    "decision": "continue",
+    "model": "muse-wonder-1.0"
   }
 ]

@@ -1,13 +1,14 @@
 CLI run E4.4 — e4.4_clear_sheet_d_medecin.json
 Image: data/samples/releve_serie_d.jpg
 Audio: data/samples/note_vocale_coherente.mp3
-Duration: 113.4s
-Tool call events in journal: 9
+Duration: 103.3s
+Tool call events in journal: 7
 Distinct tools: 7
-Max model step reached: 8 (limit 12)
-Token usage (non-streaming Muse Spark completions): prompt=110896, completion=27433, total=138329
+Max model step reached: 6 (limit 12)
+Models that decided the steps: muse-spark-1.3-contributor (4), muse-wonder-1.0 (3)
+Token usage (non-streaming chat completions and Responses calls): prompt=68336, completion=11791, total=80127
 Student questions asked: 1
-  Q1: Pouvez-vous confirmer que vous êtes bien en série D, comme indiqué sur votre relevé ?
+  Q1: Pouvez-vous confirmer votre série au baccalauréat ? Le relevé indique la série D, mais la transcription vocale ne fournit pas d'indice de confiance.
 Outcome: finished
 Last verify_report problems: 0
 Report: verified (printed on stdout)

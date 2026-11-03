@@ -6,11 +6,12 @@
       "audio_path": "data/samples/note_vocale_contradictoire.mp3"
     },
     "result": {
-      "text": "you oui bonjour bonjour je suis en série D j'ai eu quatorze de moyenne voilà j'aime beaucoup la biologie et j'aimerais travailler dans la santé peut-être médecin au lycée ce que je préférais c'était les travaux pratiques en SVT avec le microscope je préfère rester à Cotonou et j'aurai besoin d'une bourse mes parents m'ont dit de bien chercher les filières filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup",
-      "text_normalized": "you oui bonjour bonjour je suis en série D j'ai eu 14 de moyenne voilà j'aime beaucoup la biologie et j'aimerais travailler dans la santé peut-être médecin au lycée ce que je préférais c'était les travaux pratiques en SVT avec le microscope je préfère rester à Cotonou et j'aurai besoin d'une bourse mes parents m'ont dit de bien chercher les filières filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup",
+      "text": "Euh oui, bonjour. Bonjour, je suis en série D, j'ai eu quatorze de moyenne. Voilà. J'aime beaucoup la biologie et j'aimerais travailler dans la santé, peut-être médecin. Au lycée, ce que je préférais c'était les travaux pratiques en SVT. Avec le microscope, je préfère rester à Cottonou, et j'aurais besoin besoin d'une bourse. Mes parents m'ont dit de bien chercher les filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup hein.",
+      "text_normalized": "Euh oui, bonjour. Bonjour, je suis en série D, j'ai eu 14 de moyenne. Voilà. J'aime beaucoup la biologie et j'aimerais travailler dans la santé, peut-être médecin. Au lycée, ce que je préférais c'était les travaux pratiques en SVT. Avec le microscope, je préfère rester à Cottonou, et j'aurais besoin besoin d'une bourse. Mes parents m'ont dit de bien chercher les filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup hein.",
       "confidence": null
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 1,
@@ -73,13 +74,14 @@
       "moyenne_affichee": 11.2,
       "flags": []
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 2,
     "tool": "extract_profile",
     "args": {
-      "transcript": "you oui bonjour bonjour je suis en série D j'ai eu 14 de moyenne voilà j'aime beaucoup la biologie et j'aimerais travailler dans la santé peut-être médecin au lycée ce que je préférais c'était les travaux pratiques en SVT avec le microscope je préfère rester à Cotonou et j'aurai besoin d'une bourse mes parents m'ont dit de bien chercher les filières filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup"
+      "transcript": "Euh oui, bonjour. Bonjour, je suis en série D, j'ai eu quatorze de moyenne. Voilà. J'aime beaucoup la biologie et j'aimerais travailler dans la santé, peut-être médecin. Au lycée, ce que je préférais c'était les travaux pratiques en SVT. Avec le microscope, je préfère rester à Cottonou, et j'aurais besoin besoin d'une bourse. Mes parents m'ont dit de bien chercher les filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup hein."
     },
     "result": {
       "serie_declaree": {
@@ -88,12 +90,16 @@
       },
       "moyenne_declaree": {
         "value": 14,
-        "quote": "j'ai eu 14 de moyenne"
+        "quote": "j'ai eu quatorze de moyenne"
       },
       "interets": [
         {
           "value": "la biologie",
-          "quote": "j'aime beaucoup la biologie"
+          "quote": "J'aime beaucoup la biologie"
+        },
+        {
+          "value": "les travaux pratiques en SVT",
+          "quote": "ce que je préférais c'était les travaux pratiques en SVT"
         }
       ],
       "metier_vise": {
@@ -102,41 +108,44 @@
       },
       "contraintes": [
         {
-          "value": "rester à Cotonou",
-          "quote": "je préfère rester à Cotonou"
+          "value": "rester à Cottonou",
+          "quote": "je préfère rester à Cottonou"
         },
         {
           "value": "besoin d'une bourse",
-          "quote": "j'aurai besoin d'une bourse"
+          "quote": "j'aurais besoin besoin d'une bourse"
         }
       ],
       "flags": []
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 3,
     "tool": "ask_student",
     "args": {
-      "question": "Pouvez-vous confirmer votre série au Bac ? La transcription de votre note vocale n'est pas certaine, et votre relevé indique la série D."
+      "question": "La transcription de votre message vocal n'a pas de score de confiance. Pouvez-vous confirmer que vous êtes bien en série D, comme lu sur votre relevé de notes ?"
     },
     "result": {
       "status": "needs_input",
-      "question": "Pouvez-vous confirmer votre série au Bac ? La transcription de votre note vocale n'est pas certaine, et votre relevé indique la série D."
+      "question": "La transcription de votre message vocal n'a pas de score de confiance. Pouvez-vous confirmer que vous êtes bien en série D, comme lu sur votre relevé de notes ?"
     },
-    "decision": "suspend"
+    "decision": "suspend",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 4,
     "tool": "ask_student",
     "args": {
-      "question": "Vous avez déclaré 14 de moyenne dans votre message (« j'ai eu 14 de moyenne »), mais votre relevé affiche une moyenne de 11.2. Le relevé prévaut. Pouvez-vous confirmer que nous devons garder la valeur du relevé (11.2) pour la suite ?"
+      "question": "Vous avez déclaré « j'ai eu quatorze de moyenne », mais votre relevé de notes indique une moyenne affichée de 11.2. Pouvez-vous confirmer que nous devons garder la valeur du relevé (11.2) pour la suite ?"
     },
     "result": {
       "status": "needs_input",
-      "question": "Vous avez déclaré 14 de moyenne dans votre message (« j'ai eu 14 de moyenne »), mais votre relevé affiche une moyenne de 11.2. Le relevé prévaut. Pouvez-vous confirmer que nous devons garder la valeur du relevé (11.2) pour la suite ?"
+      "question": "Vous avez déclaré « j'ai eu quatorze de moyenne », mais votre relevé de notes indique une moyenne affichée de 11.2. Pouvez-vous confirmer que nous devons garder la valeur du relevé (11.2) pour la suite ?"
     },
-    "decision": "suspend"
+    "decision": "suspend",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 5,
@@ -144,48 +153,41 @@
     "args": {
       "grades": [
         {
-          "lisible": true,
           "matiere": "Anglais",
           "note": 8.0
         },
         {
-          "lisible": true,
           "matiere": "Français",
           "note": 9.5
         },
         {
-          "lisible": true,
           "matiere": "Histoire-Géographie",
           "note": 7.0
         },
         {
-          "lisible": true,
           "matiere": "Mathématiques",
           "note": 12.0
         },
         {
-          "lisible": true,
           "matiere": "Philosophie",
           "note": 8.0
         },
         {
-          "lisible": true,
           "matiere": "Sciences Physiques (PCT/SPCT)",
           "note": 12.0
         },
         {
-          "lisible": true,
           "matiere": "SVT",
           "note": 15.0
         },
         {
-          "lisible": true,
           "matiere": "EPS",
           "note": 10.5
         }
       ],
       "interets": [
-        "la biologie"
+        "biologie",
+        "travaux pratiques en SVT"
       ],
       "metier_vise": "médecin",
       "serie": "D"
@@ -332,7 +334,7 @@
             "Statut_qualité = OK",
             "page 62 du guide officiel",
             "Mode d'entrée : Classement",
-            "intérêt « la biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+            "intérêt « biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
             "moyenne de classement 13.15 calculée sur Mathématiques, Sciences Physiques (PCT/SPCT), SVT"
           ],
           "score": 20,
@@ -394,7 +396,7 @@
             "Statut_qualité = OK",
             "page 45 du guide officiel",
             "Mode d'entrée : Classement",
-            "intérêt « la biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
+            "intérêt « biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
             "moyenne de classement 12.91 calculée sur Français, Sciences Physiques (PCT/SPCT), SVT"
           ],
           "score": 20,
@@ -759,19 +761,19 @@
         }
       ]
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 6,
     "tool": "verify_report",
     "args": {
       "context": {
-        "serie": "D",
         "grades": [
           {
             "lisible": true,
             "matiere": "Anglais",
-            "note": 8.0
+            "note": 8
           },
           {
             "lisible": true,
@@ -781,27 +783,27 @@
           {
             "lisible": true,
             "matiere": "Histoire-Géographie",
-            "note": 7.0
+            "note": 7
           },
           {
             "lisible": true,
             "matiere": "Mathématiques",
-            "note": 12.0
+            "note": 12
           },
           {
             "lisible": true,
             "matiere": "Philosophie",
-            "note": 8.0
+            "note": 8
           },
           {
             "lisible": true,
             "matiere": "Sciences Physiques (PCT/SPCT)",
-            "note": 12.0
+            "note": 12
           },
           {
             "lisible": true,
             "matiere": "SVT",
-            "note": 15.0
+            "note": 15
           },
           {
             "lisible": true,
@@ -809,397 +811,363 @@
             "note": 10.5
           }
         ],
-        "transcript": "you oui bonjour bonjour je suis en série D j'ai eu 14 de moyenne voilà j'aime beaucoup la biologie et j'aimerais travailler dans la santé peut-être médecin au lycée ce que je préférais c'était les travaux pratiques en SVT avec le microscope je préfère rester à Cotonou et j'aurai besoin d'une bourse mes parents m'ont dit de bien chercher les filières filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup"
+        "serie": "D",
+        "transcript": "Euh oui, bonjour. Bonjour, je suis en série D, j'ai eu quatorze de moyenne. Voilà. J'aime beaucoup la biologie et j'aimerais travailler dans la santé, peut-être médecin. Au lycée, ce que je préférais c'était les travaux pratiques en SVT. Avec le microscope, je préfère rester à Cottonou, et j'aurais besoin besoin d'une bourse. Mes parents m'ont dit de bien chercher les filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup hein."
       },
       "report": {
-        "schema_version": 1,
         "claims": [
           {
-            "claim_id": "c-serie-declaree",
-            "text": "Vous avez déclaré « je suis en série D ».",
+            "claim_id": "c1",
             "proofs": [
               {
-                "type": "transcript",
-                "quote": "je suis en série D"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-moyenne-declaree",
-            "text": "Vous avez déclaré « j'ai eu 14 de moyenne », mais le relevé prévaut pour la suite.",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "j'ai eu 14 de moyenne"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-interet-bio",
-            "text": "Vous avez dit « j'aime beaucoup la biologie ».",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "j'aime beaucoup la biologie"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-metier",
-            "text": "Vous visez « peut-être médecin ».",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "peut-être médecin"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-ville",
-            "text": "Vous avez indiqué « je préfère rester à Cotonou », mais le guide ne publie pas de ville.",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "je préfère rester à Cotonou"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-bourse-besoin",
-            "text": "Vous avez indiqué « j'aurai besoin d'une bourse ».",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "j'aurai besoin d'une bourse"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-grade-svt",
-            "text": "SVT lue sur le relevé : 15.",
-            "proofs": [
-              {
-                "type": "grade",
                 "matiere": "SVT",
-                "note": 15.0
+                "note": 15,
+                "type": "grade"
               }
-            ]
+            ],
+            "text": "Votre relevé de notes indique 15 en SVT."
           },
           {
-            "claim_id": "c-grade-math",
-            "text": "Mathématiques lues sur le relevé : 12.",
+            "claim_id": "c2",
             "proofs": [
               {
-                "type": "grade",
-                "matiere": "Mathématiques",
-                "note": 12.0
+                "quote": "je suis en série D",
+                "type": "transcript"
               }
-            ]
+            ],
+            "text": "Vous avez déclaré : « je suis en série D »."
           },
           {
-            "claim_id": "c-grade-pct",
-            "text": "Sciences Physiques (PCT/SPCT) lues sur le relevé : 12.",
+            "claim_id": "c3",
             "proofs": [
               {
-                "type": "grade",
-                "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0
+                "quote": "J'aime beaucoup la biologie",
+                "type": "transcript"
               }
-            ]
+            ],
+            "text": "Vous avez déclaré : « J'aime beaucoup la biologie »."
           },
           {
-            "claim_id": "c-grade-fr",
-            "text": "Français lu sur le relevé : 9.5.",
+            "claim_id": "c4",
             "proofs": [
               {
-                "type": "grade",
-                "matiere": "Français",
-                "note": 9.5
+                "quote": "peut-être médecin",
+                "type": "transcript"
               }
-            ]
+            ],
+            "text": "Vous avez déclaré : « peut-être médecin »."
           },
           {
-            "claim_id": "o062-desc",
-            "text": "Médecine Générale à la Faculté des Sciences de la Santé (FSS) est accessible en Bac C, D avec entrée Classement ; le guide y publie 95 bourses.",
+            "claim_id": "c5",
             "proofs": [
               {
-                "type": "filiere",
+                "quote": "j'aurais besoin besoin d'une bourse",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez déclaré : « j'aurais besoin besoin d'une bourse »."
+          },
+          {
+            "claim_id": "c6",
+            "proofs": [
+              {
+                "champ": "Filière",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Filière",
+                "type": "filiere",
                 "valeur": "Médecine Générale"
               },
               {
-                "type": "filiere",
+                "champ": "Établissement",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Établissement",
+                "type": "filiere",
                 "valeur": "Faculté des Sciences de la Santé (FSS)"
               },
               {
-                "type": "filiere",
+                "champ": "Bac_recommandé",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Bac_recommandé",
+                "type": "filiere",
                 "valeur": "C, D"
               },
               {
-                "type": "filiere",
+                "champ": "Mode_entrée",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Mode_entrée",
+                "type": "filiere",
                 "valeur": "Classement"
               },
               {
-                "type": "filiere",
-                "offre_id": "PUB-062",
-                "page_pdf": 36,
                 "champ": "Bourse",
-                "valeur": "95"
-              }
-            ]
-          },
-          {
-            "claim_id": "o062-calc",
-            "text": "Votre moyenne de classement pour Médecine Générale est 13.15.",
-            "proofs": [
-              {
-                "type": "filiere",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Filière",
-                "valeur": "Médecine Générale"
+                "type": "filiere",
+                "valeur": "95"
               },
               {
-                "type": "calc",
+                "champ": "Aide_FPP",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "20"
+              }
+            ],
+            "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 95 ; Aide_FPP 20."
+          },
+          {
+            "claim_id": "c7",
+            "proofs": [
+              {
                 "formula": "M = Σ(mi·ci) / Σci",
                 "inputs": [
                   {
                     "coefficient": 4,
                     "matiere": "Mathématiques",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 4,
                     "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 5,
                     "matiere": "SVT",
-                    "note": 15.0
+                    "note": 15
                   }
                 ],
-                "result": 13.15
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Médecine Générale"
               }
-            ]
+            ],
+            "text": "Moyenne de classement pour Médecine Générale : 13.15."
           },
           {
-            "claim_id": "o133-desc",
-            "text": "Médecine Humaine à la Faculté de Médecine (FM) est accessible en Bac C, D avec entrée Classement ; le guide y publie 100 bourses.",
+            "claim_id": "c8",
             "proofs": [
               {
-                "type": "filiere",
+                "champ": "Filière",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Filière",
+                "type": "filiere",
                 "valeur": "Médecine Humaine"
               },
               {
-                "type": "filiere",
+                "champ": "Établissement",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Établissement",
+                "type": "filiere",
                 "valeur": "Faculté de Médecine (FM)"
               },
               {
-                "type": "filiere",
+                "champ": "Bac_recommandé",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Bac_recommandé",
+                "type": "filiere",
                 "valeur": "C, D"
               },
               {
-                "type": "filiere",
+                "champ": "Mode_entrée",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Mode_entrée",
+                "type": "filiere",
                 "valeur": "Classement"
               },
               {
-                "type": "filiere",
-                "offre_id": "PUB-133",
-                "page_pdf": 47,
                 "champ": "Bourse",
-                "valeur": "100"
-              }
-            ]
-          },
-          {
-            "claim_id": "o133-calc",
-            "text": "Votre moyenne de classement pour Médecine Humaine est 13.15.",
-            "proofs": [
-              {
-                "type": "filiere",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Filière",
-                "valeur": "Médecine Humaine"
+                "type": "filiere",
+                "valeur": "100"
               },
               {
-                "type": "calc",
+                "champ": "Aide_FPP",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "30"
+              }
+            ],
+            "text": "Médecine Humaine — Faculté de Médecine (FM) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 100 ; Aide_FPP 30."
+          },
+          {
+            "claim_id": "c9",
+            "proofs": [
+              {
                 "formula": "M = Σ(mi·ci) / Σci",
                 "inputs": [
                   {
                     "coefficient": 4,
                     "matiere": "Mathématiques",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 4,
                     "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 5,
                     "matiere": "SVT",
-                    "note": 15.0
+                    "note": 15
                   }
                 ],
-                "result": 13.15
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Médecine Humaine"
               }
-            ]
+            ],
+            "text": "Moyenne de classement pour Médecine Humaine : 13.15."
           },
           {
-            "claim_id": "o162-desc",
-            "text": "Génie Biologique et Bioprocédés (GBB) à l'Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) est accessible en Bac C, D avec entrée Classement ; le guide y publie 35 bourses.",
+            "claim_id": "c10",
             "proofs": [
               {
-                "type": "filiere",
+                "champ": "Filière",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Filière",
+                "type": "filiere",
                 "valeur": "Génie Biologique et Bioprocédés (GBB)"
               },
               {
-                "type": "filiere",
+                "champ": "Établissement",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Établissement",
+                "type": "filiere",
                 "valeur": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)"
               },
               {
-                "type": "filiere",
+                "champ": "Bac_recommandé",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Bac_recommandé",
+                "type": "filiere",
                 "valeur": "C, D"
               },
               {
-                "type": "filiere",
+                "champ": "Mode_entrée",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Mode_entrée",
+                "type": "filiere",
                 "valeur": "Classement"
               },
               {
-                "type": "filiere",
-                "offre_id": "PUB-162",
-                "page_pdf": 62,
                 "champ": "Bourse",
-                "valeur": "35"
-              }
-            ]
-          },
-          {
-            "claim_id": "o162-calc",
-            "text": "Votre moyenne de classement pour Génie Biologique et Bioprocédés (GBB) est 13.15.",
-            "proofs": [
-              {
-                "type": "filiere",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Filière",
-                "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                "type": "filiere",
+                "valeur": "35"
               },
               {
-                "type": "calc",
+                "champ": "Aide_FPP",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "7"
+              }
+            ],
+            "text": "Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 35 ; Aide_FPP 7."
+          },
+          {
+            "claim_id": "c11",
+            "proofs": [
+              {
                 "formula": "M = Σ(mi·ci) / Σci",
                 "inputs": [
                   {
                     "coefficient": 4,
                     "matiere": "Mathématiques",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 4,
                     "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 5,
                     "matiere": "SVT",
-                    "note": 15.0
+                    "note": 15
                   }
                 ],
-                "result": 13.15
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Génie Biologique et Bioprocédés (GBB)"
               }
-            ]
+            ],
+            "text": "Moyenne de classement pour Génie Biologique et Bioprocédés (GBB) : 13.15."
           },
           {
-            "claim_id": "o077-desc",
-            "text": "Hydrobiologie Appliquée à la Faculté des Sciences Techniques (FAST) est accessible en Bac C, D, DEAT avec entrée Classement ; le guide y publie 51 bourses.",
+            "claim_id": "c12",
             "proofs": [
               {
-                "type": "filiere",
+                "champ": "Filière",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Filière",
+                "type": "filiere",
                 "valeur": "Hydrobiologie Appliquée"
               },
               {
-                "type": "filiere",
+                "champ": "Établissement",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Établissement",
+                "type": "filiere",
                 "valeur": "Faculté des Sciences Techniques (FAST)"
               },
               {
-                "type": "filiere",
+                "champ": "Bac_recommandé",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Bac_recommandé",
+                "type": "filiere",
                 "valeur": "C, D, DEAT"
               },
               {
-                "type": "filiere",
+                "champ": "Mode_entrée",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Mode_entrée",
+                "type": "filiere",
                 "valeur": "Classement"
               },
               {
-                "type": "filiere",
-                "offre_id": "PUB-077",
-                "page_pdf": 45,
                 "champ": "Bourse",
-                "valeur": "51"
-              }
-            ]
-          },
-          {
-            "claim_id": "o077-calc",
-            "text": "Votre moyenne de classement pour Hydrobiologie Appliquée est 12.91.",
-            "proofs": [
-              {
-                "type": "filiere",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Filière",
-                "valeur": "Hydrobiologie Appliquée"
+                "type": "filiere",
+                "valeur": "51"
               },
               {
-                "type": "calc",
+                "champ": "Aide_FPP",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "10"
+              }
+            ],
+            "text": "Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, DEAT ; mode d'entrée Classement ; Bourse 51 ; Aide_FPP 10."
+          },
+          {
+            "claim_id": "c13",
+            "proofs": [
+              {
                 "formula": "M = Σ(mi·ci) / Σci",
                 "inputs": [
                   {
@@ -1210,35 +1178,45 @@
                   {
                     "coefficient": 4,
                     "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 5,
                     "matiere": "SVT",
-                    "note": 15.0
+                    "note": 15
                   }
                 ],
-                "result": 12.91
+                "result": 12.91,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Hydrobiologie Appliquée"
               }
-            ]
+            ],
+            "text": "Moyenne de classement pour Hydrobiologie Appliquée : 12.91."
           }
-        ]
+        ],
+        "schema_version": 1
       }
     },
     "result": [],
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-wonder-1.0"
   },
   {
     "step": 7,
     "tool": "build_report",
     "args": {
       "context": {
-        "serie": "D",
         "grades": [
           {
             "lisible": true,
             "matiere": "Anglais",
-            "note": 8.0
+            "note": 8
           },
           {
             "lisible": true,
@@ -1248,27 +1226,27 @@
           {
             "lisible": true,
             "matiere": "Histoire-Géographie",
-            "note": 7.0
+            "note": 7
           },
           {
             "lisible": true,
             "matiere": "Mathématiques",
-            "note": 12.0
+            "note": 12
           },
           {
             "lisible": true,
             "matiere": "Philosophie",
-            "note": 8.0
+            "note": 8
           },
           {
             "lisible": true,
             "matiere": "Sciences Physiques (PCT/SPCT)",
-            "note": 12.0
+            "note": 12
           },
           {
             "lisible": true,
             "matiere": "SVT",
-            "note": 15.0
+            "note": 15
           },
           {
             "lisible": true,
@@ -1276,398 +1254,363 @@
             "note": 10.5
           }
         ],
-        "transcript": "you oui bonjour bonjour je suis en série D j'ai eu 14 de moyenne voilà j'aime beaucoup la biologie et j'aimerais travailler dans la santé peut-être médecin au lycée ce que je préférais c'était les travaux pratiques en SVT avec le microscope je préfère rester à Cotonou et j'aurai besoin d'une bourse mes parents m'ont dit de bien chercher les filières filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup"
+        "serie": "D",
+        "transcript": "Euh oui, bonjour. Bonjour, je suis en série D, j'ai eu quatorze de moyenne. Voilà. J'aime beaucoup la biologie et j'aimerais travailler dans la santé, peut-être médecin. Au lycée, ce que je préférais c'était les travaux pratiques en SVT. Avec le microscope, je préfère rester à Cottonou, et j'aurais besoin besoin d'une bourse. Mes parents m'ont dit de bien chercher les filières où il y a des bourses. Donc euh je compte sur vous pour m'aider à choisir. Merci beaucoup hein."
       },
-      "refused_claims": [],
       "report": {
-        "schema_version": 1,
         "claims": [
           {
-            "claim_id": "c-serie-declaree",
-            "text": "Vous avez déclaré « je suis en série D ».",
+            "claim_id": "c1",
             "proofs": [
               {
-                "type": "transcript",
-                "quote": "je suis en série D"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-moyenne-declaree",
-            "text": "Vous avez déclaré « j'ai eu 14 de moyenne », mais le relevé prévaut pour la suite.",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "j'ai eu 14 de moyenne"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-interet-bio",
-            "text": "Vous avez dit « j'aime beaucoup la biologie ».",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "j'aime beaucoup la biologie"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-metier",
-            "text": "Vous visez « peut-être médecin ».",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "peut-être médecin"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-ville",
-            "text": "Vous avez indiqué « je préfère rester à Cotonou », mais le guide ne publie pas de ville.",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "je préfère rester à Cotonou"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-bourse-besoin",
-            "text": "Vous avez indiqué « j'aurai besoin d'une bourse ».",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "j'aurai besoin d'une bourse"
-              }
-            ]
-          },
-          {
-            "claim_id": "c-grade-svt",
-            "text": "SVT lue sur le relevé : 15.",
-            "proofs": [
-              {
-                "type": "grade",
                 "matiere": "SVT",
-                "note": 15.0
+                "note": 15,
+                "type": "grade"
               }
-            ]
+            ],
+            "text": "Votre relevé de notes indique 15 en SVT."
           },
           {
-            "claim_id": "c-grade-math",
-            "text": "Mathématiques lues sur le relevé : 12.",
+            "claim_id": "c2",
             "proofs": [
               {
-                "type": "grade",
-                "matiere": "Mathématiques",
-                "note": 12.0
+                "quote": "je suis en série D",
+                "type": "transcript"
               }
-            ]
+            ],
+            "text": "Vous avez déclaré : « je suis en série D »."
           },
           {
-            "claim_id": "c-grade-pct",
-            "text": "Sciences Physiques (PCT/SPCT) lues sur le relevé : 12.",
+            "claim_id": "c3",
             "proofs": [
               {
-                "type": "grade",
-                "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0
+                "quote": "J'aime beaucoup la biologie",
+                "type": "transcript"
               }
-            ]
+            ],
+            "text": "Vous avez déclaré : « J'aime beaucoup la biologie »."
           },
           {
-            "claim_id": "c-grade-fr",
-            "text": "Français lu sur le relevé : 9.5.",
+            "claim_id": "c4",
             "proofs": [
               {
-                "type": "grade",
-                "matiere": "Français",
-                "note": 9.5
+                "quote": "peut-être médecin",
+                "type": "transcript"
               }
-            ]
+            ],
+            "text": "Vous avez déclaré : « peut-être médecin »."
           },
           {
-            "claim_id": "o062-desc",
-            "text": "Médecine Générale à la Faculté des Sciences de la Santé (FSS) est accessible en Bac C, D avec entrée Classement ; le guide y publie 95 bourses.",
+            "claim_id": "c5",
             "proofs": [
               {
-                "type": "filiere",
+                "quote": "j'aurais besoin besoin d'une bourse",
+                "type": "transcript"
+              }
+            ],
+            "text": "Vous avez déclaré : « j'aurais besoin besoin d'une bourse »."
+          },
+          {
+            "claim_id": "c6",
+            "proofs": [
+              {
+                "champ": "Filière",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Filière",
+                "type": "filiere",
                 "valeur": "Médecine Générale"
               },
               {
-                "type": "filiere",
+                "champ": "Établissement",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Établissement",
+                "type": "filiere",
                 "valeur": "Faculté des Sciences de la Santé (FSS)"
               },
               {
-                "type": "filiere",
+                "champ": "Bac_recommandé",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Bac_recommandé",
+                "type": "filiere",
                 "valeur": "C, D"
               },
               {
-                "type": "filiere",
+                "champ": "Mode_entrée",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Mode_entrée",
+                "type": "filiere",
                 "valeur": "Classement"
               },
               {
-                "type": "filiere",
-                "offre_id": "PUB-062",
-                "page_pdf": 36,
                 "champ": "Bourse",
-                "valeur": "95"
-              }
-            ]
-          },
-          {
-            "claim_id": "o062-calc",
-            "text": "Votre moyenne de classement pour Médecine Générale est 13.15.",
-            "proofs": [
-              {
-                "type": "filiere",
                 "offre_id": "PUB-062",
                 "page_pdf": 36,
-                "champ": "Filière",
-                "valeur": "Médecine Générale"
+                "type": "filiere",
+                "valeur": "95"
               },
               {
-                "type": "calc",
+                "champ": "Aide_FPP",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "20"
+              }
+            ],
+            "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 95 ; Aide_FPP 20."
+          },
+          {
+            "claim_id": "c7",
+            "proofs": [
+              {
                 "formula": "M = Σ(mi·ci) / Σci",
                 "inputs": [
                   {
                     "coefficient": 4,
                     "matiere": "Mathématiques",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 4,
                     "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 5,
                     "matiere": "SVT",
-                    "note": 15.0
+                    "note": 15
                   }
                 ],
-                "result": 13.15
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-062",
+                "page_pdf": 36,
+                "type": "filiere",
+                "valeur": "Médecine Générale"
               }
-            ]
+            ],
+            "text": "Moyenne de classement pour Médecine Générale : 13.15."
           },
           {
-            "claim_id": "o133-desc",
-            "text": "Médecine Humaine à la Faculté de Médecine (FM) est accessible en Bac C, D avec entrée Classement ; le guide y publie 100 bourses.",
+            "claim_id": "c8",
             "proofs": [
               {
-                "type": "filiere",
+                "champ": "Filière",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Filière",
+                "type": "filiere",
                 "valeur": "Médecine Humaine"
               },
               {
-                "type": "filiere",
+                "champ": "Établissement",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Établissement",
+                "type": "filiere",
                 "valeur": "Faculté de Médecine (FM)"
               },
               {
-                "type": "filiere",
+                "champ": "Bac_recommandé",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Bac_recommandé",
+                "type": "filiere",
                 "valeur": "C, D"
               },
               {
-                "type": "filiere",
+                "champ": "Mode_entrée",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Mode_entrée",
+                "type": "filiere",
                 "valeur": "Classement"
               },
               {
-                "type": "filiere",
-                "offre_id": "PUB-133",
-                "page_pdf": 47,
                 "champ": "Bourse",
-                "valeur": "100"
-              }
-            ]
-          },
-          {
-            "claim_id": "o133-calc",
-            "text": "Votre moyenne de classement pour Médecine Humaine est 13.15.",
-            "proofs": [
-              {
-                "type": "filiere",
                 "offre_id": "PUB-133",
                 "page_pdf": 47,
-                "champ": "Filière",
-                "valeur": "Médecine Humaine"
+                "type": "filiere",
+                "valeur": "100"
               },
               {
-                "type": "calc",
+                "champ": "Aide_FPP",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "30"
+              }
+            ],
+            "text": "Médecine Humaine — Faculté de Médecine (FM) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 100 ; Aide_FPP 30."
+          },
+          {
+            "claim_id": "c9",
+            "proofs": [
+              {
                 "formula": "M = Σ(mi·ci) / Σci",
                 "inputs": [
                   {
                     "coefficient": 4,
                     "matiere": "Mathématiques",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 4,
                     "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 5,
                     "matiere": "SVT",
-                    "note": 15.0
+                    "note": 15
                   }
                 ],
-                "result": 13.15
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-133",
+                "page_pdf": 47,
+                "type": "filiere",
+                "valeur": "Médecine Humaine"
               }
-            ]
+            ],
+            "text": "Moyenne de classement pour Médecine Humaine : 13.15."
           },
           {
-            "claim_id": "o162-desc",
-            "text": "Génie Biologique et Bioprocédés (GBB) à l'Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) est accessible en Bac C, D avec entrée Classement ; le guide y publie 35 bourses.",
+            "claim_id": "c10",
             "proofs": [
               {
-                "type": "filiere",
+                "champ": "Filière",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Filière",
+                "type": "filiere",
                 "valeur": "Génie Biologique et Bioprocédés (GBB)"
               },
               {
-                "type": "filiere",
+                "champ": "Établissement",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Établissement",
+                "type": "filiere",
                 "valeur": "Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)"
               },
               {
-                "type": "filiere",
+                "champ": "Bac_recommandé",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Bac_recommandé",
+                "type": "filiere",
                 "valeur": "C, D"
               },
               {
-                "type": "filiere",
+                "champ": "Mode_entrée",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Mode_entrée",
+                "type": "filiere",
                 "valeur": "Classement"
               },
               {
-                "type": "filiere",
-                "offre_id": "PUB-162",
-                "page_pdf": 62,
                 "champ": "Bourse",
-                "valeur": "35"
-              }
-            ]
-          },
-          {
-            "claim_id": "o162-calc",
-            "text": "Votre moyenne de classement pour Génie Biologique et Bioprocédés (GBB) est 13.15.",
-            "proofs": [
-              {
-                "type": "filiere",
                 "offre_id": "PUB-162",
                 "page_pdf": 62,
-                "champ": "Filière",
-                "valeur": "Génie Biologique et Bioprocédés (GBB)"
+                "type": "filiere",
+                "valeur": "35"
               },
               {
-                "type": "calc",
+                "champ": "Aide_FPP",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "7"
+              }
+            ],
+            "text": "Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 35 ; Aide_FPP 7."
+          },
+          {
+            "claim_id": "c11",
+            "proofs": [
+              {
                 "formula": "M = Σ(mi·ci) / Σci",
                 "inputs": [
                   {
                     "coefficient": 4,
                     "matiere": "Mathématiques",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 4,
                     "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 5,
                     "matiere": "SVT",
-                    "note": 15.0
+                    "note": 15
                   }
                 ],
-                "result": 13.15
+                "result": 13.15,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-162",
+                "page_pdf": 62,
+                "type": "filiere",
+                "valeur": "Génie Biologique et Bioprocédés (GBB)"
               }
-            ]
+            ],
+            "text": "Moyenne de classement pour Génie Biologique et Bioprocédés (GBB) : 13.15."
           },
           {
-            "claim_id": "o077-desc",
-            "text": "Hydrobiologie Appliquée à la Faculté des Sciences Techniques (FAST) est accessible en Bac C, D, DEAT avec entrée Classement ; le guide y publie 51 bourses.",
+            "claim_id": "c12",
             "proofs": [
               {
-                "type": "filiere",
+                "champ": "Filière",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Filière",
+                "type": "filiere",
                 "valeur": "Hydrobiologie Appliquée"
               },
               {
-                "type": "filiere",
+                "champ": "Établissement",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Établissement",
+                "type": "filiere",
                 "valeur": "Faculté des Sciences Techniques (FAST)"
               },
               {
-                "type": "filiere",
+                "champ": "Bac_recommandé",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Bac_recommandé",
+                "type": "filiere",
                 "valeur": "C, D, DEAT"
               },
               {
-                "type": "filiere",
+                "champ": "Mode_entrée",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Mode_entrée",
+                "type": "filiere",
                 "valeur": "Classement"
               },
               {
-                "type": "filiere",
-                "offre_id": "PUB-077",
-                "page_pdf": 45,
                 "champ": "Bourse",
-                "valeur": "51"
-              }
-            ]
-          },
-          {
-            "claim_id": "o077-calc",
-            "text": "Votre moyenne de classement pour Hydrobiologie Appliquée est 12.91.",
-            "proofs": [
-              {
-                "type": "filiere",
                 "offre_id": "PUB-077",
                 "page_pdf": 45,
-                "champ": "Filière",
-                "valeur": "Hydrobiologie Appliquée"
+                "type": "filiere",
+                "valeur": "51"
               },
               {
-                "type": "calc",
+                "champ": "Aide_FPP",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "10"
+              }
+            ],
+            "text": "Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, DEAT ; mode d'entrée Classement ; Bourse 51 ; Aide_FPP 10."
+          },
+          {
+            "claim_id": "c13",
+            "proofs": [
+              {
                 "formula": "M = Σ(mi·ci) / Σci",
                 "inputs": [
                   {
@@ -1678,22 +1621,34 @@
                   {
                     "coefficient": 4,
                     "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0
+                    "note": 12
                   },
                   {
                     "coefficient": 5,
                     "matiere": "SVT",
-                    "note": 15.0
+                    "note": 15
                   }
                 ],
-                "result": 12.91
+                "result": 12.91,
+                "type": "calc"
+              },
+              {
+                "champ": "Filière",
+                "offre_id": "PUB-077",
+                "page_pdf": 45,
+                "type": "filiere",
+                "valeur": "Hydrobiologie Appliquée"
               }
-            ]
+            ],
+            "text": "Moyenne de classement pour Hydrobiologie Appliquée : 12.91."
           }
-        ]
-      }
+        ],
+        "schema_version": 1
+      },
+      "language": "fr"
     },
-    "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « j'ai eu 14 de moyenne ».\n- Tu as dit : « j'aime beaucoup la biologie ».\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « je préfère rester à Cotonou ».\n- Tu as dit : « j'aurai besoin d'une bourse ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
-    "decision": "continue"
+    "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « je suis en série D ».\n- Tu as dit : « J'aime beaucoup la biologie ».\n- Tu as dit : « peut-être médecin ».\n- Tu as dit : « j'aurais besoin besoin d'une bourse ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+    "decision": "continue",
+    "model": "muse-wonder-1.0"
   }
 ]

@@ -6,11 +6,12 @@
       "audio_path": "data/samples/note_vocale_anglais.mp3"
     },
     "result": {
-      "text": "Hello, so um I'm in my final year série D T as in as in David at the back I got 11.2 average what I like most is biology life sciences really it's my favorite subject later I'd like to work in health maybe as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou Cotonou near my parents and honestly I need a scholarship because studying is expensive expensive for us. that's it. thank you for listening.",
-      "text_normalized": "Hello, so um I'm in my final year série D T as in as in David at the back I got 11.2 average what I like most is biology life sciences really it's my favorite subject later I'd like to work in health maybe as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou Cotonou near my parents and honestly I need a scholarship because studying is expensive expensive for us. that's it. thank you for listening.",
+      "text": "Hello, so um I'm in my final year series D T as in David at the back I got 11.2 average what I like most is biology life sciences really it's my my favorite subject later I'd like to I'd like to work in health maybe as as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou near my parents and honestly I needed needed a scholarship because studying is expensive for us that's it thank you for listening..",
+      "text_normalized": "Hello, so um I'm in my final year series D T as in David at the back I got 11.2 average what I like most is biology life sciences really it's my my favorite subject later I'd like to I'd like to work in health maybe as as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou near my parents and honestly I needed needed a scholarship because studying is expensive for us that's it thank you for listening..",
       "confidence": null
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 1,
@@ -73,18 +74,19 @@
       "moyenne_affichee": 11.2,
       "flags": []
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 2,
     "tool": "extract_profile",
     "args": {
-      "transcript": "Hello, so um I'm in my final year série D T as in as in David at the back I got 11.2 average what I like most is biology life sciences really it's my favorite subject later I'd like to work in health maybe as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou Cotonou near my parents and honestly I need a scholarship because studying is expensive expensive for us. that's it. thank you for listening."
+      "transcript": "Hello, so um I'm in my final year series D T as in David at the back I got 11.2 average what I like most is biology life sciences really it's my my favorite subject later I'd like to I'd like to work in health maybe as as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou near my parents and honestly I needed needed a scholarship because studying is expensive for us that's it thank you for listening.."
     },
     "result": {
       "serie_declaree": {
         "value": "D",
-        "quote": "série D"
+        "quote": "series D T as in David"
       },
       "moyenne_declaree": {
         "value": 11.2,
@@ -93,38 +95,40 @@
       "interets": [
         {
           "value": "biology life sciences",
-          "quote": "what I like most is biology life sciences"
+          "quote": "what I like most is biology life sciences really"
         }
       ],
       "metier_vise": {
         "value": "doctor",
-        "quote": "maybe as a doctor"
+        "quote": "maybe as as a doctor"
       },
       "contraintes": [
         {
           "value": "stay in Cotonou near my parents",
-          "quote": "I'd rather stay in Cotonou Cotonou near my parents"
+          "quote": "I'd rather stay in Cotonou near my parents"
         },
         {
-          "value": "need a scholarship",
-          "quote": "I need a scholarship because studying is expensive expensive for us."
+          "value": "needed a scholarship because studying is expensive for us",
+          "quote": "I needed needed a scholarship because studying is expensive for us"
         }
       ],
       "flags": []
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 3,
     "tool": "ask_student",
     "args": {
-      "question": "You said \"série D\" in your voice note — can you confirm that your Bac series is indeed D?"
+      "question": "The transcription of your voice note has no confidence score. Can you please confirm that you are in Série D? (Please reply with D to confirm.)"
     },
     "result": {
       "status": "needs_input",
-      "question": "You said \"série D\" in your voice note — can you confirm that your Bac series is indeed D?"
+      "question": "The transcription of your voice note has no confidence score. Can you please confirm that you are in Série D? (Please reply with D to confirm.)"
     },
-    "decision": "suspend"
+    "decision": "suspend",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 4,
@@ -165,8 +169,7 @@
         }
       ],
       "interets": [
-        "biologie",
-        "sciences de la vie"
+        "biologie"
       ],
       "metier_vise": "médecin",
       "serie": "D"
@@ -376,68 +379,6 @@
             "page 45 du guide officiel",
             "Mode d'entrée : Classement",
             "intérêt « biologie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
-            "moyenne de classement 12.91 calculée sur Français, Sciences Physiques (PCT/SPCT), SVT"
-          ],
-          "score": 20,
-          "moyenne_classement": 12.91,
-          "calcul": {
-            "status": "calculé",
-            "moyenne": 12.909090909090908,
-            "moyenne_arrondie": 12.91,
-            "formule": "M = Σ(mi·ci) / Σci",
-            "somme_coefficients": 11,
-            "details": [
-              {
-                "matiere": "Français",
-                "note": 9.5,
-                "coefficient": 2,
-                "provenance": {
-                  "fichier": "coefficients_bac_benin.json",
-                  "serie": "D",
-                  "matiere": "Français"
-                }
-              },
-              {
-                "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0,
-                "coefficient": 4,
-                "provenance": {
-                  "fichier": "coefficients_bac_benin.json",
-                  "serie": "D",
-                  "matiere": "Sciences Physiques (PCT/SPCT)"
-                }
-              },
-              {
-                "matiere": "SVT",
-                "note": 15.0,
-                "coefficient": 5,
-                "provenance": {
-                  "fichier": "coefficients_bac_benin.json",
-                  "serie": "D",
-                  "matiere": "SVT"
-                }
-              }
-            ]
-          },
-          "epreuves": []
-        },
-        {
-          "Offre_ID": "PUB-081",
-          "Filière": "Sciences de la Vie et de la Terre",
-          "Établissement": "Faculté des Sciences Techniques (FAST)",
-          "page_pdf": 44,
-          "Mode_entrée": "Classement",
-          "Bac_recommandé": "C, D",
-          "Statut_qualité": "OK",
-          "Bourse": "50",
-          "Aide_FPP": "120",
-          "Débouchés_Métiers": "Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs",
-          "raisons": [
-            "série D dans Bac_recommandé (C, D)",
-            "Statut_qualité = OK",
-            "page 44 du guide officiel",
-            "Mode d'entrée : Classement",
-            "intérêt « sciences de la vie » retrouvé comme mots entiers dans Filière ou Débouchés_Métiers",
             "moyenne de classement 12.91 calculée sur Français, Sciences Physiques (PCT/SPCT), SVT"
           ],
           "score": 20,
@@ -802,7 +743,8 @@
         }
       ]
     },
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-spark-1.3-contributor"
   },
   {
     "step": 5,
@@ -810,11 +752,10 @@
     "args": {
       "context": {
         "serie": "D",
-        "transcript": "Hello, so um I'm in my final year série D T as in as in David at the back I got 11.2 average what I like most is biology life sciences really it's my favorite subject later I'd like to work in health maybe as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou Cotonou near my parents and honestly I need a scholarship because studying is expensive expensive for us. that's it. thank you for listening.",
         "grades": [
           {
             "matiere": "Anglais",
-            "note": 8.0,
+            "note": 8,
             "lisible": true,
             "flags": []
           },
@@ -826,31 +767,31 @@
           },
           {
             "matiere": "Histoire-Géographie",
-            "note": 7.0,
+            "note": 7,
             "lisible": true,
             "flags": []
           },
           {
             "matiere": "Mathématiques",
-            "note": 12.0,
+            "note": 12,
             "lisible": true,
             "flags": []
           },
           {
             "matiere": "Philosophie",
-            "note": 8.0,
+            "note": 8,
             "lisible": true,
             "flags": []
           },
           {
             "matiere": "Sciences Physiques (PCT/SPCT)",
-            "note": 12.0,
+            "note": 12,
             "lisible": true,
             "flags": []
           },
           {
             "matiere": "SVT",
-            "note": 15.0,
+            "note": 15,
             "lisible": true,
             "flags": []
           },
@@ -860,88 +801,46 @@
             "lisible": true,
             "flags": []
           }
-        ]
+        ],
+        "transcript": "Hello, so um I'm in my final year series D T as in David at the back I got 11.2 average what I like most is biology life sciences really it's my my favorite subject later I'd like to I'd like to work in health maybe as as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou near my parents and honestly I needed needed a scholarship because studying is expensive for us that's it thank you for listening.."
       },
       "report": {
         "schema_version": 1,
         "claims": [
           {
-            "claim_id": "grade_svt",
-            "text": "Your grade sheet shows SVT: 15/20.",
+            "claim_id": "c1",
+            "text": "Vous avez déclaré comme intérêt : \"what I like most is biology life sciences really\".",
+            "proofs": [
+              {
+                "type": "transcript",
+                "quote": "what I like most is biology life sciences really"
+              }
+            ]
+          },
+          {
+            "claim_id": "c2",
+            "text": "Vous avez déclaré comme métier visé : \"maybe as as a doctor\".",
+            "proofs": [
+              {
+                "type": "transcript",
+                "quote": "maybe as as a doctor"
+              }
+            ]
+          },
+          {
+            "claim_id": "c3",
+            "text": "Note lue sur le relevé en SVT : 15.",
             "proofs": [
               {
                 "type": "grade",
                 "matiere": "SVT",
-                "note": 15.0
+                "note": 15
               }
             ]
           },
           {
-            "claim_id": "grade_core",
-            "text": "Your grade sheet shows Mathématiques: 12/20, Sciences Physiques (PCT/SPCT): 12/20 and Français: 9.5/20.",
-            "proofs": [
-              {
-                "type": "grade",
-                "matiere": "Mathématiques",
-                "note": 12.0
-              },
-              {
-                "type": "grade",
-                "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0
-              },
-              {
-                "type": "grade",
-                "matiere": "Français",
-                "note": 9.5
-              }
-            ]
-          },
-          {
-            "claim_id": "profile_serie",
-            "text": "You said \"série D\" and you said \"I got 11.2 average\".",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "série D"
-              },
-              {
-                "type": "transcript",
-                "quote": "I got 11.2 average"
-              }
-            ]
-          },
-          {
-            "claim_id": "profile_goal",
-            "text": "You said \"what I like most is biology life sciences\" and you said \"maybe as a doctor\".",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "what I like most is biology life sciences"
-              },
-              {
-                "type": "transcript",
-                "quote": "maybe as a doctor"
-              }
-            ]
-          },
-          {
-            "claim_id": "profile_constraints",
-            "text": "You said \"I'd rather stay in Cotonou Cotonou near my parents\" and you said \"I need a scholarship because studying is expensive expensive for us.\" The guide does not publish a city.",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "I'd rather stay in Cotonou Cotonou near my parents"
-              },
-              {
-                "type": "transcript",
-                "quote": "I need a scholarship because studying is expensive expensive for us."
-              }
-            ]
-          },
-          {
-            "claim_id": "offer_062",
-            "text": "Médecine Générale at Faculté des Sciences de la Santé (FSS) is open to Bac C, D with entry by Classement; the guide lists 95 bourses and 20 aides FPP for this offer.",
+            "claim_id": "o1",
+            "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 95 ; Aide_FPP 20.",
             "proofs": [
               {
                 "type": "filiere",
@@ -988,8 +887,8 @@
             ]
           },
           {
-            "claim_id": "calc_062",
-            "text": "For Médecine Générale, your ranking average is 13.15 with M = Σ(mi·ci) / Σci.",
+            "claim_id": "o1c",
+            "text": "Pour Médecine Générale, moyenne de classement : 13.15.",
             "proofs": [
               {
                 "type": "calc",
@@ -1023,8 +922,8 @@
             ]
           },
           {
-            "claim_id": "offer_133",
-            "text": "Médecine Humaine at Faculté de Médecine (FM) is open to Bac C, D with entry by Classement; the guide lists 100 bourses and 30 aides FPP for this offer.",
+            "claim_id": "o2",
+            "text": "Médecine Humaine — Faculté de Médecine (FM) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 100 ; Aide_FPP 30.",
             "proofs": [
               {
                 "type": "filiere",
@@ -1071,8 +970,8 @@
             ]
           },
           {
-            "claim_id": "calc_133",
-            "text": "For Médecine Humaine, your ranking average is 13.15 with M = Σ(mi·ci) / Σci.",
+            "claim_id": "o2c",
+            "text": "Pour Médecine Humaine, moyenne de classement : 13.15.",
             "proofs": [
               {
                 "type": "calc",
@@ -1106,8 +1005,8 @@
             ]
           },
           {
-            "claim_id": "offer_162",
-            "text": "Génie Biologique et Bioprocédés (GBB) at Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) is open to Bac C, D with entry by Classement; the guide lists 35 bourses and 7 aides FPP for this offer.",
+            "claim_id": "o3",
+            "text": "Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 35 ; Aide_FPP 7.",
             "proofs": [
               {
                 "type": "filiere",
@@ -1154,8 +1053,8 @@
             ]
           },
           {
-            "claim_id": "calc_162",
-            "text": "For Génie Biologique et Bioprocédés (GBB), your ranking average is 13.15 with M = Σ(mi·ci) / Σci.",
+            "claim_id": "o3c",
+            "text": "Pour Génie Biologique et Bioprocédés (GBB), moyenne de classement : 13.15.",
             "proofs": [
               {
                 "type": "calc",
@@ -1189,8 +1088,8 @@
             ]
           },
           {
-            "claim_id": "offer_077",
-            "text": "Hydrobiologie Appliquée at Faculté des Sciences Techniques (FAST) is open to Bac C, D, DEAT with entry by Classement; the guide lists 51 bourses and 10 aides FPP for this offer.",
+            "claim_id": "o4",
+            "text": "Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, DEAT ; mode d'entrée Classement ; Bourse 51 ; Aide_FPP 10.",
             "proofs": [
               {
                 "type": "filiere",
@@ -1237,8 +1136,8 @@
             ]
           },
           {
-            "claim_id": "calc_077",
-            "text": "For Hydrobiologie Appliquée, your ranking average is 12.91 with M = Σ(mi·ci) / Σci.",
+            "claim_id": "o4c",
+            "text": "Pour Hydrobiologie Appliquée, moyenne de classement : 12.91.",
             "proofs": [
               {
                 "type": "calc",
@@ -1268,89 +1167,6 @@
                 "page_pdf": 45,
                 "champ": "Filière",
                 "valeur": "Hydrobiologie Appliquée"
-              }
-            ]
-          },
-          {
-            "claim_id": "offer_081",
-            "text": "Sciences de la Vie et de la Terre at Faculté des Sciences Techniques (FAST) is open to Bac C, D with entry by Classement; the guide lists 50 bourses and 120 aides FPP for this offer.",
-            "proofs": [
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Filière",
-                "valeur": "Sciences de la Vie et de la Terre"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Établissement",
-                "valeur": "Faculté des Sciences Techniques (FAST)"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Bac_recommandé",
-                "valeur": "C, D"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Mode_entrée",
-                "valeur": "Classement"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Bourse",
-                "valeur": "50"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Aide_FPP",
-                "valeur": "120"
-              }
-            ]
-          },
-          {
-            "claim_id": "calc_081",
-            "text": "For Sciences de la Vie et de la Terre, your ranking average is 12.91 with M = Σ(mi·ci) / Σci.",
-            "proofs": [
-              {
-                "type": "calc",
-                "formula": "M = Σ(mi·ci) / Σci",
-                "inputs": [
-                  {
-                    "matiere": "Français",
-                    "note": 9.5,
-                    "coefficient": 2
-                  },
-                  {
-                    "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0,
-                    "coefficient": 4
-                  },
-                  {
-                    "matiere": "SVT",
-                    "note": 15.0,
-                    "coefficient": 5
-                  }
-                ],
-                "result": 12.91
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Filière",
-                "valeur": "Sciences de la Vie et de la Terre"
               }
             ]
           }
@@ -1358,7 +1174,8 @@
       }
     },
     "result": [],
-    "decision": "continue"
+    "decision": "continue",
+    "model": "muse-wonder-1.0"
   },
   {
     "step": 6,
@@ -1366,11 +1183,10 @@
     "args": {
       "context": {
         "serie": "D",
-        "transcript": "Hello, so um I'm in my final year série D T as in as in David at the back I got 11.2 average what I like most is biology life sciences really it's my favorite subject later I'd like to work in health maybe as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou Cotonou near my parents and honestly I need a scholarship because studying is expensive expensive for us. that's it. thank you for listening.",
         "grades": [
           {
             "matiere": "Anglais",
-            "note": 8.0,
+            "note": 8,
             "lisible": true,
             "flags": []
           },
@@ -1382,31 +1198,31 @@
           },
           {
             "matiere": "Histoire-Géographie",
-            "note": 7.0,
+            "note": 7,
             "lisible": true,
             "flags": []
           },
           {
             "matiere": "Mathématiques",
-            "note": 12.0,
+            "note": 12,
             "lisible": true,
             "flags": []
           },
           {
             "matiere": "Philosophie",
-            "note": 8.0,
+            "note": 8,
             "lisible": true,
             "flags": []
           },
           {
             "matiere": "Sciences Physiques (PCT/SPCT)",
-            "note": 12.0,
+            "note": 12,
             "lisible": true,
             "flags": []
           },
           {
             "matiere": "SVT",
-            "note": 15.0,
+            "note": 15,
             "lisible": true,
             "flags": []
           },
@@ -1416,89 +1232,47 @@
             "lisible": true,
             "flags": []
           }
-        ]
+        ],
+        "transcript": "Hello, so um I'm in my final year series D T as in David at the back I got 11.2 average what I like most is biology life sciences really it's my my favorite subject later I'd like to I'd like to work in health maybe as as a doctor since I was little I've wanted to care for people help my family my neighborhood for the city um I'd rather stay in Cotonou near my parents and honestly I needed needed a scholarship because studying is expensive for us that's it thank you for listening.."
       },
       "refused_claims": [],
       "report": {
         "schema_version": 1,
         "claims": [
           {
-            "claim_id": "grade_svt",
-            "text": "Your grade sheet shows SVT: 15/20.",
+            "claim_id": "c1",
+            "text": "Vous avez déclaré comme intérêt : \"what I like most is biology life sciences really\".",
+            "proofs": [
+              {
+                "type": "transcript",
+                "quote": "what I like most is biology life sciences really"
+              }
+            ]
+          },
+          {
+            "claim_id": "c2",
+            "text": "Vous avez déclaré comme métier visé : \"maybe as as a doctor\".",
+            "proofs": [
+              {
+                "type": "transcript",
+                "quote": "maybe as as a doctor"
+              }
+            ]
+          },
+          {
+            "claim_id": "c3",
+            "text": "Note lue sur le relevé en SVT : 15.",
             "proofs": [
               {
                 "type": "grade",
                 "matiere": "SVT",
-                "note": 15.0
+                "note": 15
               }
             ]
           },
           {
-            "claim_id": "grade_core",
-            "text": "Your grade sheet shows Mathématiques: 12/20, Sciences Physiques (PCT/SPCT): 12/20 and Français: 9.5/20.",
-            "proofs": [
-              {
-                "type": "grade",
-                "matiere": "Mathématiques",
-                "note": 12.0
-              },
-              {
-                "type": "grade",
-                "matiere": "Sciences Physiques (PCT/SPCT)",
-                "note": 12.0
-              },
-              {
-                "type": "grade",
-                "matiere": "Français",
-                "note": 9.5
-              }
-            ]
-          },
-          {
-            "claim_id": "profile_serie",
-            "text": "You said \"série D\" and you said \"I got 11.2 average\".",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "série D"
-              },
-              {
-                "type": "transcript",
-                "quote": "I got 11.2 average"
-              }
-            ]
-          },
-          {
-            "claim_id": "profile_goal",
-            "text": "You said \"what I like most is biology life sciences\" and you said \"maybe as a doctor\".",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "what I like most is biology life sciences"
-              },
-              {
-                "type": "transcript",
-                "quote": "maybe as a doctor"
-              }
-            ]
-          },
-          {
-            "claim_id": "profile_constraints",
-            "text": "You said \"I'd rather stay in Cotonou Cotonou near my parents\" and you said \"I need a scholarship because studying is expensive expensive for us.\" The guide does not publish a city.",
-            "proofs": [
-              {
-                "type": "transcript",
-                "quote": "I'd rather stay in Cotonou Cotonou near my parents"
-              },
-              {
-                "type": "transcript",
-                "quote": "I need a scholarship because studying is expensive expensive for us."
-              }
-            ]
-          },
-          {
-            "claim_id": "offer_062",
-            "text": "Médecine Générale at Faculté des Sciences de la Santé (FSS) is open to Bac C, D with entry by Classement; the guide lists 95 bourses and 20 aides FPP for this offer.",
+            "claim_id": "o1",
+            "text": "Médecine Générale — Faculté des Sciences de la Santé (FSS) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 95 ; Aide_FPP 20.",
             "proofs": [
               {
                 "type": "filiere",
@@ -1545,8 +1319,8 @@
             ]
           },
           {
-            "claim_id": "calc_062",
-            "text": "For Médecine Générale, your ranking average is 13.15 with M = Σ(mi·ci) / Σci.",
+            "claim_id": "o1c",
+            "text": "Pour Médecine Générale, moyenne de classement : 13.15.",
             "proofs": [
               {
                 "type": "calc",
@@ -1580,8 +1354,8 @@
             ]
           },
           {
-            "claim_id": "offer_133",
-            "text": "Médecine Humaine at Faculté de Médecine (FM) is open to Bac C, D with entry by Classement; the guide lists 100 bourses and 30 aides FPP for this offer.",
+            "claim_id": "o2",
+            "text": "Médecine Humaine — Faculté de Médecine (FM) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 100 ; Aide_FPP 30.",
             "proofs": [
               {
                 "type": "filiere",
@@ -1628,8 +1402,8 @@
             ]
           },
           {
-            "claim_id": "calc_133",
-            "text": "For Médecine Humaine, your ranking average is 13.15 with M = Σ(mi·ci) / Σci.",
+            "claim_id": "o2c",
+            "text": "Pour Médecine Humaine, moyenne de classement : 13.15.",
             "proofs": [
               {
                 "type": "calc",
@@ -1663,8 +1437,8 @@
             ]
           },
           {
-            "claim_id": "offer_162",
-            "text": "Génie Biologique et Bioprocédés (GBB) at Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) is open to Bac C, D with entry by Classement; the guide lists 35 bourses and 7 aides FPP for this offer.",
+            "claim_id": "o3",
+            "text": "Génie Biologique et Bioprocédés (GBB) — Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA) : Bac recommandé C, D ; mode d'entrée Classement ; Bourse 35 ; Aide_FPP 7.",
             "proofs": [
               {
                 "type": "filiere",
@@ -1711,8 +1485,8 @@
             ]
           },
           {
-            "claim_id": "calc_162",
-            "text": "For Génie Biologique et Bioprocédés (GBB), your ranking average is 13.15 with M = Σ(mi·ci) / Σci.",
+            "claim_id": "o3c",
+            "text": "Pour Génie Biologique et Bioprocédés (GBB), moyenne de classement : 13.15.",
             "proofs": [
               {
                 "type": "calc",
@@ -1746,8 +1520,8 @@
             ]
           },
           {
-            "claim_id": "offer_077",
-            "text": "Hydrobiologie Appliquée at Faculté des Sciences Techniques (FAST) is open to Bac C, D, DEAT with entry by Classement; the guide lists 51 bourses and 10 aides FPP for this offer.",
+            "claim_id": "o4",
+            "text": "Hydrobiologie Appliquée — Faculté des Sciences Techniques (FAST) : Bac recommandé C, D, DEAT ; mode d'entrée Classement ; Bourse 51 ; Aide_FPP 10.",
             "proofs": [
               {
                 "type": "filiere",
@@ -1794,8 +1568,8 @@
             ]
           },
           {
-            "claim_id": "calc_077",
-            "text": "For Hydrobiologie Appliquée, your ranking average is 12.91 with M = Σ(mi·ci) / Σci.",
+            "claim_id": "o4c",
+            "text": "Pour Hydrobiologie Appliquée, moyenne de classement : 12.91.",
             "proofs": [
               {
                 "type": "calc",
@@ -1827,94 +1601,13 @@
                 "valeur": "Hydrobiologie Appliquée"
               }
             ]
-          },
-          {
-            "claim_id": "offer_081",
-            "text": "Sciences de la Vie et de la Terre at Faculté des Sciences Techniques (FAST) is open to Bac C, D with entry by Classement; the guide lists 50 bourses and 120 aides FPP for this offer.",
-            "proofs": [
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Filière",
-                "valeur": "Sciences de la Vie et de la Terre"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Établissement",
-                "valeur": "Faculté des Sciences Techniques (FAST)"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Bac_recommandé",
-                "valeur": "C, D"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Mode_entrée",
-                "valeur": "Classement"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Bourse",
-                "valeur": "50"
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Aide_FPP",
-                "valeur": "120"
-              }
-            ]
-          },
-          {
-            "claim_id": "calc_081",
-            "text": "For Sciences de la Vie et de la Terre, your ranking average is 12.91 with M = Σ(mi·ci) / Σci.",
-            "proofs": [
-              {
-                "type": "calc",
-                "formula": "M = Σ(mi·ci) / Σci",
-                "inputs": [
-                  {
-                    "matiere": "Français",
-                    "note": 9.5,
-                    "coefficient": 2
-                  },
-                  {
-                    "matiere": "Sciences Physiques (PCT/SPCT)",
-                    "note": 12.0,
-                    "coefficient": 4
-                  },
-                  {
-                    "matiere": "SVT",
-                    "note": 15.0,
-                    "coefficient": 5
-                  }
-                ],
-                "result": 12.91
-              },
-              {
-                "type": "filiere",
-                "offre_id": "PUB-081",
-                "page_pdf": 44,
-                "champ": "Filière",
-                "valeur": "Sciences de la Vie et de la Terre"
-              }
-            ]
           }
         ]
-      }
+      },
+      "language": "fr"
     },
-    "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n- Sciences de la Vie et de la Terre (Faculté des Sciences Techniques (FAST)) — PUB-081, page 44 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « série D ».\n- Tu as dit : « I got 11.2 average ».\n- Tu as dit : « what I like most is biology life sciences ».\n- Tu as dit : « maybe as a doctor ».\n- Tu as dit : « I'd rather stay in Cotonou Cotonou near my parents ».\n- Tu as dit : « I need a scholarship because studying is expensive expensive for us. ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n- Sciences de la Vie et de la Terre (PUB-081) : Débouchés « Enseignement des SVT, Techniciens de laboratoires et dans les institutions de recherche, Ecoles d'ingénieurs ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n- Sciences de la Vie et de la Terre (PUB-081) : 50 bourses et 120 aides FPP prévues (guide, page 44).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n- Sciences de la Vie et de la Terre (PUB-081) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
-    "decision": "continue"
+    "result": "PathProof — rapport vérifié\nSérie : D\n\n## Accessibilité\n- Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Génie Biologique et Bioprocédés (GBB) (Ecole Nationale Supérieure des Biosciences et Biotechnologies Appliquées (ENSBBA)) — PUB-162, page 62 du guide officiel — série D dans Bac_recommandé (C, D) — Mode d'entrée : Classement\n- Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 du guide officiel — série D dans Bac_recommandé (C, D, DEAT) — Mode d'entrée : Classement\n\n## Correspondance\n- Tu as dit : « what I like most is biology life sciences really ».\n- Tu as dit : « maybe as as a doctor ».\n- Médecine Générale (PUB-062) : Débouchés « Médecin généraliste, Possibilités de spécialisations dans un domaine spécifique en sciences de la santé ».\n- Médecine Humaine (PUB-133) : Débouchés « Médecin généraliste dans les hôpitaux et centre de santé ».\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Débouchés « Techniciens supérieurs dans les laboratoires d'analyse ou de recherche, Techniciens supérieurs des centres de recherche en biologie appliquée, Assistant de recherche dans les instituts de recherche biologique, Auto-emploi ».\n- Hydrobiologie Appliquée (PUB-077) : Débouchés « Techniciens de laboratoire de biologie, Spécialiste en qualité de l'eau et surveillance des écosystèmes aquatiques, Chef Production en pisciculture, pêche et Aquaculture, Technicien en Aménagement des zones humides, Technicien en Aquariologie, Technicien en Inspection des produits halieutiques ».\n\n## Quotas du guide\n- Médecine Générale (PUB-062) : 95 bourses et 20 aides FPP prévues (guide, page 36).\n- Médecine Humaine (PUB-133) : 100 bourses et 30 aides FPP prévues (guide, page 47).\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : 35 bourses et 7 aides FPP prévues (guide, page 62).\n- Hydrobiologie Appliquée (PUB-077) : 51 bourses et 10 aides FPP prévues (guide, page 45).\n\n## Moyenne de classement\nFormule : M = Σ(mi·ci) / Σci (guide, page 8). Coefficients : coefficients_bac_benin.json, série D.\n- Médecine Générale (PUB-062) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Médecine Humaine (PUB-133) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Génie Biologique et Bioprocédés (GBB) (PUB-162) : Mathématiques 12 × 4, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 13,15 / 20.\n- Hydrobiologie Appliquée (PUB-077) : Français 9,5 × 2, Sciences Physiques (PCT/SPCT) 12 × 4, SVT 15 × 5 : 12,91 / 20.\n\n## 3 choix pour apresmonbac.bj\n1. Médecine Générale (Faculté des Sciences de la Santé (FSS)) — PUB-062, page 36 (Faculté classique : oui)\n2. Médecine Humaine (Faculté de Médecine (FM)) — PUB-133, page 47 (Faculté classique : oui)\n3. Hydrobiologie Appliquée (Faculté des Sciences Techniques (FAST)) — PUB-077, page 45 (Faculté classique : oui)\nRappel : tout changement de filière fait perdre l'allocation.\nRappel : apresmonbac.bj est le seul site officiel.\nTu restes libre : l'agent explique, il ne choisit pas à ta place.\n\n## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+    "decision": "continue",
+    "model": "muse-wonder-1.0"
   }
 ]
