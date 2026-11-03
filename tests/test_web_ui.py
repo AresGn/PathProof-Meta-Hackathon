@@ -329,3 +329,13 @@ def test_every_step_card_names_who_decided_and_who_ran_it():
 def test_run_requests_carry_the_interface_language():
     app = MODULES["app.js"]
     assert app.count('body.append("language", getLanguage())') == 2
+
+
+def test_recorded_fallback_loads_the_recording_of_the_interface_language():
+    api = MODULES["api.js"]
+    assert '"../recorded-run.en.json"' in api and '"../recorded-run.json"' in api
+    assert "const language = getLanguage()" in api
+    assert "preloadRecordedRun();" in MODULES["app.js"].split("function applyLanguage()", 1)[1]
+    response = TestClient(server.app).get("/recorded-run.en.json")
+    assert response.status_code == 200
+    assert response.json()["events"][-1]["report"].startswith("PathProof — recorded report")

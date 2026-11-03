@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Callable
 
 from src.agent import loop
+from src.domain.report_text import DEFAULT_LANGUAGE
 from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.clients.muse_spark import MUSE_SPARK_MODEL
 
@@ -322,6 +323,7 @@ def run_cli_session(
     *,
     tool_schemas: list[dict] | None = None,
     journal: list | None = None,
+    language: str = DEFAULT_LANGUAGE,
 ) -> CliRunResult:
     """Run the agent loop until it finishes or ask_student gets no answer."""
     usage = TokenUsage()
@@ -332,7 +334,8 @@ def run_cli_session(
     started = time.monotonic()
     waiting_seconds = 0.0
     questions: list[str] = []
-    outcome = loop.run(tracked, model, schemas, user_input, journal=journal)
+    outcome = loop.run(tracked, model, schemas, user_input, journal=journal,
+                       language=language)
     while isinstance(outcome, dict) and outcome.get("status") == "needs_input":
         question = outcome["question"]
         questions.append(question)

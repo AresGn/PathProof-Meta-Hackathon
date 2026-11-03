@@ -277,6 +277,7 @@ async function runExample(key) {
 
 function applyLanguage() {
   applyTranslations();
+  preloadRecordedRun();
   for (const inputId of ["photo", "voice"]) {
     const input = document.getElementById(inputId);
     const nameEl = document.getElementById(`${inputId}-name`);

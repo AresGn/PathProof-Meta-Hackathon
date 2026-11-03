@@ -1,6 +1,7 @@
 """Generate the static, fictional fallback run from a successful real run."""
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -12,14 +13,39 @@ from src.agent.tool_schemas import TOOL_SCHEMAS
 from src.cli_run import run_cli_session, verified_report_from_journal
 from src.clients.meta_client import get_client
 from src.clients.muse_spark import MUSE_SPARK_MODEL
+from src.domain.report_text import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES
 
 # Fixed fictional inputs documented in data/samples/README.md.
 IMAGE_PATH = Path("data/samples/releve_serie_d.jpg")
 AUDIO_PATH = Path("data/samples/note_vocale_coherente.mp3")
-OUTPUT_PATH = ROOT / "web" / "recorded-run.json"
+OUTPUT_PATH = ROOT / "web" / "recorded-run.json"  # French reference recording
+OUTPUT_PATH_BY_LANGUAGE = {
+    "fr": OUTPUT_PATH,
+    "en": ROOT / "web" / "recorded-run.en.json",  # docs/decisions.md E5.6
+}
 FICTIONAL_QUESTION = (
     "Pouvez-vous confirmer que vous êtes bien en série D, comme indiqué sur votre relevé ?"
 )
+# English: the model words the question itself, so accept only a question that
+# asks about the serie D of the fixed sample, never an arbitrary one.
+ENGLISH_QUESTION_PATTERN = re.compile(r"\bseries?\b.*\bD\b", re.IGNORECASE | re.DOTALL)
+FICTIONAL_ANSWER = {"fr": "Oui, série D.", "en": "Yes, serie D."}
+RECORDED_WORDING = {
+    "fr": {
+        "title": ("PathProof — rapport vérifié", "PathProof — rapport enregistré"),
+        "limits": ("## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+                   "## Limites du rapport enregistré\n"
+                   "Les affirmations et leurs preuves sont reprises du journal de démonstration."),
+        "claim_word": "vérifi",
+    },
+    "en": {
+        "title": ("PathProof — verified report", "PathProof — recorded report"),
+        "limits": ("## What I could not verify\nAll the claims above are verified.",
+                   "## Limits of the recorded report\n"
+                   "The claims and their proofs are taken from the demonstration log."),
+        "claim_word": "verif",
+    },
+}
 
 
 def is_fixed_sample_path(value: object, sample: Path) -> bool:
@@ -31,7 +57,7 @@ def is_fixed_sample_path(value: object, sample: Path) -> bool:
     return candidate.resolve() == (ROOT / sample).resolve()
 
 
-def create_recorded_run(journal: list[dict]) -> dict:
+def create_recorded_run(journal: list[dict], language: str = DEFAULT_LANGUAGE) -> dict:
     """Return display events only for the fixed fictional samples and verified report."""
     if not isinstance(journal, list) or not all(isinstance(event, dict) for event in journal):
         raise ValueError("journal must be a list of events from fixed fictional sample files")
@@ -50,12 +76,12 @@ def create_recorded_run(journal: list[dict]) -> dict:
     if not has_sample_image or not has_sample_audio:
         raise ValueError("journal must use both fixed fictional sample files")
 
-    validate_fictional_question_sequence(journal)
+    validate_fictional_question_sequence(journal, language)
 
     report = verified_report_from_journal(journal)
     if not report:
         raise ValueError("journal must end with a verified report")
-    report = make_recorded_report(report)
+    report = make_recorded_report(report, language)
 
     events = [
         {
@@ -84,7 +110,14 @@ def normalize_question(question: object) -> str | None:
     return " ".join(question.split()).casefold()
 
 
-def validate_fictional_question_sequence(journal: list[dict]) -> None:
+def is_expected_question(question: object, language: str) -> bool:
+    if language == "en":
+        return isinstance(question, str) and bool(ENGLISH_QUESTION_PATTERN.search(question))
+    return normalize_question(question) == normalize_question(FICTIONAL_QUESTION)
+
+
+def validate_fictional_question_sequence(journal: list[dict],
+                                         language: str = DEFAULT_LANGUAGE) -> None:
     question_steps = [
         (index, event) for index, event in enumerate(journal)
         if event.get("tool") == "ask_student"
@@ -92,12 +125,11 @@ def validate_fictional_question_sequence(journal: list[dict]) -> None:
     if len(question_steps) != 1:
         raise ValueError("journal must contain the expected fictional question")
     question_index, question_event = question_steps[0]
-    question = normalize_question(FICTIONAL_QUESTION)
     if (not isinstance(question_event.get("args"), dict)
-            or normalize_question(question_event["args"].get("question")) != question
+            or not is_expected_question(question_event["args"].get("question"), language)
             or not isinstance(question_event.get("result"), dict)
             or question_event["result"].get("status") != "needs_input"
-            or normalize_question(question_event["result"].get("question")) != question
+            or not is_expected_question(question_event["result"].get("question"), language)
             or question_event.get("decision") != "suspend"):
         raise ValueError("journal must contain the expected fictional question")
     final_steps = [
@@ -108,26 +140,23 @@ def validate_fictional_question_sequence(journal: list[dict]) -> None:
         raise ValueError("the fictional question must precede report verification")
 
 
-def make_recorded_report(report: str) -> str:
-    report = report.replace("PathProof — rapport vérifié", "PathProof — rapport enregistré")
-    report = report.replace(
-        "## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
-        "## Limites du rapport enregistré\n"
-        "Les affirmations et leurs preuves sont reprises du journal de démonstration.",
-    )
-    if "vérifi" in report.casefold():
+def make_recorded_report(report: str, language: str = DEFAULT_LANGUAGE) -> str:
+    wording = RECORDED_WORDING[language]
+    report = report.replace(*wording["title"])
+    report = report.replace(*wording["limits"])
+    if wording["claim_word"] in report.casefold():
         raise ValueError("recorded report must not claim verification")
     return report
 
 
-def answer_fictional_question(question: str) -> str:
+def answer_fictional_question(question: str, language: str = DEFAULT_LANGUAGE) -> str:
     """Answer only the known series-confirmation question for the fixed sample."""
-    if normalize_question(question) != normalize_question(FICTIONAL_QUESTION):
+    if not is_expected_question(question, language):
         return ""
-    return "Oui, série D."
+    return FICTIONAL_ANSWER[language]
 
 
-def run_fictional_sample() -> list[dict]:
+def run_fictional_sample(language: str = DEFAULT_LANGUAGE) -> list[dict]:
     """Run the fixed fictional photo and voice sample through the live agent."""
     if Path.cwd().resolve() != ROOT:
         raise ValueError("run this script from the repository root")
@@ -137,11 +166,12 @@ def run_fictional_sample() -> list[dict]:
         MUSE_SPARK_MODEL,
         IMAGE_PATH,
         AUDIO_PATH,
-        answer_fictional_question,
+        lambda question: answer_fictional_question(question, language),
         tool_schemas=TOOL_SCHEMAS,
         journal=journal,
+        language=language,
     )
-    validate_fictional_question_sequence(journal)
+    validate_fictional_question_sequence(journal, language)
     report = verified_report_from_journal(journal)
     if (result.outcome == loop.STOPPED_STEP_LIMIT
             or (isinstance(result.outcome, dict)
@@ -152,27 +182,31 @@ def run_fictional_sample() -> list[dict]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    return argparse.ArgumentParser(
-        description="Regenerate web/recorded-run.json from a real fictional run.")
+    parser = argparse.ArgumentParser(
+        description="Regenerate a recorded run (web/recorded-run*.json) from a real fictional run.")
+    parser.add_argument("--language", choices=SUPPORTED_LANGUAGES, default=DEFAULT_LANGUAGE,
+                        help="report language of the recording (default: fr)")
+    return parser
 
 
 def main(argv: list[str] | None = None) -> int:
-    build_parser().parse_args(argv)
+    language = build_parser().parse_args(argv).language
+    output_path = OUTPUT_PATH_BY_LANGUAGE[language]
     try:
-        journal = run_fictional_sample()
-        recording = create_recorded_run(journal)
+        journal = run_fictional_sample(language)
+        recording = create_recorded_run(journal, language)
         # Write then rename: an interrupted run must not leave a truncated
         # fixture, which the page would report as invalid when the fallback is needed.
-        temporary_path = OUTPUT_PATH.with_suffix(".json.tmp")
+        temporary_path = output_path.with_suffix(".json.tmp")
         temporary_path.write_text(
             json.dumps(recording, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
-        temporary_path.replace(OUTPUT_PATH)
+        temporary_path.replace(output_path)
     except (OSError, ValueError, RuntimeError) as error:
         print(f"Could not generate the recorded run: {error}", file=sys.stderr)
         return 1
-    print(f"Wrote {OUTPUT_PATH.relative_to(ROOT)}")
+    print(f"Wrote {output_path.relative_to(ROOT)}")
     return 0
 
 

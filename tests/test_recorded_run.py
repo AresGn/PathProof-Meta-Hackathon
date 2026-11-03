@@ -117,3 +117,60 @@ def test_unexpected_fictional_question_stops_without_an_answer():
 def test_cli_does_not_accept_an_arbitrary_journal_file():
     with pytest.raises(SystemExit):
         record_demo.build_parser().parse_args(["--journal", "untrusted.json"])
+
+
+def _english_recording():
+    return json.loads(
+        (ROOT / "web" / "recorded-run.en.json").read_text(encoding="utf-8"))
+
+
+def test_english_recording_is_a_real_run_with_an_english_recorded_report():
+    events = _english_recording()["events"]
+    done = events[-1]
+    steps = events[:-1]
+    assert done["type"] == "done" and done["status"] == "ok"
+    assert done["report"].startswith("PathProof — recorded report")
+    assert "## Accessibility" in done["report"] and "## Accessibilité" not in done["report"]
+    assert "verif" not in done["report"].casefold()
+    assert steps[-1]["tool"] == "build_report" and steps[-1]["result"] == done["report"]
+    assert steps[-1]["args"]["language"] == "en"  # pinned by the loop, not by the model
+    assert any(step["tool"] == "transcribe_voice" for step in steps)
+    assert any(step["tool"] == "verify_report" and step["result"] == [] for step in steps)
+    text = json.dumps(events)
+    assert "C:\\Users" not in text and "/Users/" not in text
+
+
+def test_english_recording_claims_are_written_in_english():
+    events = _english_recording()["events"]
+    verified = next(step for step in reversed(events[:-1])
+                    if step["tool"] == "verify_report" and step["result"] == [])
+    texts = [claim["text"] for claim in verified["args"]["report"]["claims"]]
+    padded = [f" {text.casefold()} " for text in texts]
+    assert texts and any(" you " in text or " your " in text for text in padded)
+    french_words = (" est ", " vous ", " tu ", " votre ", " ton ", " ta ")  # guide names stay French
+    assert not any(word in text for text in padded for word in french_words)
+
+
+def test_english_question_is_accepted_only_when_it_asks_about_the_serie():
+    assert record_demo.is_expected_question("Can you confirm you are in serie D?", "en")
+    assert record_demo.is_expected_question("Are you in series D, as on your sheet?", "en")
+    assert not record_demo.is_expected_question("What is your favourite subject?", "en")
+    assert record_demo.answer_fictional_question("Please send a new photo.", "en") == ""
+    assert record_demo.answer_fictional_question(
+        "Can you confirm you are in serie D?", "en") == "Yes, serie D."
+
+
+def test_recorded_report_wording_is_language_specific():
+    english = ("PathProof — verified report\nSeries: D\n\n"
+               "## What I could not verify\nAll the claims above are verified.")
+    recorded = record_demo.make_recorded_report(english, "en")
+    assert recorded.startswith("PathProof — recorded report")
+    assert "## Limits of the recorded report" in recorded
+    with pytest.raises(ValueError, match="must not claim verification"):
+        record_demo.make_recorded_report(english + "\nverified offer", "en")
+
+
+def test_record_script_offers_a_language_option():
+    parser = record_demo.build_parser()
+    assert parser.parse_args(["--language", "en"]).language == "en"
+    assert parser.parse_args([]).language == "fr"

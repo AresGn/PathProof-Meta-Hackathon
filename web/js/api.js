@@ -1,6 +1,6 @@
 // Demo API client: base resolution, SSE streaming, sample files, errors.
 // No display code here; views live in steps.js, proofs.js and report.js.
-import { t } from "./i18n.js";
+import { getLanguage, t } from "./i18n.js";
 
 // The API normally shares the page origin (uvicorn serves both). Opened via
 // a static preview (Live Server, file), the page falls back to the local
@@ -10,8 +10,10 @@ const LOCAL_API_BASE = "http://127.0.0.1:8000";
 let apiBase = "";
 let apiBasePromise = null;
 let serverStateListener = null;
-let recordedRun = null;
-let recordedRunPromise = null;
+// One real recorded run per interface language (scripts/record_demo.py --language).
+const RECORDED_RUN_FILES = { fr: "../recorded-run.json", en: "../recorded-run.en.json" };
+const recordedRuns = {};
+const recordedRunPromises = {};
 
 export function setServerStateListener(listener) {
   serverStateListener = listener;
@@ -21,8 +23,8 @@ function notifyServerState(state) {
   if (serverStateListener) serverStateListener(state);
 }
 
-async function requestRecordedRun() {
-  const response = await fetch(new URL("../recorded-run.json", import.meta.url));
+async function requestRecordedRun(language) {
+  const response = await fetch(new URL(RECORDED_RUN_FILES[language], import.meta.url));
   if (!response.ok) throw new Error(t("recordedRunUnavailable", {
     detail: `${response.status}${response.statusText ? ` ${response.statusText}` : ""}`,
   }));
@@ -46,7 +48,8 @@ export function validateRecordedRun(data) {
       || !event.args || typeof event.args !== "object" || Array.isArray(event.args)
       || !Object.prototype.hasOwnProperty.call(event, "result")
       || typeof event.decision !== "string")) return false;
-  if (done.report.toLowerCase().includes("vérifi")) return false;
+  const reportText = done.report.toLowerCase();
+  if (reportText.includes("vérifi") || reportText.includes("verif")) return false;
   const build = steps[steps.length - 1];
   if (!build || build.tool !== "build_report" || build.result !== done.report) return false;
 
@@ -115,27 +118,29 @@ export function recordedFailureReason(error) {
 }
 
 export function preloadRecordedRun() {
-  if (!recordedRunPromise) {
-    recordedRunPromise = requestRecordedRun().then((data) => {
-      recordedRun = data;
+  const language = getLanguage();
+  if (!recordedRunPromises[language]) {
+    recordedRunPromises[language] = requestRecordedRun(language).then((data) => {
+      recordedRuns[language] = data;
       return data;
     }).catch(() => {
-      recordedRunPromise = null;
+      recordedRunPromises[language] = null;
       return null;
     });
   }
-  return recordedRunPromise;
+  return recordedRunPromises[language];
 }
 
 export async function fetchRecordedRun() {
-  if (recordedRun) return recordedRun;
-  if (recordedRunPromise) {
-    const preloaded = await recordedRunPromise;
+  const language = getLanguage();
+  if (recordedRuns[language]) return recordedRuns[language];
+  if (recordedRunPromises[language]) {
+    const preloaded = await recordedRunPromises[language];
     if (preloaded) return preloaded;
   }
-  const data = await requestRecordedRun();
-  recordedRun = data;
-  recordedRunPromise = Promise.resolve(data);
+  const data = await requestRecordedRun(language);
+  recordedRuns[language] = data;
+  recordedRunPromises[language] = Promise.resolve(data);
   return data;
 }
 
