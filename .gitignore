@@ -16,3 +16,7 @@ env
 data/source/
 # Demo uploads (E5.1): grade-sheet photos and voice notes saved per run, never committed
 tmp/
+
+# Vercel link (E5.4): project and org ids stay local
+.vercel/
+.env.local

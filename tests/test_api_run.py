@@ -617,3 +617,22 @@ def test_never_iterated_stream_still_settles(tmp_path):
     assert not tmpdir.exists()
     assert store.active_count() == 0
     del frames
+
+
+def test_run_tmpdir_uses_writable_tmp_on_vercel(monkeypatch):
+    monkeypatch.setenv("VERCEL", "1")
+    tmpdir = server.new_run_tmpdir("vercel-case")
+    try:
+        assert tmpdir == Path("/tmp") / "pathproof-vercel-case"
+        assert tmpdir.is_dir()
+    finally:
+        server.cleanup_tmpdir(tmpdir)
+
+
+def test_run_tmpdir_stays_in_repo_tmp_outside_vercel(monkeypatch):
+    monkeypatch.delenv("VERCEL", raising=False)
+    tmpdir = server.new_run_tmpdir("local-case")
+    try:
+        assert tmpdir == Path.cwd() / "tmp" / "pathproof-local-case"
+    finally:
+        server.cleanup_tmpdir(tmpdir)

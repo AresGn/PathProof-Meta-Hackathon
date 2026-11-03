@@ -45,6 +45,7 @@ READ_CHUNK_BYTES = 1024 * 1024  # E5.1 review: enforce caps while reading so one
 POLL_INTERVAL_SECONDS = 0.01  # E5.1 review: live SSE polling between the worker thread and the response
 SUPPORTED_IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png"}  # src/clients/vision.py MEDIA_TYPES
 SUPPORTED_AUDIO_SUFFIXES = {".flac", ".m4a", ".mp3", ".ogg", ".opus", ".wav", ".webm"}  # src/tools/transcribe_voice.py SUPPORTED_AUDIO_TYPES
+VERCEL_TMP_BASE = Path("/tmp")  # E5.4: the only writable disk of a Vercel function
 MAX_CONCURRENT_RUNS = 5  # E5.1 review (2nd pass): bound simultaneous paid API runs on the public demo
 
 pending_run_store = PendingRunStore()  # locked sessions + active-run slots (src/api/run_store.py)
@@ -119,7 +120,8 @@ async def read_limited_upload(upload: UploadFile, limit: int, label: str) -> byt
 
 
 def new_run_tmpdir(run_id: str) -> Path:
-    tmpdir = Path.cwd() / "tmp" / f"pathproof-{run_id}"
+    base = VERCEL_TMP_BASE if os.environ.get("VERCEL") else Path.cwd() / "tmp"
+    tmpdir = base / f"pathproof-{run_id}"
     tmpdir.mkdir(parents=True, exist_ok=True)
     return tmpdir
 

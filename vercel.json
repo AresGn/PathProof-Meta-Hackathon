@@ -1,0 +1,9 @@
+{
+  "functions": {
+    "app.py": {
+      "maxDuration": 300,
+      "includeFiles": "{web,data}/**",
+      "excludeFiles": "data/source/**"
+    }
+  }
+}
