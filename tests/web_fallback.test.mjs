@@ -26,7 +26,10 @@ test("fallback is reserved for network and server failures", () => {
   assert.equal(shouldUseRecordedRun({ status: 400 }), false);
   assert.equal(shouldUseRecordedRun({ status: 413 }), false);
   assert.equal(shouldUseRecordedRun({ status: 415 }), false);
-  assert.equal(shouldUseRecordedRun({ status: 404 }), false);
+  assert.equal(shouldUseRecordedRun({ status: 404 }), true);
+  assert.equal(shouldUseRecordedRun({ status: 405 }), true);
+  assert.equal(shouldUseRecordedRun({ status: 408 }), true);
+  assert.equal(shouldUseRecordedRun({ status: 422 }), false);
 });
 
 test("recorded report must match the verified draft and final build step", () => {

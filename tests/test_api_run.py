@@ -481,6 +481,17 @@ def test_upstream_http_statuses_have_explicit_error_categories():
     assert server.classify_run_error(UpstreamError(429)) == "capacity"
     assert server.classify_run_error(UpstreamError(400)) == "request"
     assert server.classify_run_error(UpstreamError(503)) == "infrastructure"
+    for server_side_status in (401, 403, 404, 408):
+        assert server.classify_run_error(UpstreamError(server_side_status)) == "infrastructure"
+
+
+def test_local_file_errors_and_missing_key_are_classified_explicitly():
+    from src.clients.meta_client import MissingApiKeyError
+
+    assert server.classify_run_error(PermissionError("denied")) == "application"
+    assert server.classify_run_error(FileNotFoundError("gone")) == "application"
+    assert server.classify_run_error(MissingApiKeyError("MUSE_API_KEY is not set")) == "infrastructure"
+    assert server.classify_run_error(RuntimeError("MUSE_API_KEY mentioned")) == "application"
 
 
 def test_stream_disconnect_settles_in_background(tmp_path):

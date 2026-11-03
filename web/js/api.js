@@ -83,9 +83,13 @@ function jsonValuesEqual(left, right) {
       && jsonValuesEqual(left[key], right[key]));
 }
 
+// A proxy or static host answers these when the backend function is missing,
+// misrouted or timing out; every other 4xx is a request error to show as is.
+const HOSTING_FAILURE_STATUSES = new Set([404, 405, 408]);
+
 export function shouldUseRecordedRun(error) {
   if (Number.isInteger(error?.status) && error.status >= 400 && error.status <= 499) {
-    return false;
+    return HOSTING_FAILURE_STATUSES.has(error.status);
   }
   return Boolean(
     error && (

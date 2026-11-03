@@ -161,10 +161,14 @@ def main(argv: list[str] | None = None) -> int:
     try:
         journal = run_fictional_sample()
         recording = create_recorded_run(journal)
-        OUTPUT_PATH.write_text(
+        # Write then rename: an interrupted run must not leave a truncated
+        # fixture, which the page would report as invalid when the fallback is needed.
+        temporary_path = OUTPUT_PATH.with_suffix(".json.tmp")
+        temporary_path.write_text(
             json.dumps(recording, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
+        temporary_path.replace(OUTPUT_PATH)
     except (OSError, ValueError, RuntimeError) as error:
         print(f"Could not generate the recorded run: {error}", file=sys.stderr)
         return 1

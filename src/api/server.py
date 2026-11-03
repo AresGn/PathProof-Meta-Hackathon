@@ -18,7 +18,6 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
-from openai import APIConnectionError, APITimeoutError
 from pydantic import BaseModel
 
 from src.agent import loop
@@ -27,6 +26,7 @@ from src.api.run_store import MAX_PENDING_RUNS, PendingRunStore, cleanup_tmpdir
 from src.cli_run import path_for_agent, verified_report_from_journal
 from src.clients.meta_client import get_client
 from src.clients.muse_spark import MUSE_SPARK_MODEL
+from src.clients.upstream_errors import classify_run_error
 
 WEB_DIR = Path(__file__).resolve().parents[2] / "web"
 SAMPLES_DIR = Path(__file__).resolve().parents[2] / "data" / "samples"
@@ -82,24 +82,6 @@ def describe_run_error(error: Exception) -> str:
     if "MUSE_API_KEY" in message:
         return "API key is not set (server misconfiguration)"
     return message
-
-
-def classify_run_error(error: Exception) -> str:
-    """Keep capacity and request failures distinct from infrastructure failures."""
-    status = getattr(error, "status_code", getattr(error, "status", None))
-    if isinstance(status, int):
-        if status == 429:
-            return "capacity"
-        if 500 <= status <= 599:
-            return "infrastructure"
-        if 400 <= status <= 499:
-            return "request"
-    if isinstance(error, (APIConnectionError, APITimeoutError, ConnectionError,
-                          TimeoutError, OSError)):
-        return "infrastructure"
-    if "MUSE_API_KEY" in str(error):
-        return "infrastructure"
-    return "application"
 
 
 def format_sse_frame(payload: dict) -> str:
