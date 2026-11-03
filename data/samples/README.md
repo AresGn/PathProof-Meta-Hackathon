@@ -72,3 +72,42 @@ Même voix. Contient mot pour mot le texte du PRD §2.1, entouré d'hésitations
 Valeurs attendues : `serie_declaree` = D, `moyenne_declaree` = 14, en contradiction avec 11,20 sur `releve_serie_d.jpg`. L'agent signale l'écart, demande à l'élève et retient le relevé.
 
 Les deux transcriptions ont été vérifiées avec ElevenLabs Scribe : « série D », « 11,2 » et « 14 » sont bien reconnus.
+
+## Fichiers supplémentaires d'évaluation E6.1 (tous fictifs)
+
+| Fichier | Contenu fictif |
+|---|---|
+| `releve_serie_d_note_manquante.jpg` | Relevé fictif série D avec une note Mathématiques manquante ; ni points totaux ni moyenne affichés. Généré par `scripts/make_grade_sheets.py`. |
+| `releve_serie_d_note_25.jpg` | Relevé fictif série D avec Mathématiques à 25/20 ; ni points totaux ni moyenne affichés, la confirmation est demandée. Généré par `scripts/make_grade_sheets.py`. |
+| `profil_serie_c.txt` | Texte fictif de secours pour la voix d'un élève de série C. |
+| `note_vocale_bruitee.mp3` | Note vocale fictive de 33 s (même voix), bruit de marché en fond et rafale de bruit sur la lettre de la série. Générée par `scripts/make_voice_notes.py`. |
+| `intention_pharmacien.txt` | Texte fictif de secours : souhait de devenir pharmacien. |
+| `intention_pilote.txt` | Texte fictif de secours : souhait de devenir pilote de ligne. |
+| `intention_infirmier.txt` | Texte fictif de secours : souhait de devenir infirmier. |
+
+## Inventaire des autres fichiers d'exemple (tous fictifs)
+
+- `releve_serie_d.jpg` — relevé fictif net de série D.
+- `releve_serie_c.jpg` — relevé fictif net de série C.
+- `releve_serie_d_flou.jpg` — relevé fictif flou de série D.
+- `note_vocale_coherente.mp3` — voix fictive cohérente avec le relevé D.
+- `note_vocale_contradictoire.mp3` — voix fictive qui annonce 14 de moyenne.
+- `vertical_slice_serie_d.json` — fixture fictive pour la tranche verticale sans vision ni voix.
+
+Les dix entrées, leurs fichiers et leurs assertions machine-vérifiables sont
+déclarés dans `evals/cases.jsonl`. Les textes `.txt` sont des solutions de
+secours d'entrée, pas des transcriptions audio mesurées.
+Comparaison des chaînes : sous-chaîne, sans tenir compte de la casse ni
+des accents.
+
+- `forbidden_strings` : absentes du rapport vérifié et des questions posées.
+- `required_strings` : présentes dans le rapport vérifié (texte rendu par
+  `build_report`, par exemple « 13,15 / 20 » ou « (PUB-119) : Concours »).
+- `expected_question` : liste d'alternatives ; au moins une apparaît dans une
+  question posée par `ask_student`. `null` : aucune question attendue.
+
+Les `.txt` se passent au CLI avec `--voice-text` ; `noisy_voice` se lance
+avec `--audio` seul. Transcription mesurée de `note_vocale_bruitee.mp3` par
+`transcribe_voice` le 3 nov : « … Je suis en terminale, série euh ce que
+j'aime c'est la biologie… », `confidence = null` (l'API n'en renvoie pas,
+E0.5) : la série est inaudible, l'agent doit la demander (FR-4).

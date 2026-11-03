@@ -1,4 +1,4 @@
-"""Render the fictional grade sheets of data/samples/ (story E0.3, issue #5).
+"""Render the fictional grade sheets of data/samples/ (E0.3 and E6.1).
 
 Layout follows the public Bac relevé: one table for the written tests, one for
 EPS, then the jury block. Coefficients come from data/coefficients_bac_benin.json.
@@ -12,12 +12,19 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 SAMPLES_DIR = Path(__file__).resolve().parent.parent / "data" / "samples"
-FONT_DIR = Path("C:/Windows/Fonts")
+# Arial on Windows; Liberation Sans (same metrics) on Linux
+FONT_FILES = [
+    (Path("C:/Windows/Fonts/arial.ttf"), Path("C:/Windows/Fonts/arialbd.ttf")),
+    (Path("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"),
+     Path("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf")),
+]
 PAGE_SIZE = (1240, 1754)  # A4 at 150 dpi
 BAND_COLORS = ["#e3f1ec", "#f6e7ee", "#eef3dc", "#e7eef8"]
 JPEG_QUALITY = 88
 GLOBAL_BLUR_RADIUS = 2.4  # still readable overall
 CELL_BLUR_RADIUS = 14  # makes one note unreadable to the eye
+MIN_GRADE = 0  # docs/prd.md FR-3
+MAX_GRADE = 20  # docs/prd.md FR-3
 
 # Group 1 coefficients, data/coefficients_bac_benin.json
 SHEETS = {
@@ -56,13 +63,33 @@ SHEETS = {
         "decision": ("Admis", "Assez bien"),
     },
 }
+SHEETS["releve_serie_d_note_manquante.jpg"] = {
+    **SHEETS["releve_serie_d.jpg"],
+    "ecrit": [
+        (name, None if name == "MATHEMATIQUES" else note, coefficient)
+        for name, note, coefficient in SHEETS["releve_serie_d.jpg"]["ecrit"]
+    ],
+    "decision": ("À confirmer", "Non déterminée"),
+}
+SHEETS["releve_serie_d_note_25.jpg"] = {
+    **SHEETS["releve_serie_d.jpg"],
+    "ecrit": [
+        (name, 25 if name == "MATHEMATIQUES" else note, coefficient)
+        for name, note, coefficient in SHEETS["releve_serie_d.jpg"]["ecrit"]
+    ],
+    "decision": ("À confirmer", "Non déterminée"),
+}
 BLURRED_SOURCE = "releve_serie_d.jpg"
 BLURRED_NAME = "releve_serie_d_flou.jpg"
 BLURRED_SUBJECT = "MATHEMATIQUES"
 
 
 def load_font(size: int, is_bold: bool = False) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(str(FONT_DIR / ("arialbd.ttf" if is_bold else "arial.ttf")), size)
+    for regular, bold in FONT_FILES:
+        font_path = bold if is_bold else regular
+        if font_path.is_file():
+            return ImageFont.truetype(str(font_path), size)
+    raise FileNotFoundError(f"no Arial-metric font found in {FONT_FILES}")
 
 
 def format_number(value: float) -> str:
@@ -73,6 +100,10 @@ def format_number(value: float) -> str:
 
 def format_average(value: float) -> str:
     return f"{value:.2f}".replace(".", ",")
+
+
+def is_grade_in_range(value: float | None) -> bool:
+    return value is not None and MIN_GRADE <= value <= MAX_GRADE
 
 
 def draw_table(draw: ImageDraw.ImageDraw, top: int, rows: list[tuple], total_row: tuple) -> tuple[int, dict]:
@@ -103,8 +134,8 @@ def draw_table(draw: ImageDraw.ImageDraw, top: int, rows: list[tuple], total_row
     return bottom, note_cells
 
 
-def render_sheet(sheet: dict) -> tuple[Image.Image, dict, float]:
-    """Return the page, the note-cell boxes and the exact group-1 average."""
+def render_sheet(sheet: dict) -> tuple[Image.Image, dict, float | None]:
+    """Return the page, note-cell boxes and average (None when confirmation is needed)."""
     page = Image.new("RGB", PAGE_SIZE, "white")
     draw = ImageDraw.Draw(page)
     band_width = PAGE_SIZE[0] // 8
@@ -125,24 +156,35 @@ def render_sheet(sheet: dict) -> tuple[Image.Image, dict, float]:
         draw.text((380, y), value, fill="black", font=load_font(26, True))
 
     draw.text((90, 500), "Épreuves écrites du premier groupe", fill="black", font=load_font(30, True))
-    written_points = sum(note * coefficient for _, note, coefficient in sheet["ecrit"])
+    # A missing or out-of-range note leaves every total blank: a partial
+    # total would invite an average computed from the other subjects
+    has_all_grades = all(is_grade_in_range(note) for _, note, _ in sheet["ecrit"])
+    written_points = sum(note * coefficient for _, note, coefficient in sheet["ecrit"]
+                         if is_grade_in_range(note))
     written_coefficients = sum(coefficient for _, _, coefficient in sheet["ecrit"])
-    rows = [(name, format_number(note), coefficient, format_number(note * coefficient), 20 * coefficient)
-            for name, note, coefficient in sheet["ecrit"]]
-    total = ("Total des épreuves écrites", format_average(written_points / written_coefficients),
-             written_coefficients, format_number(written_points), 20 * written_coefficients)
+    rows = [
+        (name, "—" if note is None else format_number(note), coefficient,
+         format_number(note * coefficient) if is_grade_in_range(note) else "—",
+         20 * coefficient)
+        for name, note, coefficient in sheet["ecrit"]
+    ]
+    total_average = format_average(written_points / written_coefficients) if has_all_grades else "—"
+    total = ("Total des épreuves écrites", total_average, written_coefficients,
+             format_number(written_points) if has_all_grades else "—", 20 * written_coefficients)
     bottom, note_cells = draw_table(draw, 550, rows, total)
 
     group_points = written_points + sheet["eps"]
     group_coefficients = written_coefficients + 1
-    average = group_points / group_coefficients
+    average = group_points / group_coefficients if has_all_grades else None
     eps_rows = [("EDUCATION PHYSIQUE ET SPORTIVE", format_number(sheet["eps"]), 1, format_number(sheet["eps"]), 20)]
-    eps_total = ("Total du 1er groupe", format_average(average), group_coefficients,
-                 format_number(group_points), 20 * group_coefficients)
+    group_average = "—" if average is None else format_average(average)
+    eps_total = ("Total du 1er groupe", group_average, group_coefficients,
+                 format_number(group_points) if has_all_grades else "—", 20 * group_coefficients)
     bottom, _ = draw_table(draw, bottom + 50, eps_rows, eps_total)
 
     decision, mention = sheet["decision"]
-    jury = [("Décision du jury", decision), ("Mention", mention), ("Moyenne", f"{format_average(average)}/20")]
+    jury_average = "Non calculée" if average is None else f"{format_average(average)}/20"
+    jury = [("Décision du jury", decision), ("Mention", mention), ("Moyenne", jury_average)]
     for index, (label, value) in enumerate(jury):
         y = bottom + 80 + index * 52
         draw.text((90, y), label, fill="black", font=load_font(30))
@@ -165,7 +207,8 @@ def main() -> None:
     for file_name, sheet in SHEETS.items():
         page, note_cells, average = render_sheet(sheet)
         page.save(SAMPLES_DIR / file_name, quality=JPEG_QUALITY)
-        print(f"{file_name}: moyenne exacte {average:.4f}")
+        average_text = "non calculée (note à confirmer)" if average is None else f"{average:.4f}"
+        print(f"{file_name}: moyenne {average_text}")
         if file_name == BLURRED_SOURCE:
             blur_sheet(page, note_cells[BLURRED_SUBJECT]).save(SAMPLES_DIR / BLURRED_NAME, quality=JPEG_QUALITY)
             print(f"{BLURRED_NAME}: note {BLURRED_SUBJECT} illisible")

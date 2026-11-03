@@ -41,7 +41,7 @@ class TokenUsage:
 
 @dataclass
 class CliRunResult:
-    image_path: Path
+    image_path: Path | None
     audio_path: Path | None
     journal: list
     outcome: str | dict
@@ -131,19 +131,29 @@ def path_for_agent(path: Path) -> str:
         return resolved.as_posix()
 
 
-def build_user_message(image_path: Path, audio_path: Path | None) -> str:
-    image_arg = path_for_agent(image_path)
-    lines = [
-        "The student submitted a grade-sheet photo and a voice note (fictional sample).",
-        f"Grade sheet image path (pass verbatim to read_grade_sheet): {image_arg}",
-    ]
+def build_user_message(image_path: Path | None, audio_path: Path | None,
+                       text: str | None = None) -> str:
+    """Describe the student inputs for the model; paths stay repo-relative."""
+    if image_path is not None and audio_path is not None:
+        first = "The student submitted a grade-sheet photo and a voice note (fictional sample)."
+    elif image_path is not None:
+        first = "The student submitted a grade-sheet photo (fictional sample)."
+    elif audio_path is not None:
+        first = "The student submitted a voice note (fictional sample)."
+    else:
+        first = "The student submitted a written fallback text (fictional sample)."
+    lines = [first]
+    if image_path is not None:
+        lines.append("Grade sheet image path (pass verbatim to read_grade_sheet): "
+                     f"{path_for_agent(image_path)}")
     if audio_path is not None:
-        lines.append(
-            "Voice note audio path (pass verbatim to transcribe_voice): "
-            f"{path_for_agent(audio_path)}")
-    lines.append(
-        "Run the full tool loop and produce a verified orientation report via "
-        "verify_report then build_report.")
+        lines.append("Voice note audio path (pass verbatim to transcribe_voice): "
+                     f"{path_for_agent(audio_path)}")
+    if text is not None and text.strip():
+        lines.append("Student fallback text (use as transcript, skip transcribe_voice "
+                     f"when there is no audio): {text.strip()}")
+    lines.append("Run the full tool loop and produce a verified orientation report via "
+                 "verify_report then build_report.")
     return "\n".join(lines)
 
 
@@ -203,15 +213,15 @@ def verify_problems_from_journal(journal: list) -> list | None:
     return None
 
 
-def default_journal_path(image_path: Path, audio_path: Path | None, label: str | None) -> Path:
+def default_journal_path(image_path: Path | None, audio_path: Path | None, label: str | None,
+                         text_path: Path | None = None) -> Path:
     if label:
         if label in (".", "..") or Path(label).name != label:
             raise CliInputError(f"--run-label must be a plain file name, got: {label}")
         stem = label
-    elif audio_path is not None:
-        stem = f"{image_path.stem}_{audio_path.stem}"
     else:
-        stem = image_path.stem
+        stem = "_".join(path.stem for path in (image_path, audio_path, text_path)
+                        if path is not None)
     return Path("evals") / "results" / f"{stem}.json"
 
 
@@ -316,10 +326,11 @@ def answers_from_file(path: Path) -> Callable[[str], str]:
 def run_cli_session(
     client,
     model: str,
-    image_path: Path,
+    image_path: Path | None,
     audio_path: Path | None,
     ask_student: Callable[[str], str],
     *,
+    voice_text: str | None = None,
     tool_schemas: list[dict] | None = None,
     journal: list | None = None,
 ) -> CliRunResult:
@@ -327,7 +338,7 @@ def run_cli_session(
     usage = TokenUsage()
     tracked = UsageTrackingClient(client, usage)
     journal = journal if journal is not None else []
-    user_input = build_user_message(image_path, audio_path)
+    user_input = build_user_message(image_path, audio_path, voice_text)
     schemas = TOOL_SCHEMAS if tool_schemas is None else tool_schemas
     started = time.monotonic()
     waiting_seconds = 0.0
