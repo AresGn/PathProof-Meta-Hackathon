@@ -21,4 +21,4 @@ tmp/
 .vercel/
 .env.local
 # Rendered demo videos (E7.2): published on YouTube, never committed (176 MB broke the Vercel preview)
-video/
+/video/

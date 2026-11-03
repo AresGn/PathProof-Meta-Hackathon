@@ -1,38 +1,38 @@
-# Test Muse Spark 1.3 — aller-retour avec deux outils
+# Muse Spark 1.3 test — round trip with two tools
 
-Vérifie que le modèle choisit le bon outil, reçoit son résultat en message `tool`, puis l'utilise dans sa réponse finale. Complète `docs/muse-spark-tool-call-results.md` (premier appel seulement). Les valeurs renvoyées sont fictives et impossibles à deviner.
+Checks that the model picks the right tool, receives its result in a `tool` message, then uses it in its final answer. Complements `docs/muse-spark-tool-call-results.md` (first call only). The returned values are fictional and impossible to guess.
 
-- **Date d'exécution :** 2026-10-27 19:31 UTC
-- **Modèle :** `muse-spark-1.3` — `max_tokens` = 4000
-- **Outils exposés :** `get_filiere_cutoff` (renvoie 13.87), `get_bursary_amount` (renvoie 417)
+- **Run date:** 2026-10-27 19:31 UTC
+- **Model:** `muse-spark-1.3` — `max_tokens` = 4000
+- **Tools exposed:** `get_filiere_cutoff` (returns 13.87), `get_bursary_amount` (returns 417)
 
-## Synthèse
+## Summary
 
-| Critère | Résultat |
+| Criterion | Result |
 | --- | --- |
-| Aller-retour, bon outil + valeur dans la réponse finale | **5/5** |
-| Choix de l'autre outil (bourse), 1 exécution | ✅ |
-| Question sans outil : aucun appel, 1 exécution | ✅ |
-| Appels enchaînés (question à deux outils) | demandés en parallèle dans un seul tour (pas d'enchaînement) ; réponse contenant les deux valeurs : ✅ |
+| Round trip, right tool + value in the final answer | **5/5** |
+| Choice of the other tool (grant), 1 run | ✅ |
+| Question without a tool: no call, 1 run | ✅ |
+| Chained calls (question needing two tools) | requested in parallel in a single turn (no chaining); answer containing both values: ✅ |
 
-## Coût
+## Cost
 
-Tokens consommés au total : 10465 en entrée, 3777 en sortie (8 conversations). Le tarif en crédits n'est pas relevé par ce script : le coût en crédits n'est donc pas chiffré ici.
+Total tokens used: 10465 input, 3777 output (8 conversations). This script does not record the credit rate, so the cost in credits is not given here.
 
-## Limites de ce test
+## Limits of this test
 
-- Deux outils seulement, une question par outil ; 5 essais pour l'aller-retour, 1 seul pour chacun des autres cas : ce n'est pas une mesure statistique.
-- Valeurs d'outils fixes ; le test ne couvre ni les erreurs d'outil ni les arguments invalides.
-- Les outils réels de PathProof (`lookup_filieres`...) ne sont pas testés ici.
+- Two tools only, one question per tool; 5 attempts for the round trip, only 1 for each other case: this is not a statistical measurement.
+- Fixed tool values; the test covers neither tool errors nor invalid arguments.
+- PathProof's real tools (`lookup_filieres`...) are not tested here.
 
-## Sorties brutes
+## Raw outputs
 
-### Aller-retour, exécution 1
+### Round trip, run 1
 
-- Question : Quel est le seuil de moyenne de classement pour la filière Médecine ?
-- Outils appelés : ['get_filiere_cutoff']
-- Tokens : 1394 en entrée, 638 en sortie
-- Résultat : ✅
+- Question: Quel est le seuil de moyenne de classement pour la filière Médecine ?
+- Tools called: ['get_filiere_cutoff']
+- Tokens: 1394 input, 638 output
+- Result: ✅
 
 ```json
 [
@@ -54,12 +54,12 @@ Tokens consommés au total : 10465 en entrée, 3777 en sortie (8 conversations).
 ]
 ```
 
-### Aller-retour, exécution 2
+### Round trip, run 2
 
-- Question : Quel est le seuil de moyenne de classement pour la filière Médecine ?
-- Outils appelés : ['get_filiere_cutoff']
-- Tokens : 1389 en entrée, 355 en sortie
-- Résultat : ✅
+- Question: Quel est le seuil de moyenne de classement pour la filière Médecine ?
+- Tools called: ['get_filiere_cutoff']
+- Tokens: 1389 input, 355 output
+- Result: ✅
 
 ```json
 [
@@ -81,12 +81,12 @@ Tokens consommés au total : 10465 en entrée, 3777 en sortie (8 conversations).
 ]
 ```
 
-### Aller-retour, exécution 3
+### Round trip, run 3
 
-- Question : Quel est le seuil de moyenne de classement pour la filière Médecine ?
-- Outils appelés : ['get_filiere_cutoff']
-- Tokens : 1388 en entrée, 407 en sortie
-- Résultat : ✅
+- Question: Quel est le seuil de moyenne de classement pour la filière Médecine ?
+- Tools called: ['get_filiere_cutoff']
+- Tokens: 1388 input, 407 output
+- Result: ✅
 
 ```json
 [
@@ -108,39 +108,12 @@ Tokens consommés au total : 10465 en entrée, 3777 en sortie (8 conversations).
 ]
 ```
 
-### Aller-retour, exécution 4
+### Round trip, run 4
 
-- Question : Quel est le seuil de moyenne de classement pour la filière Médecine ?
-- Outils appelés : ['get_filiere_cutoff']
-- Tokens : 1392 en entrée, 455 en sortie
-- Résultat : ✅
-
-```json
-[
-  {
-    "finish_reason": "tool_calls",
-    "content": "Je récupère le seuil pour la filière Médecine.",
-    "tool_calls": [
-      {
-        "name": "get_filiere_cutoff",
-        "arguments": "{\"filiere\":\"Médecine\"}"
-      }
-    ]
-  },
-  {
-    "finish_reason": "stop",
-    "content": "Le seuil de moyenne de classement pour la filière **Médecine** est de **13.87**.",
-    "tool_calls": []
-  }
-]
-```
-
-### Aller-retour, exécution 5
-
-- Question : Quel est le seuil de moyenne de classement pour la filière Médecine ?
-- Outils appelés : ['get_filiere_cutoff']
-- Tokens : 1392 en entrée, 383 en sortie
-- Résultat : ✅
+- Question: Quel est le seuil de moyenne de classement pour la filière Médecine ?
+- Tools called: ['get_filiere_cutoff']
+- Tokens: 1392 input, 455 output
+- Result: ✅
 
 ```json
 [
@@ -162,12 +135,39 @@ Tokens consommés au total : 10465 en entrée, 3777 en sortie (8 conversations).
 ]
 ```
 
-### Autre outil (bourse)
+### Round trip, run 5
 
-- Question : Quel est le montant mensuel de la bourse pour la série D ?
-- Outils appelés : ['get_bursary_amount']
-- Tokens : 1373 en entrée, 658 en sortie
-- Résultat : ✅
+- Question: Quel est le seuil de moyenne de classement pour la filière Médecine ?
+- Tools called: ['get_filiere_cutoff']
+- Tokens: 1392 input, 383 output
+- Result: ✅
+
+```json
+[
+  {
+    "finish_reason": "tool_calls",
+    "content": "Je récupère le seuil pour la filière Médecine.",
+    "tool_calls": [
+      {
+        "name": "get_filiere_cutoff",
+        "arguments": "{\"filiere\":\"Médecine\"}"
+      }
+    ]
+  },
+  {
+    "finish_reason": "stop",
+    "content": "Le seuil de moyenne de classement pour la filière **Médecine** est de **13.87**.",
+    "tool_calls": []
+  }
+]
+```
+
+### Other tool (grant)
+
+- Question: Quel est le montant mensuel de la bourse pour la série D ?
+- Tools called: ['get_bursary_amount']
+- Tokens: 1373 input, 658 output
+- Result: ✅
 
 ```json
 [
@@ -189,12 +189,12 @@ Tokens consommés au total : 10465 en entrée, 3777 en sortie (8 conversations).
 ]
 ```
 
-### Question sans outil
+### Question without a tool
 
-- Question : Combien font 7 fois 8 ?
-- Outils appelés : aucun
-- Tokens : 622 en entrée, 326 en sortie
-- Résultat : ✅
+- Question: Combien font 7 fois 8 ?
+- Tools called: none
+- Tokens: 622 input, 326 output
+- Result: ✅
 
 ```json
 [
@@ -206,12 +206,12 @@ Tokens consommés au total : 10465 en entrée, 3777 en sortie (8 conversations).
 ]
 ```
 
-### Appels enchaînés
+### Chained calls
 
-- Question : Donne-moi le seuil de moyenne de classement de Médecine ET le montant mensuel de la bourse pour la série D.
-- Outils appelés : ['get_filiere_cutoff', 'get_bursary_amount']
-- Tokens : 1515 en entrée, 555 en sortie
-- Résultat : ✅
+- Question: Donne-moi le seuil de moyenne de classement de Médecine ET le montant mensuel de la bourse pour la série D.
+- Tools called: ['get_filiere_cutoff', 'get_bursary_amount']
+- Tokens: 1515 input, 555 output
+- Result: ✅
 
 ```json
 [
@@ -237,7 +237,7 @@ Tokens consommés au total : 10465 en entrée, 3777 en sortie (8 conversations).
 ]
 ```
 
-## Rejouer
+## Rerun
 
 ```bash
 python scripts/test_muse_roundtrip.py

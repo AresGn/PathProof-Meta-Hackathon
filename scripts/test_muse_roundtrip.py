@@ -153,10 +153,10 @@ def describe_chain(trace: dict) -> str:
     """Whether the tools were called in two separate model turns (true chaining) or in parallel."""
     turns_with_tools = [s for s in trace["steps"] if s["tool_calls"]]
     if len(turns_with_tools) >= 2:
-        return "observés à la suite (tours distincts)"
+        return "observed one after the other (separate turns)"
     if turns_with_tools and len(turns_with_tools[0]["tool_calls"]) >= 2:
-        return "demandés en parallèle dans un seul tour (pas d'enchaînement)"
-    return "non observés"
+        return "requested in parallel in a single turn (no chaining)"
+    return "not observed"
 
 
 def render_trace(title: str, trace: dict) -> list[str]:
@@ -164,11 +164,11 @@ def render_trace(title: str, trace: dict) -> list[str]:
     lines = [
         f"### {title}",
         "",
-        f"- Question : {trace['question']}",
-        f"- Outils appelés : {trace['tools_called'] or 'aucun'}",
-        f"- Tokens : {prompt} en entrée, {completion} en sortie",
-        f"- Résultat : {'✅' if trace.get('ok') else '❌'}"
-        + (f" — erreur : `{trace['error']}`" if trace.get("error") else ""),
+        f"- Question: {trace['question']}",
+        f"- Tools called: {trace['tools_called'] or 'none'}",
+        f"- Tokens: {prompt} input, {completion} output",
+        f"- Result: {'✅' if trace.get('ok') else '❌'}"
+        + (f" — error: `{trace['error']}`" if trace.get("error") else ""),
         "",
         "```json",
         json.dumps(trace["steps"], ensure_ascii=False, indent=2),
@@ -186,49 +186,49 @@ def render_report(results: dict) -> str:
     completion = sum(total_tokens(t)[1] for t in all_traces)
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     lines = [
-        "# Test Muse Spark 1.3 — aller-retour avec deux outils",
+        "# Muse Spark 1.3 test — round trip with two tools",
         "",
-        "Vérifie que le modèle choisit le bon outil, reçoit son résultat en message `tool`, "
-        "puis l'utilise dans sa réponse finale. Complète `docs/muse-spark-tool-call-results.md` "
-        "(premier appel seulement). Les valeurs renvoyées sont fictives et impossibles à deviner.",
+        "Checks that the model picks the right tool, receives its result in a `tool` message, "
+        "then uses it in its final answer. Complements `docs/muse-spark-tool-call-results.md` "
+        "(first call only). The returned values are fictional and impossible to guess.",
         "",
-        f"- **Date d'exécution :** {stamp}",
-        f"- **Modèle :** `{MODEL}` — `max_tokens` = {MAX_TOKENS}",
-        f"- **Outils exposés :** `get_filiere_cutoff` (renvoie {CUTOFF_VALUE}), "
-        f"`get_bursary_amount` (renvoie {BURSARY_VALUE})",
+        f"- **Run date:** {stamp}",
+        f"- **Model:** `{MODEL}` — `max_tokens` = {MAX_TOKENS}",
+        f"- **Tools exposed:** `get_filiere_cutoff` (returns {CUTOFF_VALUE}), "
+        f"`get_bursary_amount` (returns {BURSARY_VALUE})",
         "",
-        "## Synthèse",
+        "## Summary",
         "",
-        "| Critère | Résultat |",
+        "| Criterion | Result |",
         "| --- | --- |",
-        f"| Aller-retour, bon outil + valeur dans la réponse finale | **{passed}/{len(roundtrip)}** |",
-        f"| Choix de l'autre outil (bourse), 1 exécution | {'✅' if results['bursary']['ok'] else '❌'} |",
-        f"| Question sans outil : aucun appel, 1 exécution | {'✅' if results['no_tool']['ok'] else '❌'} |",
-        f"| Appels enchaînés (question à deux outils) | {describe_chain(results['chained'])} ; "
-        f"réponse contenant les deux valeurs : {'✅' if results['chained']['ok'] else '❌'} |",
+        f"| Round trip, right tool + value in the final answer | **{passed}/{len(roundtrip)}** |",
+        f"| Choice of the other tool (grant), 1 run | {'✅' if results['bursary']['ok'] else '❌'} |",
+        f"| Question without a tool: no call, 1 run | {'✅' if results['no_tool']['ok'] else '❌'} |",
+        f"| Chained calls (question needing two tools) | {describe_chain(results['chained'])} ; "
+        f"answer containing both values: {'✅' if results['chained']['ok'] else '❌'} |",
         "",
-        "## Coût",
+        "## Cost",
         "",
-        f"Tokens consommés au total : {prompt} en entrée, {completion} en sortie "
-        f"({len(all_traces)} conversations). Le tarif en crédits n'est pas relevé par ce "
-        "script : le coût en crédits n'est donc pas chiffré ici.",
+        f"Total tokens used: {prompt} input, {completion} output "
+        f"({len(all_traces)} conversations). This script does not record the credit "
+        "rate, so the cost in credits is not given here.",
         "",
-        "## Limites de ce test",
+        "## Limits of this test",
         "",
-        f"- Deux outils seulement, une question par outil ; {ROUNDTRIP_RUNS} essais pour l'aller-retour, "
-        "1 seul pour chacun des autres cas : ce n'est pas une mesure statistique.",
-        "- Valeurs d'outils fixes ; le test ne couvre ni les erreurs d'outil ni les arguments invalides.",
-        "- Les outils réels de PathProof (`lookup_filieres`...) ne sont pas testés ici.",
+        f"- Two tools only, one question per tool; {ROUNDTRIP_RUNS} attempts for the round trip, "
+        "only 1 for each other case: this is not a statistical measurement.",
+        "- Fixed tool values; the test covers neither tool errors nor invalid arguments.",
+        "- PathProof's real tools (`lookup_filieres`...) are not tested here.",
         "",
-        "## Sorties brutes",
+        "## Raw outputs",
         "",
     ]
     for index, trace in enumerate(roundtrip, start=1):
-        lines += render_trace(f"Aller-retour, exécution {index}", trace)
-    lines += render_trace("Autre outil (bourse)", results["bursary"])
-    lines += render_trace("Question sans outil", results["no_tool"])
-    lines += render_trace("Appels enchaînés", results["chained"])
-    lines += ["## Rejouer", "", "```bash", "python scripts/test_muse_roundtrip.py", "```", ""]
+        lines += render_trace(f"Round trip, run {index}", trace)
+    lines += render_trace("Other tool (grant)", results["bursary"])
+    lines += render_trace("Question without a tool", results["no_tool"])
+    lines += render_trace("Chained calls", results["chained"])
+    lines += ["## Rerun", "", "```bash", "python scripts/test_muse_roundtrip.py", "```", ""]
     return "\n".join(lines)
 
 

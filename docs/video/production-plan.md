@@ -1,168 +1,170 @@
-# Plan de production de la vidéo (story E7.2, issue #39)
+# Video production plan (story E7.2, issue #39)
 
-Vidéo **sans visage** : un écran de navigateur filmé, une voix off, des sous-titres anglais. 3:00 au plus, en deux formats (YouTube horizontal, X vertical) et deux langues de voix (anglais, français).
-Textes de la voix : [`script-en.md`](script-en.md) et [`script-fr.md`](script-fr.md). Séquence de départ : `docs/prd.md` §13 et `docs/demo-script.md`.
+**Status (3 Nov):** the four exports were made and the video is published on YouTube (link in the README). This plan is kept as the production record.
 
-## 1. Ce qu'on livre
+A **face-less** video: a filmed browser screen, a voice-over, English subtitles. 3:00 at most, in two formats (horizontal for YouTube, vertical for X) and two voice languages (English, French).
+Voice-over texts: [`script-en.md`](script-en.md) and [`script-fr.md`](script-fr.md) (the French voice-over, kept in French on purpose). Starting sequence: `docs/prd.md` §13 and `docs/demo-script.md`.
 
-| Priorité | Fichier | Format | Voix | Sous-titres anglais |
+## 1. Deliverables
+
+| Priority | File | Format | Voice | English subtitles |
 |---|---|---|---|---|
-| **P1** | `pathproof_youtube_en.mp4` | 1920×1080, 16:9 | anglais | piste `.srt` (YouTube) + `pathproof_en.srt` |
-| **P2** | `pathproof_x_en_vertical.mp4` | 1080×1920, 9:16 | anglais | incrustés |
-| P3 | `pathproof_youtube_fr.mp4` | 1920×1080 | français | piste `.srt` (cues anglais calés sur la voix française) |
-| P3 | `pathproof_x_fr_vertical.mp4` | 1080×1920 | français | incrustés |
+| **P1** | `pathproof_youtube_en.mp4` | 1920×1080, 16:9 | English | `.srt` track (YouTube) + `pathproof_en.srt` |
+| **P2** | `pathproof_x_en_vertical.mp4` | 1080×1920, 9:16 | English | burned in |
+| P3 | `pathproof_youtube_fr.mp4` | 1920×1080 | French | `.srt` track (English cues timed on the French voice) |
+| P3 | `pathproof_x_fr_vertical.mp4` | 1080×1920 | French | burned in |
 
-Le jury est surtout anglophone : **P1 est ce qui est soumis**. P2 sert au post X (E7.3). P3 se fait s'il reste du temps ; la soumission ne doit pas en dépendre.
-Toutes les versions durent **2:58 au plus** (limite 3:00), même découpage en blocs, mêmes numéros de plans.
+The jury is mostly English-speaking: **P1 is what gets submitted**. P2 is for the X post (E7.3). P3 is done if time remains; the submission must not depend on it.
+All versions last **2:58 at most** (limit 3:00), with the same block split and the same shot numbers.
 
-> **À vérifier avant de publier sur X :** un compte X non Premium plafonne la durée d'une vidéo (je crois 2:20, non vérifié). Si le compte est concerné, il faudra une version raccourcie, donc un second jeu de textes : à décider avant de monter P2.
+> **To check before publishing on X:** a non-Premium X account caps the duration of a video (probably 2:20, not verified). If the account is affected, a shortened version will be needed, hence a second set of texts: to decide before cutting P2.
 
-## 2. Qui fait quoi
+## 2. Who does what
 
-| Qui | Tâche |
+| Who | Task |
 |---|---|
-| **Vous** | Filmer l'écran (§4), enregistrer la voix (§5), choisir le titre, la miniature et le compte X, publier. |
-| **Agent de code (montage)** | Assembler, couper les attentes, zoomer, incruster cartes et sous-titres, régler le son, exporter et contrôler les durées (§6). Il travaille avec `ffmpeg` en ligne de commande, sur des fichiers que vous déposez dans `video/raw/`. |
-| **Ni l'un ni l'autre** | Inventer un plan. Tout ce qui est à l'écran vient d'une exécution réelle ou d'une carte clairement marquée (§7). |
+| **You** | Film the screen (§4), record the voice (§5), choose the title, the thumbnail and the X account, publish. |
+| **Code agent (montage)** | Assemble, cut the waits, zoom, burn in cards and subtitles, set the sound, export and check durations (§6). It works with `ffmpeg` on the command line, on files you drop into `video/raw/`. |
+| **Neither** | Invent a shot. Everything on screen comes from a real run or from a clearly marked card (§7). |
 
-Les médias ne vont pas dans le dépôt (lourds, et les rushs peuvent contenir du bruit) : `video/` reste hors de git. Le dépôt ne garde que ces trois documents, et le `.srt` final si vous voulez le versionner.
+The media do not go into the repository (heavy, and raw footage may contain noise): `video/` stays out of git. The repository only keeps these three documents, and the final `.srt` if you want to version it.
 
-## 3. Découpage : 16 plans, 6 blocs de voix
+## 3. Split: 16 shots, 6 voice blocks
 
-Fenêtres imposées par le PRD §13 et par l'issue #39. Débit contrôlé : l'anglais reste sous 2,3 mots/s, le français sous 2,6 mots/s, ce qui laisse des silences pour l'interface.
+Windows set by PRD §13 and by issue #39. Controlled pace: English stays under 2.3 words/s, French under 2.6 words/s, which leaves silences for the interface.
 
-| Bloc | Fenêtre | Plans | Mots EN (mots/s) | Mots FR (mots/s) |
+| Block | Window | Shots | EN words (words/s) | FR words (words/s) |
 |---|---|---|---|---|
-| V1 moment fort | 0:00–0:20 | S01, S02 | 40 (2,0) | 42 (2,1) |
-| V2 problème et chiffre | 0:20–0:45 | S03, S04 | 47 (1,9) | 50 (2,0) |
-| V3a cas complet : entrées | 0:45–1:05 | S05, S06 | 42 (2,1) | 41 (2,1) |
-| V3b cas complet : trace | 1:05–1:30 | S07, S08 | 41 (1,6) | 41 (1,6) |
-| V3c cas complet : preuves | 1:30–2:00 | S09, S10, S11 | 57 (1,9) | 64 (2,1) |
-| V4 cas difficile | 2:00–2:30 | S12, S13 | 54 (1,8) | 55 (1,8) |
-| V5 évaluations et ligne écartée | 2:30–2:50 | S14, S15 | 45 (2,3) | 51 (2,6) |
-| V6 nouveau, limites, équipe | 2:50–2:58 | S16 | 16 (2,0) | 17 (2,1) |
+| V1 strong moment | 0:00–0:20 | S01, S02 | 40 (2.0) | 42 (2.1) |
+| V2 problem and figure | 0:20–0:45 | S03, S04 | 47 (1.9) | 50 (2.0) |
+| V3a full case: inputs | 0:45–1:05 | S05, S06 | 42 (2.1) | 41 (2.1) |
+| V3b full case: trace | 1:05–1:30 | S07, S08 | 41 (1.6) | 41 (1.6) |
+| V3c full case: proofs | 1:30–2:00 | S09, S10, S11 | 57 (1.9) | 64 (2.1) |
+| V4 hard case | 2:00–2:30 | S12, S13 | 54 (1.8) | 55 (1.8) |
+| V5 evaluations and dropped row | 2:30–2:50 | S14, S15 | 45 (2.3) | 51 (2.6) |
+| V6 what is new, limits, team | 2:50–2:58 | S16 | 16 (2.0) | 17 (2.1) |
 | **Total** | **2:58** | | **342** | **361** |
 
-### Plan par plan
+### Shot by shot
 
-« Exécution » = capture d'une vraie exécution de PathProof. « Carte » = image faite au montage, sans exécution, marquée comme telle.
+"Run" = capture of a real PathProof run. "Card" = an image made at the montage stage, with no run, marked as such.
 
-| Plan | Fenêtre | À l'écran | Source |
+| Shot | Window | On screen | Source |
 |---|---|---|---|
-| S01 | 0:00–0:10 | Le relevé fictif (`releve_serie_d.jpg`, moyenne **11,20**) et la transcription de la note vocale « … j'ai eu 14 de moyenne » côte à côte. Option : l'extrait audio de la note, à −22 dB sous la voix | Exécution (clic sur **Contradictory voice note**, étape `transcribe_voice`) + le fichier d'entrée |
-| S02 | 0:10–0:20 | L'agent s'arrête : « Vous avez déclaré 14/20, mais votre relevé affiche 11.2/20… », statut « Agent is waiting for your answer » | Exécution (même prise, 2e question) |
-| S03 | 0:20–0:32 | **Carte** : « 77 101 candidats au Bac 2026 », source « données de l'Office du Baccalauréat relayées par Bénin Web TV, 14 juin 2026 ». Un seul chiffre dans toute la vidéo | Carte (`docs/impact.md`) |
-| S04 | 0:32–0:45 | Dans un rapport réel, la section « Ranking average » : formule `M = Σ(mi·ci)/Σci (guide, page 8)` et les trois matières avec leurs coefficients | Exécution (rapport de S09) |
-| S05 | 0:45–0:55 | `demo.html`, clic sur **Clear serie D sheet + matching voice note** ; mention « fictional, synthetic voice » | Exécution |
-| S06 | 0:55–1:05 | Le lancement : la carte de l'agent s'allume outil par outil (accéléré ×3, pastille « ×3 » visible) | Exécution |
-| S07 | 1:05–1:17 | Gros plan sur la trace : pastilles « Decided by Muse Spark 1.3 Contributor », « Run by Muse Voice Transcribe 1.0 », « Run by Muse Spark 1.3 » | Exécution |
-| S08 | 1:17–1:30 | La question, la réponse « D », puis `lookup_filieres` « Run by deterministic code · no model » et l'étape Muse Wonder 1.0 (« effort high ») ; attente accélérée ×4 | Exécution |
-| S09 | 1:30–1:42 | Le bandeau « Verified report — every claim checked by code », défilement jusqu'à Médecine **13,15** | Exécution |
-| S10 | 1:42–1:52 | Clic sur les puces de preuve : « Grade · SVT 15/20 », « Quote · "peut-être médecin" » (fenêtre de preuve avec la citation surlignée) | Exécution |
-| S11 | 1:52–2:00 | Clic sur « Guide · PUB-062 (page 36) » puis « Result · 13.15 » ; fin sur l'étape « All claims proven » | Exécution |
-| S12 | 2:00–2:12 | Clic sur **Blurry sheet** : le relevé flou, l'agent le lit | Exécution |
-| S13 | 2:12–2:30 | La question « la note de Mathématiques est illisible… » et l'agent en attente ; puis une carte : « SAM 3.1 : tableau trouvé, cellule jamais trouvée (0/3) → abandonné », source `docs/spikes/sam` | Exécution + carte |
-| S14 | 2:30–2:42 | Dans le dépôt public, le tableau de `evals/results/summary.md` : **11 cas sur 11 conformes** (défilement lent) | Page GitHub du dépôt |
-| S15 | 2:42–2:50 | Cas Pharmacie : relevé série D + texte `intention_pharmacien.txt`, étape `lookup_filieres`, déplier « Input / output » : la ligne « Pharmacie » est dans les lignes écartées (`Statut_qualité` « Réparé - fusion OCR ») et n'apparaît pas dans les recommandations | Exécution ; **repli** : le fichier `evals/results/2026-11-03/unverified_trap.json`, légendé comme tel |
-| S16 | 2:50–2:58 | **Carte** de fin : PathProof, `pathproof-six.vercel.app`, `github.com/AresGn/PathProof-Meta-Hackathon`, compte X `{{X_HANDLE}}`, « Solo · fictional data » | Carte |
+| S01 | 0:00–0:10 | The fictional sheet (`releve_serie_d.jpg`, average **11.20**) and the voice-note transcript "… j'ai eu 14 de moyenne" side by side. Option: the audio excerpt of the note, at −22 dB under the voice | Run (click on **Contradictory voice note**, `transcribe_voice` step) + the input file |
+| S02 | 0:10–0:20 | The agent stops: "Vous avez déclaré 14/20, mais votre relevé affiche 11.2/20…" (You declared 14/20, but your sheet shows 11.2/20), status "Agent is waiting for your answer" | Run (same take, 2nd question) |
+| S03 | 0:20–0:32 | **Card**: "77,101 candidates for the 2026 BAC", source "Office du Baccalauréat data relayed by Bénin Web TV, 14 June 2026". A single figure in the whole video | Card (`docs/impact.md`) |
+| S04 | 0:32–0:45 | In a real report, the "Ranking average" section: formula `M = Σ(mi·ci)/Σci (guide, page 8)` and the three subjects with their coefficients | Run (report of S09) |
+| S05 | 0:45–0:55 | `demo.html`, click on **Clear serie D sheet + matching voice note**; caption "fictional, synthetic voice" | Run |
+| S06 | 0:55–1:05 | The launch: the agent map lights up tool by tool (sped up ×3, "×3" badge visible) | Run |
+| S07 | 1:05–1:17 | Close-up of the trace: badges "Decided by Muse Spark 1.3 Contributor", "Run by Muse Voice Transcribe 1.0", "Run by Muse Spark 1.3" | Run |
+| S08 | 1:17–1:30 | The question, the answer "D", then `lookup_filieres` "Run by deterministic code · no model" and the Muse Wonder 1.0 step ("effort high"); wait sped up ×4 | Run |
+| S09 | 1:30–1:42 | The banner "Verified report — every claim checked by code", scroll down to Medicine **13.15** | Run |
+| S10 | 1:42–1:52 | Click on the proof chips: "Grade · SVT 15/20", "Quote · "peut-être médecin"" (proof dialog with the quote highlighted) | Run |
+| S11 | 1:52–2:00 | Click on "Guide · PUB-062 (page 36)" then "Result · 13.15"; end on the "All claims proven" step | Run |
+| S12 | 2:00–2:12 | Click on **Blurry sheet**: the blurry sheet, the agent reads it | Run |
+| S13 | 2:12–2:30 | The question "the Mathematics grade is unreadable…" and the agent waiting; then a card: "SAM 3.1: table found, cell never found (0/3) → dropped", source `docs/spikes/sam` | Run + card |
+| S14 | 2:30–2:42 | In the public repository, the table of `evals/results/summary.md`: **11 of 11 cases compliant** (slow scroll) | GitHub page of the repository |
+| S15 | 2:42–2:50 | Pharmacie case: serie D sheet + text `intention_pharmacien.txt`, `lookup_filieres` step, expand "Input / output": the "Pharmacie" row is among the excluded rows (`Statut_qualité` "Réparé - fusion OCR") and does not appear in the recommendations | Run; **fallback**: the file `evals/results/2026-11-03/unverified_trap.json`, captioned as such |
+| S16 | 2:50–2:58 | End **card**: PathProof, `pathproof-six.vercel.app`, `github.com/AresGn/PathProof-Meta-Hackathon`, X account `{{X_HANDLE}}`, "Solo · fictional data" | Card |
 
-## 4. Prise de vues (écran)
+## 4. Screen capture
 
-### Préparation (une fois)
-1. Serveur : `.venv/bin/uvicorn src.api.server:app --port 8000`, puis ouvrir `http://127.0.0.1:8000/demo.html` (la page servie par uvicorn, pas un aperçu statique).
-2. **Enregistrer le navigateur seulement** (source « fenêtre » d'OBS, pas l'écran entier) : aucune fenêtre d'éditeur ni de terminal dans le champ. **`.env` ne doit jamais apparaître**, ni la barre d'adresse d'un autre onglet, ni un chemin personnel.
-3. Navigateur en fenêtre privée, sans extension, barre de favoris masquée, un seul onglet, notifications coupées (mode « ne pas déranger »).
-4. Réglages : 1920×1080, 30 i/s, MKV (remux en MP4 ensuite), curseur visible avec un halo discret.
-5. Langue de l'interface : **choisir EN ou FR avant de lancer** (le rapport et les questions suivent la langue choisie au démarrage). Version anglaise : interface EN. Version française : interface FR, rushs séparés.
-6. Les rushs d'une exécution complète durent 100 à 165 s (mesuré, `docs/deploy.md`, `evals/results/summary.md`) : tourner sans couper, le montage accélère les attentes.
+### Preparation (once)
+1. Server: `.venv/bin/uvicorn src.api.server:app --port 8000`, then open `http://127.0.0.1:8000/demo.html` (the page served by uvicorn, not a static preview).
+2. **Record the browser only** (OBS "window" source, not the whole screen): no editor or terminal window in the frame. **`.env` must never appear**, nor the address bar of another tab, nor a personal path.
+3. Browser in a private window, no extensions, bookmarks bar hidden, a single tab, notifications off ("do not disturb" mode).
+4. Settings: 1920×1080, 30 fps, MKV (remux to MP4 afterwards), visible cursor with a discreet halo.
+5. Interface language: **choose EN or FR before launching** (the report and the questions follow the language chosen at start). English version: EN interface. French version: FR interface, separate raw footage.
+6. Raw footage of a full run lasts 100 to 165 s (measured, `docs/deploy.md`, `evals/results/summary.md`): shoot without cutting, the montage speeds up the waits.
 
-### Où filmer
-- **Serveur local** pour les prises : même code que le déploiement, sans limite par IP (5 requêtes/min sur Vercel) et sans le 404 de session `ask_student` connu sur Vercel (`docs/deploy.md`).
-- **URL publique** pour **une** prise de S05/S06 : preuve que la démo déployée tourne. Si le 404 apparaît, on garde la prise locale.
+### Where to film
+- **Local server** for the takes: same code as the deployment, no per-IP limit (5 requests/min on Vercel) and without the `ask_student` session 404 known on Vercel (`docs/deploy.md`).
+- **Public URL** for **one** take of S05/S06: proof that the deployed demo runs. If the 404 appears, keep the local take.
 
-### Liste des prises
+### Take list
 
-| Prise | Quoi | Plans | Coût indicatif (boucle seule, `evals/results/summary.md`) |
+| Take | What | Shots | Indicative cost (loop only, `evals/results/summary.md`) |
 |---|---|---|---|
-| T1 | **Contradictory voice note** : répondre « D » à la 1re question, laisser la 2e (14 contre 11,2) affichée 10 s | S01, S02 | ≈ 0,32 $ |
-| T2 | **Clear serie D sheet + matching voice note**, répondre « D », puis parcourir le rapport et les preuves | S04–S11 | ≈ 0,38 $ |
-| T3 | **Blurry sheet** | S12, S13 | ≈ 0 $ |
-| T4 | Pharmacie : relevé `releve_serie_d.jpg` + texte de `intention_pharmacien.txt` | S15 | ≈ 0,35 $ |
-| T5 | GitHub : `summary.md`, défilement lent | S14 | 0 |
+| T1 | **Contradictory voice note**: answer "D" to the 1st question, leave the 2nd (14 vs 11.2) displayed for 10 s | S01, S02 | ≈ $0.32 |
+| T2 | **Clear serie D sheet + matching voice note**, answer "D", then go through the report and the proofs | S04–S11 | ≈ $0.38 |
+| T3 | **Blurry sheet** | S12, S13 | ≈ $0 |
+| T4 | Pharmacie: sheet `releve_serie_d.jpg` + text from `intention_pharmacien.txt` | S15 | ≈ $0.35 |
+| T5 | GitHub: `summary.md`, slow scroll | S14 | 0 |
 
-Prévoir 2 à 3 essais par prise : environ 5 $ par langue, très en dessous du solde de crédits (66 $ le 3 nov, selon le porteur).
+Plan 2 to 3 attempts per take: about $5 per language, far below the credit balance ($66 on 3 Nov, according to the owner).
 
-**Prises à refaire si :** le bandeau « exécution enregistrée » apparaît (ce n'est pas une prise en direct ; si vous la gardez, la voix doit le dire) ; la 2e question de T1 n'est pas celle du 14 contre 11,2 (le comportement varie d'une exécution à l'autre) ; la limite de 12 pas est atteinte sans rapport (`docs/deploy.md`) ; une clé, un nom réel ou un chemin personnel est visible.
+**Retake if:** the "recorded run" banner appears (this is not a live take; if you keep it, the voice must say so); the 2nd question of T1 is not the 14 vs 11.2 one (behaviour varies from one run to another); the 12-step limit is reached without a report (`docs/deploy.md`); a key, a real name or a personal path is visible.
 
-### Nommage des rushs
-`video/raw/<plan>_<langue>_<format>_take<n>.mkv`, par exemple `S08_en_desktop_take2.mkv`, `S13_fr_vertical_take1.mkv`. Une ligne de `video/raw/NOTES.txt` par prise gardée : « bonne », « reprise », et pourquoi.
+### Raw file naming
+`video/raw/<shot>_<language>_<format>_take<n>.mkv`, for example `S08_en_desktop_take2.mkv`, `S13_fr_vertical_take1.mkv`. One line of `video/raw/NOTES.txt` per kept take: "good", "retake", and why.
 
-### Format vertical (X)
-- **Prise native** : fenêtre étroite, `chromium --app=http://127.0.0.1:8000/demo.html --window-size=540,960 --force-device-scale-factor=2`, enregistrée en 1080×1920. L'interface est responsive (captures à 375 px dans `docs/`), donc la même prise se refait en vertical.
-- **Repli** : recadrer le rush horizontal autour du panneau actif (zoom au montage). Moins net, mais sans refaire les prises.
-- Zones de sécurité : texte et sous-titres entre 12 % et 82 % de la hauteur, rien dans les 10 % du haut ni les 15 % du bas (interface du lecteur).
+### Vertical format (X)
+- **Native capture**: narrow window, `chromium --app=http://127.0.0.1:8000/demo.html --window-size=540,960 --force-device-scale-factor=2`, recorded at 1080×1920. The interface is responsive (375 px captures in `docs/`), so the same take can be redone in vertical.
+- **Fallback**: crop the horizontal footage around the active panel (zoom at the montage stage). Less sharp, but without redoing the takes.
+- Safe zones: text and subtitles between 12 % and 82 % of the height, nothing in the top 10 % or the bottom 15 % (player interface).
 
-## 5. Voix off
+## 5. Voice-over
 
-- **Vous enregistrez la voix** (français et anglais). Il n'y a pas de synthèse vocale dans PathProof ; une voix de synthèse pour la narration est possible mais doit être annoncée dans la description de la vidéo.
-- Micro proche (15 cm), pièce calme, filtre anti-pop ou, à défaut, un tissu devant le micro. WAV 48 kHz mono, un fichier par bloc : `video/raw/VO_en_V1.wav` … `VO_en_V6.wav`, idem `VO_fr_*`.
-- Lire à voix posée, 2 prises par bloc, couper les respirations bruyantes. Les nombres sont dits en toutes lettres (c'est écrit ainsi dans les scripts).
-- Le texte est contraint par les fenêtres ci-dessus : si une phrase est trop longue à dire, la raccourcir **dans le script** (et pas en accélérant la voix), puis prévenir le montage.
-- La voix des notes vocales d'exemple est synthétique (`data/samples/README.md`). Une mention à l'écran « fictional student · synthetic voice » en S05 le dit.
+- **You record the voice** (French and English). There is no speech synthesis in PathProof; a synthetic voice for the narration is possible but must be disclosed in the video description.
+- Close microphone (15 cm), quiet room, pop filter or, failing that, a cloth in front of the microphone. WAV 48 kHz mono, one file per block: `video/raw/VO_en_V1.wav` … `VO_en_V6.wav`, likewise `VO_fr_*`.
+- Read in a calm voice, 2 takes per block, cut loud breaths. Numbers are spoken in full (this is how they are written in the scripts).
+- The text is constrained by the windows above: if a sentence is too long to say, shorten it **in the script** (not by speeding up the voice), then tell the montage.
+- The voice of the sample voice notes is synthetic (`data/samples/README.md`). A caption on screen "fictional student · synthetic voice" in S05 says so.
 
-## 6. Montage (agent de code, `ffmpeg`)
+## 6. Montage (code agent, `ffmpeg`)
 
-Prérequis : `ffmpeg` et `ffprobe` installés (absents de cette machine le 3 nov : `sudo apt install ffmpeg`).
+Prerequisite: `ffmpeg` and `ffprobe` installed (absent from this machine on 3 Nov: `sudo apt install ffmpeg`).
 
-Un fichier `video/timeline.csv` décrit le montage, une ligne par plan : `plan, source, in, out, vitesse, zoom, carte, bloc_voix`. Le montage se rejoue depuis ce fichier si une prise change.
+A file `video/timeline.csv` describes the montage, one line per shot: `shot, source, in, out, speed, zoom, card, voice_block`. The montage is replayed from this file if a take changes.
 
-Étapes, dans l'ordre :
-1. **Contrôle des rushs** : `ffprobe` (résolution, i/s, durée). Écarter ce qui ne respecte pas le §4.
-2. **Voix** : réduction de bruit légère, normalisation à **−16 LUFS** intégrés, crête vraie −1 dBTP ; les blocs sont posés à leur fenêtre.
-3. **Plans** : coupe (`in`/`out`), accélération des attentes avec une pastille « ×3 » ou « ×4 » toujours visible, zoom ciblé (`crop` + `scale`) sur les pastilles de modèles, sur la question, sur la preuve ouverte.
-4. **Cartes** : S03, S13 (mention SAM) et S16, sobres, polices système, couleurs de l'interface (thème sombre, vert PathProof).
-5. **Sous-titres** : `pathproof_en.srt`, cues de `script-en.md` (2 lignes maximum, 42 caractères en horizontal, 28 en vertical), calés sur la voix enregistrée. Pour la version à voix française : les **mêmes cues anglais**, recalés sur l'audio français.
-6. **Son** : pas de musique avec paroles ; un fond discret (−30 dB) est permis, sinon rien. L'extrait de note vocale de S01 passe à −22 dB sous la voix.
-7. **Export** :
-   - YouTube : H.264 High, 1920×1080, 30 i/s, CRF 18, AAC 192 kbit/s ; sous-titres en **piste `.srt`** à téléverser avec la vidéo.
-   - X vertical : H.264, 1080×1920, 30 i/s, CRF 20, AAC 192 kbit/s ; sous-titres **incrustés** (`subtitles=` avec `force_style`, police plus grande).
-8. **Contrôle** : `ffprobe` donne une durée ≤ 180,0 s pour chaque fichier ; relecture complète ; `ffmpeg -i … -af ebur128` pour vérifier le niveau ; première image propre pour la miniature.
+Steps, in order:
+1. **Footage check**: `ffprobe` (resolution, fps, duration). Set aside whatever does not meet §4.
+2. **Voice**: light noise reduction, normalization to **−16 LUFS** integrated, true peak −1 dBTP; the blocks are placed at their window.
+3. **Shots**: cut (`in`/`out`), speed-up of the waits with a "×3" or "×4" badge always visible, targeted zoom (`crop` + `scale`) on the model badges, on the question, on the opened proof.
+4. **Cards**: S03, S13 (SAM caption) and S16, sober, system fonts, interface colours (dark theme, PathProof green).
+5. **Subtitles**: `pathproof_en.srt`, cues from `script-en.md` (2 lines maximum, 42 characters horizontal, 28 vertical), timed on the recorded voice. For the French-voice version: the **same English cues**, retimed on the French audio.
+6. **Sound**: no music with lyrics; a discreet background (−30 dB) is allowed, otherwise nothing. The voice-note excerpt of S01 goes to −22 dB under the voice.
+7. **Export**:
+   - YouTube: H.264 High, 1920×1080, 30 fps, CRF 18, AAC 192 kbit/s; subtitles as an **`.srt` track** to upload with the video.
+   - X vertical: H.264, 1080×1920, 30 fps, CRF 20, AAC 192 kbit/s; subtitles **burned in** (`subtitles=` with `force_style`, larger font).
+8. **Check**: `ffprobe` gives a duration ≤ 180.0 s for each file; full playback; `ffmpeg -i … -af ebur128` to check the level; a clean first frame for the thumbnail.
 
-Le montage ne doit rien rendre plus beau que la réalité : pas de fausse trace, pas de rapport retouché, pas de valeur recalculée à la main.
+The montage must not make anything look better than reality: no fake trace, no retouched report, no value recomputed by hand.
 
-## 7. Règles d'honnêteté (critères de l'issue #39)
+## 7. Honesty rules (criteria of issue #39)
 
-| Critère | Comment il est tenu |
+| Criterion | How it is met |
 |---|---|
-| 3:00 au plus, sous-titres anglais | 2:58 ; `.srt` ou incrustés, même sur la voix française |
-| Séquence du PRD §13 | blocs V1 à V6, fenêtres du §3 |
-| Chaque plan = une exécution réelle, mode enregistré dit | seules les cartes S03, S13 (mention SAM) et S16 ne sont pas des exécutions et se lisent comme des cartes ; une prise « enregistrée » se dit dans la voix |
-| Aucune clé, donnée réelle, chiffre sans source | données fictives uniquement ; 77 101 sourcé à l'écran ; le PDF du guide n'est pas montré (seules ses lignes citées par les preuves le sont) |
-| Lien ouvrable sans connexion | vidéo publique ou non répertoriée ; ouverte en fenêtre privée avant d'être mise dans le README |
-| Seul le travail de l'événement | ni la V1 WhatsApp, ni de vieilles captures ; le dépôt est celui du hackathon |
+| 3:00 at most, English subtitles | 2:58; `.srt` or burned in, even on the French voice |
+| PRD §13 sequence | blocks V1 to V6, windows of §3 |
+| Every shot = a real run, recorded mode stated | only the cards S03, S13 (SAM caption) and S16 are not runs and read as cards; a "recorded" take is stated in the voice |
+| No key, real data or unsourced figure | fictional data only; 77,101 sourced on screen; the guide PDF is not shown (only the rows cited by the proofs are) |
+| Link openable without login | public or unlisted video; opened in a private window before being put in the README |
+| Only work done during the event | neither the WhatsApp V1 nor old captures; the repository is the hackathon's |
 
-Points de vocabulaire : jamais « chatbot » ; « vérifié » seulement pour le rapport dont chaque affirmation a passé `verify_report` ; « onze cas conformes, un passage chacun » (pas « fiable »).
+Vocabulary points: never "chatbot"; "verified" only for a report whose every claim passed `verify_report`; "eleven compliant cases, one pass each" (not "reliable").
 
-**Écart avec le PRD, dit dans la voix :** le PRD (§3.1, ligne 97, et le tableau des cas du §10) annonce que Pharmacie, écartée par le contrôle qualité, est **listée** sous « Ce que je n'ai pas pu vérifier ». Dans la sortie réelle (`evals/results/2026-11-03/unverified_trap.json`), le rapport ne cite pas Pharmacie et écrit « Toutes les affirmations ci-dessus sont vérifiées » ; la ligne n'est visible que comme ligne **écartée** dans le résultat de `lookup_filieres`. La voix du bloc V5 dit donc « excluded », pas « listed as unverified ». Voir `docs/decisions.md`.
+**Gap with the PRD, stated in the voice:** the PRD (§3.1, line 97, and the case table of §10) says that Pharmacie, dropped by the quality check, is **listed** under "Ce que je n'ai pas pu vérifier" ("what I could not verify"). In the real output (`evals/results/2026-11-03/unverified_trap.json`), the report does not mention Pharmacie and writes "Toutes les affirmations ci-dessus sont vérifiées" ("All the claims above are verified"); the row is only visible as an **excluded** row in the `lookup_filieres` result. The voice of block V5 therefore says "excluded", not "listed as unverified". See `docs/decisions.md`.
 
-## 8. Calendrier (mardi 3 novembre, gel le soir ; limite de soumission : 4 novembre 21 h ET = 5 novembre 03 h à Porto-Novo)
+## 8. Schedule (Tuesday 3 November, freeze in the evening; submission limit: 4 November 21:00 ET = 5 November 03:00 in Porto-Novo)
 
-| Étape | Durée estimée | Sortie |
+| Step | Estimated duration | Output |
 |---|---|---|
-| 1. Installer `ffmpeg` ; régler OBS et la fenêtre ; test de 1 minute | 30 min | rushs de test propres |
-| 2. Prises T1 à T5, interface anglaise, écran horizontal | 60 min | `video/raw/S*_en_desktop_*` |
-| 3. Voix anglaise, blocs V1 à V6 | 30 min | `VO_en_*.wav` |
-| 4. Montage P1 (YouTube anglais) + `.srt` | 60 à 90 min | `pathproof_youtube_en.mp4` |
-| 5. Contrôle : durée, niveau, lecture complète, ouverture en fenêtre privée | 20 min | liste cochée sur l'issue |
-| 6. Prises verticales + montage P2 (X) | 60 min | `pathproof_x_en_vertical.mp4` |
-| 7. Version française P3 (prises FR, voix FR, montage) | 90 min | optionnel |
-| 8. Téléversement, lien dans le README, post X (E7.3), soumission (E7.5) | 30 min | liens |
+| 1. Install `ffmpeg`; set up OBS and the window; 1-minute test | 30 min | clean test footage |
+| 2. Takes T1 to T5, English interface, horizontal screen | 60 min | `video/raw/S*_en_desktop_*` |
+| 3. English voice, blocks V1 to V6 | 30 min | `VO_en_*.wav` |
+| 4. Montage P1 (English YouTube) + `.srt` | 60 to 90 min | `pathproof_youtube_en.mp4` |
+| 5. Check: duration, level, full playback, opening in a private window | 20 min | list checked on the issue |
+| 6. Vertical takes + montage P2 (X) | 60 min | `pathproof_x_en_vertical.mp4` |
+| 7. French version P3 (FR takes, FR voice, montage) | 90 min | optional |
+| 8. Upload, link in the README, X post (E7.3), submission (E7.5) | 30 min | links |
 
-La marge de la nuit du 4 au 5 novembre sert aux reprises, pas aux nouveautés.
+The margin of the night of 4 to 5 November is for retakes, not for new things.
 
-## 9. À fournir par vous
+## 9. To provide yourself
 
-- `{{X_HANDLE}}` : le compte X affiché sur la carte S16 (je n'ai pas de compte à citer).
-- Titre et description de la vidéo (la description cite : démo, dépôt, « données fictives », voix de synthèse des notes d'exemple).
-- Le lien final de la vidéo : à ajouter ensuite dans le README (la ligne a été retirée tant que la vidéo n'existe pas).
-- Le choix de la voix : la vôtre ou une voix de synthèse annoncée.
+- `{{X_HANDLE}}`: the X account shown on the S16 card (no account to cite was available).
+- Title and description of the video (the description cites: demo, repository, "fictional data", synthetic voice of the sample notes).
+- The final video link: to add afterwards in the README.
+- The choice of voice: yours or a disclosed synthetic voice.

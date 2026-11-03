@@ -1,22 +1,22 @@
-# Test Muse Spark 1.3 — appel d'outil `lookup_filieres`
+# Muse Spark 1.3 test — `lookup_filieres` tool call
 
-Ce rapport vérifie que le modèle **choisit l'outil** proposé (pas la qualité de la réponse textuelle).
+This report checks that the model **chooses the tool** it is offered (not the quality of its text answer).
 
-- **Date d'exécution :** 2026-10-26 16:54 UTC
-- **Modèle :** `muse-spark-1.3`
-- **Endpoint :** `https://api.meta.ai/v1`
-- **Exécutions :** 5
-- **Réussites :** 5/5
+- **Run date:** 2026-10-26 16:54 UTC
+- **Model:** `muse-spark-1.3`
+- **Endpoint:** `https://api.meta.ai/v1`
+- **Runs:** 5
+- **Passes:** 5/5
 
-## Critères de réussite
+## Success criteria
 
 - `finish_reason` = `tool_calls`
 - `tool_calls[0].function.name` = `lookup_filieres`
-- Arguments JSON contenant `moyenne` = **13.5** (virgule française dans la question)
+- JSON arguments containing `moyenne` = **13.5** (French decimal comma in the question)
 
-## Résultats
+## Results
 
-| Run | OK | finish_reason | Outil | Arguments | content |
+| Run | OK | finish_reason | Tool | Arguments | content |
 | ---: | :---: | --- | --- | --- | --- |
 | 1 | ✅ | `tool_calls` | `lookup_filieres` | `{"moyenne":13.5}` | Je regarde les filières accessibles avec 13,5. |
 | 2 | ✅ | `tool_calls` | `lookup_filieres` | `{"moyenne":13.5}` | Je vérifie les filières accessibles avec 13,5. |
@@ -24,7 +24,7 @@ Ce rapport vérifie que le modèle **choisit l'outil** proposé (pas la qualité
 | 4 | ✅ | `tool_calls` | `lookup_filieres` | `{"moyenne":13.5}` | Je vérifie les filières adaptées à 13,5. |
 | 5 | ✅ | `tool_calls` | `lookup_filieres` | `{"moyenne":13.5}` | Je vérifie quelles filières correspondent à 13,5. |
 
-## Sortie console brute (5 exécutions)
+## Raw console output (5 runs)
 
 ```text
 === Run 1 ===
@@ -53,10 +53,10 @@ tool_calls: [ChatCompletionMessageFunctionToolCall(id='call_da504829-261f-43b5-8
 content: Je vérifie quelles filières correspondent à 13,5.
 ```
 
-## Rejouer le test
+## Rerun the test
 
 ```bash
 python scripts/test_muse_tool_call.py
 ```
 
-Prérequis : `MUSE_API_KEY` dans `.env` (voir `.env.example`).
+Prerequisite: `MUSE_API_KEY` in `.env` (see `.env.example`).

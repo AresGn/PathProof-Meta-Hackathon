@@ -1,70 +1,70 @@
-# Ce qu'on reprend de la V1 d'OrientBot (et ce qu'on laisse)
+# What we take from OrientBot V1 (and what we leave)
 
-**Règle :** on reprend des **règles métier** (spécifications) et on les réécrit dans ce dépôt pendant l'événement. Aucun fichier de code, aucune fonction ni aucun bloc de code de `orientbotv2` n'est copié. C'est ce que dit le README (« No code from it is reused here ») et ce qu'exige le cadre « new work only ». Voir aussi `docs/prd.md` (sections 0, 12 et 14).
+**Rule:** we take **business rules** (specifications) and rewrite them in this repository during the event. No code file, function or block of code from `orientbotv2` is copied. This is what the README says ("No code from it is reused here") and what the "new work only" framework requires. See also `docs/prd.md` (sections 0, 12 and 14).
 
-Ce document ne cite que des éléments vérifiés dans le code de la V1 (lecture seule, dépôt privé, non lié ici). Les chemins mentionnés servent de référence interne à l'équipe ; aucun contenu de ces fichiers n'est reproduit.
-
----
-
-## 1. À reprendre comme règle (réécrire from scratch)
-
-### 1.1 Moyenne de classement par filière
-- **Source dans la V1 :** `packages/domain/src/mesrs/coefficients-bac-series.ts`, calcul dans `calculer-moyenne.ts`.
-- **Règle :** moyenne pondérée par les coefficients de la série du Bac. Seules les épreuves du **groupe 1 (écrit + pratique)** comptent.
-- **Ce qui change par rapport à la V1 :** PathProof calcule la moyenne de **classement propre à chaque offre** : `M = (m1·x + m2·y + m3·z) / (x + y + z)`, sur les trois matières de la colonne `Matières` de l'offre, avec les coefficients de la série (guide 2026-2027, page 8). Outil : `compute_ranking_average`.
-- **Source officielle :** arrêté N°016-2003/MESRS/MEPS/METFP (modifié) pour les coefficients ; *Guide d'information 2026-2027*, page 8, pour la formule.
-- **Données :** `data/coefficients_bac_benin.json`. Fichier de données, pas de code. Les coefficients C et D doivent redonner les deux exemples de la page 8 (Médecine D : 5, 4, 4 ; Médecine C : 2, 6, 5), test unitaire obligatoire. L'équipe confirme que les coefficients sont ceux en vigueur au 27 octobre 2026.
-
-### 1.2 Rapprochement des noms de matières
-- **Source :** `packages/domain/src/mesrs/matcher-matieres.ts`.
-- **Règle :** normaliser les deux côtés (casse, accents, pluriels, abréviations : « math », « PCT » et « SPCT », « Anglais (LV1) », « Hist-Géo/Anglais (DT/STI) »), puis résoudre les formules composées avec les matières que l'élève possède vraiment.
-- **Pourquoi :** les relevés, le guide et la table des coefficients n'écrivent pas les matières de la même façon. Sans cette étape, `read_grade_sheet` produit des matières qui ne correspondent à rien.
-
-### 1.3 Ne rien recommander sans preuve
-- **Source :** principe de conception de ce dépôt (`docs/architecture.md`), pas un fichier de la V1.
-- **Règle :** seules les lignes `Statut_qualité = OK` sont recommandées ; les autres sont listées dans « Ce que je n'ai pas pu vérifier ». Chaque phrase du rapport porte une preuve (`grade`, `transcript`, `filiere` ou `calc`) contrôlée par `verify_report`.
-
-### 1.4 Demander plutôt que deviner
-- **Source :** `profilage.processor.ts`, validation des notes entre 0 et 20 et des matières valides pour la série.
-- **Règle :** une note hors de 0–20 ou une matière invalide pour la série déclenche une question (`ask_student`), jamais une valeur par défaut (FR-3).
+This document only cites elements checked in the V1 code (read-only, private repository, not linked here). The paths mentioned serve as an internal reference for the team; none of the contents of those files is reproduced.
 
 ---
 
-## 2. À ne pas reprendre pour cet événement
+## 1. To take as a rule (rewrite from scratch)
 
-| Élément V1 | Pourquoi on le laisse |
+### 1.1 Ranking average per program
+- **Source in V1:** `packages/domain/src/mesrs/coefficients-bac-series.ts`, computation in `calculer-moyenne.ts`.
+- **Rule:** average weighted by the coefficients of the BAC series. Only the **group 1 (written + practical)** exams count.
+- **What changes compared with V1:** PathProof computes the **ranking average specific to each offer**: `M = (m1·x + m2·y + m3·z) / (x + y + z)`, on the three subjects of the offer's `Matières` column, with the series' coefficients (2026-2027 guide, page 8). Tool: `compute_ranking_average`.
+- **Official source:** order N°016-2003/MESRS/MEPS/METFP (as amended) for the coefficients; *Guide d'information 2026-2027*, page 8, for the formula.
+- **Data:** `data/coefficients_bac_benin.json`. A data file, not code. The C and D coefficients must reproduce the two examples of page 8 (Medicine D: 5, 4, 4; Medicine C: 2, 6, 5), a mandatory unit test. The team confirms that the coefficients are those in force on 27 October 2026.
+
+### 1.2 Matching subject names
+- **Source:** `packages/domain/src/mesrs/matcher-matieres.ts`.
+- **Rule:** normalize both sides (case, accents, plurals, abbreviations: "math", "PCT" and "SPCT", "Anglais (LV1)", "Hist-Géo/Anglais (DT/STI)"), then resolve compound formulas with the subjects the student actually has.
+- **Why:** grade sheets, the guide and the coefficient table do not write subjects the same way. Without this step, `read_grade_sheet` produces subjects that match nothing.
+
+### 1.3 Recommend nothing without proof
+- **Source:** a design principle of this repository (`docs/architecture.md`), not a V1 file.
+- **Rule:** only rows with `Statut_qualité = OK` are recommended; the others are listed under "Ce que je n'ai pas pu vérifier" ("what I could not verify"). Every sentence of the report carries a proof (`grade`, `transcript`, `filiere` or `calc`) checked by `verify_report`.
+
+### 1.4 Ask rather than guess
+- **Source:** `profilage.processor.ts`, validation of grades between 0 and 20 and of valid subjects for the series.
+- **Rule:** a grade outside 0–20 or a subject invalid for the series triggers a question (`ask_student`), never a default value (FR-3).
+
+---
+
+## 2. Not to take for this event
+
+| V1 element | Why we leave it |
 |---|---|
-| Bot WhatsApp (Baileys), file BullMQ, Supabase | Infrastructure lourde, hors des 9 jours |
-| Paiement KKiaPay, landing, codes partenaires | Hors sujet pour la démo |
-| Machine d'états de session (`ACCUEIL` → `RAPPORT_PARENTS`) | Workflow fixe, remplacé par une boucle où l'agent choisit l'outil |
-| Questionnaire RIASEC | **Retiré par principe** (`docs/prd.md` section 2.2) : un profil de personnalité ne se prouve pas, et six questions à choix multiples font « chatbot ». La note vocale le remplace |
-| Garde-fous de recommandation (anti-saturation, public-first, strict match, bourse, validateur) | Pipeline complet trop lourd ; on garde l'idée « rien sans preuve », réalisée par `verify_report` |
-| Rapport audio parents, synthèse vocale | Pas d'API TTS chez Meta |
-| Calcul de bourse (`estimer-bourse.ts`) | Hors périmètre ; le rapport affiche seulement les quotas du guide |
-| Appels LLM via OpenRouter / Groq / Claude | Remplacés par les modèles Meta |
+| WhatsApp bot (Baileys), BullMQ queue, Supabase | Heavy infrastructure, out of reach in the 9 days |
+| KKiaPay payment, landing page, partner codes | Off topic for the demo |
+| Session state machine (`ACCUEIL` → `RAPPORT_PARENTS`) | Fixed workflow, replaced by a loop where the agent chooses the tool |
+| RIASEC questionnaire | **Removed on principle** (`docs/prd.md` section 2.2): a personality profile cannot be proven, and six multiple-choice questions feel like a "chatbot". The voice note replaces it |
+| Recommendation guardrails (anti-saturation, public-first, strict match, grant, validator) | Full pipeline too heavy; we keep the "nothing without proof" idea, delivered by `verify_report` |
+| Audio report for parents, speech synthesis | Meta has no TTS API |
+| Grant computation (`estimer-bourse.ts`) | Out of scope; the report only shows the guide's quotas |
+| LLM calls via OpenRouter / Groq / Claude | Replaced by the Meta models |
 
 ---
 
-## 3. Données : ce qu'on peut et ne peut pas faire
+## 3. Data: what we can and cannot do
 
-**Ce qui est dans le dépôt (données, pas du code) :** les CSV extraits du *Guide d'information 2026-2027*, document public officiel du MESRS. L'extraction (MinerU) a été faite avant le hackathon ; ces fichiers étaient rangés dans le dossier de la V1 (`GUIDE_2026-2027-CSV-EXCEL/`) et ont été copiés tels quels dans `data/`. Les voici :
+**What is in the repository (data, not code):** the CSVs extracted from the *Guide d'information 2026-2027*, an official public MESRS document. The extraction (MinerU) was done before the hackathon; these files were kept in the V1 folder (`GUIDE_2026-2027-CSV-EXCEL/`) and copied as is into `data/`. They are:
 
-- `offres_publiques_2026_2027.csv`, `series_et_offres_2026_2027.csv`, `controle_qualite_2026_2027.csv` ;
-- `pages_offres.csv` (offre → page du PDF), produit pour PathProof ;
-- `coefficients_bac_benin.json` (liste des épreuves de l'Office du Bac).
+- `offres_publiques_2026_2027.csv`, `series_et_offres_2026_2027.csv`, `controle_qualite_2026_2027.csv`;
+- `pages_offres.csv` (offer → PDF page), produced for PathProof;
+- `coefficients_bac_benin.json` (list of the Office du Bac exams).
 
-**Ce qui n'est pas dans le dépôt :**
-- **Le PDF du guide.** Il porte la mention « Vente interdite ». Une copie locale existe dans `data/source/` (ignorée par git) pour vérifier les pages. On ne le republie pas tant qu'une URL officielle publique n'est pas trouvée et citée (`TODO`, voir `docs/prd.md` section 6).
-- **`offres_privees_2026_2027.csv` (753 offres).** Elles ne servent à rien pour recommander (ni série, ni matières, ni débouchés) ; on réduit donc ce qu'on republie. Le README les mentionne.
-- Les autres guides de la V1 (2024-2025, 2025-2026) et tout contenu issu des PDF ou Markdown de `orientbotv2`.
+**What is not in the repository:**
+- **The guide PDF.** It carries the mention "Vente interdite" (sale forbidden). A local copy exists in `data/source/` (ignored by git) to check pages. We do not republish it; a public official URL was found on 3 Nov and is cited in `docs/impact.md` (see also `docs/prd.md` section 6).
+- **`offres_privees_2026_2027.csv` (753 offers).** They are useless for recommending (no series, subjects or careers); we therefore reduce what we republish. The README mentions them.
+- The other V1 guides (2024-2025, 2025-2026) and any content from the PDFs or Markdown files of `orientbotv2`.
 
-**Provenance à écrire dans le README :** voir `docs/prd.md` section 14. Si un doute sur la republication subsiste, on ne publie que le sous-ensemble utilisé (C et D).
+**Provenance to write in the README:** see `docs/prd.md` section 14. If any doubt about republication remains, we publish only the subset used (C and D).
 
 ---
 
-## 4. Résumé pour l'équipe
+## 4. Summary for the team
 
-- **Reprendre :** la formule officielle de moyenne (réécrite, avec test sur les exemples de la page 8), la normalisation des matières, la règle « rien sans preuve », la règle « demander plutôt que deviner ».
-- **Laisser :** WhatsApp, paiement, TTS, parents, bourse, garde-fous complets, RIASEC.
-- **Données :** CSV et JSON du guide dans `data/` ; PDF seulement en local.
-- **Interdit :** copier du code ou des fichiers de code de `orientbotv2` dans ce dépôt.
+- **Take:** the official average formula (rewritten, with a test on the page 8 examples), subject normalization, the "nothing without proof" rule, the "ask rather than guess" rule.
+- **Leave:** WhatsApp, payment, TTS, parents, grant, full guardrails, RIASEC.
+- **Data:** the guide's CSV and JSON files in `data/`; PDF only locally.
+- **Forbidden:** copying code or code files from `orientbotv2` into this repository.

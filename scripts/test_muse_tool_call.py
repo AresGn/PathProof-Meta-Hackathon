@@ -86,32 +86,32 @@ passed = sum(1 for r in rows if r.get("ok"))
 ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
 lines = [
-    "# Test Muse Spark 1.3 — appel d'outil `lookup_filieres`",
+    "# Muse Spark 1.3 test — `lookup_filieres` tool call",
     "",
-    "Ce rapport vérifie que le modèle **choisit l'outil** proposé (pas la qualité de la réponse textuelle).",
+    "This report checks that the model **chooses the tool** it is offered (not the quality of its text answer).",
     "",
-    f"- **Date d'exécution :** {ts}",
-    f"- **Modèle :** `{MODEL}`",
-    f"- **Endpoint :** `https://api.meta.ai/v1`",
-    f"- **Exécutions :** {RUNS}",
-    f"- **Réussites :** {passed}/{RUNS}",
+    f"- **Run date:** {ts}",
+    f"- **Model:** `{MODEL}`",
+    f"- **Endpoint:** `https://api.meta.ai/v1`",
+    f"- **Runs:** {RUNS}",
+    f"- **Passes:** {passed}/{RUNS}",
     "",
-    "## Critères de réussite",
+    "## Success criteria",
     "",
     "- `finish_reason` = `tool_calls`",
     "- `tool_calls[0].function.name` = `lookup_filieres`",
-    "- Arguments JSON contenant `moyenne` = **13.5** (virgule française dans la question)",
+    "- JSON arguments containing `moyenne` = **13.5** (French decimal comma in the question)",
     "",
-    "## Résultats",
+    "## Results",
     "",
-    "| Run | OK | finish_reason | Outil | Arguments | content |",
+    "| Run | OK | finish_reason | Tool | Arguments | content |",
     "| ---: | :---: | --- | --- | --- | --- |",
 ]
 
 for r in rows:
     if "error" in r:
         lines.append(
-            f"| {r['run']} | ❌ | — | — | — | Erreur : `{r['error']}` |"
+            f"| {r['run']} | ❌ | — | — | — | Error: `{r['error']}` |"
         )
         continue
     ok = "✅" if r.get("ok") else "❌"
@@ -126,19 +126,19 @@ for r in rows:
 lines.extend(
     [
         "",
-        "## Sortie console brute (5 exécutions)",
+        "## Raw console output (5 runs)",
         "",
         "```text",
         console_buf.getvalue().rstrip(),
         "```",
         "",
-        "## Rejouer le test",
+        "## Rerun the test",
         "",
         "```bash",
         "python scripts/test_muse_tool_call.py",
         "```",
         "",
-        "Prérequis : `MUSE_API_KEY` dans `.env` (voir `.env.example`).",
+        "Prerequisite: `MUSE_API_KEY` in `.env` (see `.env.example`).",
         "",
     ]
 )
