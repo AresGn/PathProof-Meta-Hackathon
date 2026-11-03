@@ -160,6 +160,19 @@ def test_wonder_responses_calls_are_counted():
     client = UsageTrackingClient(inner, usage)
     assert client.responses.create(model="muse-wonder-1.0") is response
     assert (usage.prompt_tokens, usage.completion_tokens, usage.total_tokens) == (40, 60, 100)
+    assert usage.by_model == {"muse-wonder-1.0": {"prompt_tokens": 40, "completion_tokens": 60}}
+
+
+def test_chat_usage_is_split_by_model():
+    usage = TokenUsage()
+    response = SimpleNamespace(usage=SimpleNamespace(prompt_tokens=7, completion_tokens=3, total_tokens=10))
+    completions = SimpleNamespace(create=lambda **kwargs: response)
+    inner = SimpleNamespace(chat=SimpleNamespace(completions=completions), responses=None)
+    client = UsageTrackingClient(inner, usage)
+    client.chat.completions.create(model="muse-spark-1.3-contributor")
+    client.chat.completions.create(model="muse-spark-1.3-contributor")
+    assert usage.by_model == {"muse-spark-1.3-contributor":
+                              {"prompt_tokens": 14, "completion_tokens": 6}}
 
 
 def test_answers_from_lines_keeps_blank_lines_so_answers_stay_aligned():

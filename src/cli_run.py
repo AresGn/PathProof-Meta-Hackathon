@@ -31,16 +31,24 @@ class TokenUsage:
     completion_tokens: int = 0
     total_tokens: int = 0
     streaming_calls: int = 0
+    # model name -> {"prompt_tokens", "completion_tokens"}: the models are billed at different rates
+    by_model: dict[str, dict[str, int]] = field(default_factory=dict)
 
-    def add(self, usage: object) -> None:
+    def add(self, usage: object, model: str | None = None) -> None:
         if usage is None:
             return
         # Chat completions say prompt/completion; the Responses API (Wonder) says input/output.
-        self.prompt_tokens += int(getattr(usage, "prompt_tokens", None)
-                                  or getattr(usage, "input_tokens", 0) or 0)
-        self.completion_tokens += int(getattr(usage, "completion_tokens", None)
-                                      or getattr(usage, "output_tokens", 0) or 0)
+        prompt = int(getattr(usage, "prompt_tokens", None)
+                     or getattr(usage, "input_tokens", 0) or 0)
+        completion = int(getattr(usage, "completion_tokens", None)
+                         or getattr(usage, "output_tokens", 0) or 0)
+        self.prompt_tokens += prompt
+        self.completion_tokens += completion
         self.total_tokens += int(getattr(usage, "total_tokens", 0) or 0)
+        if model:
+            counts = self.by_model.setdefault(model, {"prompt_tokens": 0, "completion_tokens": 0})
+            counts["prompt_tokens"] += prompt
+            counts["completion_tokens"] += completion
 
 
 @dataclass
@@ -113,7 +121,7 @@ class _UsageTrackingCompletions:
                 usage.streaming_calls += 1
                 return original_create(**kwargs)
             response = original_create(**kwargs)
-            usage.add(getattr(response, "usage", None))
+            usage.add(getattr(response, "usage", None), kwargs.get("model"))
             return response
 
         self.create = tracked_create
@@ -129,7 +137,7 @@ class _UsageTrackingResponses:
 
     def create(self, **kwargs):
         response = self._responses.create(**kwargs)
-        self._usage.add(getattr(response, "usage", None))
+        self._usage.add(getattr(response, "usage", None), kwargs.get("model"))
         return response
 
     def __getattr__(self, name: str):
@@ -263,10 +271,23 @@ def _path_for_log(path: Path | None) -> str:
     return path_for_agent(path)
 
 
-def _models_of(journal: list) -> str:
+def steps_by_model(journal: list) -> Counter:
     """Steps per deciding model, read from the journal (who really answered)."""
-    counts = Counter(event.get("model") for event in journal if event.get("model"))
+    return Counter(event.get("model") for event in journal if event.get("model"))
+
+
+def _models_of(journal: list) -> str:
+    counts = steps_by_model(journal)
     return ", ".join(f"{model} ({count})" for model, count in counts.items()) or "(none)"
+
+
+def outcome_status(outcome: str | dict) -> str:
+    """"needs_input" / "unverified" (dict status), "step_limit" or "finished"."""
+    if isinstance(outcome, dict):
+        return str(outcome.get("status"))
+    if outcome == loop.STOPPED_STEP_LIMIT:
+        return "step_limit"
+    return "finished"
 
 
 def write_run_summary(journal_path: Path, result: CliRunResult) -> None:
@@ -290,12 +311,13 @@ def write_run_summary(journal_path: Path, result: CliRunResult) -> None:
     lines.append(f"Student questions asked: {len(result.questions)}")
     for index, question in enumerate(result.questions, start=1):
         lines.append(f"  Q{index}: {question}")
-    if isinstance(result.outcome, dict):
-        lines.append(f"Outcome status: {result.outcome.get('status')}")
-    elif result.outcome == loop.STOPPED_STEP_LIMIT:
+    status = outcome_status(result.outcome)
+    if status == "step_limit":
         lines.append("Outcome: step limit reached")
-    else:
+    elif status == "finished":
         lines.append("Outcome: finished")
+    else:
+        lines.append(f"Outcome status: {status}")
     verify = verify_problems_from_journal(result.journal)
     if verify is not None:
         lines.append(f"Last verify_report problems: {len(verify)}")
@@ -363,9 +385,13 @@ def run_cli_session(
     journal: list | None = None,
     language: str = DEFAULT_LANGUAGE,
     drafting_model: str | None = None,
+    usage: TokenUsage | None = None,
 ) -> CliRunResult:
-    """Run the agent loop until it finishes or ask_student gets no answer."""
-    usage = TokenUsage()
+    """Run the agent loop until it finishes or ask_student gets no answer.
+
+    A caller that passes its own `usage` keeps the tokens already spent when the run crashes.
+    """
+    usage = usage if usage is not None else TokenUsage()
     tracked = UsageTrackingClient(client, usage)
     journal = journal if journal is not None else []
     user_input = build_user_message(image_path, audio_path, voice_text)

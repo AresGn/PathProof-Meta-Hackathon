@@ -1,0 +1,120 @@
+{
+  "case_id": "noisy_voice",
+  "date": "2026-11-03",
+  "language": "fr",
+  "models": {
+    "deciding": "muse-spark-1.3-contributor",
+    "drafting": "muse-wonder-1.0"
+  },
+  "files": [
+    {
+      "role": "voice",
+      "type": "audio",
+      "path": "data/samples/note_vocale_bruitee.mp3"
+    }
+  ],
+  "student_answers": [
+    "Oui, je suis en série D."
+  ],
+  "outcome_status": "needs_input",
+  "report_text": null,
+  "questions": [
+    "Je n'ai pas bien entendu ta série dans ta note vocale (le marché faisait beaucoup de bruit). Peux-tu me confirmer : es-tu en série C ou en série D ?",
+    "Merci pour ta confirmation en série D. Pour continuer, peux-tu me fournir la photo de ton relevé de notes (le chemin du fichier image) afin que je puisse lire tes notes ?"
+  ],
+  "duration_seconds": 51.51599999994505,
+  "usage": {
+    "prompt_tokens": 14489,
+    "completion_tokens": 1453,
+    "total_tokens": 15942,
+    "streaming_calls": 0,
+    "by_model": {
+      "muse-spark-1.3-contributor": {
+        "prompt_tokens": 14489,
+        "completion_tokens": 1453
+      }
+    }
+  },
+  "error": null,
+  "journal": [
+    {
+      "step": 1,
+      "tool": "transcribe_voice",
+      "args": {
+        "audio_path": "data/samples/note_vocale_bruitee.mp3"
+      },
+      "result": {
+        "text": "Allo, bonjour. Je vous parle depuis le marché, il y a beaucoup de bruit excusez-moi. Je suis en terminale série euh ce que j'aime c'est la biologie et la chimie j'aime comprendre comment le corps fonctionne plus tard je je voudrais travailler dans la santé. Peut-être pharmacien ou médecin médecin je ne sais pas encore. Mes parents veulent que je reste de la maison et il me faudra une bourse. Sinon ce sera difficile. Dans la merci.",
+        "text_normalized": "Allo, bonjour. Je vous parle depuis le marché, il y a beaucoup de bruit excusez-moi. Je suis en terminale série euh ce que j'aime c'est la biologie et la chimie j'aime comprendre comment le corps fonctionne plus tard je je voudrais travailler dans la santé. Peut-être pharmacien ou médecin médecin je ne sais pas encore. Mes parents veulent que je reste de la maison et il me faudra une bourse. Sinon ce sera difficile. Dans la merci.",
+        "confidence": null
+      },
+      "decision": "continue",
+      "model": "muse-spark-1.3-contributor"
+    },
+    {
+      "step": 2,
+      "tool": "extract_profile",
+      "args": {
+        "transcript": "Allo, bonjour. Je vous parle depuis le marché, il y a beaucoup de bruit excusez-moi. Je suis en terminale série euh ce que j'aime c'est la biologie et la chimie j'aime comprendre comment le corps fonctionne plus tard je je voudrais travailler dans la santé. Peut-être pharmacien ou médecin médecin je ne sais pas encore. Mes parents veulent que je reste de la maison et il me faudra une bourse. Sinon ce sera difficile. Dans la merci."
+      },
+      "result": {
+        "serie_declaree": null,
+        "moyenne_declaree": null,
+        "interets": [
+          {
+            "value": "la biologie",
+            "quote": "la biologie"
+          },
+          {
+            "value": "la chimie",
+            "quote": "la chimie"
+          },
+          {
+            "value": "comprendre comment le corps fonctionne",
+            "quote": "comprendre comment le corps fonctionne"
+          }
+        ],
+        "metier_vise": null,
+        "contraintes": [
+          {
+            "value": "Mes parents veulent que je reste de la maison",
+            "quote": "Mes parents veulent que je reste de la maison"
+          },
+          {
+            "value": "il me faudra une bourse",
+            "quote": "il me faudra une bourse"
+          }
+        ],
+        "flags": []
+      },
+      "decision": "continue",
+      "model": "muse-spark-1.3-contributor"
+    },
+    {
+      "step": 3,
+      "tool": "ask_student",
+      "args": {
+        "question": "Je n'ai pas bien entendu ta série dans ta note vocale (le marché faisait beaucoup de bruit). Peux-tu me confirmer : es-tu en série C ou en série D ?"
+      },
+      "result": {
+        "status": "needs_input",
+        "question": "Je n'ai pas bien entendu ta série dans ta note vocale (le marché faisait beaucoup de bruit). Peux-tu me confirmer : es-tu en série C ou en série D ?"
+      },
+      "decision": "suspend",
+      "model": "muse-spark-1.3-contributor"
+    },
+    {
+      "step": 4,
+      "tool": "ask_student",
+      "args": {
+        "question": "Merci pour ta confirmation en série D. Pour continuer, peux-tu me fournir la photo de ton relevé de notes (le chemin du fichier image) afin que je puisse lire tes notes ?"
+      },
+      "result": {
+        "status": "needs_input",
+        "question": "Merci pour ta confirmation en série D. Pour continuer, peux-tu me fournir la photo de ton relevé de notes (le chemin du fichier image) afin que je puisse lire tes notes ?"
+      },
+      "decision": "suspend",
+      "model": "muse-spark-1.3-contributor"
+    }
+  ]
+}
