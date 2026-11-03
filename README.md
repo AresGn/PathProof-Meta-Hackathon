@@ -118,7 +118,7 @@ Full agent run (E4.4, needs `MUSE_API_KEY` and ffmpeg for voice): `python -m src
 
 ## Evaluation
 
-Ten cases are planned in `evals/cases.jsonl`, four of them adversarial (unverified row, false-friend job, contest-entry program, voice contradicting the sheet). Target: 9 of 10 compliant and zero claims without proof. Sample files are not created yet. Results (to be committed in `evals/results/`): TODO (nothing measured).
+Ten fictional cases and their machine-checkable assertions are listed in `evals/cases.jsonl`; their images, audio and text fallbacks are in `data/samples/`. Four cases are adversarial (unverified row, false-friend job, contest-entry program, voice contradicting the sheet). Target: 9 of 10 compliant and zero claims without proof. The evaluation runner is not implemented yet; no new results have been measured.
 
 ## Limitations
 
