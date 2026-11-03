@@ -1,0 +1,13 @@
+CLI run E4.4 — e6.1_english_voice_d_medecin.json
+Image: data/samples/releve_serie_d.jpg
+Audio: data/samples/note_vocale_anglais.mp3
+Duration: 135.0s
+Tool call events in journal: 7
+Distinct tools: 7
+Max model step reached: 6 (limit 12)
+Token usage (non-streaming Muse Spark completions): prompt=62168, completion=14281, total=76449
+Student questions asked: 1
+  Q1: You said "série D" in your voice note — can you confirm that your Bac series is indeed D?
+Outcome: finished
+Last verify_report problems: 0
+Report: verified (printed on stdout)

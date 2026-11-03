@@ -57,6 +57,16 @@ VOICE_NOTES = {
         "Mes parents m'ont dit de bien chercher les filières où il y a des bourses... "
         "Donc, euh, je compte sur vous pour m'aider à choisir. Merci beaucoup, hein."
     ),
+    # English twin of note_vocale_coherente.mp3: the jury mostly speaks English (E6.1)
+    "note_vocale_anglais.mp3": (
+        "Hello... So, um, I'm in my final year, series D, D as in David. At the bac, I got eleven point two average. "
+        "What I like most is biology, life sciences... really, it's my favourite subject. "
+        "Later, I'd like to work in health... maybe as a doctor. "
+        "Since I was little, I've wanted to care for people, help my family, my neighbourhood. "
+        "For the city, um... I'd rather stay in Cotonou, near my parents. "
+        "And honestly, I'll need a scholarship, because studying is expensive for us. "
+        "That's it... thank you for listening."
+    ),
 }
 NOISY_NOTE = "note_vocale_bruitee.mp3"
 # The series letter is the single character after "série " (masked by the burst)

@@ -81,6 +81,7 @@ Les deux transcriptions ont été vérifiées avec ElevenLabs Scribe : « série
 | `releve_serie_d_note_25.jpg` | Relevé fictif série D avec Mathématiques à 25/20 ; ni points totaux ni moyenne affichés, la confirmation est demandée. Généré par `scripts/make_grade_sheets.py`. |
 | `profil_serie_c.txt` | Texte fictif de secours pour la voix d'un élève de série C. |
 | `note_vocale_bruitee.mp3` | Note vocale fictive de 33 s (même voix), bruit de marché en fond et rafale de bruit sur la lettre de la série. Générée par `scripts/make_voice_notes.py`. |
+| `note_vocale_anglais.mp3` | Note vocale fictive de 42 s en anglais (même voix), jumelle de `note_vocale_coherente.mp3` : série D, 11,2, « maybe as a doctor ». Générée par `scripts/make_voice_notes.py`. |
 | `intention_pharmacien.txt` | Texte fictif de secours : souhait de devenir pharmacien. |
 | `intention_pilote.txt` | Texte fictif de secours : souhait de devenir pilote de ligne. |
 | `intention_infirmier.txt` | Texte fictif de secours : souhait de devenir infirmier. |
@@ -94,7 +95,7 @@ Les deux transcriptions ont été vérifiées avec ElevenLabs Scribe : « série
 - `note_vocale_contradictoire.mp3` — voix fictive qui annonce 14 de moyenne.
 - `vertical_slice_serie_d.json` — fixture fictive pour la tranche verticale sans vision ni voix.
 
-Les dix entrées, leurs fichiers et leurs assertions machine-vérifiables sont
+Les dix entrées du PRD, plus `english_voice_d_medecin` (jury surtout anglophone), leurs fichiers et leurs assertions machine-vérifiables sont
 déclarés dans `evals/cases.jsonl`. Les textes `.txt` sont des solutions de
 secours d'entrée, pas des transcriptions audio mesurées.
 Comparaison des chaînes : sous-chaîne, sans tenir compte de la casse ni
