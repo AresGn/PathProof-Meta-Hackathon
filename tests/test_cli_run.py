@@ -51,6 +51,18 @@ def test_build_user_message_uses_repo_relative_paths(tmp_path, monkeypatch):
     assert "AresDev" not in message
 
 
+def test_build_user_message_passes_fallback_text_without_a_grade_sheet():
+    message = build_user_message(None, None, "Je suis en série ... (bruit)")
+    assert "read_grade_sheet" not in message
+    assert "transcribe_voice" in message  # told to skip it
+    assert "Je suis en série ... (bruit)" in message
+
+
+def test_default_journal_path_names_every_given_input():
+    path = default_journal_path(None, None, None, Path("intention_pilote.txt"))
+    assert path == Path("evals/results/intention_pilote.json")
+
+
 def test_path_for_agent_prefers_relative(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     path = tmp_path / "data" / "x.jpg"
@@ -316,3 +328,24 @@ def test_main_returns_2_for_an_unsafe_run_label(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "sheet.jpg").write_bytes(b"x")
     assert main_module.main(["--image", "sheet.jpg", "--run-label", "../../x"]) == 2
+
+
+def test_main_rejects_a_run_without_any_input():
+    with pytest.raises(SystemExit) as error:
+        main_module.main([])
+    assert error.value.code == 2
+
+
+def test_main_sends_the_voice_text_file_without_a_grade_sheet(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "voix.txt").write_text("Je veux devenir pilote de ligne.", encoding="utf-8")
+    seen = {}
+
+    def fake_session(_client, _model, image_path, audio_path, _ask, *, voice_text, journal):
+        seen.update(image=image_path, audio=audio_path, text=voice_text)
+        raise RuntimeError("stop after capture")
+
+    monkeypatch.setattr(main_module, "get_client", lambda: object())
+    monkeypatch.setattr(main_module, "run_cli_session", fake_session)
+    assert main_module.main(["--voice-text", "voix.txt"]) == 1
+    assert seen == {"image": None, "audio": None, "text": "Je veux devenir pilote de ligne."}

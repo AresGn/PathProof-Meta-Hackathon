@@ -1,3 +1,0 @@
-FALLBACK TEXT FOR A FICTIONAL NOISY VOICE NOTE
-
-Fictional placeholder for a noisy voice input. Transcription confidence: 0.18 (low). The tentative transcript is "Je suis en terminale, série ..."; noise obscures whether the student says C or D.

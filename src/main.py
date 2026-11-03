@@ -1,4 +1,4 @@
-"""CLI entry point: grade-sheet photo + voice note → verified report (E4.4, issue #29)."""
+"""CLI entry point: grade-sheet photo + voice note or text → verified report (E4.4, issue #29)."""
 import argparse
 import sys
 from pathlib import Path
@@ -20,8 +20,12 @@ from src.clients.meta_client import get_client
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run the PathProof agent loop on a grade sheet and optional voice note.")
-    parser.add_argument("--image", required=True, help="Path to the grade-sheet photo")
+    parser.add_argument("--image", help="Path to the grade-sheet photo")
     parser.add_argument("--audio", help="Path to the voice note audio file")
+    parser.add_argument(
+        "--voice-text",
+        help="Text file the student wrote instead of a voice note (eval fallback inputs)",
+    )
     parser.add_argument(
         "--journal-out",
         help="Where to write the raw tool journal (JSON array). "
@@ -54,14 +58,20 @@ def _stdin_ask(question: str) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     configure_stdio_utf8()
-    args = build_parser().parse_args(argv)
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if not (args.image or args.audio or args.voice_text):
+        parser.error("give at least one of --image, --audio or --voice-text")
     try:
-        image_path = resolve_path(args.image, "Grade sheet")
+        image_path = resolve_path(args.image, "Grade sheet") if args.image else None
         audio_path = resolve_path(args.audio, "Voice note") if args.audio else None
+        text_path = resolve_path(args.voice_text, "Voice text") if args.voice_text else None
+        voice_text = text_path.read_text(encoding="utf-8") if text_path else None
         ask_fn = (_stdin_ask if not args.answers_file else
                   answers_from_file(resolve_path(args.answers_file, "Answers file")))
         journal_path = (Path(args.journal_out) if args.journal_out else
-                        default_journal_path(image_path, audio_path, args.run_label))
+                        default_journal_path(image_path, audio_path, args.run_label,
+                                             text_path))
     except CliInputError as error:
         print(error, file=sys.stderr)
         return 2
@@ -78,7 +88,7 @@ def main(argv: list[str] | None = None) -> int:
     exit_code = 1
     try:
         result = run_cli_session(client, MUSE_SPARK_MODEL, image_path, audio_path, ask_fn,
-                                 journal=journal)
+                                 voice_text=voice_text, journal=journal)
         exit_code = print_outcome(result)
     except Exception as error:
         print(f"Run failed ({type(error).__name__}): {error}", file=sys.stderr)
