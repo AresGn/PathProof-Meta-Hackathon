@@ -172,6 +172,20 @@ def test_answer_stream_locks_new_runs_until_the_answer_finishes():
     assert "await streamAnswer(currentRunId, answer.trim(), handleEvent)" in answer_handler
 
 
+def test_expired_answer_session_restores_trace_and_closes_retry_controls():
+    app = MODULES["app.js"]
+    answer_handler = app.split('answerBtn.addEventListener("click"', 1)[1]
+    expired_session = answer_handler.split("if (err?.status === 404)", 1)[1].split(
+        "} else if", 1
+    )[0]
+    assert "restoreAnswerState(retryState)" in expired_session
+    assert "closeSession()" in expired_session
+    assert "retrySuffix" not in expired_session
+    assert "lastRunRecorded" not in app
+    assert "lastRecordedError" not in app
+    assert "recordedRetryState" not in app
+
+
 def test_proof_sources_come_from_the_accepted_verifier_context():
     proofs = MODULES["proofs.js"]
     assert "export function verifiedContext(steps)" in proofs

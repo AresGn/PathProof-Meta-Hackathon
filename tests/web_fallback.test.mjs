@@ -17,10 +17,12 @@ const recording = JSON.parse(
 );
 
 test("fallback is reserved for network and server failures", () => {
-  assert.equal(shouldUseRecordedRun(new TypeError("fetch failed")), true);
-  assert.equal(shouldUseRecordedRun({ name: "AbortError" }), true);
+  assert.equal(shouldUseRecordedRun({ networkFailure: true }), true);
   assert.equal(shouldUseRecordedRun({ infrastructureFailure: true }), true);
   assert.equal(shouldUseRecordedRun({ status: 503 }), true);
+  assert.equal(shouldUseRecordedRun({ status: 429 }), false);
+  assert.equal(shouldUseRecordedRun({ category: "capacity" }), false);
+  assert.equal(shouldUseRecordedRun(new TypeError("front-end bug")), false);
   assert.equal(shouldUseRecordedRun({ status: 400 }), false);
   assert.equal(shouldUseRecordedRun({ status: 413 }), false);
   assert.equal(shouldUseRecordedRun({ status: 415 }), false);
@@ -64,15 +66,35 @@ test("recorded report must match the verified draft and final build step", () =>
   verifiedBuild.args.context.serie = "C";
   assert.notDeepEqual(verifiedBuild.args.context, acceptedVerification.args.context);
   assert.equal(validateRecordedRun(mismatchedContext), false);
+
+  const missingArgs = structuredClone(recording);
+  delete missingArgs.events[0].args;
+  assert.equal(validateRecordedRun(missingArgs), false);
+
+  const missingResult = structuredClone(recording);
+  delete missingResult.events[0].result;
+  assert.equal(validateRecordedRun(missingResult), false);
+
+  const missingTerminal = structuredClone(recording);
+  missingTerminal.events[missingTerminal.events.length - 1] = null;
+  assert.equal(validateRecordedRun(missingTerminal), false);
+
+  const unresolvedQuestion = structuredClone(recording);
+  unresolvedQuestion.events.splice(-1, 0, {
+    type: "step", step: 99, tool: "ask_student", args: { question: "Series?" },
+    result: { status: "needs_input", question: "Series?" }, decision: "suspend",
+  });
+  assert.equal(validateRecordedRun(unresolvedQuestion), false);
 });
 
 test("recorded fallback reason is localized from error data", async () => {
-  assert.match(recordedFailureReason(new TypeError("offline")), /server unreachable/i);
+  assert.match(recordedFailureReason({ networkFailure: true, message: "offline" }), /server unreachable/i);
   assert.match(recordedFailureReason({ status: 503 }), /503/);
   assert.match(recordedFailureReason({ interrupted: true, messageKey: "answerInterrupted" }), /answer did not go through/i);
+  assert.match(recordedFailureReason(new TypeError("render failed")), /render failed/i);
   const { setLanguage } = await import("../web/js/i18n.js");
   setLanguage("fr");
-  assert.match(recordedFailureReason(new TypeError("offline")), /serveur injoignable/i);
+  assert.match(recordedFailureReason({ networkFailure: true, message: "offline" }), /serveur injoignable/i);
   assert.match(recordedFailureReason({ status: 503 }), /503/);
   assert.match(recordedFailureReason({ interrupted: true, messageKey: "answerInterrupted" }), /réponse n’a pas abouti/i);
   setLanguage("en");
@@ -94,16 +116,33 @@ test("answer SSE errors and interruptions are classified centrally", async () =>
   };
 
   try {
-    answerResponse = new Response(
-      'data: {"type":"error","run_id":"retry-id","error":"backend failed"}\n\n',
-      { status: 200 }
-    );
+    let streamCancelled = false;
+    answerResponse = new Response(new ReadableStream({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode(
+          'data: {"type":"error","run_id":"retry-id","category":"capacity","error":"too many pending runs, retry later"}\n\n'
+        ));
+      },
+      cancel() {
+        streamCancelled = true;
+      },
+    }), { status: 200 });
     const observed = [];
     await assert.rejects(
       streamAnswer("retry-id", "D", (event) => observed.push(event)),
-      (error) => error.infrastructureFailure === true
+      (error) => error.category === "capacity" && !shouldUseRecordedRun(error)
     );
     assert.equal(observed[0].type, "error");
+    assert.equal(streamCancelled, true);
+
+    answerResponse = new Response(
+      'data: {"type":"error","category":"infrastructure","error":"upstream unavailable"}\n\n',
+      { status: 200 }
+    );
+    await assert.rejects(
+      streamAnswer("retry-id", "D", () => {}),
+      (error) => error.category === "infrastructure" && shouldUseRecordedRun(error)
+    );
 
     answerResponse = new Response(
       'data: {"type":"step","tool":"ask_student"}\n\n',
@@ -116,6 +155,32 @@ test("answer SSE errors and interruptions are classified centrally", async () =>
         && recordedFailureReason(error).includes("answer did not go through")
     );
 
+    answerResponse = new Response(
+      'data: {"type":"done","run_id":"retry-id","status":"ok"}\n\n',
+      { status: 200 }
+    );
+    await assert.rejects(
+      streamAnswer("retry-id", "D", () => { throw new TypeError("render bug"); }),
+      (error) => error.message === "render bug" && !shouldUseRecordedRun(error)
+    );
+
+    globalThis.fetch = async (url) => {
+      if (String(url).endsWith("/health")) {
+        return new Response(JSON.stringify({ service: "pathproof-demo" }), { status: 200 });
+      }
+      throw new TypeError("network disconnected");
+    };
+    await assert.rejects(
+      streamAnswer("retry-id", "D", () => {}),
+      (error) => error.networkFailure === true && shouldUseRecordedRun(error)
+    );
+
+    globalThis.fetch = async (url) => {
+      if (String(url).endsWith("/health")) {
+        return new Response(JSON.stringify({ service: "pathproof-demo" }), { status: 200 });
+      }
+      return answerResponse;
+    };
     answerResponse = new Response(JSON.stringify({ detail: "invalid answer" }), { status: 400 });
     await assert.rejects(
       streamAnswer("retry-id", "", () => {}),

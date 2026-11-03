@@ -18,6 +18,7 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
+from openai import APIConnectionError, APITimeoutError
 from pydantic import BaseModel
 
 from src.agent import loop
@@ -81,6 +82,24 @@ def describe_run_error(error: Exception) -> str:
     if "MUSE_API_KEY" in message:
         return "API key is not set (server misconfiguration)"
     return message
+
+
+def classify_run_error(error: Exception) -> str:
+    """Keep capacity and request failures distinct from infrastructure failures."""
+    status = getattr(error, "status_code", getattr(error, "status", None))
+    if isinstance(status, int):
+        if status == 429:
+            return "capacity"
+        if 500 <= status <= 599:
+            return "infrastructure"
+        if 400 <= status <= 499:
+            return "request"
+    if isinstance(error, (APIConnectionError, APITimeoutError, ConnectionError,
+                          TimeoutError, OSError)):
+        return "infrastructure"
+    if "MUSE_API_KEY" in str(error):
+        return "infrastructure"
+    return "application"
 
 
 def format_sse_frame(payload: dict) -> str:
@@ -201,13 +220,16 @@ def settle_agent_run(*, run_id: str, journal: list, tmpdir: Path | None,
             pending_run_store.restore_pending_run(run_id, restore_entry)
         else:
             cleanup_tmpdir(tmpdir)
-        return {"type": "error", "run_id": run_id, "error": describe_run_error(error)}
+        return {"type": "error", "run_id": run_id,
+                "category": classify_run_error(error),
+                "error": describe_run_error(error)}
     outcome = box.get("outcome")
     if isinstance(outcome, dict) and outcome.get("status") == "needs_input":
         if not pending_run_store.try_store_pending_run(
                 run_id, outcome, tmpdir, limit=pending_limit):
             cleanup_tmpdir(tmpdir)
             return {"type": "error", "run_id": run_id,
+                    "category": "capacity",
                     "error": "too many pending runs, retry later"}
         return {"type": "needs_input", "run_id": run_id,
                 "question": outcome.get("question"),
@@ -235,7 +257,9 @@ def settle_agent_run_safely(*, run_id: str, journal: list, tmpdir: Path | None,
                 cleanup_tmpdir(tmpdir)
         except Exception:
             pass
-        return {"type": "error", "run_id": run_id, "error": describe_run_error(error)}
+        return {"type": "error", "run_id": run_id,
+                "category": classify_run_error(error),
+                "error": describe_run_error(error)}
 
 
 SETTLE_DRAIN_TIMEOUT_SECONDS = 2.0  # E5.1 review (3rd pass): grace for a live consumer to drain before the background settle

@@ -186,7 +186,7 @@ def test_tool_error_becomes_error_event_not_500(monkeypatch):
     app = make_client(monkeypatch)
 
     def broken_client():
-        raise RuntimeError("boom from the client factory")
+        raise ConnectionError("upstream connection failed")
 
     monkeypatch.setattr(server, "get_client", broken_client)
     response = app.post(
@@ -197,7 +197,8 @@ def test_tool_error_becomes_error_event_not_500(monkeypatch):
     events = parse_sse(response.text)
     errors = [event for event in events if event.get("type") == "error"]
     assert errors, "expected an error event, not a raw 500"
-    assert "boom from the client factory" in errors[0]["error"]
+    assert errors[0]["category"] == "infrastructure"
+    assert "upstream connection failed" in errors[0]["error"]
 
 
 def test_api_key_never_appears_in_responses(monkeypatch):
@@ -442,6 +443,44 @@ def test_too_many_concurrent_runs_returns_429(monkeypatch):
     monkeypatch.setattr(server, "MAX_CONCURRENT_RUNS", 0)
     response = app.post("/run", files={"image": ("sheet.jpg", b"fake-image", "image/jpeg")})
     assert response.status_code == 429
+
+
+def test_pending_capacity_error_is_classified_as_non_infrastructure():
+    event = server.settle_agent_run(
+        run_id="run-id",
+        journal=[],
+        tmpdir=None,
+        restore_entry=None,
+        box={"outcome": {"status": "needs_input", "question": "Series?"}},
+        pending_limit=0,
+    )
+
+    assert event["type"] == "error"
+    assert event["category"] == "capacity"
+
+
+def test_business_errors_are_not_classified_as_infrastructure():
+    event = server.settle_agent_run(
+        run_id="run-id",
+        journal=[],
+        tmpdir=None,
+        restore_entry=None,
+        box={"error": ValueError("invalid input")},
+    )
+
+    assert event["type"] == "error"
+    assert event["category"] == "application"
+
+
+def test_upstream_http_statuses_have_explicit_error_categories():
+    class UpstreamError(Exception):
+        def __init__(self, status_code):
+            super().__init__("upstream failure")
+            self.status_code = status_code
+
+    assert server.classify_run_error(UpstreamError(429)) == "capacity"
+    assert server.classify_run_error(UpstreamError(400)) == "request"
+    assert server.classify_run_error(UpstreamError(503)) == "infrastructure"
 
 
 def test_stream_disconnect_settles_in_background(tmp_path):

@@ -24,7 +24,10 @@ def test_recorded_run_is_built_from_a_verified_fictional_journal():
     assert recording["events"][-1]["type"] == "done"
     assert recording["events"][-1]["status"] == "ok"
     assert recording["events"][-1]["report"]
-    assert recording["events"][-1]["report"] == journal[-1]["result"]
+    assert recording["events"][-1]["report"] != journal[-1]["result"]
+    assert recording["events"][-1]["report"].startswith("PathProof — rapport enregistré")
+    assert all(event["tool"] != "ask_student" for event in recording["events"][:-1])
+    assert "vérifié" not in recording["events"][-1]["report"].casefold()
 
 
 def test_recorded_run_rejects_journals_without_a_verified_report():
@@ -83,8 +86,32 @@ def test_recorded_run_rejects_a_non_successful_live_outcome(monkeypatch):
         record_demo.run_fictional_sample()
 
 
+def test_recorded_run_rejects_unexpected_question_sequence(monkeypatch):
+    journal_path = ROOT / "evals" / "results" / "e4.4_clear_sheet_d_medecin.json"
+    journal = json.loads(journal_path.read_text(encoding="utf-8"))
+    question_event = next(event for event in journal if event["tool"] == "ask_student")
+    question_event["args"]["question"] = "Quelle est votre série ?"
+    question_event["result"]["question"] = "Quelle est votre série ?"
+
+    def fake_run(*args, **kwargs):
+        kwargs["journal"].extend(journal)
+        return SimpleNamespace(
+            outcome="Merci.",
+            report_text=journal[-1]["result"],
+        )
+
+    monkeypatch.setattr(record_demo, "get_client", lambda: object())
+    monkeypatch.setattr(record_demo, "run_cli_session", fake_run)
+
+    with pytest.raises(ValueError, match="expected fictional question"):
+        record_demo.run_fictional_sample()
+
+
 def test_unexpected_fictional_question_stops_without_an_answer():
-    assert record_demo.answer_fictional_question("What is your favorite color?") == ""
+    assert record_demo.answer_fictional_question(
+        "Pouvez-vous confirmer que vous êtes bien en série D, comme indiqué sur votre relevé ?"
+    ) == "Oui, série D."
+    assert record_demo.answer_fictional_question("Quelle est votre série ?") == ""
 
 
 def test_cli_does_not_accept_an_arbitrary_journal_file():

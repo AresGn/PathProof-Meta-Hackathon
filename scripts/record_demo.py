@@ -17,6 +17,9 @@ from src.clients.muse_spark import MUSE_SPARK_MODEL
 IMAGE_PATH = Path("data/samples/releve_serie_d.jpg")
 AUDIO_PATH = Path("data/samples/note_vocale_coherente.mp3")
 OUTPUT_PATH = ROOT / "web" / "recorded-run.json"
+FICTIONAL_QUESTION = (
+    "Pouvez-vous confirmer que vous êtes bien en série D, comme indiqué sur votre relevé ?"
+)
 
 
 def is_fixed_sample_path(value: object, sample: Path) -> bool:
@@ -47,9 +50,12 @@ def create_recorded_run(journal: list[dict]) -> dict:
     if not has_sample_image or not has_sample_audio:
         raise ValueError("journal must use both fixed fictional sample files")
 
+    validate_fictional_question_sequence(journal)
+
     report = verified_report_from_journal(journal)
     if not report:
         raise ValueError("journal must end with a verified report")
+    report = make_recorded_report(report)
 
     events = [
         {
@@ -57,11 +63,11 @@ def create_recorded_run(journal: list[dict]) -> dict:
             "step": event.get("step"),
             "tool": event.get("tool"),
             "args": event.get("args"),
-            "result": event.get("result"),
+            "result": report if event.get("tool") == "build_report" else event.get("result"),
             "decision": event.get("decision"),
         }
         for event in journal
-        if event.get("tool")
+        if event.get("tool") and event.get("tool") != "ask_student"
     ]
     events.append({
         "type": "done",
@@ -72,9 +78,51 @@ def create_recorded_run(journal: list[dict]) -> dict:
     return {"events": events}
 
 
+def normalize_question(question: object) -> str | None:
+    if not isinstance(question, str):
+        return None
+    return " ".join(question.split()).casefold()
+
+
+def validate_fictional_question_sequence(journal: list[dict]) -> None:
+    question_steps = [
+        (index, event) for index, event in enumerate(journal)
+        if event.get("tool") == "ask_student"
+    ]
+    if len(question_steps) != 1:
+        raise ValueError("journal must contain the expected fictional question")
+    question_index, question_event = question_steps[0]
+    question = normalize_question(FICTIONAL_QUESTION)
+    if (not isinstance(question_event.get("args"), dict)
+            or normalize_question(question_event["args"].get("question")) != question
+            or not isinstance(question_event.get("result"), dict)
+            or question_event["result"].get("status") != "needs_input"
+            or normalize_question(question_event["result"].get("question")) != question
+            or question_event.get("decision") != "suspend"):
+        raise ValueError("journal must contain the expected fictional question")
+    final_steps = [
+        index for index, event in enumerate(journal)
+        if event.get("tool") in {"verify_report", "build_report"}
+    ]
+    if not final_steps or question_index >= min(final_steps):
+        raise ValueError("the fictional question must precede report verification")
+
+
+def make_recorded_report(report: str) -> str:
+    report = report.replace("PathProof — rapport vérifié", "PathProof — rapport enregistré")
+    report = report.replace(
+        "## Ce que je n'ai pas pu vérifier\nToutes les affirmations ci-dessus sont vérifiées.",
+        "## Limites du rapport enregistré\n"
+        "Les affirmations et leurs preuves sont reprises du journal de démonstration.",
+    )
+    if "vérifi" in report.casefold():
+        raise ValueError("recorded report must not claim verification")
+    return report
+
+
 def answer_fictional_question(question: str) -> str:
     """Answer only the known series-confirmation question for the fixed sample."""
-    if "série" not in question.casefold() and "serie" not in question.casefold():
+    if normalize_question(question) != normalize_question(FICTIONAL_QUESTION):
         return ""
     return "Oui, série D."
 
@@ -93,6 +141,7 @@ def run_fictional_sample() -> list[dict]:
         tool_schemas=TOOL_SCHEMAS,
         journal=journal,
     )
+    validate_fictional_question_sequence(journal)
     report = verified_report_from_journal(journal)
     if (result.outcome == loop.STOPPED_STEP_LIMIT
             or (isinstance(result.outcome, dict)

@@ -49,9 +49,7 @@ let serverState = "checking";
 let lastReport = null;
 let lastReportVerified = false;
 let lastProblems = null;
-let lastRunRecorded = false;
-let lastRecordedError = null;
-let recordedRetryState = null;
+let recordedRunState = null;
 
 const proofViewer = createProofViewer({
   dialog: proofDialog,
@@ -152,21 +150,18 @@ function handleEvent(event) {
 
 function resetRunView() {
   closeSession();
-  recordedRetryState = null;
+  recordedRunState = null;
   recordedBanner.hidden = true;
   seenSteps = [];
   lastReport = null;
   lastReportVerified = false;
   lastProblems = null;
-  lastRunRecorded = false;
-  lastRecordedError = null;
   drawSteps();
   showReport(null);
 }
 
 function restoreAnswerState(state) {
-  lastRunRecorded = false;
-  lastRecordedError = null;
+  recordedRunState = null;
   recordedBanner.hidden = true;
   currentRunId = state.runId;
   seenSteps = state.steps;
@@ -180,9 +175,9 @@ function restoreAnswerState(state) {
 }
 
 function restoreRecordedRetryState() {
-  if (!recordedRetryState) return;
-  const state = recordedRetryState;
-  recordedRetryState = null;
+  if (!recordedRunState?.retryState) return;
+  const state = recordedRunState.retryState;
+  recordedRunState = null;
   restoreAnswerState(state);
   setStatus(t("askedStatus"));
 }
@@ -209,9 +204,7 @@ async function showRecordedRun(error, { retryState = null } = {}) {
     return;
   }
   resetRunView();
-  lastRunRecorded = true;
-  lastRecordedError = error;
-  recordedRetryState = retryState;
+  recordedRunState = { error, retryState };
   recordedBanner.hidden = false;
   for (const event of recording.events) {
     if (event.type === "step") {
@@ -276,10 +269,10 @@ function applyLanguage() {
   drawSteps(true);
   if (lastProblems) showProblems(lastProblems);
   else if (lastReport) showReport(lastReport, lastReportVerified);
-  if (lastRunRecorded) {
+  if (recordedRunState) {
     recordedBanner.hidden = false;
     setStatus(t("recordedRunStatus", {
-      reason: recordedFailureReason(lastRecordedError),
+      reason: recordedFailureReason(recordedRunState.error),
     }), true);
   }
 }
@@ -347,7 +340,11 @@ answerBtn.addEventListener("click", async () => {
   try {
     await streamAnswer(currentRunId, answer.trim(), handleEvent);
   } catch (err) {
-    if (shouldUseRecordedRun(err)) {
+    if (err?.status === 404) {
+      restoreAnswerState(retryState);
+      closeSession();
+      setStatus(`${t("errorPrefix")}${describeClientError(err)}`, true);
+    } else if (shouldUseRecordedRun(err)) {
       await showRecordedRun(err, { retryState });
     } else {
       const retrySuffix = currentRunId ? t("retrySuffix") : "";
