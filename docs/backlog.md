@@ -138,8 +138,8 @@ E1.4 format des preuves ─► E2.4 verify_report ──────────
 
 ## E7 — Soumission (J8, mar 3 nov, gel au soir ; J9 marge)
 
-- [ ] **E7.1 (M)** [#38](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/38) README final : statut réel, section V1, modèles réellement utilisés, limites, équipe ; `docs/impact.md` avec le chiffre officiel sourcé. *Dép. :* E6.3.
-  *Acceptation :* aucun `TODO` dans le README ; chaque affirmation correspond à un résultat commité.
+- [x] **E7.1 (M)** [#38](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/38) README final : statut réel, section V1, modèles réellement utilisés, limites, équipe ; `docs/impact.md` avec le chiffre officiel sourcé. *Dép. :* E6.3.
+  *Acceptation :* aucun `TODO` dans le README ; chaque affirmation correspond à un résultat commité. *Fait le 3 nov :* README et `docs/impact.md` sans `TODO` ; chiffre 77 101 (presse relayant l'Office, pas une page officielle) ; 4 modèles Meta ; évaluation 11/11 ; équipe solo. **Reste ouvert :** lien vidéo (dépend d'E7.2) et ouverture du README en navigation privée (à vérifier sur GitHub).
 - [ ] **E7.2 (L)** [#39](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/39) Vidéo de 3 minutes, sous-titres anglais, moment fort d'abord (`docs/demo-script.md`). *Dép. :* E6.3.
   *Acceptation :* durée ≤ 3:00 ; chaque plan montre une exécution réelle.
 - [ ] **E7.3 (S)** [#40](https://github.com/AresGn/PathProof-Meta-Hackathon/issues/40) Post X avec la vidéo. *Dép. :* E7.2.

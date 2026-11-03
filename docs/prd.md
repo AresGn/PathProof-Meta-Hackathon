@@ -34,8 +34,8 @@ Le mot « chatbot » n'apparaît nulle part : ni dans le README, ni dans la vid�
 
 Un bachelier béninois choisit sa filière souvent sur des critères flous (la série, l'avis de la famille, la rumeur). Il ne voit pas clairement quelles filières sont ouvertes à son profil réel, ni où trouver l'information officielle.
 
-- Chiffre d'impact : `TODO` nombre de candidats au Bac au Bénin pour la session la plus récente, avec la source officielle (Office du Baccalauréat ou MESRS).
-- Leçon du prototype antérieur : `TODO` ce que les 7 premiers utilisateurs ont appris à l'équipe (formulé en termes généraux, sans aucune donnée personnelle).
+- Chiffre d'impact : 77 101 candidats au Bac au Bénin, session de juin 2026, données de l'Office du Baccalauréat relayées par la presse (source et réserves dans `docs/impact.md`).
+- Leçon du prototype antérieur : non documentée dans le dépôt, donc non écrite (voir `docs/impact.md`).
 
 > **Règle du projet :** aucun chiffre n'entre dans le README, la vidéo ou la démo sans source officielle citée. Tant qu'une source manque, on écrit `TODO`.
 
@@ -223,7 +223,7 @@ Source : le *Guide d'information 2026-2027* officiel, extrait du PDF (via MinerU
 1. Ajouter une colonne `page_pdf` à chaque offre, pour que la preuve renvoie à la page du PDF officiel et pas à une ligne du fichier MinerU. **Premier jet fait** (`pages_offres.csv`) : 180 pages trouvées sans ambiguïté, 23 départagées par le sigle de l'établissement, 19 à vérifier à la main (dont Pharmacie `PUB-064`, en réalité page 36), 2 introuvables (`PUB-122`, `PUB-210`).
 2. Découper la colonne `Matières` par série. Le texte est parfois collé (« …SVTA1, A2 : … ») ; un découpage sur les en-têtes de série fonctionne pour 222 offres sur 224 ; les 2 restantes (`PUB-220`, `PUB-223`) ont « — » et seront traitées comme « matières non publiées ».
 3. Contrôler à la main 20 lignes `OK` tirées au hasard contre le PDF, et publier le résultat dans `docs/data-audit.md`. C'est ce qui permet d'écrire « vérifié » sans mentir.
-4. Mettre l'URL publique officielle du PDF dans le README et dans chaque preuve. `TODO` : trouver cette URL sur www.enseignementsuperieur.gouv.bj. Le guide porte la mention « Vente interdite » : le diffuser gratuitement avec sa source reste cohérent, mais à défaut d'URL officielle, ne pas republier le PDF lui-même.
+4. Mettre l'URL publique officielle du PDF dans le README et dans chaque preuve. URL trouvée sur www.enseignementsuperieur.gouv.bj (voir `docs/impact.md`). Le guide porte la mention « Vente interdite » : le diffuser gratuitement avec sa source reste cohérent, mais à défaut d'URL officielle, ne pas republier le PDF lui-même.
 5. Ajouter une colonne `faculte_classique` (oui ou non), pour la consigne de la page 9. Règle de départ : le nom de l'établissement commence par « Faculté ». À relire à la main.
 
 **Provenance (à dire dans le README) :** l'extraction CSV a été faite avant le hackathon, à partir d'un document public officiel. Ce sont des données, pas du code. Le script de découpage, les outils et l'agent sont écrits pendant l'événement.
